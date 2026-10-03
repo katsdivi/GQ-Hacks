@@ -20,7 +20,7 @@ If behind, protect this order: recorder, Made It (`run.py`), lead/lag, backtest,
 4. **Costs are always charged.** Fees, spread and latency in every backtest number. Until Andrew's fee file lands, fee is 2 cents per contract and the output must say `PLACEHOLDER FEE`.
 5. **No secrets, no vendor data in git.** Keys live in `.env` (gitignored). Raw Databento, Kalshi and Massive data stays under `data/` and `out/` (gitignored). Only the fake game (`data/ticks/sample*`) and `data/games.csv` are committed. Never print a key value to the terminal.
 6. **Paper trading only.** No code path places a real-money order.
-7. **Vibe-coded code never touches `strategy.py`, `costs.py`, `backtest.py`, `leadlag.py`.** Those are written with Divi, line by line, from Alden's spec.
+7. **`strategy.py`, `costs.py`, `backtest.py`, `leadlag.py` are written only in Divi's pairing sessions, reviewed line by line by Divi before merge to `main`, and outputs hand-checked by Alden.** Teammates' code never touches them.
 
 ## Data contracts (do not change without Divi)
 
