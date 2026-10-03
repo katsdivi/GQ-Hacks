@@ -126,3 +126,81 @@ def game_with_matched_null(rng, k_rate, o_rate, case: str) -> tuple[float, float
     to = trades(rng, po, o_rate, 5.0 if case == "lead_5s" else 0.0, "other")
     return (xcorr_lead.game_lag(tk, "kalshi", to, "other"),
             xcorr_lead.game_lag(tk, "kalshi", thinned_self(tk, to), "other"))
+
+
+# ---- quote-based cases (Amendment 2 revision): quotes move on information, no trade needed ----
+
+def quotes(rng, path: np.ndarray, lag_s: float, flicker_per_min: float, venue: str, poll_s: float | None = None,
+           recv_delay_s: float = 0.1) -> pd.DataFrame:
+    """Best bid/ask that track the hidden path (shifted by lag_s) rounded to the cent, with a 1-cent spread
+    around it and random one-tick spread flicker (bid or ask moves 1c for a few seconds).
+    Streamed venues emit a row whenever bid or ask changes; poll_s samples the book every poll_s seconds."""
+    n = DURATION_S
+    src = np.clip(np.arange(n) - int(round(lag_s)), 0, n - 1)
+    mid = np.round(path[src], 2)
+    bid, ask = mid - 0.005, mid + 0.005
+    flick = np.zeros(n)
+    starts = np.flatnonzero(rng.random(n) < flicker_per_min / 60)
+    for t0 in starts:
+        flick[t0:t0 + rng.integers(1, 6)] = rng.choice([-1, 1]) * 0.01
+    bid = np.round(np.where(flick < 0, bid + flick, bid), 3)
+    ask = np.round(np.where(flick > 0, ask + flick, ask), 3)
+    if poll_s:
+        idx = np.arange(0, n, int(poll_s))
+    else:
+        chg = np.flatnonzero((np.diff(bid, prepend=-1) != 0) | (np.diff(ask, prepend=-1) != 0))
+        idx = chg
+    ts = ((idx + recv_delay_s + rng.uniform(0, 0.05, len(idx))) * 1e9).astype("int64")
+    rows = pd.concat([
+        pd.DataFrame({"ts": ts, "kind": "bid", "price": bid[idx], "side": "buy"}),
+        pd.DataFrame({"ts": ts, "kind": "ask", "price": ask[idx], "side": "sell"})], ignore_index=True)
+    return rows.assign(venue=venue, market_id=venue, size=np.nan).sort_values(["ts", "kind"], kind="stable")
+
+
+def quote_game(rng, case: str, other: str) -> float:
+    pk = hidden_path(rng)
+    po = hidden_path(rng) if case == "no_link" else pk
+    lag_o = 5.0 if case == "lead_5s" else 0.0
+    qk = quotes(rng, pk, 0.0, flicker_per_min=6, venue="kalshi")
+    if other == "polymarket.com":
+        qo = quotes(rng, po, lag_o, flicker_per_min=2, venue="other")
+    else:  # Polymarket US: 1 s polled best bid/ask, receipt 0.1 to 0.6 s after the poll
+        qo = quotes(rng, po, lag_o, flicker_per_min=1, venue="other", poll_s=1, recv_delay_s=0.3)
+    return xcorr_lead.game_lag_mid(qk, "kalshi", qo, "other")
+
+
+def quote_study(seed: int, other: str, games: int, studies: int) -> dict:
+    rng = np.random.default_rng(seed)
+    min_lead = 1.0 if other == "polymarket.com" else 1.5
+    runs = {c: [[quote_game(rng, c, other) for _ in range(games)] for _ in range(studies)]
+            for c in ("no_link", "zero_lag", "lead_5s")}
+    placebo = [[quote_game(rng, "no_link", other) for _ in range(games)] for _ in range(studies)]
+    out = {}
+    for c, rr in runs.items():
+        flat = np.array([x for r in rr for x in r], float)
+        flat = flat[~np.isnan(flat)]
+        verdicts = [xcorr_lead.decide(r, pl, 0.0, min_lead_s=min_lead)["result"] for r, pl in zip(rr, placebo)]
+        out[c] = {"median_lag": float(np.median(flat)), "share_pos": float((flat > 0).mean()),
+                  "share_zero": float((flat == 0).mean()), "share_lag5": float((np.abs(flat - 5) <= 1).mean()),
+                  "kalshi_leads_rate": float(np.mean([v == "kalshi leads" for v in verdicts])),
+                  "verdicts": pd.Series(verdicts).value_counts().to_dict()}
+    return out
+
+
+def test_quote_zero_lag_reads_zero_and_lead_recovered():
+    r = quote_study(3, "polymarket.com", games=30, studies=1)
+    assert abs(r["zero_lag"]["median_lag"]) < 1 and r["zero_lag"]["kalshi_leads_rate"] == 0
+    assert r["lead_5s"]["median_lag"] == 5 and r["lead_5s"]["kalshi_leads_rate"] == 1
+
+
+def quote_report(games: int = 40, studies: int = 10) -> pd.DataFrame:
+    rows = []
+    for other in ("polymarket.com", "Polymarket US"):
+        res = quote_study(SEED, other, games, studies)
+        for case, r in res.items():
+            rows.append({"pair": f"Kalshi quotes vs {other}-like quotes" + (" (1 s polled)" if other == "Polymarket US" else ""),
+                         "case": case, "games": games * studies, "median_lag_s": r["median_lag"],
+                         "share_lag_pos": round(r["share_pos"], 3), "share_lag_zero": round(r["share_zero"], 3),
+                         "share_lag_5s_pm1": round(r["share_lag5"], 3),
+                         "rule_says_kalshi_leads": f"{r['kalshi_leads_rate']:.0%} of {studies} studies", "verdicts": r["verdicts"]})
+    return pd.DataFrame(rows)

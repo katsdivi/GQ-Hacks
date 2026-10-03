@@ -3,21 +3,22 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~6:00 AM ET)
-Current task: Amendment 2 DRAFT ready for Alden (8 AM); NOT committed; no Polymarket US or holdout prices examined
-Done: v3 committed 508f2db; v2 who-leads INCONCLUSIVE (primary L failed unrelated-games placebo); polymarket_us live since 08:30:24 UTC;
-  Time & Sales verified (execution time, ns, D = 0) and training counts done; synthetic activity-bias test done
-Verified numbers:
-  Activity bias (xcorr, 400 simulated games per case; rule on 10 studies x 40 games):
-    390 vs 5/min: no link 0/10 false; zero-lag link +1.0 s median, 3/10 false "Kalshi leads"; true 5 s lead 10/10 found (median +6 s)
-    390 vs 1/min: no link 0/10 false; zero-lag link +5.0 s median, 10/10 false; true 5 s lead 10/10 (median +8 s)
-    -> xcorr is biased at ~1 trade/min; the unrelated-games placebo cannot detect it (it only tests "no link")
-    activity-matched null (exploratory, 40 games): removes the 1/min false lead but loses the true 5 s lead (p 0.098); does not fix 5/min
-  Polymarket US training: 215 games matched to Kalshi, median in-game 1.0 trades/min (NFL 0.0, CFB 3.0), 165 games >= 50 trades
-  State sources: no first-party Polymarket US state list; Arizona "unavailable" only from third-party guides; earlier Arizona C&D claim unverified
-Blockers: none. Decisions for Divi + Alden: activity-matched null / min trade rate / Part B untestable; Florida check in-app
-Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; nothing runs on Polymarket US or holdout until it is committed
-Decisions pending: Amendment 2, t9-costs review, B (Webull, deferred)
+STATUS  (last update: Sat Oct 3, ~5:15 AM ET)
+Current task: Amendment 2 DRAFT revised for Alden (8 AM); NOT committed. Nothing runs on holdout or Polymarket US prices until it is
+Done: trade-based vs quote-based activity-bias simulation (docs/results/activity_bias.md); recorder now stores venue server
+  timestamps on book rows (polymarket.com, Kalshi deltas) from 09:07:50 UTC
+Verified numbers (simulated data only):
+  Trade-based xcorr: linked zero-lag reads +1.0 s at 5 trades/min (false "Kalshi leads" 3/10 studies), +5.0 s at 1/min (10/10)
+  Book-midpoint xcorr: linked zero-lag reads 0 s in 100% of games (false 0/10) for streamed and 1 s polled quotes;
+    true 5 s lead reads 5 s in 100% of games; rule power 5/10 at 40 games, 6-7/10 at 30-60, 10/10 at 80
+  Unrelated-games placebo false-positive rate 0/10 in every case (it cannot detect activity bias)
+Draft changes: confirmatory test = book-mid xcorr on recorded holdout games (Fri night + Sat), run once after Saturday's last game;
+  trade-based results exploratory only; Polymarket US on trades "not testable at ~1 trade/min"; one pre-registered
+  trade-the-laggard setting (jump 4c, window 10 s, entry gap 3c, timeout 60 s) on recorded books; 81-grids removed
+Recording caveat: Friday-night games only partly recorded (Kalshi from 03:09 UTC, polymarket.com 04:11, Polymarket US 08:30)
+Blockers: none. For Alden: final-whistle definition, Kalshi server ts use, power (~80 games needed for 10/10)
+Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md
+Decisions pending: Amendment 2, t9-costs review, Florida in-app check, B (Webull, deferred)
 ```
 
 ## Log

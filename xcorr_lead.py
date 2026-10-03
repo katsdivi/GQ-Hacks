@@ -45,6 +45,21 @@ def game_lag(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, venue_y
     return float(lag) if np.isfinite(corr[lag]) else float("nan")
 
 
+def game_lag_mid(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, venue_y: str,
+                 max_lag_s: int = MAX_LAG_S) -> float:
+    """Book-midpoint version (Amendment 2 confirmatory test): mid = (best bid + best ask) / 2 from each
+    venue's bid/ask rows (align.venue_events, backward fill only), 1 s grid, xcorr of 1 s mid changes."""
+    gx = align.to_grid(align.venue_events(ticks_x, venue_x))
+    gy = align.to_grid(align.venue_events(ticks_y, venue_y))
+    if gx.empty or gy.empty:
+        return float("nan")
+    gx, gy = align.common_grid(gx, gy)
+    if len(gx) < 2 * max_lag_s + 2:
+        return float("nan")
+    lag, corr = leadlag.xcorr_lag(gx, gy, max_lag_s)
+    return float(lag) if np.isfinite(corr[lag]) else float("nan")
+
+
 def mann_whitney_p(a, b) -> float:
     """Two-sided Mann-Whitney U test, normal approximation with tie correction (no scipy)."""
     a, b = np.asarray(a, float), np.asarray(b, float)
@@ -66,7 +81,8 @@ def mann_whitney_p(a, b) -> float:
     return float(math.erfc(max(z, 0.0) / math.sqrt(2)))
 
 
-def decide(real_lags, placebo_lags, d_s: float = 0.0, x: str = "kalshi", y: str = "other") -> dict:
+def decide(real_lags, placebo_lags, d_s: float = 0.0, x: str = "kalshi", y: str = "other",
+           min_lead_s: float = MIN_LEAD_S) -> dict:
     r = np.asarray(real_lags, float) - d_s
     pl = np.asarray(placebo_lags, float) - d_s
     r, pl = r[~np.isnan(r)], pl[~np.isnan(pl)]
@@ -78,9 +94,9 @@ def decide(real_lags, placebo_lags, d_s: float = 0.0, x: str = "kalshi", y: str 
     share_pos, share_neg = float((r > 0).mean()), float((r < 0).mean())
     out.update({"median_corrected_lag_s": med, "mann_whitney_p": p, "share_positive": share_pos,
                 "share_negative": share_neg, "placebo_median_s": float(np.median(pl)) if len(pl) else float("nan")})
-    if med >= MIN_LEAD_S and p < 0.05 and share_pos >= MIN_SHARE:
+    if med >= min_lead_s and p < 0.05 and share_pos >= MIN_SHARE:
         out["result"] = f"{x} leads"
-    elif med <= -MIN_LEAD_S and p < 0.05 and share_neg >= MIN_SHARE:
+    elif med <= -min_lead_s and p < 0.05 and share_neg >= MIN_SHARE:
         out["result"] = f"{y} leads"
     else:
         out["result"] = "neither venue leads consistently"
