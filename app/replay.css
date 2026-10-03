@@ -1,0 +1,50 @@
+/* Keep the page and chart mounting surface white, including in dark mode. */
+.stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+[data-testid="stMain"], [data-testid="stPlotlyChart"] {
+    background: #ffffff !important;
+    color: #172033 !important;
+    color-scheme: light;
+}
+
+/* Frequent fragment reruns should not dim the previous frame while waiting. */
+[data-stale="true"], [data-testid="stElementContainer"] {
+    opacity: 1 !important;
+    transition: none !important;
+}
+
+/* Use explicit contrast for text that otherwise inherits the browser theme. */
+.stApp h1, .stApp h2, .stApp h3, .stApp p, .stApp label,
+[data-testid="stMetricValue"], [data-testid="stMetricLabel"],
+[data-testid="stMarkdownContainer"], [data-testid="stCaptionContainer"] {
+    color: #172033 !important;
+}
+.stApp p, .stApp label, [data-testid="stCaptionContainer"] {
+    font-size: 1rem !important;
+    line-height: 1.55 !important;
+}
+[data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Controls and their portal menus need their own light backgrounds. */
+.stApp button, [data-baseweb="select"] > div,
+[data-baseweb="popover"], [role="listbox"], [role="option"] {
+    background-color: #ffffff !important;
+    color: #172033 !important;
+}
+[data-baseweb="select"] *, [role="option"] * {
+    color: #172033 !important;
+}
+.stApp button, [data-baseweb="select"] > div {
+    border: 1px solid #64748b !important;
+}
+.stApp button:hover, [role="option"]:hover,
+[role="option"][aria-selected="true"] {
+    background-color: #e8efff !important;
+}
+.stApp button:focus-visible, [data-baseweb="select"]:focus-within {
+    outline: 3px solid #2563eb !important;
+    outline-offset: 2px;
+}
