@@ -18,6 +18,13 @@ Polymarket US):
   6. Placebo: Kalshi from game A vs the other venue from game B = the next qualifying game in kickoff order
      with kickoff within 30 min of A, recorded on the same machine as A; both series cut to A's window.
   7. Decision: xcorr_lead.decide, min_lead_s 1.0 (polymarket.com) or 1.5 (Polymarket US).
+  8. Book-wipe exclusion (Amendment 3 draft): polymarket.com sports books cancel all resting limit orders at
+     the official game start. Per game, on the test's other venue: the first second at or after kickoff -
+     30 min whose book has neither side; excluded for BOTH venues from 2 min before it to 5 min after that
+     book is two-sided again (to the window end if it never is). No such second -> excluded [kickoff - 2 min,
+     kickoff + 10 min]. A both-sides-empty book writes no row in the 2026-10-03 recordings (only a
+     "book_empty" marker row would show it), so on those recordings the fallback applies to every game.
+     Mid changes never span an excluded interval; the qualifying count and the lag use the rest.
 No prices are printed: outputs are counts, lags and decisions. Refuses games with kickoff >= 2026-08-01 unless
 holdout_run=True (the run is once, after Saturday's last game, when Divi says go).
 """
@@ -42,6 +49,9 @@ PIN_HI, PIN_LO, PIN_S = 0.98, 0.02, 60
 MAX_OUTAGE_S = 60
 MIN_CHANGES = 50
 PLACEBO_KICKOFF_S = 30 * 60
+WIPE_SEARCH_S = 30 * 60              # look for a full clear from kickoff - 30 min
+WIPE_PRE_S, WIPE_POST_S = 2 * 60, 5 * 60
+WIPE_FALLBACK = (-2 * 60, 10 * 60)   # no clear found: [kickoff - 2 min, kickoff + 10 min]
 REST_HEARTBEAT_COVER_S = 15          # one connected kalshi_rest heartbeat covers this many seconds
 HB_FEED = {"kalshi": "kalshi_ws", "polymarket": "polymarket", "polymarket_us": "polymarket_us"}
 TESTS = {"polymarket.com": ("polymarket", 1.0), "Polymarket US": ("polymarket_us", 1.5)}
@@ -182,6 +192,21 @@ def pinned_end(gx: pd.Series, gy: pd.Series, lo_g: int, hi_g: int) -> int:
     return best
 
 
+def wipe_exclusion(to: pd.DataFrame, other: str, ko_ns: int, end_g: int) -> tuple[tuple[int, int], str]:
+    """Excluded grid seconds (lo_g, hi_g inclusive) and the source ("clear" or "fallback")."""
+    ko_g = ko_ns // NS
+    sides = X.sides_snapshots(to, other)
+    if len(sides):
+        g = pd.Series(sides.to_numpy(), index=sides.index.to_numpy() // NS).groupby(level=0).last()
+        empty = g[(g.index >= ko_g - WIPE_SEARCH_S) & (g == 0)]
+        if len(empty):
+            c = int(empty.index[0])
+            back = g[(g.index > c) & (g == 2)]
+            hi = int(back.index[0]) + WIPE_POST_S if len(back) else end_g
+            return (c - WIPE_PRE_S, min(hi, end_g)), "clear"
+    return (ko_g + WIPE_FALLBACK[0], ko_g + WIPE_FALLBACK[1]), "fallback"
+
+
 def instruments(c, maps: dict) -> dict:
     home = c.game_id.split("_")[-1].upper()
     pc = maps["polymarket_com"].get(c.kalshi_ticker)
@@ -208,14 +233,18 @@ def game_on_machine(m: Machine, c, inst: dict, other: str) -> dict:
         out["reason"] = r
         return out
     lo_g, hi_g = lo // NS, end // NS - 1
-    nx, ny = X.n_mid_changes(gx.loc[lo_g:hi_g]), X.n_mid_changes(gy.loc[lo_g:hi_g])
+    ex, src = wipe_exclusion(to, other, ko, hi_g)
+    exc = [ex]
+    out.update(excl_lo_g=ex[0], excl_hi_g=ex[1], excl_source=src,
+               excluded_s=max(0, min(ex[1], hi_g) - max(ex[0], lo_g) + 1))
+    nx, ny = X.n_mid_changes(gx.loc[lo_g:hi_g], exc), X.n_mid_changes(gy.loc[lo_g:hi_g], exc)
     out.update(n_changes_kalshi=nx, n_changes_other=ny)
     if nx < MIN_CHANGES or ny < MIN_CHANGES:
         out["reason"] = f"not qualifying ({nx} / {ny} mid changes, need {MIN_CHANGES})"
         out["qualifying"] = False
         return out
     tkw, tow = tk[(tk.ts >= lo) & (tk.ts < end)], to[(to.ts >= lo) & (to.ts < end)]
-    out.update(qualifying=True, reason="", lag_s=X.game_lag_mid(tkw, "kalshi", tow, other))
+    out.update(qualifying=True, reason="", lag_s=X.game_lag_mid(tkw, "kalshi", tow, other, exclude=exc))
     return out
 
 
@@ -258,8 +287,10 @@ def run_test(cands: pd.DataFrame, maps: dict, machines: list[Machine], test: str
         lo, end = int(a["window_start_ns"]), int(a["window_end_ns"])
         tk = m.rows("kalshi", instruments(ca, maps)["kalshi"], lo, end - 1)
         to = m.rows(other, instruments(cb, maps)[other], lo, end - 1)
+        exc = [(int(a["excl_lo_g"]), int(a["excl_hi_g"]))]      # A's window, A's exclusion
         pl.append({"game_a": a["game_id"], "game_b": b["game_id"], "machine": a["machine"],
-                   "lag_s": X.game_lag_mid(tk, "kalshi", to, other) if len(tk) and len(to) else float("nan")})
+                   "lag_s": X.game_lag_mid(tk, "kalshi", to, other, exclude=exc) if len(tk) and len(to)
+                   else float("nan")})
     pl = pd.DataFrame(pl, columns=["game_a", "game_b", "machine", "lag_s"])
     dec = X.decide(q["lag_s"].to_numpy(float), pl["lag_s"].to_numpy(float), 0.0, "kalshi", other, min_lead_s=min_lead)
     return per, pl, dec

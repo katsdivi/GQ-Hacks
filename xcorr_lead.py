@@ -49,20 +49,37 @@ NS = 1_000_000_000
 _EMPTY = -1.0   # sentinel for "last snapshot had an empty side" so a grid carry never fills across it
 
 
-def mid_snapshots(ticks: pd.DataFrame, venue: str) -> pd.Series:
-    """Mid per recorded top-of-book snapshot (HYPOTHESIS_v2.md Amendment 2): index ts (ns), value
-    (bid + ask) / 2, NaN when either side is empty. The collector writes the bid row and the ask row of a
-    snapshot with the same receipt ts and writes no row for an empty side, so a snapshot ts with only one
-    kind means the other side was empty. One market per venue (the runner picks it)."""
-    b = ticks[(ticks["venue"] == venue) & ticks["kind"].isin(["bid", "ask"])]
+BOOK_KINDS = ["bid", "ask", "book_empty"]
+
+
+def _book_wide(ticks: pd.DataFrame, venue: str) -> pd.DataFrame:
+    """One row per recorded snapshot ts with columns bid, ask (NaN = side empty). The collector writes the bid
+    and ask rows of a snapshot with the same receipt ts and no row for an empty side. A snapshot with BOTH
+    sides empty writes no row in the 2026-10-03 recordings, so it is invisible there; a "book_empty" marker
+    row (kind "book_empty", any price) is read as a snapshot with neither side."""
+    b = ticks[(ticks["venue"] == venue) & ticks["kind"].isin(BOOK_KINDS)]
     if b.empty:
-        return pd.Series(dtype="float64")
+        return pd.DataFrame(columns=["bid", "ask"], dtype="float64")
     assert b["market_id"].nunique() == 1, f"{venue}: one market per venue, got {b['market_id'].nunique()}"
-    w = b.pivot_table(index="ts", columns="kind", values="price", aggfunc="last").sort_index()
+    w = b.assign(price=b["price"].where(b["kind"] != "book_empty")) \
+         .pivot_table(index="ts", columns="kind", values="price", aggfunc="last", dropna=False).sort_index()
     for k in ("bid", "ask"):
         if k not in w:
             w[k] = np.nan
+    return w[["bid", "ask"]]
+
+
+def mid_snapshots(ticks: pd.DataFrame, venue: str) -> pd.Series:
+    """Mid per recorded top-of-book snapshot (HYPOTHESIS_v2.md Amendment 2): index ts (ns), value
+    (bid + ask) / 2, NaN when either side is empty. One market per venue (the runner picks it)."""
+    w = _book_wide(ticks, venue)
     return (w["bid"] + w["ask"]) / 2
+
+
+def sides_snapshots(ticks: pd.DataFrame, venue: str) -> pd.Series:
+    """Number of non-empty sides (0, 1, 2) per recorded snapshot ts (book-wipe rule, Amendment 3 draft)."""
+    w = _book_wide(ticks, venue)
+    return w["bid"].notna().astype(int) + w["ask"].notna().astype(int)
 
 
 def mid_grid(snap: pd.Series) -> pd.Series:
@@ -77,24 +94,33 @@ def mid_grid(snap: pd.Series) -> pd.Series:
     return last.reindex(full).ffill().replace(_EMPTY, np.nan)
 
 
-def mid_changes(grid: pd.Series) -> pd.Series:
+def mid_changes(grid: pd.Series, exclude=()) -> pd.Series:
     """Per grid second: defined mid minus the previous DEFINED mid; NaN where the mid is undefined or no
-    earlier defined mid exists. Duplicate rows cannot create a change (the mid does not move)."""
-    prev = grid.ffill().shift(1)
-    return (grid - prev).where(grid.notna())
+    earlier defined mid exists. Duplicate rows cannot create a change (the mid does not move).
+    exclude: (lo_g, hi_g) grid-second intervals, inclusive (book-wipe rule). Mids inside are dropped, and a
+    change never spans an excluded interval: the first defined mid after it has no previous mid."""
+    g = grid.copy()
+    seg = np.zeros(len(g), dtype="int64")
+    for lo, hi in exclude:
+        g[(g.index >= lo) & (g.index <= hi)] = np.nan
+        seg += (g.index > hi).astype("int64")
+    prev = g.groupby(seg).ffill().groupby(seg).shift(1)
+    return (g - prev).where(g.notna())
 
 
-def n_mid_changes(grid: pd.Series) -> int:
-    """Amendment 2 qualification count: grid seconds whose defined mid differs from the previous defined mid."""
-    c = mid_changes(grid)
+def n_mid_changes(grid: pd.Series, exclude=()) -> int:
+    """Amendment 2 qualification count: grid seconds whose defined mid differs from the previous defined mid
+    (outside excluded intervals)."""
+    c = mid_changes(grid, exclude)
     return int((c.notna() & (c.abs() > 1e-12)).sum())
 
 
 def game_lag_mid(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, venue_y: str,
-                 max_lag_s: int = MAX_LAG_S) -> float:
+                 max_lag_s: int = MAX_LAG_S, exclude=()) -> float:
     """Book-midpoint version (Amendment 2 confirmatory test): xcorr of 1 s mid changes, mids defined only
     when both sides exist, never filled across an empty side. Seconds without a defined change on either
-    venue drop out of the correlation (pairwise). Positive = x (Kalshi) first."""
+    venue drop out of the correlation (pairwise). Positive = x (Kalshi) first. exclude: grid-second
+    intervals dropped for BOTH venues (book-wipe rule, Amendment 3 draft)."""
     gx, gy = mid_grid(mid_snapshots(ticks_x, venue_x)), mid_grid(mid_snapshots(ticks_y, venue_y))
     if gx.empty or gy.empty:
         return float("nan")
@@ -102,7 +128,7 @@ def game_lag_mid(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, ven
     if hi - lo + 1 < 2 * max_lag_s + 2:
         return float("nan")
     idx = np.arange(lo, hi + 1, dtype="int64")
-    rx, ry = mid_changes(gx).reindex(idx), mid_changes(gy).reindex(idx)
+    rx, ry = mid_changes(gx, exclude).reindex(idx), mid_changes(gy, exclude).reindex(idx)
     corr = {lag: float(rx.corr(ry.shift(-lag))) for lag in range(-max_lag_s, max_lag_s + 1)}
     corr = {k: (v if v == v else -np.inf) for k, v in corr.items()}
     lag = max(corr, key=corr.get)
