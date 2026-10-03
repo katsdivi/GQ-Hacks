@@ -113,7 +113,7 @@ class Writer:
         self.buf_local += recs
         if self.conn is not None:
             self.buf_tiger += [(r["ts"], r["venue"], r["market_id"], r["kind"], r["price"], r["size"], r["side"])
-                               for r in recs if r["venue"] in ("kalshi", "polymarket")]
+                               for r in recs if r["venue"] in ("kalshi", "polymarket", "polymarket_us")]
 
     def flush_tiger(self) -> None:
         if self.conn is None or not self.buf_tiger:
@@ -155,6 +155,7 @@ class KalshiPoller:
         self.last_trade_s: dict[str, int] = st.get("last_trade_s", {})
         self.seen_ids: dict[str, set] = {}
         self.pending_trades: list[str] = []
+        self.event_names: dict[str, dict] = {}   # event ticker -> {team code: team name} (for name matching)
         self.ws_enabled = False                 # set True when a Kalshi websocket listener exists
         self.ws_connected = False
         self.ws_down_since_ns = time.time_ns()
@@ -214,6 +215,8 @@ class KalshiPoller:
                     if gd not in keep_dates:
                         continue
                     teams = self.event_away_home(m["event_ticker"])
+                    # Team name per team code (live market titles are "<team> wins", so names come from yes_sub_title).
+                    self.event_names.setdefault(m["event_ticker"], {})[m["ticker"].rsplit("-", 1)[1]] = m.get("yes_sub_title") or ""
                     if not teams:
                         log(f"skip {m['ticker']}: cannot parse away/home")
                         continue
@@ -644,6 +647,218 @@ class PolymarketWS:
                 backoff = min(backoff * 2, 30)
 
 
+class PolymarketUS:
+    """Polymarket US (CFTC venue) public gateway, no key: venue "polymarket_us".
+
+    The market websocket needs an API key (HTTP 401 without), so this polls REST:
+      * every 1 s, one batched GET /v1/markets?slug=... (up to 100 slugs) for every game's best bid/ask
+        on the long instrument; bid/ask rows on change, ts = receipt time, size NaN;
+      * GET /v1/markets/{slug}/bbo (sizes, sharesTraded) returns 429 even at 1 request/s, so it is off
+        (BBO_PER_S = 0). Trades come from Polymarket US's daily Time & Sales files (every trade,
+        nanosecond timestamps; see STATUS.md), not from this poller.
+    Instrument: the moneyline has one instrument; its long side is outcomes[0], the away team
+    (slug aec-<league>-<away>-<home>-<date>), so P(home) = 1 - long price and bid/ask swap.
+    Mapping to our games (Kalshi codes) goes to data/live/polymarket_us_map.json (NFL by team
+    code, CFB by name). Public limit is 25 requests/s per IP; this stays under 10 and backs off on 429.
+    Holdout: write-only, counts only.
+    """
+
+    G = "https://gateway.polymarket.us"
+    BBO_PER_S = 0.0     # /bbo is rate limited far below the documented 25/s (429 at 1/s); off.
+    BATCH_EVERY_S = 1.0  # trades come from the daily Time & Sales files instead (ns timestamps)
+    MAP_FILE = LIVE_DIR / "polymarket_us_map.json"
+
+    def __init__(self, writer: Writer, kalshi: KalshiPoller) -> None:
+        self.w, self.k = writer, kalshi
+        self.s = requests.Session()
+        self.markets: dict[str, dict] = {}     # slug -> {long_is_away, league, away, home, ...}
+        self.top: dict[str, tuple] = {}
+        self.traded: dict[str, float] = {}
+        self.rr = 0
+        self.backoff_until = 0.0
+
+    def get(self, path: str, params=None) -> dict | None:
+        if time.monotonic() < self.backoff_until:
+            return None
+        try:
+            r = self.s.get(self.G + path, params=params, timeout=15)
+        except requests.RequestException as e:
+            log(f"polymarket_us {path} {type(e).__name__}")
+            return None
+        if r.status_code == 429:
+            self.backoff_s = min(getattr(self, "backoff_s", 1.0) * 2, 60.0)
+            self.backoff_until = time.monotonic() + self.backoff_s
+            log(f"polymarket_us HTTP 429 on {path.split(chr(63))[0][:40]}; backing off {self.backoff_s:.0f} s")
+            return None
+        self.backoff_s = 1.0
+        if not r.ok:
+            return None
+        return r.json()
+
+    def refresh(self) -> None:
+        """Game moneylines from /v2/leagues/{nfl,cfb}/events (the /v1/markets filters miss them)."""
+        today = datetime.now(ET).date()
+        keep = {today + timedelta(days=d) for d in (-1, 0, 1)}
+        found = {}
+        for league in ("nfl", "cfb"):
+            off = 0
+            for _ in range(20):
+                d = self.get(f"/v2/leagues/{league}/events", {"limit": 50, "offset": off})
+                evs = (d or {}).get("events", [])
+                if not evs:
+                    break
+                off += len(evs)
+                for e in evs:
+                    for m in e.get("markets") or []:
+                        if m.get("sportsMarketTypeV2") != "SPORTS_MARKET_TYPE_MONEYLINE":
+                            continue
+                        self._consider(m, keep, found, e.get("teams") or [])
+                if len(evs) < 50:
+                    break
+        if found or not self.markets:
+            self.markets = found
+        self.write_map()
+        log(f"polymarket_us markets: {len(self.markets)} NFL/CFB moneylines in date window")
+
+    def _consider(self, m: dict, keep: set, found: dict, teams: list) -> None:
+        parts = m.get("slug", "").split("-")
+        if len(parts) < 7 or parts[0] != "aec" or parts[1] not in ("nfl", "cfb") or not m.get("gameStartTime"):
+            return
+        if m.get("closed") or m.get("archived"):
+            return
+        gst = pd.Timestamp(m["gameStartTime"])
+        gst = gst.tz_localize("UTC") if gst.tzinfo is None else gst.tz_convert("UTC")
+        if gst.tz_convert(ET).date() not in keep:
+            return
+        outcomes = json.loads(m["outcomes"]) if isinstance(m.get("outcomes"), str) else (m.get("outcomes") or [])
+        long_side = next((x for x in m.get("marketSides") or [] if x.get("long")), {})
+        long_name = long_side.get("description") or ""
+        if not outcomes or long_name not in outcomes:
+            log(f"polymarket_us skip {m['slug']}: cannot tell which side is long")
+            return
+        # School / team names from the event (outcomes are mascots for CFB), matched by abbreviation.
+        names = {str(t.get("abbreviation", "")).lower(): t.get("name") or "" for t in teams}
+        found[m["slug"]] = {"league": parts[1].upper(), "away": parts[2], "home": parts[3],
+                            "away_name": names.get(parts[2]) or outcomes[0],
+                            "home_name": names.get(parts[3]) or (outcomes[1] if len(outcomes) > 1 else ""),
+                            "away_outcome": outcomes[0],
+                            "long_is_away": long_name == outcomes[0], "game_start": gst.isoformat()}
+
+    def write_map(self) -> None:
+        from ingest.download_all import NFL_ALIAS, _sim
+        rows = {}
+        events = {e: v for e, v in self.k.events.items() if v}
+        for slug, m in self.markets.items():
+            best, score = None, 0.0
+            day = pd.Timestamp(m["game_start"]).tz_convert(ET).date()
+            for ev, (ka, kh, *_rest) in events.items():
+                series = ev.split("-")[0]
+                if (m["league"] == "NFL") != (series == "KXNFLGAME"):
+                    continue
+                code = ev.split("-")[1]
+                try:
+                    evday = datetime(2000 + int(code[:2]), MONTHS[code[2:5]], int(code[5:7])).date()
+                except (KeyError, ValueError):
+                    continue
+                if abs((evday - day).days) > 1:
+                    continue
+                if m["league"] == "NFL":
+                    sc = 1.0 if (NFL_ALIAS.get(ka, ka.lower()), NFL_ALIAS.get(kh, kh.lower())) == (m["away"], m["home"]) else 0.0
+                else:
+                    nm = self.k.event_names.get(ev, {})
+                    an, hn = nm.get(ka, ""), nm.get(kh, "")
+                    sc = (_sim(an, m["away_name"]) + _sim(hn, m["home_name"])) / 2 if an and hn else 0.0
+                if sc > score:
+                    best, score = ev, sc
+            ok = best is not None and score >= 0.8
+            ka, kh = (self.k.events[best][0], self.k.events[best][1]) if ok else ("", "")
+            rows[slug] = {**m, "kalshi_event": best if ok else None, "match_score": round(score, 3),
+                          "game_id": (f"{m['league'].lower()}_{pd.Timestamp(m['game_start']):%Y%m%d}_{ka.lower()}_{kh.lower()}"
+                                      if ok else None)}
+        self.MAP_FILE.write_text(json.dumps(rows, indent=1))
+
+    def _rows(self, slug: str, bid, ask, bsz, asz, recv: int) -> list[dict]:
+        snap = (bid, ask, bsz, asz)
+        if snap == self.top.get(slug):
+            return []
+        self.top[slug] = snap
+        if self.markets[slug]["long_is_away"]:      # long = away: home bid = 1 - long ask, home ask = 1 - long bid
+            hb, ha, hbs, has = (1 - ask if ask == ask else ask), (1 - bid if bid == bid else bid), asz, bsz
+        else:
+            hb, ha, hbs, has = bid, ask, bsz, asz
+        return [{"ts": recv, "venue": "polymarket_us", "market_id": slug, "kind": k, "price": round(px, 4),
+                 "size": sz, "side": sd}
+                for k, px, sz, sd in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell")) if px == px and 0 < px < 1]
+
+    @staticmethod
+    def _px(q) -> float:
+        try:
+            return float((q or {}).get("value"))
+        except (TypeError, ValueError):
+            return float("nan")
+
+    def poll_batch(self) -> None:
+        slugs = sorted(self.markets)
+        rows = []
+        for i in range(0, len(slugs), 100):
+            d = self.get("/v1/markets", [("slug", x) for x in slugs[i:i + 100]] + [("limit", 100)])
+            recv = time.time_ns()
+            for m in (d or {}).get("markets", []):
+                if m.get("slug") not in self.markets:
+                    continue
+                old = self.top.get(m["slug"], (None, None, float("nan"), float("nan")))
+                rows += self._rows(m["slug"], self._px(m.get("bestBidQuote")), self._px(m.get("bestAskQuote")),
+                                   old[2], old[3], recv)
+        if rows:
+            self.w.add(pd.DataFrame(rows), rows[0]["ts"])
+
+    def poll_bbo(self, n: int) -> None:
+        slugs = sorted(self.markets)
+        for _ in range(min(n, len(slugs))):
+            slug = slugs[self.rr % len(slugs)]
+            self.rr += 1
+            d = self.get(f"/v1/markets/{slug}/bbo")
+            md = (d or {}).get("marketData") or {}
+            if not md:
+                continue
+            recv = time.time_ns()
+            f = lambda k: float(md[k]["value"]) if isinstance(md.get(k), dict) else (float(md[k]) if md.get(k) not in (None, "") else float("nan"))
+            rows = self._rows(slug, f("bestBid"), f("bestAsk"), f("bidShares"), f("askShares"), recv)
+            traded = f("sharesTraded")
+            prev = self.traded.get(slug)
+            if prev is not None and traded == traded and traded > prev:
+                px = f("lastTradePx")
+                if px == px:
+                    hpx = 1 - px if self.markets[slug]["long_is_away"] else px
+                    rows.append({"ts": recv, "venue": "polymarket_us", "market_id": slug, "kind": "trade",
+                                 "price": round(hpx, 4), "size": traded - prev, "side": "unknown"})
+            if traded == traded:
+                self.traded[slug] = traded
+            if rows:
+                self.w.add(pd.DataFrame(rows), recv)
+
+    async def run(self, stop: asyncio.Event) -> None:
+        last_refresh, last_map, last_batch = 0.0, 0.0, 0.0
+        while not stop.is_set():
+            t0 = time.monotonic()
+            try:
+                if time.monotonic() - last_refresh > (REFRESH_MARKETS_S if self.markets else 60):
+                    await asyncio.to_thread(self.refresh)
+                    last_refresh = time.monotonic()
+                if time.monotonic() - last_map > 60:      # Kalshi titles arrive after start; remap each minute
+                    await asyncio.to_thread(self.write_map)
+                    last_map = time.monotonic()
+                if self.markets:
+                    if time.monotonic() - last_batch >= self.BATCH_EVERY_S:
+                        await asyncio.to_thread(self.poll_batch)
+                        last_batch = time.monotonic()
+                    await asyncio.to_thread(self.poll_bbo, int(self.BBO_PER_S))
+            except Exception as e:
+                log(f"polymarket_us error {type(e).__name__}: {e}")
+                await asyncio.sleep(2)
+            await asyncio.sleep(max(0.0, 1.0 - (time.monotonic() - t0)))
+
+
 async def writer_loop(w: Writer, stop: asyncio.Event) -> None:
     last_local, last_report = time.monotonic(), time.monotonic()
     while not stop.is_set():
@@ -668,14 +883,15 @@ async def main_async(minutes: float | None) -> None:
     w = Writer()
     k = KalshiPoller(w)
     pmws = PolymarketWS(w)
-    tasks = [k.run(stop), pmws.run(stop), writer_loop(w, stop)]
+    pmus = PolymarketUS(w, k)
+    tasks = [k.run(stop), pmws.run(stop), pmus.run(stop), writer_loop(w, stop)]
     kid, kpath = os.getenv("KALSHI_API_KEY_ID") or "", os.getenv("KALSHI_PRIVATE_KEY_PATH") or ""
     if kid and kpath and Path(kpath).is_file():
         tasks.append(KalshiWS(k, kid, kpath).run(stop))
         mode = "kalshi websocket (REST fallback after %.0f s down)" % WS_FALLBACK_S
     else:
         mode = "kalshi REST polling (no Kalshi key)"
-    log(f"collector start pid {os.getpid()} ({mode} + polymarket websocket)")
+    log(f"collector start pid {os.getpid()} ({mode} + polymarket websocket + polymarket_us REST)")
     await asyncio.gather(*tasks)
     w.flush_tiger()
     w.flush_local()
