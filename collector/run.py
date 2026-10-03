@@ -1,4 +1,4 @@
-"""T4 live recorder: Kalshi NFL + college football game markets -> local parquet (+ Tiger Data).
+"""T4 live recorder: Kalshi + polymarket.com NFL / college football game markets -> local parquet (+ Tiger Data).
 
 One asyncio process, one listener per venue, one writer.
 
@@ -46,10 +46,10 @@ from ingest.kalshi import trades_to_rows
 from store import timescale
 
 ROOT = Path(__file__).resolve().parents[1]
-LIVE_DIR = ROOT / "data" / "live"
+LIVE_DIR = Path(os.getenv("COLLECTOR_LIVE_DIR", ROOT / "data" / "live"))  # override for test runs
 STATE_FILE = LIVE_DIR / "kalshi_state.json"
 EVENTS_CACHE = LIVE_DIR / "kalshi_events.json"
-GAPS_MD = ROOT / "GAPS.md"
+GAPS_MD = Path(os.getenv("COLLECTOR_GAPS_MD", ROOT / "GAPS.md"))
 BASE = "https://api.elections.kalshi.com/trade-api/v2"
 SERIES = ("KXNFLGAME", "KXNCAAFGAME")
 ET = ZoneInfo("America/New_York")
@@ -95,15 +95,15 @@ class Writer:
     def add(self, df: pd.DataFrame, recv_ns: int) -> None:
         if df.empty:
             return
-        recs = df[SHARED].to_dict("records")
+        recs = df.to_dict("records")
         for r in recs:
-            r["recv_ns"] = recv_ns
+            r.setdefault("recv_ns", recv_ns)
             k = (r["venue"], r["kind"])
             self.counts[k] = self.counts.get(k, 0) + 1
         self.buf_local += recs
         if self.conn is not None:
             self.buf_tiger += [(r["ts"], r["venue"], r["market_id"], r["kind"], r["price"], r["size"], r["side"])
-                               for r in recs]
+                               for r in recs if r["venue"] in ("kalshi", "polymarket")]
 
     def flush_tiger(self) -> None:
         if self.conn is None or not self.buf_tiger:
@@ -122,8 +122,10 @@ class Writer:
         if not self.buf_local:
             return
         rows, self.buf_local = self.buf_local, []
-        df = pd.DataFrame(rows).astype({"ts": "int64", "venue": "string", "market_id": "string", "kind": "string",
-                                        "price": "float64", "size": "float64", "side": "string", "recv_ns": "int64"})
+        df = pd.DataFrame(rows)
+        types = {"ts": "int64", "venue": "string", "market_id": "string", "kind": "string", "price": "float64",
+                 "size": "float64", "side": "string", "recv_ns": "int64", "src_ts_ns": "Int64", "tx_hash": "string"}
+        df = df.astype({c: t for c, t in types.items() if c in df.columns})
         now = datetime.now(timezone.utc)
         for venue, part in df.groupby("venue"):
             d = LIVE_DIR / str(venue) / f"{now:%Y%m%d}"
@@ -302,6 +304,181 @@ class KalshiPoller:
             await asyncio.sleep(max(0.0, BOOK_EVERY_S - (time.monotonic() - t0)))
 
 
+class PolymarketWS:
+    """polymarket.com public market websocket (no key): NFL + CFB moneyline books and trades.
+
+    Game markets: open moneyline markets in the current-season NFL (12185) and CFB (12756)
+    series with gameStartTime yesterday, today or tomorrow (US Eastern). Outcomes are
+    [away, home]; away-token rows are flipped to P(home wins).
+      bid/ask rows: top of book on change, ts = receipt time.
+      trade rows (last_trade_price): ts = the event's own timestamp, plus recv_ns,
+        src_ts_ns and tx_hash, so block time can be looked up later.
+    Calibration markets (venue "polymarket_dcal"): the 10 busiest non-sports markets, trades
+    only, used to measure the match-to-block delay D (HYPOTHESIS_v2.md). Never football.
+    """
+
+    URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
+    GAMMA = "https://gamma-api.polymarket.com"
+
+    def __init__(self, writer: Writer) -> None:
+        self.w = writer
+        self.s = requests.Session()
+        self.tokens: dict[str, dict] = {}     # asset_id -> {condition, home: bool, calib: bool}
+        self.books: dict[str, dict] = {}      # asset_id -> {"bids": {px: sz}, "asks": {px: sz}}
+        self.top: dict[str, tuple] = {}
+        self.last_msg_ns = time.time_ns()
+
+    def refresh(self) -> bool:
+        today = datetime.now(ET).date()
+        keep = {today + timedelta(days=d) for d in (-1, 0, 1)}
+        toks: dict[str, dict] = {}
+        for sid in (12185, 12756):
+            off = 0
+            while True:
+                b = self.s.get(f"{self.GAMMA}/events", params={"series_id": sid, "closed": "false", "limit": 100,
+                                                                "offset": off}, timeout=30).json()
+                if not b:
+                    break
+                off += len(b)
+                for e in b:
+                    for m in e.get("markets") or []:
+                        if m.get("sportsMarketType") != "moneyline" or not m.get("gameStartTime"):
+                            continue
+                        gs = pd.Timestamp(m["gameStartTime"])
+                        gs = gs.tz_localize("UTC") if gs.tzinfo is None else gs
+                        if gs.tz_convert(ET).date() not in keep:
+                            continue
+                        ids = json.loads(m["clobTokenIds"]) if isinstance(m["clobTokenIds"], str) else m["clobTokenIds"]
+                        if len(ids) != 2:
+                            continue
+                        toks[ids[0]] = {"condition": m["conditionId"], "home": False, "calib": False}
+                        toks[ids[1]] = {"condition": m["conditionId"], "home": True, "calib": False}
+        busy = self.s.get(f"{self.GAMMA}/markets", params={"active": "true", "closed": "false", "order": "volume24hr",
+                                                           "ascending": "false", "limit": 40}, timeout=30).json()
+        n_cal = 0
+        for m in busy:
+            if m.get("sportsMarketType") or m.get("gameStartTime") or n_cal >= 10:
+                continue  # calibration set excludes every sports market
+            ids = json.loads(m["clobTokenIds"]) if isinstance(m["clobTokenIds"], str) else m["clobTokenIds"]
+            for t in ids:
+                toks[t] = {"condition": m["conditionId"], "home": True, "calib": True}
+            n_cal += 1
+        changed = set(toks) != set(self.tokens)
+        self.tokens = toks
+        n_game = sum(1 for v in toks.values() if not v["calib"]) // 2
+        log(f"polymarket markets: {n_game} game moneylines, {n_cal} calibration markets")
+        return changed
+
+    def _emit_top(self, asset: str, recv: int) -> None:
+        info = self.tokens.get(asset)
+        if not info or info["calib"]:
+            return
+        bk = self.books.get(asset)
+        if not bk:
+            return
+        bb = max(bk["bids"]) if bk["bids"] else None
+        ba = min(bk["asks"]) if bk["asks"] else None
+        snap = (bb, bk["bids"].get(bb), ba, bk["asks"].get(ba))
+        if snap == self.top.get(asset):
+            return
+        self.top[asset] = snap
+        bid, bsz, ask, asz = snap
+        if info["home"]:
+            hb, hbs, ha, has = bid, bsz, ask, asz
+        else:  # away token: its bid is a home ask at 1 - bid
+            hb, hbs = (1 - ask if ask is not None else None), asz
+            ha, has = (1 - bid if bid is not None else None), bsz
+        rows = [{"ts": recv, "venue": "polymarket", "market_id": asset, "kind": k, "price": round(px, 4),
+                 "size": sz, "side": sd}
+                for k, px, sz, sd in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell"))
+                if px is not None and 0 < px < 1]
+        if rows:
+            self.w.add(pd.DataFrame(rows), recv)
+
+    def handle(self, x: dict, recv: int) -> None:
+        et = x.get("event_type")
+        if et == "book":
+            a = x["asset_id"]
+            self.books[a] = {"bids": {float(l["price"]): float(l["size"]) for l in x.get("bids", [])},
+                             "asks": {float(l["price"]): float(l["size"]) for l in x.get("asks", [])}}
+            self._emit_top(a, recv)
+        elif et == "price_change":
+            touched = set()
+            for c in x.get("price_changes") or []:
+                a = c["asset_id"]
+                bk = self.books.setdefault(a, {"bids": {}, "asks": {}})
+                side = bk["bids"] if c["side"].upper() == "BUY" else bk["asks"]
+                px, sz = float(c["price"]), float(c["size"])
+                if sz == 0:
+                    side.pop(px, None)
+                else:
+                    side[px] = sz
+                touched.add(a)
+            for a in touched:
+                self._emit_top(a, recv)
+        elif et == "last_trade_price":
+            a = x["asset_id"]
+            info = self.tokens.get(a)
+            if not info:
+                return
+            px = float(x["price"])
+            side = {"BUY": "buy", "SELL": "sell"}.get(str(x.get("side")).upper(), "unknown")
+            if not info["home"] and not info["calib"]:
+                px = 1 - px
+                side = {"buy": "sell", "sell": "buy"}.get(side, "unknown")
+            src = int(x["timestamp"]) * 1_000_000 if x.get("timestamp") else None
+            self.w.add(pd.DataFrame([{
+                "ts": src or recv, "venue": "polymarket_dcal" if info["calib"] else "polymarket",
+                "market_id": a, "kind": "trade", "price": round(px, 4), "size": float(x.get("size") or 0),
+                "side": side, "recv_ns": recv, "src_ts_ns": src, "tx_hash": x.get("transaction_hash")}]), recv)
+
+    async def run(self, stop: asyncio.Event) -> None:
+        import websockets
+        backoff, last_refresh = 1, 0.0
+        while not stop.is_set():
+            try:
+                await asyncio.to_thread(self.refresh)
+                last_refresh = time.monotonic()
+                if not self.tokens:
+                    await asyncio.sleep(60)
+                    continue
+                async with websockets.connect(self.URL, ping_interval=None, max_size=None, open_timeout=20) as ws:
+                    await ws.send(json.dumps({"assets_ids": sorted(self.tokens), "type": "market"}))
+                    log(f"polymarket websocket subscribed to {len(self.tokens)} tokens")
+                    backoff, last_ping = 1, time.monotonic()
+                    while not stop.is_set():
+                        if time.monotonic() - last_ping > 10:
+                            await ws.send("PING")
+                            last_ping = time.monotonic()
+                        if time.monotonic() - last_refresh > REFRESH_MARKETS_S:
+                            last_refresh = time.monotonic()
+                            if await asyncio.to_thread(self.refresh):
+                                log("polymarket market set changed; resubscribing")
+                                break
+                        try:
+                            msg = await asyncio.wait_for(ws.recv(), timeout=5)
+                        except asyncio.TimeoutError:
+                            continue
+                        recv = time.time_ns()
+                        if (recv - self.last_msg_ns) / 1e9 > 120:
+                            log_gap(self.last_msg_ns, recv, "polymarket", "no websocket messages")
+                        self.last_msg_ns = recv
+                        if msg in ("PONG", ""):
+                            continue
+                        d = json.loads(msg)
+                        for x in (d if isinstance(d, list) else [d]):
+                            self.handle(x, recv)
+            except Exception as e:
+                if stop.is_set():
+                    break
+                log(f"polymarket websocket {type(e).__name__}: {e}; reconnect in {backoff}s")
+                t0 = time.time_ns()
+                await asyncio.sleep(backoff)
+                if backoff >= 8:
+                    log_gap(t0 - backoff * 1_000_000_000, time.time_ns(), "polymarket", f"websocket reconnect ({type(e).__name__})")
+                backoff = min(backoff * 2, 30)
+
+
 async def writer_loop(w: Writer, stop: asyncio.Event) -> None:
     last_local, last_report = time.monotonic(), time.monotonic()
     while not stop.is_set():
@@ -325,8 +502,9 @@ async def main_async(minutes: float | None) -> None:
         loop.call_later(minutes * 60, stop.set)
     w = Writer()
     k = KalshiPoller(w)
-    log(f"collector start pid {os.getpid()} (kalshi REST polling mode)")
-    await asyncio.gather(k.run(stop), writer_loop(w, stop))
+    pmws = PolymarketWS(w)
+    log(f"collector start pid {os.getpid()} (kalshi REST polling mode + polymarket websocket)")
+    await asyncio.gather(k.run(stop), pmws.run(stop), writer_loop(w, stop))
     w.flush_tiger()
     w.flush_local()
     k.save_state()
