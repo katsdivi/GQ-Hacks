@@ -3,18 +3,26 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 10:22 AM ET)
-Current task: two recorders live (Mac + Vultr) for Saturday's games; Amendment 2 DRAFT awaiting Alden, NOT committed
-Done: Vultr deployed (Atlanta, systemd, chrony offset ~0.6 ms, local parquet only, own log out/GAPS_vultr.md);
-  heartbeats + auto outage logging on every feed (both machines); one-machine-per-game rule in the draft
-Verified numbers:
-  Vultr 10 min (14:11:28-14:21:23 UTC): kalshi ask 8,678 / bid 8,880 / trade 2,335; polymarket ask 2,280 / bid 2,280 / trade 47;
-    polymarket_us ask 228 / bid 1,698; 0 of 11 minutes empty; outages: none except two logged restarts (systemctl restart test passed)
-  Kalshi websocket on one key from two machines: no conflict seen on either side (Mac and Vultr both subscribed)
-  Mac: outages again 14:13-14:15 UTC (kalshi_ws 116 s, polymarket 112 s, polymarket_us 78 s) and 09:06-09:49 ET (sleep on battery)
-Blockers: Mac sleeps on battery / lid closed -> Vultr is the primary recorder per the draft rule
-Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; commit after approval; after Saturday's last game run the book-mid test once
-Decisions pending: Amendment 2, t9-costs (3 commits, rule 7 review), Florida in-app check, Tiger single-writer choice, B (Webull, deferred)
+STATUS  (last update: Sat Oct 3, 10:45 AM ET)
+Current task: Saturday recording (Mac + Vultr); Amendment 2 DRAFT edited, NOT committed; branch t4h-ops-checks (not merged)
+Done this session:
+  Key hygiene: secrets/kalshi.pem and kalshi.env git-ignored; 0 commits ever touch secrets/; 0 secrets in git status
+  Polymarket US ask/bid asymmetry (14:15-14:25 UTC, identical on both machines): REAL one-sided book on 5 FCS mismatches
+    (gateway sends no bestBidQuote on the long/away side, so no home ask); crossed quotes 0. PLUS a collector dedup bug
+    (NaN != NaN) that rewrote the unchanged bid every poll (~301 rows/10 min/market). Fixed + tested (9c9b7b6); NOT deployed
+  Mac outage 14:13-14:15 UTC = Clamshell Sleep on battery (pmset 10:13:18 ET sleep, 10:14:35 ET lid wake); still on battery
+  collector/watch_vultr.sh: read-only, every 120 s, alerts on unit not active / ssh fail / missing or >60 s heartbeat;
+    running under caffeinate (cycles 10:28 and 10:30 ET: unit=active, feed ages 3-7 s)
+  data/live/holdout_candidates.csv: 112 CFB games (kickoff 2026-10-02 23:00Z to 2026-10-04 03:59Z), polymarket.com 112,
+    Polymarket US 102, both 102, 0 missing kickoffs (3 via hand-checked ESPN event ids); 14 Sunday NFL games are outside
+    the window. sha256 prefix d20247c7140ac7c9. Gitignored: needs git add -f in the Amendment 2 commit
+  Amendment 2 draft: same-machine placebo pairs, fixed candidate set, Friday-night exclusion rule, disclosure + commit lines
+  Polymarket US T&S training conversion: complete (276 day files, log ends 20260731)
+  Strategy A data: ingest/kalshi_only_train.py running in background (1267 training games planned; seal max kickoff check)
+Blockers: Mac on battery (sleeps when lid closes; Vultr has no backup then)
+Next: Divi OK to redeploy the dedup fix (between games or after Saturday's last game); Alden review; commit Amendment 2
+  + candidate CSV; write the book-mid runner and laggard evaluator (synthetic data only)
+Decisions pending: dedup redeploy timing, include Sunday NFL?, Amendment 2, t9-costs review, Florida in-app check, B (deferred)
 ```
 
 ## Log
