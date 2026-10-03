@@ -19,7 +19,9 @@ All prices are P(home wins): away markets are flipped (1 - p, bid <-> ask, buy <
 Writer: buffers rows, writes Tiger Data once per second if TIGER_DATABASE_URL is set, and
 always writes a local parquet chunk every 5 s and on shutdown:
   data/live/<venue>/<YYYYMMDD>/<unix_s>_<pid>.parquet   (gitignored)
-Local chunks add recv_ns (receipt time, ns) to the shared columns.
+Local chunks add recv_ns (receipt time, ns) to the shared columns, and src_ts_ns (the venue's own
+server timestamp) where the message carries one: polymarket.com book and trade messages, Kalshi
+orderbook deltas (ts_ms). For book rows ts stays the receipt time.
 
 Holdout rule: this process only writes. It prints row counts, nothing else.
 
@@ -260,7 +262,8 @@ class KalshiPoller:
             self.queue_trades(t)
         self.process_pending()
 
-    def top_rows(self, t: str, bid: float, ask: float, bsz: float, asz: float, recv: int) -> list[dict]:
+    def top_rows(self, t: str, bid: float, ask: float, bsz: float, asz: float, recv: int,
+                 src_ns: int | None = None) -> list[dict]:
         """Top-of-book rows for market t if it changed, in P(home wins) terms. Shared by REST and websocket."""
         snap = (bid, ask, bsz, asz)
         if snap == self.book.get(t) or t not in self.markets:
@@ -270,7 +273,7 @@ class KalshiPoller:
         # Home terms: away market's bid becomes home ask at 1 - bid, and vice versa.
         hb, ha, hbs, has = (1 - ask, 1 - bid, asz, bsz) if away else (bid, ask, bsz, asz)
         return [{"ts": recv, "venue": "kalshi", "market_id": t, "kind": kind, "price": round(px, 4), "size": sz,
-                 "side": side}
+                 "side": side, **({"src_ts_ns": src_ns} if src_ns else {})}
                 for kind, px, sz, side in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell"))
                 if px == px and 0 < px < 1]  # skip empty side (0 or 1 after flip, or NaN)
 
@@ -381,7 +384,7 @@ class KalshiWS:
                 return {round(float(px) * scale, 4): float(q) for px, q in (msg.get(k) or [])}
         return {}
 
-    def _emit(self, t: str, recv: int) -> None:
+    def _emit(self, t: str, recv: int, src_ns: int | None = None) -> None:
         bk = self.books.get(t)
         if not bk:
             return
@@ -389,7 +392,7 @@ class KalshiWS:
         nb = max(bk["no"]) if bk["no"] else None
         bid, bsz = (yb, bk["yes"][yb]) if yb is not None else (float("nan"), float("nan"))
         ask, asz = (round(1 - nb, 4), bk["no"][nb]) if nb is not None else (float("nan"), float("nan"))
-        rows = self.p.top_rows(t, bid, ask, bsz, asz, recv)
+        rows = self.p.top_rows(t, bid, ask, bsz, asz, recv, src_ns)
         if rows:
             self.p.w.add(pd.DataFrame(rows), recv)
 
@@ -418,7 +421,8 @@ class KalshiWS:
                     bk[side].pop(px, None)
                 else:
                     bk[side][px] = q
-                self._emit(t, recv)
+                ts_ms = msg.get("ts_ms")
+                self._emit(t, recv, int(ts_ms) * 1_000_000 if ts_ms else None)
         elif typ == "trade":
             self.p.queue_trades(msg.get("market_ticker"))
         elif typ == "error":
@@ -537,7 +541,7 @@ class PolymarketWS:
         log(f"polymarket markets: {n_game} game moneylines, {n_cal} calibration markets")
         return changed
 
-    def _emit_top(self, asset: str, recv: int) -> None:
+    def _emit_top(self, asset: str, recv: int, src_ns: int | None = None) -> None:
         info = self.tokens.get(asset)
         if not info or info["calib"]:
             return
@@ -557,7 +561,7 @@ class PolymarketWS:
             hb, hbs = (1 - ask if ask is not None else None), asz
             ha, has = (1 - bid if bid is not None else None), bsz
         rows = [{"ts": recv, "venue": "polymarket", "market_id": asset, "kind": k, "price": round(px, 4),
-                 "size": sz, "side": sd}
+                 "size": sz, "side": sd, **({"src_ts_ns": src_ns} if src_ns else {})}
                 for k, px, sz, sd in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell"))
                 if px is not None and 0 < px < 1]
         if rows:
@@ -569,7 +573,7 @@ class PolymarketWS:
             a = x["asset_id"]
             self.books[a] = {"bids": {float(l["price"]): float(l["size"]) for l in x.get("bids", [])},
                              "asks": {float(l["price"]): float(l["size"]) for l in x.get("asks", [])}}
-            self._emit_top(a, recv)
+            self._emit_top(a, recv, int(x["timestamp"]) * 1_000_000 if x.get("timestamp") else None)
         elif et == "price_change":
             touched = set()
             for c in x.get("price_changes") or []:
@@ -582,8 +586,9 @@ class PolymarketWS:
                 else:
                     side[px] = sz
                 touched.add(a)
+            src = int(x["timestamp"]) * 1_000_000 if x.get("timestamp") else None
             for a in touched:
-                self._emit_top(a, recv)
+                self._emit_top(a, recv, src)
         elif et == "last_trade_price":
             a = x["asset_id"]
             info = self.tokens.get(a)
