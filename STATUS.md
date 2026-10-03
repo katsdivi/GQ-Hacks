@@ -3,27 +3,24 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 11:00 AM ET)
-Current task: Saturday recording (Mac + Vultr); Amendment 2 DRAFT edited, NOT committed; branch t4h-ops-checks (not merged)
-Verified this session:
-  Keys: kalshi.pem IGNORED, kalshi.env IGNORED, 0 commits touch secrets/, 0 secrets in git status
-  Polymarket US 14:15-14:25 UTC: Mac ask 6 / bid 1,511, Vultr ask 6 / bid 1,521; crossed 0 on both. Real one-sided book
-    (no bid on the long/away side, 5 FCS mismatches) + dedup bug that only ADDS exact repeats: 1,500 of 1,517 rows are
-    repeats, 17 after read-time dedup; nothing dropped or corrupted. Fix 9c9b7b6 tested, NOT deployed (deploy after last game)
-  Mac 14:13 UTC outage: pmset "Clamshell Sleep ... Using Batt" 10:13:18 ET, lid wake 10:14:35 ET
-  Mac sleep: caffeinate -dims -w <collector pid> attached (no restart); supervise.sh now uses -dims for future starts.
-    On battery macOS ignores PreventSystemSleep (summary 0), so lid close still sleeps. Battery 95%, lowpowermode 0
-  Watchdog collector/watch_vultr.sh: cycles every ~2 min since 10:28 ET, unit=active, feed ages 0-10 s, no alerts
-  holdout_candidates.csv (cutoff Sun 06:00 ET, Sunday NFL out): 112 CFB, polymarket.com 112, Polymarket US 102, both 102,
-    0 empty kickoffs, sha256 prefix d20247c7140ac7c9 (gitignored, git add -f with Amendment 2)
-  docs/strategy_a_rules.md committed before any Strategy A code: ties pay 0.5 and stay in; ALBY at IOWA resolved from Kalshi
-    metadata (home Iowa, Iowa won) but excluded (no ESPN match); ESPN groups=90; no-ESPN-match games: 1 of 1,267
-  Strategy A download running: 350/1264 at 14:57Z; seal dropped 57 holdout events; no strategy code run
-Blockers: Mac on battery (lid close sleeps it; Vultr then has no backup)
-Next: plug in Mac; Alden review; commit Amendment 2 + candidate CSV; dedup redeploy after last game; book-mid runner +
-  laggard evaluator on synthetic data
-Decisions pending: ALBY at IOWA (exclude vs hand-checked ESPN id; v3 says drop only games ESPN does not have),
-  Amendment 2, t9-costs review, Florida in-app check, B (deferred)
+STATUS  (last update: Sat Oct 3, 11:18 AM ET)
+Current task: Saturday recording (Mac + Vultr); Amendment 2 PRE-REGISTERED on main; ops work on branch t4h-ops-checks (not merged)
+Done:
+  Amendment 2 committed on main 8a509ff at 2026-10-03 11:15:07 ET, with data/live/holdout_candidates.csv (forced add,
+    sha256 prefix d20247c7140ac7c9, 112 CFB games). Committed before Alden's review (line included).
+  Added before commit: mid defined only when both sides exist (no fill across a missing side); mid change = grid second
+    whose defined mid differs from the previous one (rows never counted, >= 50 qualification uses it); repeat-row disclosure;
+    "definitions govern" note: current xcorr_lead.game_lag_mid ffills each side separately and must change before the run
+  Strategy A rules: ALBY at IOWA included via hand-checked ESPN event 401752799 (only hand-matched game); downloader override
+  T8 coverage check: 5 random T8 games start -119.7 to -120.0 min; of 136 checked, cfb_20250913_ull_mizz starts +74.5 min
+    (T8 kickoff 3 h off ESPN). T8 kickoff vs ESPN > 15 min on 4 of 138 (usc_pur, ull_mizz, fau_fiu, tem_gt). Full re-download kept.
+  Recorders at 11:15 ET: Mac 0 of 6 empty minutes; Vultr watchdog unit=active, feed ages 7-9 s
+Running: Strategy A download 480/1264 at 15:14Z, ~6 games/min now, ~2 h left; then re-fetch ALBY at IOWA with ESPN kickoff
+Blockers: Mac on battery (lid close sleeps it)
+Next: fix game_lag_mid to the Amendment 2 mid rule (xcorr_lead.py, branch, tested on synthetic books); book-mid runner +
+  laggard evaluator on synthetic data; dedup redeploy after Saturday's last game
+Decisions pending: T8 kickoff mismatches (4 games) for v2/B; merge t4h-ops-checks (merge, not rebase: amendment cites 9c9b7b6);
+  t9-costs review; Florida in-app check; B (deferred)
 ```
 
 ## Log
