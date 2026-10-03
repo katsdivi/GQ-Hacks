@@ -17,6 +17,7 @@ out/*
 __pycache__/
 *.pyc
 .venv/
+.venv-exec/
 .ipynb_checkpoints/
 .DS_Store
 
