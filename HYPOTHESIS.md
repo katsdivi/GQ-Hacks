@@ -31,3 +31,7 @@ This hypothesis is retired without being tested. The text above is unchanged.
 Reason: it cannot be tested as registered. The committed holdout (August 1 to October 2026) contains 0 CME NFL single-game contracts on Databento (`GLBX.MDP3`), and the one college week-0 contract checked (CGFSUQ629, August 29 2026) had 0 trades. The training period has only about 18 CME games with trade data (Databento coverage of these contracts starts 2026-01-11), too few for the planned tuning and robustness checks.
 
 Data examined before retiring: one exploratory training game, LAR at CHI on 2026-01-18 (CME FGCHIF618 C0001, Kalshi KXNFLGAME-26JAN18LACHI-CHI), used for the data check and a venue overlay chart. No backtest, strategy, or tuning was run. No holdout prices were loaded. The result on that one game is not used to form a new hypothesis.
+
+## Correction (2026-10-03)
+
+The retirement note above says "about 18 CME games with trade data". The correct figure is about 14 games: 13 NFL playoff games (26 team contracts, one per team; the Jan 10 wild-card games are only partly covered because Databento data starts 2026-01-11) plus the college football championship game (2 contracts). The reason for retiring the hypothesis is unchanged.
