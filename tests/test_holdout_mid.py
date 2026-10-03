@@ -137,7 +137,38 @@ def test_feed_start_prefers_heartbeat(tmp_path):
 def test_run_all_applies_holm(world):
     cands, maps, machines = world
     out = H.run_all(cands, maps, machines)
-    levels = sorted(v["decision"]["holm_level"] for v in out.values())
+    levels = sorted(out[t]["decision"]["holm_level"] for t in H.TESTS)
     assert levels in ([0.025, 0.05], [0.0, 0.025])
-    for v in out.values():
+    diag = out["receipt_diagnostic"]
+    assert list(diag.columns) == ["machine", "venue", "n_rows", "median_s", "p90_s"]
+    assert (diag["n_rows"] == 0).all()                         # synthetic world rows carry no src_ts_ns
+    for v in (out[t] for t in H.TESTS):
         assert v["decision"]["alpha"] == v["decision"]["holm_level"]
+
+
+def test_receipt_diagnostic(tmp_path):
+    """recv_ns - src_ts_ns per machine and venue, over the game's window only; rows without src_ts_ns skipped."""
+    ko = pd.Timestamp("2025-10-04 15:00", tz="UTC").value
+    root = tmp_path / "m"
+    n = 1000
+    ts = ko + np.arange(n, dtype="int64") * NS
+    for venue, mid, delay in (("kalshi", "EV-H", 0.2), ("polymarket", "tok", np.r_[np.full(900, 0.5), np.full(100, 2.0)])):
+        d = root / "data" / "live" / venue / "20251004"
+        d.mkdir(parents=True)
+        src = pd.array(ts - (np.asarray(delay) * NS).astype("int64") if np.ndim(delay) else ts - int(delay * NS),
+                       dtype="Int64")
+        f = pd.DataFrame({"ts": ts, "venue": venue, "market_id": mid, "kind": "bid", "price": 0.5, "size": 1.0,
+                          "side": "buy", "src_ts_ns": src, "recv_ns": ts})
+        f.loc[f.index % 10 == 0, "src_ts_ns"] = pd.NA            # rows with no venue timestamp are skipped
+        outside = f.assign(ts=f["ts"] + 10 * n * NS, recv_ns=f["recv_ns"] + 10 * n * NS + 99 * NS)
+        pd.concat([f, outside]).to_parquet(d / "1_0.parquet", index=False)
+    md = root / "GAPS.md"
+    md.write_text("| a | b | c | d | e |\n|---|---|---|---|---|\n")
+    m = H.Machine("mac", root, md, year=2025)
+    cands = pd.DataFrame([{"game_id": "cfb_20251004_a_h", "kickoff_utc": "2025-10-04T15:00:00Z", "kalshi_ticker": "EV"}])
+    maps = {"polymarket_com": {"EV": {"collector_home_token": "tok"}}, "polymarket_us": {}}
+    per = pd.DataFrame([{"game_id": "cfb_20251004_a_h", "machine": "mac", "window_start_ns": ko,
+                         "window_end_ns": ko + n * NS}])
+    diag = H.receipt_diagnostic(cands, maps, [m], {"polymarket.com": per}).set_index("venue")
+    assert diag.loc["kalshi", "n_rows"] == 900 and abs(diag.loc["kalshi", "median_s"] - 0.2) < 1e-9
+    assert diag.loc["polymarket", "median_s"] == 0.5 and diag.loc["polymarket", "p90_s"] > 0.5

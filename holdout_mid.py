@@ -27,6 +27,11 @@ Polymarket US):
      recordings (only a "book_empty" marker row would show it), so on those recordings the fallback applies
      to every game.
      Mid changes never span an excluded interval; the qualifying count and the lag use the rest.
+  9. Diagnostic (Amendment 3, reported, NOT a decision rule): per machine and venue, median and p90 of receipt
+     time minus the venue-side timestamp (recv_ns - src_ts_ns, seconds) over the rows of the instruments and
+     windows of the games run on that machine. Only rows that carry a venue-side timestamp count: Kalshi
+     websocket orderbook_delta rows (ts_ms) and polymarket.com book and trade rows; Polymarket US rows never
+     carry one (reported as n_rows 0). Only the two timestamp columns are read.
 No prices are printed: outputs are counts, lags and decisions. Refuses games with kickoff >= 2026-08-01 unless
 holdout_run=True (the run is once, after Saturday's last game, when Divi says go).
 """
@@ -102,6 +107,19 @@ class Machine:
         d = ds.dataset(fs, format="parquet")
         f = (ds.field("market_id") == market) & (ds.field("ts") >= lo_ns) & (ds.field("ts") <= hi_ns)
         return d.to_table(filter=f, columns=["ts", "venue", "market_id", "kind", "price"]).to_pandas()
+
+    def receipt_lags_s(self, venue: str, market: str, lo_ns: int, hi_ns: int) -> np.ndarray:
+        """recv_ns - src_ts_ns in seconds for rows with a venue-side timestamp (diagnostic only; reads ts,
+        market_id and the two timestamp columns, never prices)."""
+        fs = self.files(venue)
+        if not fs:
+            return np.array([])
+        d = ds.dataset(fs, format="parquet")
+        if "src_ts_ns" not in d.schema.names or "recv_ns" not in d.schema.names:
+            return np.array([])
+        f = (ds.field("market_id") == market) & (ds.field("ts") >= lo_ns) & (ds.field("ts") <= hi_ns)
+        t = d.to_table(filter=f, columns=["recv_ns", "src_ts_ns"]).to_pandas().dropna()
+        return (t["recv_ns"].astype("int64") - t["src_ts_ns"].astype("int64")).to_numpy() / NS
 
     def gaps(self) -> pd.DataFrame:
         if self._gaps is None:
@@ -316,4 +334,38 @@ def run_all(cands: pd.DataFrame, maps: dict, machines: list[Machine], holdout_ru
         q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)]
         inputs[t] = (q["lag_s"].to_numpy(float), pl["lag_s"].to_numpy(float), TESTS[t][0], TESTS[t][1])
     final = X.decide_holm(inputs)
-    return {t: {"per_game": res[t][0], "placebo": res[t][1], "decision": final[t]} for t in TESTS}
+    out = {t: {"per_game": res[t][0], "placebo": res[t][1], "decision": final[t]} for t in TESTS}
+    out["receipt_diagnostic"] = receipt_diagnostic(cands, maps, machines, {t: res[t][0] for t in TESTS})
+    return out
+
+
+def receipt_diagnostic(cands: pd.DataFrame, maps: dict, machines: list[Machine], per: dict) -> pd.DataFrame:
+    """Amendment 3 diagnostic, reported only (no rule uses it): median and p90 of receipt time minus the
+    venue-side timestamp, per machine and venue, over each game's instruments and window on the machine the
+    game was run on (games with a window on a machine, qualifying or not)."""
+    by = {m.name: m for m in machines}
+    cand = cands.set_index("game_id")
+    lags: dict[tuple[str, str], list] = {}
+    seen = set()
+    for t, p in per.items():
+        if "window_start_ns" not in p:
+            continue
+        other = TESTS[t][0]
+        for r in p.dropna(subset=["window_start_ns"]).itertuples():
+            if not r.machine:
+                continue
+            inst = instruments(cand.loc[[r.game_id]].reset_index().iloc[0], maps)
+            for v in ("kalshi", other):
+                key = (r.machine, v, inst[v], int(r.window_start_ns))
+                if inst[v] is None or key in seen:
+                    continue
+                seen.add(key)
+                lags.setdefault((r.machine, v), []).append(
+                    by[r.machine].receipt_lags_s(v, inst[v], int(r.window_start_ns), int(r.window_end_ns)))
+    rows = []
+    for (mach, v), xs in sorted(lags.items()):
+        x = np.concatenate(xs) if xs else np.array([])
+        rows.append({"machine": mach, "venue": v, "n_rows": len(x),
+                     "median_s": float(np.median(x)) if len(x) else float("nan"),
+                     "p90_s": float(np.quantile(x, 0.9)) if len(x) else float("nan")})
+    return pd.DataFrame(rows, columns=["machine", "venue", "n_rows", "median_s", "p90_s"])
