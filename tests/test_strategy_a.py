@@ -89,7 +89,7 @@ def test_select_theta_needs_50_trades():
     assert A.select_theta(s) == 0.8
 
 
-def test_fill_capped_at_99_cents():
+def test_fill_capped_at_one_minus_tick():
     tr = trades([(-120, "HHH", 0.97), (-60, "AAA", 0.03), (-2, "HHH", 0.98), (3, "HHH", 0.99)])
     r = fav_row(A.evaluate_game(tr, game()), 0.90)
     assert r["entered"] and r["fill_price"] == 0.99 and r["fill_capped"]          # 0.99 trade -> 0.99, not 1.00
@@ -99,6 +99,13 @@ def test_fill_capped_at_99_cents():
     tr2 = trades(BASE + [(3, "HHH", 0.98)])
     r2 = fav_row(A.evaluate_game(tr2, game()), 0.70)
     assert r2["fill_price"] == 0.99 and not r2["fill_capped"]                     # 0.98 + 1 cent is not capped
+    # a market with a 0.001 step: cap 0.999, so the 0.99 trade fills at 1.00 -> capped at 0.999
+    g = game()
+    g.tick = {"HHH": 0.001, "AAA": 0.001}
+    r3 = fav_row(A.evaluate_game(tr, g), 0.90)
+    assert r3["fill_price"] == 0.999 and r3["fill_capped"]
+    g.tick = {"HHH": 0.01}                                                        # explicit cent tick: as default
+    assert fav_row(A.evaluate_game(tr, g), 0.90)["fill_price"] == 0.99
 
 
 def test_preseason_flag_and_side_by_side():
@@ -113,9 +120,76 @@ def test_preseason_flag_and_side_by_side():
                      "espn", 1.0)
     assert [A.is_preseason(g) for g in (hof, aug, reg, cfb_aug)] == [True, True, False, False]
     assert not A.is_preseason(pre)                                                # October kickoff
+    # boundary: the opener is Thu Sep 4, 2025 (ET date); Sep 3 ET is preseason, Sep 4 ET is not
+    sep3 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2025-09-04 03:00", tz="UTC"), "espn", 1.0)
+    sep4 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2025-09-04 16:00", tz="UTC"), "espn", 1.0)
+    assert A.is_preseason(sep3) and not A.is_preseason(sep4)
+    with pytest.raises(ValueError):                                               # 2026 opener not set
+        A.is_preseason(A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2026-08-10", tz="UTC"), "espn", 1.0))
     tr = trades(BASE + [(3, "HHH", 0.83)])
     rows = pd.DataFrame(A.evaluate_game(tr, game()) + [dict(r, game_id="nfl_x", preseason=True)
                                                        for r in A.evaluate_game(tr, game())])
     t = A.summarize_side_by_side(rows)
     n = t[(t.theta == 0.70) & ~t.placebo].set_index("sample")["n_trades"]
     assert n["primary"] == 2 and n["no NFL preseason"] == 1
+
+
+# The four training games with a blank settlement in the games file, and what Kalshi's metadata records for
+# them (status/result/settlement_value_dollars only; v3 Amendment 3 section 1). MIA (away of MIA at CHI) 404s.
+BLANKS = [("nfl_20250929_gb_dal", "DAL", "GB", "KXNFLGAME-25SEP28GBDAL"),
+          ("nfl_20250808_lv_sea", "SEA", "LV", "KXNFLGAME-25AUG07LVSEA"),
+          ("nfl_20250810_mia_chi", "CHI", "MIA", "KXNFLGAME-25AUG10MIACHI"),
+          ("nfl_20250817_jac_no", "NO", "JAC", "KXNFLGAME-25AUG17JACNO")]
+CENT = '[{"end": "1.0000", "start": "0.0000", "step": "0.0100"}]'
+
+
+def four_games(tmp_path):
+    games = [{"game_id": g, "league": "NFL", "home": h, "away": a, "kalshi_event": e, "kalshi_ticker": f"{e}-{h}",
+              "kickoff_utc_espn": "2025-09-28T20:25:00Z", "kickoff_source": "espn", "settlement_result": None,
+              "n_trades": 100} for g, h, a, e in BLANKS]
+    games.append({**games[0], "game_id": "nfl_20251005_x_y", "settlement_result": 1.0})   # a normal game
+    meta = []
+    for g, h, a, e in BLANKS:
+        meta.append({"game_id": g, "side": "home", "ticker": f"{e}-{h}", "status": "finalized", "result": "scalar",
+                     "settlement_value_dollars": "0.5000", "price_level_structure": "linear_cent",
+                     "price_ranges": CENT})
+        meta.append({"game_id": g, "side": "away", "ticker": f"{e}-{a}",
+                     **({"status": "not found"} if a == "MIA" else
+                        {"status": "finalized", "result": "scalar", "settlement_value_dollars": "0.5000",
+                         "price_level_structure": "linear_cent", "price_ranges": CENT})})
+    gp, mp = tmp_path / "games.csv", tmp_path / "meta.csv"
+    pd.DataFrame(games).to_csv(gp, index=False)
+    pd.DataFrame(meta).to_csv(mp, index=False)
+    return gp, mp
+
+
+def test_scalar_settlement_step_on_the_four_blank_games(tmp_path):
+    gp, mp = four_games(tmp_path)
+    before = gp.read_bytes()
+    g = A.apply_scalar_settlements(pd.read_csv(gp), pd.read_csv(mp)).set_index("game_id")
+    for gid, *_ in BLANKS:
+        assert g.loc[gid, "settlement_result"] == 0.5
+        assert g.loc[gid, "settlement_source"] == "kalshi scalar (home market)"
+    assert g.loc["nfl_20251005_x_y", "settlement_result"] == 1.0
+    assert g.loc["nfl_20251005_x_y", "settlement_source"] == "yes/no"
+    assert gp.read_bytes() == before                                              # the games file is not edited
+    # only the away market recorded: 1 - its value; no scalar record anywhere: stays blank
+    m = pd.read_csv(mp)
+    away_only = m[~((m.game_id == "nfl_20250808_lv_sea") & (m.side == "home"))].copy()
+    away_only.loc[(away_only.game_id == "nfl_20250808_lv_sea"), "settlement_value_dollars"] = "0.2500"
+    r = A.apply_scalar_settlements(pd.read_csv(gp), away_only).set_index("game_id")
+    assert r.loc["nfl_20250808_lv_sea", "settlement_result"] == 0.75
+    none = A.apply_scalar_settlements(pd.read_csv(gp), m[m.game_id != "nfl_20250817_jac_no"])
+    assert none.set_index("game_id")["settlement_result"].isna().sum() == 1
+
+
+def test_load_games_ticks_and_preseason_assert(tmp_path):
+    gp, mp = four_games(tmp_path)
+    gs = A.load_games(gp, mp, expect_preseason=0)                 # all five kick off on 2025-09-28
+    assert [g.result for g in gs] == [0.5, 0.5, 0.5, 0.5, 1.0]
+    assert gs[0].tick == {"DAL": 0.01, "GB": 0.01} and gs[2].tick == {"CHI": 0.01}   # MIA not found: default
+    assert A.fill_cap(gs[2], "MIA") == 0.99
+    with pytest.raises(AssertionError):
+        A.load_games(gp, mp)                                      # the training default expects 49
+    assert A.top_step('[{"end": "0.1", "start": "0", "step": "0.001"}, {"end": "1", "start": "0.1", "step": "0.01"}]') == 0.01
+    assert math.isnan(A.top_step(None))

@@ -46,3 +46,4 @@ run.py       python run.py --game <id>
 - Only Divi merges to `main`. Work on your own branch.
 - No API keys and no raw vendor data in the repo.
 - Never look at test games (Aug to Oct 2026) until the final run. Record every setting tried.
+- Venue data is used read-only. No code places, amends or cancels an order on any venue, except paper orders to the Webull sandbox (execution/webull.py refuses any other host). Kalshi credentials are used only to open the read-only market-data websocket. polymarket.com data is read only: US residents cannot trade it.
