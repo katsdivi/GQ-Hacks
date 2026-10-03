@@ -115,3 +115,25 @@
 | Sat Oct 03 18:06:29 | Sat Oct 03 18:06:35 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
 | Sat Oct 03 18:11:24 | Sat Oct 03 18:11:25 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
 | Sat Oct 03 18:21:35 | Sat Oct 03 18:21:36 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:31:04 | Sat Oct 03 18:31:10 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:36:20 | Sat Oct 03 18:36:26 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:37:06 | Sat Oct 03 18:37:11 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:41:47 | Sat Oct 03 18:41:48 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:47:16 | Sat Oct 03 18:47:23 | polymarket | websocket error ConnectionClosedError; duration 7 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:50:26 | Sat Oct 03 18:50:32 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:51:58 | Sat Oct 03 18:51:59 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:53:17 | Sat Oct 03 18:53:22 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:54:57 | Sat Oct 03 18:55:03 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:59:08 | Sat Oct 03 18:59:13 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 18:59:40 | Sat Oct 03 18:59:45 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:01:29 | Sat Oct 03 19:01:35 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:02:09 | Sat Oct 03 19:02:10 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:07:04 | Sat Oct 03 19:07:09 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:12:20 | Sat Oct 03 19:12:22 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:20:08 | Sat Oct 03 19:20:13 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:20:19 | Sat Oct 03 19:20:24 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:21:32 | Sat Oct 03 19:21:33 | kalshi_ws | resubscribe (market set changed); duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:22:53 | Sat Oct 03 19:22:59 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:23:42 | Sat Oct 03 19:23:46 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:24:08 | Sat Oct 03 19:24:13 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 19:24:47 | Sat Oct 03 19:24:52 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |

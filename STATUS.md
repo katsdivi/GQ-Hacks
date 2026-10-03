@@ -3,21 +3,18 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 6:28 PM ET)
+STATUS  (last update: Sat Oct 3, 7:32 PM ET)
 Current task: stopped for Divi's line-by-line review of docs/review/strategy_a_walkthrough.md.
 Done:
-  1 A3 (v2) COMMITTED on main: ed5db9b, 2026-10-03 18:14:20 ET, pushed (origin/main = ed5db9b). Heading time
-    18:14 ET. Before the 7 PM kickoffs. No rebase/squash anywhere; merges only.
-  2 Staleness on BOTH markets (strategy_a.py 221-225, a3e4a55, branch only): either market with no trade in
-    (t - 10 min, t] -> game skipped, n_skipped_stale per theta; favorite chosen only when both fresh. Tests a/b/c;
-    (c) verified the previous rule ENTERED that game. v3 A3 draft section 6 (18:20 ET). Walkthrough regenerated.
-  3 fetch_game (download_all.py): away market from the event's market list (/historical/markets?event_ticker),
-    never from codes (8bd117a). 10 Miami (OH) B games: 10/10 equal the bulk tickers (old rebuild 0/10). All B
-    games live: 977/977 equal the bulk plan; 1 outside the plan (nfl_20260118_lar_chi, T3) resolves to -LA, its
-    T3 tick file is home-only by design of the old T3 download. 151 tests pass.
-  4 docs/known_limitations.md: collector discovery would skip a hyphenated market; 0 holdout games affected
-    (audit 5:40 PM). Collector not changed or deployed.
-Running: sim (a) on sim box (started 15:57 ET); watcher copies a/ on DONE
+  1 Power note appended to HYPOTHESIS_v2.md on main: 8964ea9, 19:30:29 ET, pushed (origin/main = 8964ea9), merge
+    only. Divi's sentence edit applied. Citation points to branch t13-strategy-a at 3825678 (docs/results/sim/ is
+    not on main).
+  2 Sim results complete before box teardown: docs/results/sim/ a/ (power_sim_quotes.csv 8 rows, studies 4,000,
+    run.log) and b/ (reps 30,000, table 60, wilson 60, ring_0/ring_1 3,000 each, run.log), driver.log; line counts
+    equal the box. Power at alpha 0.025: 47-80% (n 30-60), 85-89% (n 80); no-link <= 1.2%, zero-lag 0.
+  3 A3 (v2) on main: ed5db9b, 18:14:20 ET, pushed.
+  4 Staleness on both markets: a3e4a55, test_staleness_on_both_markets (a/b/c), v3 A3 draft section 6 (18:20 ET).
+  5 fetch_game: 8bd117a, tests/test_fetch_game_away.py (10/10 Miami (OH) B games = bulk tickers; live 977/977).
 Next: Divi reviews walkthrough. v3 A3 commits only on "commit v3 A3"; Strategy A runs only on "run A on training".
 Decisions pending: commit v3 A3; run A on training
 ```
