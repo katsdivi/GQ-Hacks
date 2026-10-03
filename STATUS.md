@@ -3,24 +3,28 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 2:21 PM ET)
-URGENT: Mac battery 53%, ~56 min left at 14:18 ET. Plug in now or the Mac recorder (backup) dies.
-Current task: Saturday recording; v3 Amendment 2 on main; v2 Amendment 3 DRAFT (power sentence pending)
+STATUS  (last update: Sat Oct 3, 3:30 PM ET)
+Current task: fees hardened; Amendment 3 additions drafted (NOT committed); Webull client drafted
 Done:
-  v3 Amendment 2 on main 37170aa, 2026-10-03 13:57:27 ET, pushed (no favorite on equal prices; underdog placebo uses
-    the corrected fill). t13-strategy-a pushed (12309ea at push time)
-  Fee test: strategy_a fees == t9-costs costs.fee (6213f5d) on P 0.05..0.95 x C {1, 10, 100}, both lines: 57 passed
-    (values vendored; replace with direct calls once t9-costs is merged)
-  Placebo design simulation script committed (tests/placebo_design_sim.py, ring of 3,000 games per venue, exact
-    reuse for Design 2); smoke test OK; NOT run yet
-INCIDENT 14:00-14:18 ET: the power re-run (sonnet agent, 8 worker processes) pushed load to 182 on 8 cores and
-  starved the Mac collector (polymarket heartbeat gap 972 s, logged in GAPS.md with cause). Simulation killed 14:18;
-  load 65 a minute later, collector writing every minute. Vultr unaffected (watchdog: active, feeds 6-7 s)
-  Kalshi HTTP 429 on the Mac collector's trade polling, sporadic, during the Strategy A download (same IP); books unaffected
-Running: Strategy A download 1150/1264 at 18:16Z (~20 min left); then ALBY at IOWA re-fetch, then STOP
-Not running: power re-run and placebo-design simulation. Held until the Mac is on AC; then nice -n 19 with 2 processes
-Next: final download counts; simulations (niced) -> Amendment 3 power sentence from the design Divi approves
-Decisions pending: placebo design (after the simulation); commit v2 Amendment 3; merges (rule 7); Florida in-app check
+  Strategy A download complete: 1,267 games (CFB 936, NFL 331), 0 duplicates, 0 zero-trade, max kickoff 2026-01-18
+    (seal 2026-08-01). ALBY at IOWA re-fetched with ESPN event 401752799: kickoff 22:00Z, 1,317 trades (was 53)
+  Fees: t9-costs 735eae2 and t13 ae90e8a use exact Decimal, ROUND_CEILING per order. The old code was already right
+    (round-9 guard); identical on 59,700 cases to an integer reference; 7 float-noise cases tested
+  Book-wipe exclusion in holdout_mid.py / xcorr_lead.py (2c23dec), synthetic test: 5 s fake lead -> 0 s
+  execution/webull.py (41f12a6): sandbox only, dry run default, 30 req/60 s limiter, 12 mocked tests
+  Full suite: 127 + 12 passed
+Findings to decide:
+  GB at DAL 2025-09-28 was a 40-40 tie; downloader left settlement NaN, so Strategy A drops it (rule says 0.5)
+  3 NFL preseason games unsettled; 49 Aug preseason NFL games included: keep for Strategy A training?
+  NFL stops 2026-01-18: conference championships and Super Bowl missing (likely a different Kalshi series)
+  Strategy A fill = trade + 1 cent can reach 1.00 when the trade is 0.99 (not a valid Kalshi price)
+  costs.py has no Polymarket US schedule (fees.md: taker 0.0695 from 2026-10-01, not implemented, no date gate)
+  Both-empty books write no row (both venues): full clears invisible today, fallback [ko-2, ko+10 min] applies
+  Mac polymarket.com gaps cover the noon kickoffs (11:57-12:34 ET etc.); Vultr feed fresh (max 11 s) all day
+Running: nothing. Strategy A NOT run (waiting for "run A on training")
+Next: Webull keys (~/keys/webull.env, env vars only); SDK install after the last game; Vultr rsync after last game
+Decisions pending: power sim 500 reps (~3.2 h) vs 150 (~57 min) on the sim box (box stays up until then);
+  Amendment 3 (fallback width, PM US fallback yes/no); placebo design D2; merges (rule 7)
 ```
 
 ## Log
