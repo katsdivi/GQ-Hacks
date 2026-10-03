@@ -45,18 +45,67 @@ def game_lag(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, venue_y
     return float(lag) if np.isfinite(corr[lag]) else float("nan")
 
 
+NS = 1_000_000_000
+_EMPTY = -1.0   # sentinel for "last snapshot had an empty side" so a grid carry never fills across it
+
+
+def mid_snapshots(ticks: pd.DataFrame, venue: str) -> pd.Series:
+    """Mid per recorded top-of-book snapshot (HYPOTHESIS_v2.md Amendment 2): index ts (ns), value
+    (bid + ask) / 2, NaN when either side is empty. The collector writes the bid row and the ask row of a
+    snapshot with the same receipt ts and writes no row for an empty side, so a snapshot ts with only one
+    kind means the other side was empty. One market per venue (the runner picks it)."""
+    b = ticks[(ticks["venue"] == venue) & ticks["kind"].isin(["bid", "ask"])]
+    if b.empty:
+        return pd.Series(dtype="float64")
+    assert b["market_id"].nunique() == 1, f"{venue}: one market per venue, got {b['market_id'].nunique()}"
+    w = b.pivot_table(index="ts", columns="kind", values="price", aggfunc="last").sort_index()
+    for k in ("bid", "ask"):
+        if k not in w:
+            w[k] = np.nan
+    return (w["bid"] + w["ask"]) / 2
+
+
+def mid_grid(snap: pd.Series) -> pd.Series:
+    """1 s grid label g -> mid of the last snapshot at or before the end of second g (backward only).
+    A second with no snapshot carries the previous snapshot's state; if that state had an empty side the
+    mid stays undefined (NaN) until a two-sided snapshot arrives."""
+    if snap.empty:
+        return pd.Series(dtype="float64")
+    g = snap.index.to_numpy() // NS
+    last = pd.Series(snap.fillna(_EMPTY).to_numpy(), index=g).groupby(level=0).last()
+    full = np.arange(last.index.min(), last.index.max() + 1, dtype="int64")
+    return last.reindex(full).ffill().replace(_EMPTY, np.nan)
+
+
+def mid_changes(grid: pd.Series) -> pd.Series:
+    """Per grid second: defined mid minus the previous DEFINED mid; NaN where the mid is undefined or no
+    earlier defined mid exists. Duplicate rows cannot create a change (the mid does not move)."""
+    prev = grid.ffill().shift(1)
+    return (grid - prev).where(grid.notna())
+
+
+def n_mid_changes(grid: pd.Series) -> int:
+    """Amendment 2 qualification count: grid seconds whose defined mid differs from the previous defined mid."""
+    c = mid_changes(grid)
+    return int((c.notna() & (c.abs() > 1e-12)).sum())
+
+
 def game_lag_mid(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, venue_y: str,
                  max_lag_s: int = MAX_LAG_S) -> float:
-    """Book-midpoint version (Amendment 2 confirmatory test): mid = (best bid + best ask) / 2 from each
-    venue's bid/ask rows (align.venue_events, backward fill only), 1 s grid, xcorr of 1 s mid changes."""
-    gx = align.to_grid(align.venue_events(ticks_x, venue_x))
-    gy = align.to_grid(align.venue_events(ticks_y, venue_y))
+    """Book-midpoint version (Amendment 2 confirmatory test): xcorr of 1 s mid changes, mids defined only
+    when both sides exist, never filled across an empty side. Seconds without a defined change on either
+    venue drop out of the correlation (pairwise). Positive = x (Kalshi) first."""
+    gx, gy = mid_grid(mid_snapshots(ticks_x, venue_x)), mid_grid(mid_snapshots(ticks_y, venue_y))
     if gx.empty or gy.empty:
         return float("nan")
-    gx, gy = align.common_grid(gx, gy)
-    if len(gx) < 2 * max_lag_s + 2:
+    lo, hi = max(gx.index.min(), gy.index.min()), min(gx.index.max(), gy.index.max())
+    if hi - lo + 1 < 2 * max_lag_s + 2:
         return float("nan")
-    lag, corr = leadlag.xcorr_lag(gx, gy, max_lag_s)
+    idx = np.arange(lo, hi + 1, dtype="int64")
+    rx, ry = mid_changes(gx).reindex(idx), mid_changes(gy).reindex(idx)
+    corr = {lag: float(rx.corr(ry.shift(-lag))) for lag in range(-max_lag_s, max_lag_s + 1)}
+    corr = {k: (v if v == v else -np.inf) for k, v in corr.items()}
+    lag = max(corr, key=corr.get)
     return float(lag) if np.isfinite(corr[lag]) else float("nan")
 
 
