@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from decimal import ROUND_CEILING, Decimal
 
 import pandas as pd
 
@@ -49,8 +50,12 @@ def fee_webull(price: float, qty: int = QTY) -> float:
 
 
 def fee_kalshi_direct(price: float, qty: int = QTY) -> float:
-    raw = KALSHI_DIRECT_RATE * qty * price * (1 - price)
-    return math.ceil(round(raw * 100, 9)) / 100       # round up to the cent per order
+    """0.07 x C x P x (1 - P), exact decimal, rounded UP to the cent per order. P is trade price + 1 cent,
+    on the cent grid; rounding the float to 4 places recovers it exactly (and keeps a sub-cent tick if one
+    ever appears instead of forcing it to a cent)."""
+    p = Decimal(str(round(float(price), 4)))
+    raw = Decimal(str(KALSHI_DIRECT_RATE)) * Decimal(int(qty)) * p * (1 - p)
+    return float(raw.quantize(Decimal("0.01"), rounding=ROUND_CEILING))
 
 
 @dataclass

@@ -1,6 +1,11 @@
 """strategy_a fee functions equal costs.fee on branch t9-costs (not merged yet).
-Expected values were generated from t9-costs:costs.py at 6213f5d with costs.fee(P, C, "buy", "kalshi", route=...).
-When t9-costs is merged, replace the constants with direct calls to costs.fee."""
+The constants were first generated from t9-costs:costs.py at 6213f5d, then re-derived independently with
+Decimal (0.07 x C x P x (1 - P), ROUND_CEILING to the cent; Webull 0.02 x C): all 114 entries agree, and
+test_constants_match_decimal re-checks that here. When t9-costs is merged, replace the constants with direct
+calls to costs.fee."""
+import math
+from decimal import ROUND_CEILING, Decimal
+
 import pytest
 
 import strategy_a as A
@@ -16,3 +21,26 @@ DIRECT = {(0.05, 1): 0.01, (0.05, 10): 0.04, (0.05, 100): 0.34, (0.1, 1): 0.01, 
 def test_fees_match_t9_costs(p, c):
     assert A.fee_webull(p, c) == pytest.approx(WEBULL[(p, c)], abs=1e-12)
     assert A.fee_kalshi_direct(p, c) == pytest.approx(DIRECT[(p, c)], abs=1e-12)
+
+
+def _dec_direct(p: float, c: int) -> float:
+    d = Decimal(str(p))
+    return float((Decimal("0.07") * c * d * (1 - d)).quantize(Decimal("0.01"), rounding=ROUND_CEILING))
+
+
+def test_constants_match_decimal():
+    for (p, c), v in DIRECT.items():
+        assert v == _dec_direct(p, c)
+    for (p, c), v in WEBULL.items():
+        assert v == float(Decimal("0.02") * c)
+
+
+# C = 100: float 0.07 * C * P * (1 - P) carries noise above the exact cent value, so a plain float ceil charges
+# one cent too much (e.g. 1.7500000000000002 -> 1.76). Exact values by hand: 7 x P x (1 - P) dollars.
+FLOAT_NOISE = {0.10: 0.63, 0.20: 1.12, 0.40: 1.68, 0.50: 1.75, 0.60: 1.68, 0.70: 1.47, 0.80: 1.12}
+
+
+@pytest.mark.parametrize("p", sorted(FLOAT_NOISE))
+def test_direct_fee_no_float_ceil_overcharge(p):
+    assert math.ceil(0.07 * 100 * p * (1 - p) * 100) / 100 == pytest.approx(FLOAT_NOISE[p] + 0.01)  # the trap
+    assert A.fee_kalshi_direct(p, 100) == FLOAT_NOISE[p]
