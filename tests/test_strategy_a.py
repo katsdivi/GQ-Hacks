@@ -87,3 +87,35 @@ def test_select_theta_needs_50_trades():
     s = pd.DataFrame({"theta": [0.7, 0.8, 0.9, 0.7], "placebo": [False, False, False, True],
                       "n_trades": [120, 60, 49, 120], "roc_webull_mean": [0.01, 0.03, 0.10, 0.5]})
     assert A.select_theta(s) == 0.8
+
+
+def test_fill_capped_at_99_cents():
+    tr = trades([(-120, "HHH", 0.97), (-60, "AAA", 0.03), (-2, "HHH", 0.98), (3, "HHH", 0.99)])
+    r = fav_row(A.evaluate_game(tr, game()), 0.90)
+    assert r["entered"] and r["fill_price"] == 0.99 and r["fill_capped"]          # 0.99 trade -> 0.99, not 1.00
+    assert r["pnl_webull"] == pytest.approx((1 - 0.99) * 10 - 0.20)
+    s = A.summarize(pd.DataFrame(A.evaluate_game(tr, game())))
+    assert s.loc[(s.theta == 0.90) & ~s.placebo, "n_capped_fills"].item() == 1
+    tr2 = trades(BASE + [(3, "HHH", 0.98)])
+    r2 = fav_row(A.evaluate_game(tr2, game()), 0.70)
+    assert r2["fill_price"] == 0.99 and not r2["fill_capped"]                     # 0.98 + 1 cent is not capped
+
+
+def test_preseason_flag_and_side_by_side():
+    pre = A.Game("nfl_20250810_aaa_hhh", "NFL", "HHH", "AAA", "KXNCAAFGAME-25OCT04AAAHHH", KO, "espn", 1.0)
+    hof = A.Game("nfl_20250801_aaa_hhh", "NFL", "HHH", "AAA", "X", pd.Timestamp("2025-08-01 00:00", tz="UTC"),
+                 "espn", 1.0)
+    reg = A.Game("nfl_20250905_aaa_hhh", "NFL", "HHH", "AAA", "X", pd.Timestamp("2025-09-05 00:20", tz="UTC"),
+                 "espn", 1.0)
+    aug = A.Game("nfl_20250810_aaa_hhh", "NFL", "HHH", "AAA", "X", pd.Timestamp("2025-08-10 17:00", tz="UTC"),
+                 "espn", 1.0)
+    cfb_aug = A.Game("cfb_20250830_aaa_hhh", "CFB", "HHH", "AAA", "X", pd.Timestamp("2025-08-30 16:00", tz="UTC"),
+                     "espn", 1.0)
+    assert [A.is_preseason(g) for g in (hof, aug, reg, cfb_aug)] == [True, True, False, False]
+    assert not A.is_preseason(pre)                                                # October kickoff
+    tr = trades(BASE + [(3, "HHH", 0.83)])
+    rows = pd.DataFrame(A.evaluate_game(tr, game()) + [dict(r, game_id="nfl_x", preseason=True)
+                                                       for r in A.evaluate_game(tr, game())])
+    t = A.summarize_side_by_side(rows)
+    n = t[(t.theta == 0.70) & ~t.placebo].set_index("sample")["n_trades"]
+    assert n["primary"] == 2 and n["no NFL preseason"] == 1

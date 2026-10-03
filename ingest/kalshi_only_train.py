@@ -238,20 +238,40 @@ def build_plan() -> pd.DataFrame:
 # ---------- settlement ----------
 
 def settlement(home_ticker: str, away_ticker: str) -> str:
+    """Home-team result from Kalshi's own settlement fields (no prices): yes/no -> 1/0; "scalar" (a tie or
+    split settlement) -> Kalshi's recorded settlement_value_dollars for the home market (1 - away's value
+    if only the away market is found). Blank if neither market is finalized with a result."""
     def res(t):
         for path in (f"/historical/markets/{t}", f"/markets/{t}"):
             try:
-                return _kget(path)["market"].get("result", "") or ""
+                m = _kget(path)["market"]
+                return m.get("result", "") or "", m.get("settlement_value_dollars")
             except requests.HTTPError:
                 continue
-        return ""
-    h = res(home_ticker)
+        return "", None
+    h, hv = res(home_ticker)
     if h in ("yes", "no"):
         return "1" if h == "yes" else "0"
-    a = res(away_ticker)
+    if h == "scalar" and hv not in (None, ""):
+        return str(float(hv))
+    a, av = res(away_ticker)
     if a in ("yes", "no"):
         return "0" if a == "yes" else "1"
+    if a == "scalar" and av not in (None, ""):
+        return str(1.0 - float(av))
     return ""
+
+
+def resettle_blanks() -> None:
+    """Fill blank settlement_result rows in GAMES_OUT from Kalshi metadata (settlement fields only)."""
+    g = pd.read_csv(GAMES_OUT)
+    for i in g.index[g["settlement_result"].isna()]:
+        r = g.loc[i]
+        s = settlement(r["kalshi_ticker"], f"{r['kalshi_event']}-{r['away']}")
+        log(f"{r['game_id']}: blank -> {s or 'still blank'}")
+        if s:
+            g.loc[i, "settlement_result"] = float(s)
+    g.to_csv(GAMES_OUT, index=False)
 
 
 # ---------- download ----------
@@ -308,8 +328,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--limit", type=int, help="process only the first N games not yet done (testing)")
     ap.add_argument("--rate", type=float, default=K_RATE[0], help="max Kalshi requests per second")
+    ap.add_argument("--resettle", action="store_true", help="only fill blank settlement_result rows (ties)")
     a = ap.parse_args()
     K_RATE[0] = a.rate
+    if a.resettle:
+        resettle_blanks()
+        return
     run(a.limit)
 
 

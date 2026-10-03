@@ -9,11 +9,15 @@ Per game and theta:
     own-market price. Skip if the favorite's market has no trade in [t - 10 min, t] (staleness). Enter iff
     favorite price >= theta.
   Fill (Amendment 1 section 4): first trade on the favorite's own market at or after t + 1.0 s, plus 1 cent
-    half-spread. No such trade within 5 min after t -> skip, reason "no post-decision trade".
+    half-spread, capped at 0.99 (v3 Amendment 3 draft: 1.00 is not a valid Kalshi price). No such trade within
+    5 min after t -> skip, reason "no post-decision trade".
   Settlement: $1 per contract if the favorite wins, $0 if it loses, $0.5 on a tie (docs/strategy_a_rules.md).
   Costs (v3 line 20): Webull $0.02 per contract per fill, entry only (primary); Kalshi direct
     0.07 x C x P x (1 - P) rounded up to the cent per order (comparison). Settlement fee 0.
   Placebo: buy the underdog's own market under the same decision and the same fill rule.
+  Preseason robustness (v3 Amendment 3 draft): NFL games with ESPN kickoff in July or August (ET) are flagged
+    "preseason"; they stay in the primary run, and summarize_side_by_side reports the run without them next to
+    it. Theta selection uses the primary run only.
 
 Input trades follow the tick contract (price = P(home wins)); the away team's own-market price is 1 - price
 on rows of the away market. No prices are printed. Sealed games (kickoff >= 2026-08-01) are refused unless
@@ -38,6 +42,7 @@ STALE_S = 10 * 60
 LATENCY_S = 1.0               # docs/spec_provisional.md default latency
 FILL_WINDOW_S = 5 * 60        # Amendment 1 section 4: no trade within 5 min after t -> skip
 HALF_SPREAD = 0.01            # v3: as-of price + 1 cent
+MAX_FILL = 0.99               # v3 Amendment 3 draft: fill = min(trade + 1 cent, 0.99)
 MEDIAN_WINDOW_S = 3.0
 MIN_TRADES_SELECT = 50        # v3 selection: thetas with at least 50 trades
 WEBULL_PER_CONTRACT = 0.02
@@ -68,6 +73,12 @@ class Game:
     kickoff: pd.Timestamp  # ESPN kickoff, UTC
     kickoff_source: str
     result: float          # home win 1.0 / home loss 0.0 / tie 0.5 / NaN unsettled
+
+
+def is_preseason(g: Game) -> bool:
+    """NFL preseason = ESPN kickoff in July or August, US Eastern (Hall of Fame game and August preseason; the
+    regular season starts in September). 2025 training: 49 games."""
+    return g.league.upper() == "NFL" and g.kickoff.tz_convert("America/New_York").month in (7, 8)
 
 
 def own_market_trades(trades: pd.DataFrame, g: Game, team: str) -> pd.DataFrame:
@@ -121,7 +132,7 @@ def decide(trades: pd.DataFrame, g: Game) -> dict:
 
 def _leg(d: dict, g: Game, team: str, theta: float, placebo: bool) -> dict:
     row = {"game_id": g.game_id, "league": g.league, "theta": theta, "placebo": placebo,
-           "team": team, "entered": False, "skip": d["skip"]}
+           "team": team, "entered": False, "skip": d["skip"], "preseason": is_preseason(g)}
     if d["skip"]:
         return row
     if d["fav_px"] < theta:
@@ -135,11 +146,12 @@ def _leg(d: dict, g: Game, team: str, theta: float, placebo: bool) -> dict:
         row["skip"] = "unsettled"
         return row
     fill_ts, trade_px = fill
-    price = trade_px + HALF_SPREAD
+    capped = trade_px + HALF_SPREAD > MAX_FILL
+    price = min(round(trade_px + HALF_SPREAD, 4), MAX_FILL)
     team_result = g.result if team == g.home else 1.0 - g.result       # tie stays 0.5
     fw, fd = fee_webull(price), fee_kalshi_direct(price)
     gross = (team_result - price) * QTY
-    row.update(entered=True, fill_ts=fill_ts, fill_price=price, payout=team_result,
+    row.update(entered=True, fill_ts=fill_ts, fill_price=price, fill_capped=capped, payout=team_result,
                fee_webull=fw, fee_direct=fd, pnl_webull=gross - fw, pnl_direct=gross - fd,
                roc_webull=(gross - fw) / (price * QTY + fw), roc_direct=(gross - fd) / (price * QTY + fd))
     return row
@@ -151,7 +163,8 @@ def evaluate_game(trades: pd.DataFrame, g: Game, thetas=THETAS, final_test: bool
         raise ValueError(f"{g.game_id}: kickoff on/after 2026-08-01 is sealed (needs final_test)")
     if g.kickoff_source not in KICKOFF_SOURCES:
         return [{"game_id": g.game_id, "league": g.league, "theta": th, "placebo": p, "entered": False,
-                 "skip": f"kickoff not from ESPN ({g.kickoff_source})"} for th in thetas for p in (False, True)]
+                 "skip": f"kickoff not from ESPN ({g.kickoff_source})", "preseason": is_preseason(g)}
+                for th in thetas for p in (False, True)]
     d = decide(trades, g)
     rows = []
     for th in thetas:
@@ -168,11 +181,19 @@ def summarize(rows: pd.DataFrame) -> pd.DataFrame:
         out.append({"theta": th, "placebo": pl, "n_trades": len(e),
                     "roc_webull_mean": e["roc_webull"].mean() if len(e) else float("nan"),
                     "roc_direct_mean": e["roc_direct"].mean() if len(e) else float("nan"),
+                    "n_capped_fills": int(e["fill_capped"].sum()) if "fill_capped" in e else 0,
                     "skipped_no_post_decision_trade": int((r["skip"] == "no post-decision trade").sum()),
                     "skipped_stale": int(r["skip"].str.startswith("stale").sum()),
                     "skipped_other": int((~r["entered"] & ~r["skip"].isin(["below theta", "no post-decision trade"])
                                           & ~r["skip"].str.startswith("stale")).sum())})
     return pd.DataFrame(out)
+
+
+def summarize_side_by_side(rows: pd.DataFrame) -> pd.DataFrame:
+    """Primary run (all games) and the robustness run without NFL preseason, one table, column "sample"."""
+    return pd.concat([summarize(rows).assign(sample="primary"),
+                      summarize(rows[~rows["preseason"].astype(bool)]).assign(sample="no NFL preseason")],
+                     ignore_index=True)
 
 
 def select_theta(summary: pd.DataFrame) -> float | None:
