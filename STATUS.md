@@ -3,39 +3,26 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 5:40 PM ET)
-Current task: 4:05 decisions list. A3 (v2) staged on main worktree, waiting for "commit A3". v3 A3 + strategy_a.py
-  ready for line-by-line review. Sim (a) running (watcher copies a/ on DONE).
+STATUS  (last update: Sat Oct 3, 6:15 PM ET)
+Current task: post-review list. A3 still staged in ../wt-main, NOT committed (waiting for literal "commit A3").
 Done:
-  1 Placebo: Design 1 for both venues (rule reads jointly). A3 5a reports D2 numbers + Wilson, strict-by-construction
-    note (7.3% expected upper at 500 reps), MW-only 8-12% under D1 zero-lag, median gate controls it.
-  2 polymarket.com seconds_delay (CLOB GET /markets/<condition>, field seconds_delay; Gamma has none), sealed fetch
-    16:22 ET: data/live/holdout_seconds_delay.csv sha256 24a5d41af0ba7f34. 3 s: 0, 1 s: 112, other 0, missing 0.
-    SURPRISE: every holdout market is 1 s, not 3 s. Laggard uses per-market delay (missing -> 3, counted).
-  3 A3 final text (HYPOTHESIS_v2_amendment3_DRAFT.md) appended to HYPOTHESIS_v2.md in ../wt-main (uncommitted) +
-    docs/market_structure.pdf (Andrew, 15:38 version, sha256 0e31fa56). PM US: no delay, cut kept as precaution.
-    Power sentence = placeholder to note. Runner diagnostic recv - src_ts per venue per machine (d2614ae).
-    Venue-side ts: Kalshi ws orderbook_delta only (ms); polymarket.com book + trade (ms); PM US none.
-  4 Strategy A (e918921): games CSV restored to original (4 blanks); scalar settlement applied at load from
-    data/raw/kalshi_market_meta.csv (code step, test on the 4 games); preseason = ET date < 2025-09-04, assert 49;
-    fill cap 1 - market tick. Ticks: 2,527 markets at 0.01, 0 other, 7 not found (all OH away tickers, default 0.01). data/ and out/ gitignored; history has only games.csv, sample ticks,
-    holdout_candidates.csv and the 2 holdout maps (ids/metadata) under data/.
-  5 Laggard (t14 64f6151): no mid carry across outages, kickoff cut or window end; fills across a break or past
-    the end skipped and counted; capacity = best-level size at fill (exact for at-or-better; PM US not measurable).
-    15/15 laggard tests, 182 suite.
-  6 Compliance: credentialed calls = Kalshi market-data websocket only (subscribe; signed headers). All other venue
-    calls unauthenticated GETs (Kalshi REST, Gamma, data-api, CLOB, gateway.polymarket.us, polymarketexchange.com
-    files). No order endpoint on any venue. Webull: constructor refuses any host but api.sandbox.webull.com; SDK
-    user endpoint overrides its production table. README line added.
-Running: sim (a) on sim box, started 15:57 ET; background watcher scp's a/ to docs/results/sim/a on DONE
-Next: Divi reviews A3 -> "commit A3"; power table + note when (a) lands; v3 A3 review; item 7 liquidity
-Not done / flags: item 7 needs polymarket.com market-level volume/OI (only event volume stored) and PM US
-  metadata; NFL 2026 opener date must be set before Strategy A final test (is_preseason raises)
-Since 4:55: 3 s leftovers removed (A3 13/16/17, laggard tests on the 1 s market delay, cd5eea2; 3 s only as the
-  counted missing fallback). 2026 opener Sep 9 set. Team-code bug: Miami (OH) "M-OH" cut to "OH" by the downloader;
-  13 games resolved from trade files, kept; cfb_20250831_lam_unt excluded (no UNT rows) (04d3bdd). Ticks 2,534 at
-  0.01. Kalshi training volume median 1.41M (IQR 185K-4.64M); OI 0 on all (settled), not usable.
-Decisions pending: commit A3
+  1 Hyphen audit (ids only). Only hyphenated Kalshi code in any series touched: M-OH (Miami (OH)), 13 training CFB
+    events, 0 NFL. HOLDOUT CLEAN: 126 Kalshi events Oct 2-4 listed, 0 hyphenated; all 112 candidates' home and away
+    instruments exist; both frozen maps' Kalshi events exist (14 PM US entries outside candidates = Oct 4-5 NFL).
+    Training: games file codes "OH" (wrong code, fixed at load from trade files, 04d3bdd); ESPN kickoffs 13/13
+    correct (home/away right); T8 polymarket.com 10/10 correct, 3 unmatched correctly (2 have no moneyline market,
+    LINW not listed); B ticks 10/10 have both Kalshi markets (bulk download used real tickers). Latent, unused:
+    download_all.fetch_game line 366 (clean-clone path) would build a wrong away ticker for the 10 B games;
+    collector discovery (rsplit) would skip a hyphenated market live. Fixes proposed, not applied.
+  2 LAM at UNT: UNT market exists at the expected ticker (finalized, yes); its 33 trades all end 2 h 12 min before
+    kickoff, 0 in the [ko-2h, ko+5h] window. Not the hyphen bug; stays excluded; v3 A3 reason updated.
+  3 Liquidity: report.liquidity_kalshi, volume only (OI dropped). Kalshi training volume median 1.41M contracts
+    (IQR 185K-4.64M); CFB 794K, NFL 5.30M. polymarket.com / PM US not started (low priority).
+  4 docs/review/strategy_a_walkthrough.md (63bb03e): 11 blocks with [TIME]/[MONEY] tags, tests per block, 3
+    lookahead points with line numbers, 5 review notes. Strategy A NOT run.
+Running: sim (a) on sim box (started 15:57 ET); watcher copies a/ on DONE
+Next: "commit A3" -> commit on main (merge only), push, hash + ET time; power table + note when (a) lands
+Decisions pending: commit A3; apply the two latent hyphen fixes (fetch_game, collector after Saturday)
 ```
 
 ## Log

@@ -103,3 +103,8 @@
 | Sat Oct 03 16:51:13 | Sat Oct 03 16:51:19 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
 | Sat Oct 03 16:51:27 | Sat Oct 03 16:51:32 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
 | Sat Oct 03 17:01:39 | Sat Oct 03 17:01:53 | polymarket | resubscribe (market set changed); duration 14 s; recovered | auto-logged by collector |
+| Sat Oct 03 17:11:58 | Sat Oct 03 17:12:12 | polymarket | resubscribe (market set changed); duration 14 s; recovered | auto-logged by collector |
+| Sat Oct 03 17:16:52 | Sat Oct 03 17:16:58 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 17:27:02 | Sat Oct 03 17:27:17 | polymarket | resubscribe (market set changed); duration 15 s; recovered | auto-logged by collector |
+| Sat Oct 03 17:31:50 | Sat Oct 03 17:31:56 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 17:32:31 | Sat Oct 03 17:32:37 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
