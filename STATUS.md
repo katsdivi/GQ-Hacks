@@ -3,20 +3,22 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 7:32 PM ET)
-Current task: stopped for Divi's line-by-line review of docs/review/strategy_a_walkthrough.md.
+STATUS  (last update: Sat Oct 3, 7:50 PM ET)
+Current task: Strategy A training run done; stopped.
 Done:
-  1 Power note appended to HYPOTHESIS_v2.md on main: 8964ea9, 19:30:29 ET, pushed (origin/main = 8964ea9), merge
-    only. Divi's sentence edit applied. Citation points to branch t13-strategy-a at 3825678 (docs/results/sim/ is
-    not on main).
-  2 Sim results complete before box teardown: docs/results/sim/ a/ (power_sim_quotes.csv 8 rows, studies 4,000,
-    run.log) and b/ (reps 30,000, table 60, wilson 60, ring_0/ring_1 3,000 each, run.log), driver.log; line counts
-    equal the box. Power at alpha 0.025: 47-80% (n 30-60), 85-89% (n 80); no-link <= 1.2%, zero-lag 0.
-  3 A3 (v2) on main: ed5db9b, 18:14:20 ET, pushed.
-  4 Staleness on both markets: a3e4a55, test_staleness_on_both_markets (a/b/c), v3 A3 draft section 6 (18:20 ET).
-  5 fetch_game: 8bd117a, tests/test_fetch_game_away.py (10/10 Miami (OH) B games = bulk tickers; live 977/977).
-Next: Divi reviews walkthrough. v3 A3 commits only on "commit v3 A3"; Strategy A runs only on "run A on training".
-Decisions pending: commit v3 A3; run A on training
+  1 Orientation check PASS (training, no P&L): home_px + away_px at t over 1,135 games reaching the favorite
+    decision: median 1.0100, p5 1.0000, p95 1.0200, 0 outside [0.90, 1.10].
+  2 v3 Amendment 3 committed on main: d349e50, 19:40:56 ET, pushed (merge only). Includes the orientation check.
+  3 Strategy A on training (runner a164987, strategy_a a3e4a55), 1,267 games, nothing tuned, holdout not loaded.
+    Selected theta (v3 rule) = 0.80. Favorite legs, Webull ROC [95% game bootstrap]: 0.70 -0.031 [-0.072, 0.008]
+    n 536; 0.80 -0.007 [-0.044, 0.026] n 302; 0.90 -0.026 [-0.065, 0.008] n 127. Kalshi direct at 0.80 +0.007
+    [-0.032, 0.042]. Placebo (underdog) legs -0.37 / -0.56 / -0.71, CIs all below 0.
+    0.80 win rate 0.911 vs mean fill 0.898 (+1.3 cents); P&L Webull -$21.40, direct +$19.06.
+    Costs x2 at 0.80: Webull -0.038 [-0.073, -0.005], direct -0.009 [-0.045, 0.024].
+    No NFL preseason: 0.80 and 0.90 unchanged (no preseason trades there); 0.70 -0.033.
+    6 rows appended to experiments/variants.csv. Outputs out/strategy_a/ (gitignored).
+Next: Divi reads the A result. B not run. Code still on branch t13-strategy-a (not merged).
+Decisions pending: merge t13-strategy-a to main after review
 ```
 
 ## Log
