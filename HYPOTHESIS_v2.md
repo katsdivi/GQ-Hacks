@@ -57,3 +57,15 @@ Direction is measured on training games only (kickoff before 2026-08-01), with t
 1. One game, LAR at CHI on 2026-01-18, was examined on CME and Kalshi only (data check, overlay chart, and a rough cross-correlation that suggested Kalshi moved before CME).
 2. polymarket.com trade records were downloaded for three NFL training games picked by date (nfl-atl-min-2025-09-14, nfl-atl-no-2025-11-23, nfl-atl-ari-2025-12-21) to count trades per minute and to check timestamps against block times. The records include a price field; prices were not examined, plotted or compared.
 3. No Kalshi vs polymarket.com price comparison has been made.
+
+## Amendment 1 (2026-10-03 00:41 ET)
+
+Rule 2 of "Block-time bias: correction fixed in advance" is replaced by the following lower/upper bound fill rule, because the p90 shift allowed fills to see trades matched after the decision:
+
+- Decisions and gap checks: never shifted; raw polymarket.com block time only.
+- polymarket.com entry fills: timestamps shifted earlier by the 90th percentile of D (worse for us).
+- polymarket.com exit fills: unshifted (worse for us).
+- The same backtest is also run with no shift at all and reported as the upper bound. Both results are reported, labelled "lower bound" (the rule above) and "upper bound" (no shift).
+- Backtests that trade on Kalshi with polymarket.com as the signal are unchanged (unshifted).
+
+Written after one training game (nfl_20251116_was_mia) was run under the old rule. The lead rule is unchanged.
