@@ -12,3 +12,4 @@ matplotlib
 cryptography
 pytest
 scipy
+webull-openapi-python-sdk==3.0.2   # execution/webull.py; install after the last game (collector shares .venv)
