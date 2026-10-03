@@ -11,3 +11,4 @@ python-dotenv
 matplotlib
 cryptography
 pytest
+scipy

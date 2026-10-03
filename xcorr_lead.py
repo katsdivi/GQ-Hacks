@@ -110,7 +110,20 @@ def game_lag_mid(ticks_x: pd.DataFrame, venue_x: str, ticks_y: pd.DataFrame, ven
 
 
 def mann_whitney_p(a, b) -> float:
-    """Two-sided Mann-Whitney U test, normal approximation with tie correction (no scipy)."""
+    """Two-sided Mann-Whitney U test (scipy.stats.mannwhitneyu, default method). NaNs dropped."""
+    from scipy.stats import mannwhitneyu
+    a, b = np.asarray(a, float), np.asarray(b, float)
+    a, b = a[~np.isnan(a)], b[~np.isnan(b)]
+    if len(a) == 0 or len(b) == 0:
+        return float("nan")
+    if np.unique(np.concatenate([a, b])).size == 1:
+        return 1.0
+    return float(mannwhitneyu(a, b, alternative="two-sided").pvalue)
+
+
+def mann_whitney_p_custom(a, b) -> float:
+    """Cross-check only (tests): the earlier hand-written version. Normal approximation, tie and continuity
+    correction."""
     a, b = np.asarray(a, float), np.asarray(b, float)
     a, b = a[~np.isnan(a)], b[~np.isnan(b)]
     n1, n2 = len(a), len(b)
@@ -131,7 +144,7 @@ def mann_whitney_p(a, b) -> float:
 
 
 def decide(real_lags, placebo_lags, d_s: float = 0.0, x: str = "kalshi", y: str = "other",
-           min_lead_s: float = MIN_LEAD_S) -> dict:
+           min_lead_s: float = MIN_LEAD_S, alpha: float = 0.05) -> dict:
     r = np.asarray(real_lags, float) - d_s
     pl = np.asarray(placebo_lags, float) - d_s
     r, pl = r[~np.isnan(r)], pl[~np.isnan(pl)]
@@ -143,10 +156,28 @@ def decide(real_lags, placebo_lags, d_s: float = 0.0, x: str = "kalshi", y: str 
     share_pos, share_neg = float((r > 0).mean()), float((r < 0).mean())
     out.update({"median_corrected_lag_s": med, "mann_whitney_p": p, "share_positive": share_pos,
                 "share_negative": share_neg, "placebo_median_s": float(np.median(pl)) if len(pl) else float("nan")})
-    if med >= min_lead_s and p < 0.05 and share_pos >= MIN_SHARE:
+    out["alpha"] = alpha
+    if med >= min_lead_s and p < alpha and share_pos >= MIN_SHARE:
         out["result"] = f"{x} leads"
-    elif med <= -min_lead_s and p < 0.05 and share_neg >= MIN_SHARE:
+    elif med <= -min_lead_s and p < alpha and share_neg >= MIN_SHARE:
         out["result"] = f"{y} leads"
     else:
         out["result"] = "neither venue leads consistently"
+    return out
+
+
+def decide_holm(inputs: dict, alpha: float = 0.05) -> dict:
+    """Holm across the venue tests (Amendment 3 draft): inputs = {test: (real_lags, placebo_lags, y, min_lead_s)}.
+    Step-down: the smaller Mann-Whitney p is judged at alpha / 2; only if that test's p passes is the larger p
+    judged at alpha. A test whose p fails its Holm level cannot be called a lead (other criteria unchanged)."""
+    p = {t: mann_whitney_p(np.asarray(r, float), np.asarray(pl, float)) for t, (r, pl, _y, _m) in inputs.items()}
+    order = sorted(p, key=lambda t: (np.inf if p[t] != p[t] else p[t]))
+    levels, still = {}, True
+    for i, t in enumerate(order):
+        lv = alpha / (len(order) - i)
+        levels[t] = lv if still else 0.0             # 0.0: Holm stopped, nothing below can pass
+        still = still and (p[t] == p[t]) and p[t] < lv
+    out = {}
+    for t, (r, pl, y, m) in inputs.items():
+        out[t] = {**decide(r, pl, 0.0, "kalshi", y, min_lead_s=m, alpha=levels[t]), "holm_level": levels[t]}
     return out
