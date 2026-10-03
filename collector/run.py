@@ -2,7 +2,8 @@
 
 One asyncio process, one listener per venue, one writer.
 
-Kalshi listener (REST polling mode, Decision D fallback; public endpoints, no key):
+Kalshi: authenticated websocket (KalshiWS) when secrets/kalshi.env has a key, with REST book polling
+as automatic fallback after the websocket is down 30 s. Without a key, REST only:
   * Every ~1 s: GET /markets?tickers=... in batches of 100 for every open KXNFLGAME /
     KXNCAAFGAME market whose game date is yesterday, today or tomorrow (US Eastern).
     Emits bid and ask rows (top of book) when they change. ts = receipt time.
@@ -30,6 +31,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import base64
 import json
 import os
 import re
@@ -41,11 +43,19 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 import requests
+from dotenv import load_dotenv
 
 from ingest.kalshi import trades_to_rows
 from store import timescale
 
 ROOT = Path(__file__).resolve().parents[1]
+# Kalshi key ID and key path live outside .env, in the gitignored secrets/ folder. Existing env vars win
+# (the teammate recorder exports them empty to stay on public REST).
+load_dotenv(ROOT / ".env")
+load_dotenv(ROOT / "secrets" / "kalshi.env")
+WS_URL = os.getenv("COLLECTOR_KALSHI_WS_URL", "wss://api.elections.kalshi.com/trade-api/ws/v2")  # override only for tests
+WS_PATH = "/trade-api/ws/v2"
+WS_FALLBACK_S = 30.0   # REST book polling resumes after the websocket has been down this long
 LIVE_DIR = Path(os.getenv("COLLECTOR_LIVE_DIR", ROOT / "data" / "live"))  # override for test runs
 STATE_FILE = LIVE_DIR / "kalshi_state.json"
 EVENTS_CACHE = LIVE_DIR / "kalshi_events.json"
@@ -145,6 +155,10 @@ class KalshiPoller:
         self.last_trade_s: dict[str, int] = st.get("last_trade_s", {})
         self.seen_ids: dict[str, set] = {}
         self.pending_trades: list[str] = []
+        self.ws_enabled = False                 # set True when a Kalshi websocket listener exists
+        self.ws_connected = False
+        self.ws_down_since_ns = time.time_ns()
+        self.rest_books_on = True
         self.next_req = 0.0
         self.had_ok_poll = False
         self.last_ok_ns = time.time_ns()
@@ -236,22 +250,32 @@ class KalshiPoller:
                 elif t not in self.volume:
                     self.last_trade_s[t] = int(time.time()) - 60
                 self.volume[t] = vol
-                snap = (bid, ask, bsz, asz)
-                if snap == self.book.get(t):
-                    continue
-                self.book[t] = snap
-                away = self.markets[t]["away"]
-                # Home terms: away market's bid becomes home ask at 1 - bid, and vice versa.
-                hb, ha, hbs, has = (1 - ask, 1 - bid, asz, bsz) if away else (bid, ask, bsz, asz)
-                for kind, px, sz, side in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell")):
-                    if px == px and 0 < px < 1:  # skip empty side (0 or 1 after flip, or NaN)
-                        rows.append({"ts": recv, "venue": "kalshi", "market_id": t, "kind": kind,
-                                     "price": round(px, 4), "size": sz, "side": side})
+                rows += self.top_rows(t, bid, ask, bsz, asz, recv)
         if rows:
             self.w.add(pd.DataFrame(rows), recv)
         for t in changed:
-            if t not in self.pending_trades:
-                self.pending_trades.append(t)
+            self.queue_trades(t)
+        self.process_pending()
+
+    def top_rows(self, t: str, bid: float, ask: float, bsz: float, asz: float, recv: int) -> list[dict]:
+        """Top-of-book rows for market t if it changed, in P(home wins) terms. Shared by REST and websocket."""
+        snap = (bid, ask, bsz, asz)
+        if snap == self.book.get(t) or t not in self.markets:
+            return []
+        self.book[t] = snap
+        away = self.markets[t]["away"]
+        # Home terms: away market's bid becomes home ask at 1 - bid, and vice versa.
+        hb, ha, hbs, has = (1 - ask, 1 - bid, asz, bsz) if away else (bid, ask, bsz, asz)
+        return [{"ts": recv, "venue": "kalshi", "market_id": t, "kind": kind, "price": round(px, 4), "size": sz,
+                 "side": side}
+                for kind, px, sz, side in (("bid", hb, hbs, "buy"), ("ask", ha, has, "sell"))
+                if px == px and 0 < px < 1]  # skip empty side (0 or 1 after flip, or NaN)
+
+    def queue_trades(self, t: str) -> None:
+        if t in self.markets and t not in self.pending_trades:
+            self.pending_trades.append(t)
+
+    def process_pending(self) -> None:
         batch, self.pending_trades = self.pending_trades[:MAX_TRADE_POLLS_PER_LOOP], self.pending_trades[MAX_TRADE_POLLS_PER_LOOP:]
         for t in batch:
             self.poll_trades(t)
@@ -292,7 +316,16 @@ class KalshiPoller:
                 if time.monotonic() - last_refresh > REFRESH_MARKETS_S:
                     await asyncio.to_thread(self.refresh_markets)
                     last_refresh = time.monotonic()
-                await asyncio.to_thread(self.poll_books)
+                down_s = 0.0 if self.ws_connected else (time.time_ns() - self.ws_down_since_ns) / 1e9
+                want_rest = (not self.ws_enabled) or down_s > WS_FALLBACK_S
+                if want_rest != self.rest_books_on:
+                    log("kalshi REST book polling " + ("ON (websocket down %.0f s)" % down_s if want_rest
+                                                      else "OFF (websocket enabled; connected or reconnecting)"))
+                    self.rest_books_on = want_rest
+                if want_rest:
+                    await asyncio.to_thread(self.poll_books)
+                else:
+                    await asyncio.to_thread(self.process_pending)   # trades flagged by the websocket
                 now = time.time_ns()
                 if self.had_ok_poll and (now - self.last_ok_ns) / 1e9 > GAP_LOG_S:
                     log_gap(self.last_ok_ns, now, "kalshi", "polling stalled (errors, rate limit or host asleep)")
@@ -302,6 +335,138 @@ class KalshiPoller:
                 log(f"kalshi poll error {type(e).__name__}: {e}")
                 await asyncio.sleep(2)
             await asyncio.sleep(max(0.0, BOOK_EVERY_S - (time.monotonic() - t0)))
+
+
+class KalshiWS:
+    """Kalshi authenticated websocket: orderbook_delta (snapshot + deltas) and trade channels.
+
+    Books: a local book per market (YES bids and NO bids by price); top of book is the best YES
+    bid and 1 - the best NO bid, emitted through KalshiPoller.top_rows on change (ts = receipt).
+    Trades: a trade message flags the market and the poller fetches it from REST, so trade rows keep
+    Kalshi's exact created_time. A sequence gap or a market-set change resubscribes (fresh snapshot).
+    While connected, the poller's REST book polling is off; it resumes after WS_FALLBACK_S down.
+    """
+
+    def __init__(self, poller: KalshiPoller, key_id: str, key_path: str) -> None:
+        from cryptography.hazmat.primitives import serialization
+        self.p = poller
+        self.key_id = key_id
+        self.key = serialization.load_pem_private_key(Path(key_path).read_bytes(), password=None)
+        self.books: dict[str, dict] = {}
+        self.seen_types: set[str] = set()
+        poller.ws_enabled = True
+
+    def headers(self) -> dict:
+        from cryptography.hazmat.primitives import hashes
+        from cryptography.hazmat.primitives.asymmetric import ed25519, padding, rsa
+        ts = str(int(time.time() * 1000))
+        msg = (ts + "GET" + WS_PATH).encode()
+        if isinstance(self.key, rsa.RSAPrivateKey):
+            sig = self.key.sign(msg, padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=hashes.SHA256.digest_size),
+                                hashes.SHA256())
+        elif isinstance(self.key, ed25519.Ed25519PrivateKey):
+            sig = self.key.sign(msg)
+        else:
+            raise RuntimeError(f"unsupported Kalshi key type {type(self.key).__name__}")
+        return {"KALSHI-ACCESS-KEY": self.key_id, "KALSHI-ACCESS-TIMESTAMP": ts,
+                "KALSHI-ACCESS-SIGNATURE": base64.b64encode(sig).decode()}
+
+    @staticmethod
+    def _levels(msg: dict, side: str) -> dict:
+        for k, scale in ((f"{side}_dollars_fp", 1.0), (f"{side}_dollars", 1.0), (side, 0.01)):
+            if k in msg:
+                return {round(float(px) * scale, 4): float(q) for px, q in (msg.get(k) or [])}
+        return {}
+
+    def _emit(self, t: str, recv: int) -> None:
+        bk = self.books.get(t)
+        if not bk:
+            return
+        yb = max(bk["yes"]) if bk["yes"] else None
+        nb = max(bk["no"]) if bk["no"] else None
+        bid, bsz = (yb, bk["yes"][yb]) if yb is not None else (float("nan"), float("nan"))
+        ask, asz = (round(1 - nb, 4), bk["no"][nb]) if nb is not None else (float("nan"), float("nan"))
+        rows = self.p.top_rows(t, bid, ask, bsz, asz, recv)
+        if rows:
+            self.p.w.add(pd.DataFrame(rows), recv)
+
+    def handle(self, m: dict, recv: int) -> bool:
+        """Returns False when the stream must be resubscribed (sequence gap)."""
+        typ, msg = m.get("type"), m.get("msg") or {}
+        if typ not in self.seen_types:
+            self.seen_types.add(typ)
+            log(f"kalshi ws first {typ}: keys {sorted(msg.keys()) if isinstance(msg, dict) else type(msg).__name__}")
+        if typ == "orderbook_snapshot":
+            t = msg.get("market_ticker")
+            self.books[t] = {"yes": self._levels(msg, "yes"), "no": self._levels(msg, "no")}
+            self._emit(t, recv)
+        elif typ == "orderbook_delta":
+            t = msg.get("market_ticker")
+            bk = self.books.setdefault(t, {"yes": {}, "no": {}})
+            side = msg.get("side")
+            if "price_dollars" in msg:
+                px = round(float(msg["price_dollars"]), 4)
+            else:
+                px = round(float(msg.get("price", 0)) / 100, 4)
+            delta = float(msg.get("delta_fp", msg.get("delta", 0)))
+            if side in bk:
+                q = bk[side].get(px, 0.0) + delta
+                if q <= 1e-9:
+                    bk[side].pop(px, None)
+                else:
+                    bk[side][px] = q
+                self._emit(t, recv)
+        elif typ == "trade":
+            self.p.queue_trades(msg.get("market_ticker"))
+        elif typ == "error":
+            log(f"kalshi ws error message: {msg}")
+        return True
+
+    async def run(self, stop: asyncio.Event) -> None:
+        import websockets
+        backoff = 1
+        while not stop.is_set():
+            while not self.p.markets and not stop.is_set():
+                await asyncio.sleep(1)
+            tickers = sorted(self.p.markets)
+            try:
+                async with websockets.connect(WS_URL, additional_headers=self.headers(), open_timeout=20,
+                                              ping_interval=10, ping_timeout=20, max_size=None) as ws:
+                    await ws.send(json.dumps({"id": 1, "cmd": "subscribe", "params": {
+                        "channels": ["orderbook_delta", "trade"], "market_tickers": tickers}}))
+                    self.books, last_seq = {}, {}
+                    self.p.ws_connected, backoff = True, 1
+                    log(f"kalshi websocket subscribed to {len(tickers)} markets")
+                    last_check = time.monotonic()
+                    while not stop.is_set():
+                        if time.monotonic() - last_check > 60:
+                            last_check = time.monotonic()
+                            if sorted(self.p.markets) != tickers:
+                                log("kalshi market set changed; resubscribing")
+                                break
+                        try:
+                            raw = await asyncio.wait_for(ws.recv(), timeout=5)
+                        except asyncio.TimeoutError:
+                            continue
+                        recv = time.time_ns()
+                        m = json.loads(raw)
+                        sid, seq = m.get("sid"), m.get("seq")
+                        if seq is not None and sid in last_seq and seq != last_seq[sid] + 1:
+                            log(f"kalshi ws sequence gap on sid {sid} ({last_seq[sid]} -> {seq}); resubscribing")
+                            break
+                        if seq is not None:
+                            last_seq[sid] = seq
+                        self.handle(m, recv)
+            except Exception as e:
+                if stop.is_set():
+                    break
+                log(f"kalshi websocket {type(e).__name__}: {e}; reconnect in {backoff}s")
+            if self.p.ws_connected:
+                self.p.ws_connected = False
+                self.p.ws_down_since_ns = time.time_ns()
+            if not stop.is_set():
+                await asyncio.sleep(backoff)
+                backoff = min(backoff * 2, 30)
 
 
 class PolymarketWS:
@@ -503,8 +668,15 @@ async def main_async(minutes: float | None) -> None:
     w = Writer()
     k = KalshiPoller(w)
     pmws = PolymarketWS(w)
-    log(f"collector start pid {os.getpid()} (kalshi REST polling mode + polymarket websocket)")
-    await asyncio.gather(k.run(stop), pmws.run(stop), writer_loop(w, stop))
+    tasks = [k.run(stop), pmws.run(stop), writer_loop(w, stop)]
+    kid, kpath = os.getenv("KALSHI_API_KEY_ID") or "", os.getenv("KALSHI_PRIVATE_KEY_PATH") or ""
+    if kid and kpath and Path(kpath).is_file():
+        tasks.append(KalshiWS(k, kid, kpath).run(stop))
+        mode = "kalshi websocket (REST fallback after %.0f s down)" % WS_FALLBACK_S
+    else:
+        mode = "kalshi REST polling (no Kalshi key)"
+    log(f"collector start pid {os.getpid()} ({mode} + polymarket websocket)")
+    await asyncio.gather(*tasks)
     w.flush_tiger()
     w.flush_local()
     k.save_state()
