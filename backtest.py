@@ -8,8 +8,10 @@ backward only):
     (fill_model = "trade+halfspread").
 Fees: costs.fee on every fill (PLACEHOLDER until Andrew's file).
 
-Follower timestamps arrive already adjusted by the caller (run.py): polymarket.com shifted
-EARLIER by D p90 when it is the venue traded (v2 rule 2), unshifted otherwise.
+Entry and exit fills can use different quote tables (HYPOTHESIS_v2.md Amendment 1). When
+polymarket.com is traded, run.py passes entry quotes shifted EARLIER by D p90 and unshifted exit
+quotes ("lower bound", both worse for us), and separately unshifted quotes for both ("upper
+bound"). Kalshi quotes are never shifted.
 
 Test set: games with kickoff on/after 2026-08-01 are refused unless final_test=True.
 """
@@ -49,23 +51,24 @@ def follower_quotes(ticks: pd.DataFrame, venue: str, shift_s: float = 0.0) -> tu
     return q.reset_index(drop=True), "trade+halfspread"
 
 
-def simulate(sig: pd.DataFrame, quotes: pd.DataFrame, venue: str, latency_s: float = 1.0) -> pd.DataFrame:
+def simulate(sig: pd.DataFrame, entry_quotes: pd.DataFrame, exit_quotes: pd.DataFrame, venue: str,
+             latency_s: float = 1.0) -> pd.DataFrame:
     """One row per round trip with entry/exit fill prices, fees and net P&L in cents."""
     if sig.empty:
         return pd.DataFrame(columns=["entry_fill_ns", "exit_fill_ns", "direction", "entry_px", "exit_px",
                                      "fees", "pnl_cents"])
     lat = int(round(latency_s * 1_000_000_000))
-    q = quotes.sort_values("ts", kind="stable")
-    qts = q["ts"].to_numpy()
+    qe = entry_quotes.sort_values("ts", kind="stable")
+    qx = exit_quotes.sort_values("ts", kind="stable")
 
-    def asof(t_ns: int):
-        i = np.searchsorted(qts, t_ns, side="right") - 1   # last quote with ts <= t_ns
+    def asof(q: pd.DataFrame, t_ns: int):
+        i = np.searchsorted(q["ts"].to_numpy(), t_ns, side="right") - 1   # last quote with ts <= t_ns
         return None if i < 0 else q.iloc[i]
 
     rows = []
     for s in sig.itertuples():
         t_in, t_out = s.entry_decision_ns + lat, s.exit_decision_ns + lat
-        a, b = asof(t_in), asof(t_out)
+        a, b = asof(qe, t_in), asof(qx, t_out)
         if a is None or b is None:
             continue
         if s.direction == 1:      # long the follower: buy at ask, sell at bid

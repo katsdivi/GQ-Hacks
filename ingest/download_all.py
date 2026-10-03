@@ -345,6 +345,47 @@ def download(plan: pd.DataFrame, limit: int | None) -> None:
         upsert_games(games_rows)
 
 
+def fetch_game(game_id: str, league: str, home: str, away: str, kickoff_utc, kalshi_home_ticker: str,
+               pm_condition: str) -> pd.DataFrame:
+    """Fetch one game's public ticks from scratch (used by run.py on a clean clone). Writes the same
+    data/ticks/<game_id>{_kalshi,_polymarket,}.parquet files as the bulk download; returns the merged frame.
+
+    Home team = Kalshi's. polymarket.com's home outcome is found the same way as in match_games:
+    NFL by team code (slug "nfl-<away>-<home>-<date>"), CFB by team name.
+    """
+    kick = utc(kickoff_utc)
+    if kick >= TEST_START:
+        raise SystemExit(f"{game_id} is a sealed test game; not fetching")
+    start, end = kick - PRE, kick + POST
+    km = get(f"{KALSHI}/historical/markets/{kalshi_home_ticker}")["market"]
+    t = re.match(r"^(.*?)\s+(at|vs\.?)\s+(.*?)(\s+Winner\?)?$", km.get("title") or "")
+    k_away_name, k_home_name = (t.group(1), t.group(3)) if t else ("", km.get("yes_sub_title", ""))
+    away_ticker = kalshi_home_ticker.rsplit("-", 1)[0] + "-" + away
+    probe = get(f"{PMDATA}/trades", {"market": pm_condition, "limit": 500, "takerOnly": "true"}, throttle=False)
+    names = {int(x["outcomeIndex"]): x["outcome"] for x in probe}
+    slug = probe[0]["eventSlug"] if probe else ""
+    parts = slug.split("-")
+    if league == "NFL" and len(parts) >= 3:
+        flipped = (NFL_ALIAS.get(home, home.lower()), NFL_ALIAS.get(away, away.lower())) == (parts[1], parts[2])
+    else:
+        same = (_sim(k_away_name, names.get(0, "")) + _sim(k_home_name, names.get(1, ""))) / 2
+        swap = (_sim(k_away_name, names.get(1, "")) + _sim(k_home_name, names.get(0, ""))) / 2
+        flipped = swap > same
+    home_index = 0 if flipped else 1
+    print(f"fetching {game_id}: kalshi {kalshi_home_ticker} + {away_ticker}, polymarket.com {slug} "
+          f"(home outcome {names.get(home_index, '?')!r}), window {start} to {end}")
+    k = pd.concat([kalshi_trades(kalshi_home_ticker, start, end, away=False),
+                   kalshi_trades(away_ticker, start, end, away=True)], ignore_index=True)
+    TICKS.mkdir(parents=True, exist_ok=True)
+    k.to_parquet(TICKS / f"{game_id}_kalshi.parquet", index=False)
+    pm, trunc = pm_trades(pm_condition, home_index, start, end)
+    pm.to_parquet(TICKS / f"{game_id}_polymarket.parquet", index=False)
+    merged = merge(game_id)
+    merged.to_parquet(TICKS / f"{game_id}.parquet", index=False)
+    print(f"  kalshi {len(k):,} trades, polymarket.com {len(pm):,} trades" + (" (TRUNCATED by API cap)" if trunc else ""))
+    return merged
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--plan", action="store_true", help="only build the matched game list")

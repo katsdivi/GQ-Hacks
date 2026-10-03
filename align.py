@@ -39,6 +39,20 @@ def venue_events(ticks: pd.DataFrame, venue: str, shift_s: float = 0.0) -> pd.Da
     return ev.sort_values("ts", kind="stable").reset_index(drop=True)
 
 
+def trade_median_events(ticks: pd.DataFrame, venue: str, window_s: float = 3.0) -> pd.DataFrame:
+    """PROVISIONAL (pre-spec) price series: at each trade, the median of this venue's trade prices
+    in the trailing window (t - window_s, t], past and current trades only. Damps bid/ask bounce
+    on trades-only history. Never shifted: decisions and gap checks use raw timestamps
+    (HYPOTHESIS_v2.md Amendment 1).
+    """
+    tr = ticks[(ticks["venue"] == venue) & (ticks["kind"] == "trade")].sort_values("ts", kind="stable")
+    if tr.empty:
+        return pd.DataFrame(columns=["ts", "price"])
+    s = pd.Series(tr["price"].to_numpy(), index=pd.to_datetime(tr["ts"].to_numpy(), utc=True))
+    med = s.rolling(pd.Timedelta(seconds=window_s), closed="right").median()   # (t - w, t]
+    return pd.DataFrame({"ts": tr["ts"].to_numpy(), "price": med.to_numpy()})
+
+
 def to_grid(ev: pd.DataFrame) -> pd.Series:
     """Events -> per-second series indexed by integer second label g (last value in [g, g+1), ffilled)."""
     if ev.empty:

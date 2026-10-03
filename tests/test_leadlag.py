@@ -11,7 +11,8 @@ P = {**leadlag.PROVISIONAL, **strategy.PROVISIONAL}
 
 
 def _grids(df, a, b):
-    return align.common_grid(align.to_grid(align.venue_events(df, a)), align.to_grid(align.venue_events(df, b)))
+    return align.common_grid(align.to_grid(align.trade_median_events(df, a, 3.0)),
+                             align.to_grid(align.trade_median_events(df, b, 3.0)))
 
 
 def _run(df, a, b, latency_s):
@@ -19,7 +20,7 @@ def _run(df, a, b, latency_s):
     resp, summ = leadlag.leadlag(pa, pb, P["jump_cents"], P["window_s"], P["cover"], P["max_wait_s"], P["max_lag_s"])
     sig = strategy.signals(pa, pb, resp, P["entry_gap_cents"], P["exit_gap_cents"], P["timeout_s"], P["qty"])
     q, _ = backtest.follower_quotes(df, b)
-    return resp, summ, backtest.simulate(sig, q, b, latency_s)
+    return resp, summ, backtest.simulate(sig, q, q, b, latency_s)
 
 
 def test_finds_planted_jumps_and_lag():
@@ -40,10 +41,21 @@ def test_placebo_kalshi_as_leader_has_no_edge():
     assert len(trades) == 0 or trades["pnl_cents"].sum() <= 0
 
 
-def test_edge_shrinks_with_latency():
+def test_edge_does_not_grow_with_latency():
     df, _ = build(seed=42)
     nets = [_run(df, "cme", "kalshi", lat)[2]["pnl_cents"].sum() for lat in (0.0, 1.0, 2.0)]
-    assert nets[0] > nets[1] >= nets[2]
+    assert nets[0] >= nets[1] >= nets[2]
+
+
+def test_edge_exists_when_lag_exceeds_detection_delay(monkeypatch):
+    # The 3 s median detects a jump 1 s late and decisions are stamped 1 s after their label,
+    # so a 2 s lag is used up before any latency. With a 5 s lag the edge must be positive at 0 s.
+    import make_sample
+    monkeypatch.setattr(make_sample, "LAG_S", 5)
+    df, _ = make_sample.build(seed=42)
+    _, summ, trades = _run(df, "cme", "kalshi", 0.0)
+    assert summ["median_response_s"] == 5
+    assert trades["pnl_cents"].sum() > 0
 
 
 def test_decisions_are_stamped_after_their_grid_label():
@@ -67,3 +79,13 @@ def test_test_games_refused():
     with pytest.raises(SystemExit):
         backtest.check_allowed("nfl_x", "2026-08-02T00:00:00Z")
     backtest.check_allowed("nfl_x", "2026-07-31T00:00:00Z")
+
+
+def test_trailing_median_uses_only_past_trades():
+    df, _ = build(seed=42)
+    ev = align.trade_median_events(df, "cme", 3.0)
+    tr = df[(df["venue"] == "cme") & (df["kind"] == "trade")].sort_values("ts")
+    # Trades are 1 s apart: the value at trade i is the median of trades i-2, i-1, i only.
+    i = 500
+    want = tr["price"].iloc[i - 2: i + 1].median()
+    assert ev["price"].iloc[i] == want
