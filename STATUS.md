@@ -3,24 +3,24 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~12:45 AM ET)
-Current task: Made It DONE on branch t5-made-it, tag v0-made-it (NOT merged to main); waiting on Divi's line-by-line review
-Done: T1-T4 (Mac), T5-T7 PROVISIONAL; rule 7 wording clarified (8cf0670); v2 committed d6bfa9c
-Verified numbers:
-  Fake game: 15/15 planted jumps found, median response +2.0 s, xcorr +2 s; placebo (kalshi leads) 0 trades;
-    net at latency 0 / 1 s: +10.0c / -88.0c over 15 trades (decision stamped at label + 1 s); 8 tests pass
-  nfl_20251116_was_mia (kalshi vs polymarket.com, PLACEHOLDER FEE 2c/fill, half-spread 0.5c, latency 1 s):
-    kalshi leads: 286 jumps, 164 covered, median response +10.0 s, xcorr +7 s; 149 trades on polymarket, net -267.6c
-    polymarket leads: 152 jumps, 70 covered, median response +6.0 s, xcorr -10 s; 41 trades on kalshi, net -222.0c
-    polymarket.com shifted 2.879 s earlier when traded (D p90)
-  D: median +2.119 s, p90 +2.879 s, 603 non-sports trades (experiments/d_estimate.json)
-  Fresh clone: stdout, leadlag/signals parquets and chart md5 identical for sample and was_mia
-Flags for review: v2 shift lets traded-venue fills see trades matched up to (D90 - D) s later (docs/review_t5.md);
-  286 kalshi "jumps" likely include last-trade bid/ask bounce (price definition needs Alden);
-  recorder 65 s stall 04:17-04:18 UTC (GAPS.md) + polymarket receipt delay in same minute
+STATUS  (last update: Sat Oct 3, ~1:05 AM ET)
+Current task: review fixes DONE on branch t5b-fixes (3d3cda7), not merged; main = a532304 (v0-made-it kept on 850f081)
+Done: merge t5-made-it -> main; HYPOTHESIS_v2.md Amendment 1 committed bc9d583 (00:41 ET) BEFORE the code change;
+  fill bounds, trailing 3 s median price, latency label, run.py fetches missing public ticks
+Verified numbers (latency 1 s; 0 s = decision within 1 s of the move; PLACEHOLDER FEE 2c/fill; PROVISIONAL):
+  Fake game: cme 15/15 jumps, median +2.0 s, xcorr +2 s; placebo (kalshi leads) 15 jumps, 0 signals, 0 trades;
+    edge -88.0c at 0 s and 1 s: the 3 s median adds ~1 s detection delay, using up the 2 s planted lag (5 s lag test: positive); 10 tests pass
+  Jumps with 3 s median vs last trade: was_mia kalshi 180 (was 286), polymarket.com 114 (was 152); fake 15 (was 15)
+  nfl_20251116_was_mia:
+    kalshi leads: 180 jumps, 116 covered, median +10.5 s, xcorr +10 s; 92 trades on polymarket.com:
+      lower bound -37.8c (-0.41c/trade), upper bound -21.7c (-0.24c/trade)
+    polymarket.com leads: 114 jumps, 57 covered, median +6.0 s, xcorr -10 s; 21 trades on kalshi -100.0c (-4.76c/trade)
+  Clean clone with NO data files: run.py fetched was_mia (49,291 kalshi + 2,977 polymarket.com trades), ticks identical
+    (52,268 rows); stdout, leadlag/signals parquets and chart md5 identical for both games
+Flags: lower-bound polymarket.com entry fills can use trades matched up to (D p90 - D) s after the fill (chosen adverse; decisions never see it)
 Blockers: none. Pending from Divi: Kalshi key (websocket), Vultr IP, TIGER_DATABASE_URL
-Next: Divi reviews docs/review_t5.md + the 4 core files; Alden hand-checks outputs; T8 download continues (~2 h)
-Decisions pending: v2 shift sign-off (Alden), price definition for trades-only history, B (Webull, deferred)
+Next: Divi reviews t5b-fixes + docs/review_t5.md, merges; Alden hand-checks; T8 finishing (~1.5 h); no multi-game run yet
+Decisions pending: price definition (Alden), B (Webull, deferred)
 ```
 
 ## Task log
