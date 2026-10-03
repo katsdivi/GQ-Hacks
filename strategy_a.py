@@ -6,8 +6,9 @@ Per game and theta:
   t = ESPN kickoff - 5 min.
   Decision (backward as-of only, rows with ts <= t): each team's OWN market price = trailing 3 s median of
     that market's trade prices, last value at or before t (align.trade_median_events). Favorite = higher
-    own-market price. Skip if the favorite's market has no trade in [t - 10 min, t] (staleness). Enter iff
-    favorite price >= theta.
+    own-market price, decided only when BOTH markets are fresh: skip the game if either team's market has no
+    trade in (t - 10 min, t] (staleness, v3 Amendment 3 draft section 6, both markets). Enter iff favorite
+    price >= theta.
   Fill (Amendment 1 section 4): first trade on the favorite's own market at or after t + 1.0 s, plus 1 cent
     half-spread, capped at 1 - tick of that market (v3 Amendment 3 draft: 1.00 is not a valid Kalshi price;
     tick = the step of the market's top price range in Kalshi's metadata, 0.01 if not known). No such trade
@@ -215,14 +216,18 @@ def decide(trades: pd.DataFrame, g: Game) -> dict:
     if any(math.isnan(p) for p in px.values()):
         out["skip"] = "no pre-decision price on both markets"
         return out
+    # Staleness on BOTH markets, before the favorite is chosen: a stale price on either side could pick the
+    # wrong favorite. Window (t - 10 min, t], rows with ts <= t only.
+    stale = [team for team in (g.home, g.away)
+             if tr[team][(tr[team]["ts"] > t_ns - STALE_S * NS) & (tr[team]["ts"] <= t_ns)].empty]
+    if stale:
+        out["skip"] = f"stale (no trade in the 10 min before t: {', '.join(f'{g.event}-{x}' for x in stale)})"
+        return out
     if px[g.home] == px[g.away]:
         out["skip"] = "no favorite (equal prices)"
         return out
     fav = g.home if px[g.home] > px[g.away] else g.away
     dog = g.away if fav == g.home else g.home
-    recent = tr[fav][(tr[fav]["ts"] > t_ns - STALE_S * NS) & (tr[fav]["ts"] <= t_ns)]
-    if recent.empty:
-        out["skip"] = "stale (no favorite trade in the 10 min before t)"
     out.update(fav=fav, dog=dog, fav_px=px[fav], dog_px=px[dog], _tr=tr)
     return out
 
@@ -290,7 +295,7 @@ def summarize(rows: pd.DataFrame) -> pd.DataFrame:
                     "roc_direct_mean": e["roc_direct"].mean() if len(e) else float("nan"),
                     "n_capped_fills": int(e["fill_capped"].sum()) if "fill_capped" in e else 0,
                     "skipped_no_post_decision_trade": int((r["skip"] == "no post-decision trade").sum()),
-                    "skipped_stale": int(r["skip"].str.startswith("stale").sum()),
+                    "n_skipped_stale": int(r["skip"].str.startswith("stale").sum()),
                     "skipped_other": int((~r["entered"] & ~r["skip"].isin(["below theta", "no post-decision trade"])
                                           & ~r["skip"].str.startswith("stale")).sum())})
     return pd.DataFrame(out)

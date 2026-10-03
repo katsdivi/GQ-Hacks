@@ -83,6 +83,31 @@ def test_placebo_uses_same_fill_rule_and_seal():
     assert fav_row(A.evaluate_game(tr, game(source="kalshi_date")), 0.70)["skip"].startswith("kickoff not from ESPN")
 
 
+def test_staleness_on_both_markets():
+    # (a) underdog stale: its last trade 11 min before t; favorite fresh -> skipped, not traded, counted
+    dog_stale = trades([(-120, "HHH", 0.80), (-660, "AAA", 0.21), (-2, "HHH", 0.80), (3, "HHH", 0.83)])
+    rows = A.evaluate_game(dog_stale, game())
+    assert not any(r["entered"] for r in rows)
+    assert all(r["skip"] == "stale (no trade in the 10 min before t: KXNCAAFGAME-25OCT04AAAHHH-AAA)" for r in rows)
+    s = A.summarize(pd.DataFrame(rows))
+    assert (s["n_skipped_stale"] == 1).all() and len(s) == 2 * len(A.THETAS)        # per theta, per leg
+    # (b) both fresh: unchanged behavior (same row as the BASE game in test_fill_is_first_trade...)
+    r = fav_row(A.evaluate_game(trades(BASE + [(3, "HHH", 0.83)]), game()), 0.70)
+    assert r["entered"] and r["team"] == "HHH" and r["fill_price"] == pytest.approx(0.84)
+    # (c) stale underdog whose old price makes the favorite: HHH fresh at 0.72; AAA last traded at 0.20, 15 min
+    #     before t (its later trades, after t, are at 0.75: it had moved). The old favorite-only rule picks HHH
+    #     (0.72 > 0.20, HHH fresh) and enters at theta 0.70; the both-markets rule skips the game.
+    flip = trades([(-900, "AAA", 0.20), (-120, "HHH", 0.72), (-2, "HHH", 0.72), (3, "HHH", 0.73), (4, "AAA", 0.75)])
+    rows = A.evaluate_game(flip, game())
+    assert not any(r["entered"] for r in rows)
+    assert all(r["skip"] == "stale (no trade in the 10 min before t: KXNCAAFGAME-25OCT04AAAHHH-AAA)" for r in rows)
+    d = A.decide(flip, game())
+    assert "fav" not in d                                    # the favorite is never chosen from a stale side
+    # and when the stale side is HHH (the would-be favorite) the game is skipped the same way
+    fav_stale = trades([(-700, "HHH", 0.80), (-60, "AAA", 0.21), (3, "HHH", 0.83)])
+    assert all(r["skip"].endswith("KXNCAAFGAME-25OCT04AAAHHH-HHH)") for r in A.evaluate_game(fav_stale, game()))
+
+
 def test_select_theta_needs_50_trades():
     s = pd.DataFrame({"theta": [0.7, 0.8, 0.9, 0.7], "placebo": [False, False, False, True],
                       "n_trades": [120, 60, 49, 120], "roc_webull_mean": [0.01, 0.03, 0.10, 0.5]})
