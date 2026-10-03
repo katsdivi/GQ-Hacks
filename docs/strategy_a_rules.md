@@ -18,16 +18,15 @@ The download title parse was suspect, so home/away and the result were resolved 
 - Markets: KXNCAAFGAME-25AUG30ALBYIOWA-IOWA (yes_sub_title "Iowa", result yes, finalized) and -ALBY (yes_sub_title "University at Albany", result no, finalized). Rules text: "If Iowa wins the University at Albany vs Iowa college football game originally scheduled for Aug 30, 2025, then the market resolves to Yes."
 - Home/away and result are unambiguous: home Iowa, home win = 1. This matches the row already in `kalshi_only_games.csv`.
 
-The game's kickoff in the table comes from the Kalshi event date (`kickoff_source = kalshi_date`) because our ESPN name match failed, so it falls under rule 3 and is excluded.
+Decided by Divi on 2026-10-03, ~11:05 ET: the game is INCLUDED. v3 drops only games ESPN does not have, and ESPN has this one ("UAlbany Great Danes at Iowa Hawkeyes", event 401752799, kickoff 2025-08-30T22:00Z); only our name match missed it. Its kickoff comes from that hand-checked ESPN event (`ESPN_EVENT_OVERRIDE` in `ingest/kalshi_only_train.py`, `kickoff_source = espn_event_id`). Its first download used the Kalshi event date (12:00Z) as kickoff, so the trade window missed the game; that file and its games-table row are re-fetched with the ESPN kickoff once the full download finishes.
 
 ## 3. Kickoff times
 
 - ESPN public scoreboard, `groups=90` (all divisions; `groups=80` and `limit=1000` cut the college board to about 25 games a day). NFL from the NFL scoreboard.
-- Kickoffs come from ESPN only (v3). A game with no ESPN kickoff match is excluded from Strategy A and listed here. A kickoff is never inferred from the Kalshi event date or from trading.
-- Games with no ESPN kickoff match (training plan of 1,267 games: 1,266 matched, 1 not):
-  - cfb_20250830_alby_iowa (KXNCAAFGAME-25AUG30ALBYIOWA): excluded.
-
-Open question for Divi (decide before any Strategy A result): v3 says "Games ESPN does not have are dropped". ESPN does list this game ("UAlbany Great Danes at Iowa Hawkeyes", event 401752799, 2025-08-30T22:00Z); only our name matcher missed it. Two options: keep the exclusion above, or allow hand-checked ESPN event ids (as `ingest/holdout_candidates.py` does for 3 holdout games). Either way, the choice applies to the test set too.
+- Kickoffs come from ESPN only (v3). A kickoff is never inferred from the Kalshi event date or from trading. A game ESPN does not have is excluded from Strategy A and listed here.
+- When ESPN has a game but our name match misses it, the kickoff may come from a hand-checked ESPN event id (checked against both teams' ESPN schedules). The same rule applies to the test set.
+- Training plan of 1,267 games: 1,266 matched by name, 1 not. Hand-matched games (the only one): cfb_20250830_alby_iowa (KXNCAAFGAME-25AUG30ALBYIOWA) -> ESPN event 401752799.
+- Games excluded because ESPN does not have them: none so far.
 
 ## Disclosure
 

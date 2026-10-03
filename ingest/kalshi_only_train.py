@@ -138,8 +138,19 @@ def _name_score(kname: str, kcode: str, team: dict) -> float:
     return best
 
 
+# Hand-checked ESPN event ids for games ESPN has but our name match misses (docs/strategy_a_rules.md).
+ESPN_EVENT_OVERRIDE = {
+    "KXNCAAFGAME-25AUG30ALBYIOWA": "401752799",   # UAlbany Great Danes at Iowa Hawkeyes
+}
+ESPN_SUMMARY = "https://site.api.espn.com/apis/site/v2/sports/football/{}/summary"
+
+
 def espn_kickoff(league: str, ev: pd.Series, cache: dict) -> tuple[pd.Timestamp | None, str]:
     """Best ESPN game for a Kalshi event: date within +-1 day, both teams matched by name/code."""
+    if ev["k_event"] in ESPN_EVENT_OVERRIDE:
+        path = "nfl" if league.lower() == "nfl" else "college-football"
+        d = requests.get(ESPN_SUMMARY.format(path), params={"event": ESPN_EVENT_OVERRIDE[ev["k_event"]]}, timeout=30).json()
+        return K._utc(d["header"]["competitions"][0]["date"]), "espn_event_id"
     best, best_s = None, 0.0
     for dd in (-1, 0, 1):
         day = ev["k_date"].tz_localize("UTC") + pd.Timedelta(days=dd)
