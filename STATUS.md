@@ -3,41 +3,35 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 4:05 PM ET)
-Current task: 3:35 PM list done except sim part (a) (running) and the power sentence that waits on it
+STATUS  (last update: Sat Oct 3, 4:55 PM ET)
+Current task: 4:05 decisions list. A3 (v2) staged on main worktree, waiting for "commit A3". v3 A3 + strategy_a.py
+  ready for line-by-line review. Sim (a) running (watcher copies a/ on DONE).
 Done:
-  1 Sim (b) on sim box (fa5b19f, seed 20261003, 500 reps, 8 procs, 585 s): docs/results/sim/ (8b2071d),
-    CIs + rule: tests/sim_wilson.py.
-    Lead/zero cells reproduce the 14:52 run 24/24. Preset rule -> DESIGN 1: D2 zero-lag upper 0.8% (pass),
-    shared-shift (iid) D2 upper polymarket.com 6.8% n30, 5.6% n40, 8.2% n60 (FAIL); PM US 2.9/5.9/5.1% (pass).
-    D2 point estimates no worse than D1 (0.036-0.058 vs 0.048-0.058); a 5%-sized test has expected upper 7.3%.
-    Reverse lead: Kalshi-leads 0/500 every cell. Clustered shared-shift (sensitivity): <= 1% everywhere.
-  2 Fees: t9-costs ba36a6a + 7528eab (fees.md). polymarket.com 5 dp HALF_UP (direction unstated in docs), no
-    cent ceiling; Polymarket US 0.0695, HALF_EVEN cents, raises before 2026-10-01 14:00 UTC. Hand tests incl.
-    C=120 P=0.50 raw 2.085 -> 2.08, C=1000 -> 17.38. Integer reference grid 79,600 cases (199 prices x C 1..100
-    x 4 schedules; the old 59,700 was x 3) all equal. t13: no Polymarket fee code exists there, nothing to fix.
-  3 A3 draft (uncommitted): fallback [T-2, T+20], T = min(ESPN, map game_start = Gamma gameStartTime; equal
-    in 111/112, 1 min later in 1). Runner + test a0ea17d: 15-min copy leaks under +10 in 15/20, under +20 0/20.
-    Limitation paragraph added; placebo sentence filled (Design 1); power sentence placeholder.
-  4 v3 Amendment 3 draft (uncommitted, for review): all 4 blank settlements are Kalshi "scalar" 0.5000
-    (GB-DAL + 3 preseason); games table re-settled (777/486/4 x 0.5). Preseason flag (NFL Jul/Aug ET, 49 games)
-    + side-by-side summary; fill cap 0.99 with n_capped_fills; strategy_a a1b24c9. Conf champs + SB excluded
-    (no 2-market Kalshi game event; SB only in 32-market KXSB-26). A NOT run.
-  5 .venv-exec with webull-openapi-python-sdk 3.0.2 (d34b762); collector .venv pip freeze identical (63 pkgs)
-  6 Mac gap 11:57-12:34 ET = lid closed on battery ("Clamshell Sleep", pmset), DarkWakes only until 12:40;
-    9 clamshell sleeps today incl. 14:00:41 (226 s). Mac polymarket heartbeat live (last_ok 19:57:13Z).
-    Holdout games kicked off by 15:57 ET (62/112), heartbeat/GAPS rule, nominal window end:
-    polymarket.com 57 clean on Vultr, 0 only on Mac, 5 excluded; PM US 52 / 0 / 1, 9 no PM US instrument
-  7 Secrets scan clean; all named branches pushed incl. t14-laggard; nothing merged to main.
-    Worktrees left: ../wt-t9 (t9-costs), ../wt-t14 (t14-laggard)
-  8 laggard.py on t14-laggard (7e2f760, = t13 + merge of t9-costs): 9 synthetic tests pass
-Running: sim (a) power n=30/40/60/80 on sim box (tmux gqhsim), started 15:57 ET, ~3.2 h
-Next: scp (a) -> docs/results/sim/a, fill A3 power sentence; Divi commits A3 (v2) and reviews v3 A3
-Not done / flags: capped-fill counts per theta need the A run (wired: n_capped_fills); laggard.py has no
-  capacity (sizes not read) though Amendment 2 asks for it on polymarket.com; games CSV re-settled in place,
-  original at data/raw/kalshi_only_games.before_resettle_20261003.csv
-Decisions pending: D1/D2 rule joint (D1) or per venue (PM US alone -> D2); preseason = Jul/Aug ET (49, incl.
-  Hall of Fame game) or literal August (48); Mac on AC with lid open tonight (9 clamshell sleeps today)
+  1 Placebo: Design 1 for both venues (rule reads jointly). A3 5a reports D2 numbers + Wilson, strict-by-construction
+    note (7.3% expected upper at 500 reps), MW-only 8-12% under D1 zero-lag, median gate controls it.
+  2 polymarket.com seconds_delay (CLOB GET /markets/<condition>, field seconds_delay; Gamma has none), sealed fetch
+    16:22 ET: data/live/holdout_seconds_delay.csv sha256 24a5d41af0ba7f34. 3 s: 0, 1 s: 112, other 0, missing 0.
+    SURPRISE: every holdout market is 1 s, not 3 s. Laggard uses per-market delay (missing -> 3, counted).
+  3 A3 final text (HYPOTHESIS_v2_amendment3_DRAFT.md) appended to HYPOTHESIS_v2.md in ../wt-main (uncommitted) +
+    docs/market_structure.pdf (Andrew, 15:38 version, sha256 0e31fa56). PM US: no delay, cut kept as precaution.
+    Power sentence = placeholder to note. Runner diagnostic recv - src_ts per venue per machine (d2614ae).
+    Venue-side ts: Kalshi ws orderbook_delta only (ms); polymarket.com book + trade (ms); PM US none.
+  4 Strategy A (e918921): games CSV restored to original (4 blanks); scalar settlement applied at load from
+    data/raw/kalshi_market_meta.csv (code step, test on the 4 games); preseason = ET date < 2025-09-04, assert 49;
+    fill cap 1 - market tick. Ticks: 2,527 markets at 0.01, 0 other, 7 not found (all OH away tickers, default 0.01). data/ and out/ gitignored; history has only games.csv, sample ticks,
+    holdout_candidates.csv and the 2 holdout maps (ids/metadata) under data/.
+  5 Laggard (t14 64f6151): no mid carry across outages, kickoff cut or window end; fills across a break or past
+    the end skipped and counted; capacity = best-level size at fill (exact for at-or-better; PM US not measurable).
+    15/15 laggard tests, 182 suite.
+  6 Compliance: credentialed calls = Kalshi market-data websocket only (subscribe; signed headers). All other venue
+    calls unauthenticated GETs (Kalshi REST, Gamma, data-api, CLOB, gateway.polymarket.us, polymarketexchange.com
+    files). No order endpoint on any venue. Webull: constructor refuses any host but api.sandbox.webull.com; SDK
+    user endpoint overrides its production table. README line added.
+Running: sim (a) on sim box, started 15:57 ET; background watcher scp's a/ to docs/results/sim/a on DONE
+Next: Divi reviews A3 -> "commit A3"; power table + note when (a) lands; v3 A3 review; item 7 liquidity
+Not done / flags: item 7 needs polymarket.com market-level volume/OI (only event volume stored) and PM US
+  metadata; NFL 2026 opener date must be set before Strategy A final test (is_preseason raises)
+Decisions pending: Alden review time line in A3 disclosure; commit A3
 ```
 
 ## Log
