@@ -3,24 +3,26 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 11:18 AM ET)
-Current task: Saturday recording (Mac + Vultr); Amendment 2 PRE-REGISTERED on main; ops work on branch t4h-ops-checks (not merged)
+STATUS  (last update: Sat Oct 3, 11:35 AM ET)
+Current task: Saturday recording (Mac + Vultr); Amendment 2 on main (8a509ff); v3 Amendment 1 DRAFT awaiting Divi
 Done:
-  Amendment 2 committed on main 8a509ff at 2026-10-03 11:15:07 ET, with data/live/holdout_candidates.csv (forced add,
-    sha256 prefix d20247c7140ac7c9, 112 CFB games). Committed before Alden's review (line included).
-  Added before commit: mid defined only when both sides exist (no fill across a missing side); mid change = grid second
-    whose defined mid differs from the previous one (rows never counted, >= 50 qualification uses it); repeat-row disclosure;
-    "definitions govern" note: current xcorr_lead.game_lag_mid ffills each side separately and must change before the run
-  Strategy A rules: ALBY at IOWA included via hand-checked ESPN event 401752799 (only hand-matched game); downloader override
-  T8 coverage check: 5 random T8 games start -119.7 to -120.0 min; of 136 checked, cfb_20250913_ull_mizz starts +74.5 min
-    (T8 kickoff 3 h off ESPN). T8 kickoff vs ESPN > 15 min on 4 of 138 (usc_pur, ull_mizz, fau_fiu, tem_gt). Full re-download kept.
-  Recorders at 11:15 ET: Mac 0 of 6 empty minutes; Vultr watchdog unit=active, feed ages 7-9 s
-Running: Strategy A download 480/1264 at 15:14Z, ~6 games/min now, ~2 h left; then re-fetch ALBY at IOWA with ESPN kickoff
+  GitHub: pushed main, t4h-ops-checks, t9-costs to github.com/katsdivi/GQ-Hacks (PUBLIC). Pre-push scan of all history:
+    private keys 0, Vultr IP 0, real .env/kalshi values in history 0 of 7, 6 credential-pattern hits all placeholders,
+    no blob > 1 MB, data/ only games.csv, sample.parquet, sample_truth.csv, holdout_candidates.csv (no vendor data)
+  game_lag_mid fixed to the Amendment 2 mid rule (2f79319, xcorr_lead.py only): mid only when both sides exist, no fill
+    across an empty side, change = defined mid differs from previous defined mid. Tests: 30 s empty side -> no mid/changes;
+    3x duplicated and repeat rows -> 9 changes either way; one-sided bug case -> 0; zero-lag 0 s and 5 s lead recovered
+    (both venues); identical to old function on two-sided books. Full suite 40 passed. No holdout data touched.
+  T8 kickoff scan, all 977: ESPN matched 977; |T8 - ESPN| > 15 min: 14 (all fail B coverage, all in the v2 916-game run);
+    > 1 min: 26. docs/results/t8_kickoff_check.md; docs/results/v2_who_leads.md created (v2 numbers + disclosure, not rerun)
+  HYPOTHESIS_v3_amendment1_DRAFT.md written (combined A+B book, costs x2, French factors, ESPN kickoffs for B, 21 trials)
+Running: Strategy A download 610/1264 at 15:30Z, ~8 games/min, ETA ~16:55Z (12:55 ET); then ALBY at IOWA re-fetch
+Recorders 11:31 ET: Mac 0 of 6 empty minutes; Vultr unit=active, feed ages 2-3 s
 Blockers: Mac on battery (lid close sleeps it)
-Next: fix game_lag_mid to the Amendment 2 mid rule (xcorr_lead.py, branch, tested on synthetic books); book-mid runner +
-  laggard evaluator on synthetic data; dedup redeploy after Saturday's last game
-Decisions pending: T8 kickoff mismatches (4 games) for v2/B; merge t4h-ops-checks (merge, not rebase: amendment cites 9c9b7b6);
-  t9-costs review; Florida in-app check; B (deferred)
+Next: Divi approves v3 Amendment 1 (commit to main BEFORE any A/B code); book-mid runner + laggard evaluator on synthetic
+  data; dedup redeploy after Saturday's last game
+Decisions pending: v3 Amendment 1 PROPOSED items (capital base, x365 annualization, NW 5 lags) for Alden; merge
+  t4h-ops-checks (merge, not rebase); t9-costs review; Florida in-app check
 ```
 
 ## Log
