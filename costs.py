@@ -16,7 +16,7 @@ Spread: trades-only history has no book, so fills are trade price plus or minus 
 """
 from __future__ import annotations
 
-import math
+from decimal import ROUND_CEILING, Decimal
 
 ORDER_SIZE = 10                  # contracts per signal (default; part of the frozen stats plan)
 KALSHI_ROUTE = "webull"          # primary; "direct" is the comparison line
@@ -30,9 +30,21 @@ FEE_LABEL = ("costs as if traded today: Kalshi via Webull $0.02/contract/fill "
              "rounded up per order (fee venue to confirm: polymarket.com vs Polymarket US)")
 
 
-def _ceil_cent(x: float) -> float:
-    """Round a dollar amount UP to the next cent (tolerance for float noise)."""
-    return math.ceil(round(x * 100, 9)) / 100
+CENT = Decimal("0.01")
+
+
+def _dec(x: float) -> Decimal:
+    """Exact decimal of a price or rate. Fill prices are on a 1/10000 dollar grid (cents, or cents plus or
+    minus the half-cent HALF_SPREAD), so rounding the float to 4 places recovers the intended value exactly."""
+    return Decimal(str(round(float(x), 4)))
+
+
+def _rate_fee(rate: float, qty: float, price: float) -> float:
+    """rate x C x P x (1 - P) in exact decimal arithmetic, rounded UP to the cent per order.
+    Float ceil would overcharge on noise (0.07 * 100 * 0.5 * 0.5 = 1.7500000000000002 -> 1.76)."""
+    p = _dec(price)
+    raw = _dec(rate) * _dec(qty) * p * (1 - p)
+    return float(raw.quantize(CENT, rounding=ROUND_CEILING))
 
 
 def fee(price: float, qty: float, side: str, venue: str, route: str | None = None,
@@ -51,11 +63,11 @@ def fee(price: float, qty: float, side: str, venue: str, route: str | None = Non
         if r == "webull":
             return WEBULL_PER_CONTRACT * c
         if r == "direct":
-            return _ceil_cent(KALSHI_DIRECT_RATE * c * p * (1 - p))
+            return _rate_fee(KALSHI_DIRECT_RATE, c, p)
         raise ValueError(f"unknown Kalshi route {r!r}")
     if venue == "polymarket":
         rate = POLYMARKET_RATE if polymarket_rate is None else polymarket_rate
-        return _ceil_cent(rate * c * p * (1 - p))
+        return _rate_fee(rate, c, p)
     if venue == "cme":
         # Fake game only (CME is not a trading venue in this project): charge the Webull line.
         return WEBULL_PER_CONTRACT * c

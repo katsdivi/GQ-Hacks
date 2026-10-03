@@ -49,3 +49,22 @@ def test_backtest_kalshi_route_switch():
 def test_polymarket_comparison_rate_override():
     assert costs.fee(0.5, 10, "buy", "polymarket", polymarket_rate=0.03) == pytest.approx(0.08)  # 0.075 -> 0.08
     assert costs.fee(0.5, 10, "buy", "polymarket", polymarket_rate=0.0) == 0.0
+
+
+# C = 100: float 0.07 * C * P * (1 - P) carries noise above the exact cent value, so a plain float ceil charges
+# one cent too much (e.g. 1.7500000000000002 -> 1.76). Exact values by hand: 7 x P x (1 - P) dollars.
+FLOAT_NOISE = {0.10: 0.63, 0.20: 1.12, 0.40: 1.68, 0.50: 1.75, 0.60: 1.68, 0.70: 1.47, 0.80: 1.12}
+
+
+@pytest.mark.parametrize("p", sorted(FLOAT_NOISE))
+def test_direct_fee_no_float_ceil_overcharge(p):
+    import math
+    assert math.ceil(0.07 * 100 * p * (1 - p) * 100) / 100 == pytest.approx(FLOAT_NOISE[p] + 0.01)  # the trap
+    assert costs.fee(p, 100, "buy", "kalshi", route="direct") == FLOAT_NOISE[p]
+
+
+def test_half_cent_fill_prices_exact():
+    # backtest trades-only fills are trade price +/- HALF_SPREAD 0.005: 0.07 * 10 * 0.505 * 0.495 = 0.1749825 -> 0.18
+    assert costs.fee(0.505, 10, "buy", "kalshi", route="direct") == 0.18
+    # 0.05 * 100 * 0.495 * 0.505 = 1.2498750 -> 1.25
+    assert costs.fee(0.495, 100, "buy", "polymarket") == 1.25
