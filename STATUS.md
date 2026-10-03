@@ -3,17 +3,17 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Fri Oct 2, ~11:30 PM ET)
-Current task: Decision A follow-up; waiting on Divi to approve HYPOTHESIS_v2.md, then T4 recorder
-Done: T1, T2 (CME PASS Jan-Feb 2026 only), T3 (Kalshi ingest); CME vs Kalshi retired in HYPOTHESIS.md (f12c1dc)
+STATUS  (last update: Fri Oct 2, ~11:50 PM ET)
+Current task: HYPOTHESIS_v2.md final text out for Alden's review (not committed); T4 recorder live on the Mac
+Done: T1, T2, T3; CME vs Kalshi retired (f12c1dc) + count correction ~14 games (d37d9df); recorder committed (d842ead)
 Verified numbers:
-  Polymarket training games (kickoff before 2026-08-01): NFL 285 (all with moneyline), CFB 829 (715 with moneyline)
-  Polymarket in-game moneyline taker trades/min, 3 NFL games picked by date: median 5, 5, 5 (1,058 / 1,158 / 1,087 trades)
-  Polymarket trade timestamps are whole seconds; Data API caps at ~20k trades per market; no free historical order book after 2026-02-20
-  Polymarket sports taker fee: C x 0.05 x p(1-p) now; history before Mar 30 2026 unconfirmed
-Blockers: none for the recorder. Arizona: Polymarket US unavailable, international venue blocks US persons (paper only anyway)
-Next: Divi reviews HYPOTHESIS_v2.md; then T4 recorder (Kalshi websocket + Polymarket public websocket) and fix-ups (Databento side check, official kickoffs)
-Decisions pending: v2 hypothesis approval, B (Webull paper orders, deferred)
+  Recorder (Mac, Kalshi REST polling, 218 game markets, local parquet only):
+    before restart 03:09:16-03:39:16 UTC: 15,640 trades, 3,821 bid + 3,509 ask rows, 0 of 30 minutes empty
+    killed 03:39:28, back up 03:39:34 (6 s); after-restart 30-min window ends 04:09:34 UTC
+  polymarket.com trade timestamp = on-chain block time (20 of 20 trades, two training games); match-to-block delay not measured yet
+Blockers: none tonight. Waiting on Divi: Vultr IP, Kalshi API key + .pem, TIGER_DATABASE_URL (deploy script ready: collector/deploy_vultr.sh)
+Next: Alden reads v2 -> commit v2 -> Polymarket book websocket in recorder; Vultr deploy when keys arrive; then T5-T7 Made It on one training game
+Decisions pending: v2 approval (Alden), B (Webull paper orders, deferred)
 ```
 
 ## Task log

@@ -16,7 +16,7 @@ Kalshi listener (REST polling mode, Decision D fallback; public endpoints, no ke
 All prices are P(home wins): away markets are flipped (1 - p, bid <-> ask, buy <-> sell).
 
 Writer: buffers rows, writes Tiger Data once per second if TIGER_DATABASE_URL is set, and
-always writes a local parquet chunk every 30 s and on shutdown:
+always writes a local parquet chunk every 5 s and on shutdown:
   data/live/<venue>/<YYYYMMDD>/<unix_s>_<pid>.parquet   (gitignored)
 Local chunks add recv_ns (receipt time, ns) to the shared columns.
 
@@ -54,7 +54,7 @@ BASE = "https://api.elections.kalshi.com/trade-api/v2"
 SERIES = ("KXNFLGAME", "KXNCAAFGAME")
 ET = ZoneInfo("America/New_York")
 BOOK_EVERY_S = 1.0
-FLUSH_LOCAL_S = 30.0
+FLUSH_LOCAL_S = 5.0
 FLUSH_TIGER_S = 1.0
 REFRESH_MARKETS_S = 600
 MAX_REQ_PER_S = 8.0          # Kalshi basic tier allows more; stay well under it
