@@ -1,0 +1,25 @@
+venue,scenario,n,design,reps,n_placebo,kalshi_leads,reverse
+Polymarket US,lead,30,D1,500,29.0,0.62,0.0
+Polymarket US,lead,30,D2,500,135.0,0.892,0.0
+Polymarket US,lead,40,D1,500,39.0,0.72,0.0
+Polymarket US,lead,40,D2,500,185.0,0.958,0.0
+Polymarket US,lead,60,D1,500,59.0,0.838,0.0
+Polymarket US,lead,60,D2,500,285.0,1.0,0.0
+Polymarket US,zero,30,D1,500,29.0,0.0,0.0
+Polymarket US,zero,30,D2,500,135.0,0.0,0.0
+Polymarket US,zero,40,D1,500,39.0,0.0,0.0
+Polymarket US,zero,40,D2,500,185.0,0.0,0.0
+Polymarket US,zero,60,D1,500,59.0,0.0,0.0
+Polymarket US,zero,60,D2,500,285.0,0.0,0.0
+polymarket.com,lead,30,D1,500,29.0,0.616,0.0
+polymarket.com,lead,30,D2,500,135.0,0.928,0.0
+polymarket.com,lead,40,D1,500,39.0,0.736,0.0
+polymarket.com,lead,40,D2,500,185.0,0.992,0.0
+polymarket.com,lead,60,D1,500,59.0,0.852,0.0
+polymarket.com,lead,60,D2,500,285.0,1.0,0.0
+polymarket.com,zero,30,D1,500,29.0,0.0,0.0
+polymarket.com,zero,30,D2,500,135.0,0.0,0.0
+polymarket.com,zero,40,D1,500,39.0,0.0,0.0
+polymarket.com,zero,40,D2,500,185.0,0.0,0.0
+polymarket.com,zero,60,D1,500,59.0,0.0,0.0
+polymarket.com,zero,60,D2,500,285.0,0.0,0.0

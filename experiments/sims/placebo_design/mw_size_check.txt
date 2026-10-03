@@ -1,0 +1,10 @@
+Mann-Whitney size under each placebo design (computed on the Mac from the copied ring tables, seed 777, 500 reps):
+"real" = unrelated-pair lags from a disjoint ring block (pl3), vs Design 1 (pl1, n-1 pairs) or Design 2 (pl1..pl5, ~5n pairs).
+Share of reps with p < 0.05 (nominal 0.05):
+polymarket.com  n=30: D1 0.052  D2 0.048
+polymarket.com  n=40: D1 0.034  D2 0.060
+polymarket.com  n=60: D1 0.048  D2 0.038
+Polymarket US   n=30: D1 0.018  D2 0.018
+Polymarket US   n=40: D1 0.030  D2 0.020
+Polymarket US   n=60: D1 0.040  D2 0.010
+Dependence: corr(pl1, pl2) for placebo lags sharing one Kalshi game: +0.000 (polymarket.com), -0.011 (Polymarket US), M = 3000.
