@@ -3,7 +3,7 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 6:15 PM ET)
+STATUS  (last update: Sat Oct 3, 5:40 PM ET)
 Current task: post-review list. A3 still staged in ../wt-main, NOT committed (waiting for literal "commit A3").
 Done:
   1 Hyphen audit (ids only). Only hyphenated Kalshi code in any series touched: M-OH (Miami (OH)), 13 training CFB
