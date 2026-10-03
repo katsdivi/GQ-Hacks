@@ -137,3 +137,55 @@ Committed before Strategy A is run on training data. Both are choices v3 and v3 
 2. Underdog placebo fill: the underdog placebo (v3 "buy the underdog ... at its own as-of price + 1 cent") uses the corrected fill of v3 Amendment 1 section 4 on the underdog's own market: the first underdog-market trade at or after t + 1.0 s, plus 1 cent; skipped and counted if there is none within 5 minutes after t. The placebo decision (favorite >= theta, staleness on the favorite's market) is the favorite leg's decision.
 
 Disclosure: committed 13:57 ET Oct 3. No Strategy A or B code has run on real data; strategy_a.py has run only on fake games in tests/test_strategy_a.py.
+
+## Amendment 3 (2026-10-03 19:40 ET)
+
+Six Strategy A choices that v3 and v3 Amendments 1 and 2 leave open, fixed before any Strategy A result exists. Committed before Strategy A is run on training data. strategy_a.py implements all six (branch t13-strategy-a, a3e4a55). No Strategy A trade, fill, return or win rate has been computed; the only computation on real data is the orientation check in the Disclosure (no P&L).
+
+### 1. Ties and Kalshi scalar settlements
+
+A game settles at Kalshi's own recorded settlement value. When Kalshi marks a market result "scalar", the home-team market's `settlement_value_dollars` is the payout per contract (1 minus the away market's value if only the away market is found). This applies docs/strategy_a_rules.md section 1 ("Before a blank is treated as a tie, the Kalshi market metadata must show the scalar settlement at 0.5").
+
+Checked 2026-10-03 from Kalshi market metadata (`/historical/markets/<ticker>`: fields status, result, settlement_value_dollars only; no price fields read):
+
+| game | Kalshi event | home market | away market | settled at |
+|---|---|---|---|---|
+| nfl_20250929_gb_dal (GB at DAL, 2025-09-28, 40-40 tie) | KXNFLGAME-25SEP28GBDAL | DAL: finalized, scalar, 0.5000 | GB: finalized, scalar, 0.5000 | 0.5 |
+| nfl_20250808_lv_sea (preseason) | KXNFLGAME-25AUG07LVSEA | SEA: finalized, scalar, 0.5000 | LV: finalized, scalar, 0.5000 | 0.5 |
+| nfl_20250810_mia_chi (preseason) | KXNFLGAME-25AUG10MIACHI | CHI: finalized, scalar, 0.5000 | MIA: not found (404) | 0.5 |
+| nfl_20250817_jac_no (preseason) | KXNFLGAME-25AUG17JACNO | NO: finalized, scalar, 0.5000 | JAC: finalized, scalar, 0.5000 | 0.5 |
+
+GB at DAL: Kalshi's recorded value is 0.5, which matches the v3 tie rule. The other three blank-settlement games (all NFL preseason) also have a populated Kalshi result field (scalar, 0.5); the downloader maps only yes/no. These four stay in the sample (v3: tied games are never dropped).
+
+How it is applied (a code step; the games file is never edited): ingest/kalshi_market_meta.py records, for both team markets of every training game, Kalshi's status, result and settlement_value_dollars (plus the tick and liquidity fields of sections 3 and the report; no price fields) in data/raw/kalshi_market_meta.csv. strategy_a.load_games reads the games file as downloaded and applies strategy_a.apply_scalar_settlements: where settlement_result is blank and the home market's result is "scalar", the result is its settlement_value_dollars; else, if the away market's is, 1 minus that value; a blank with no scalar record stays blank (and the game is skipped as "unsettled"). Each game carries settlement_source ("yes/no" or "kalshi scalar (home market)"). Test: tests/test_strategy_a.py::test_scalar_settlement_step_on_the_four_blank_games (the four games above, MIA at CHI with the away market not found). Result on the training file: 1,263 games settled yes/no in the file, 4 settled by the scalar step (exactly the four above, 0.5 each, from the home market); 777 home wins, 486 home losses, 4 at 0.5; 0 still blank.
+
+### 2. NFL preseason
+
+NFL preseason = NFL games whose ESPN kickoff (US Eastern date) is before that season's regular-season opener: Thursday Sep 4, 2025 for the 2025 season (training), Wednesday Sep 9, 2026 (Patriots at Seahawks) for the 2026 season (test set). This is the Hall of Fame game and the rest of the preseason. strategy_a.load_games asserts the count is 49 on the training file. A season with no opener date set raises an error instead of guessing. Tests: Sep 3, 2025 ET is preseason and Sep 4 is not; Sep 8, 2026 ET is preseason and Sep 9 is not. These games stay in the primary run. A robustness run without them is reported side by side with the primary run (same theta grid, same costs). It is a robustness report, not a trading variant: theta is selected on the primary run only, and the robustness run never changes the selected theta or the test-set rule.
+
+### 3. Fill price cap
+
+Fill = min(first post-decision trade + 1 cent, 1 - tick), where tick is the price step of that market's top price range in Kalshi's metadata (`price_ranges`, field step; `price_level_structure`), 0.01 if the market's metadata was not found. A trade at the top valid price would otherwise give a fill above it, which is not a valid Kalshi price. Training markets (metadata only, both team markets of all 1,267 games, which covers every favorite market without identifying favorites, since that needs prices): 2,534 markets, all found, all price_level_structure linear_cent with one range 0 to 1 at step 0.01 (count at 0.01: 2,534; other: 0). So the cap is 0.99 for every training market, the same as the earlier fixed cap. The number of capped fills is reported per theta (favorite leg and underdog placebo leg) in the Strategy A output (column n_capped_fills). A capped fill is kept, not skipped.
+
+### 4. Conference championships and Super Bowl
+
+Excluded. Reason, from Kalshi series and market metadata (searched 2026-10-03, about 5 min, no prices):
+- The 2026-01-25 conference championships: series KXNFLGAME has only KXNFLGAME-26JAN25LASEA (LA at SEA), a duplicate with zero volume on both markets, and no event for NE at DEN. Series KXAFC and KXNFC have no 2026 event (KXAFC has only the 2025 event); KXNFLAFCCHAMP and KXNFLNFCCHAMP have no settled 2026 event with markets.
+- Super Bowl LX (2026-02-08, SEA vs NE): only in KXSB-26, a 32-market season futures event ("Will <team> win the 2026 Pro Football Championship?"), not a two-market game event. Using it would need a different game definition (two of 32 markets, prices not complementary by construction), so it is not added under the same pipeline.
+- NFL training games therefore end with the divisional round (last kickoff 2026-01-18). Training: 1,267 games (CFB 936, NFL 331); the seal check (kickoff < 2026-08-01) is unchanged.
+
+### 5. Team markets and games with a missing market
+
+Each game's two team markets are taken from the market ids in its downloaded trade file (strategy_a.team_markets): home = the games file's kalshi_ticker; away = the event's other market. Team codes are everything after "<event>-" in the ticker. Reason: the downloader cut team codes at the last hyphen, so Miami (OH), Kalshi code "M-OH", appears as "OH" in the games file; built from that code, its market id does not exist and those games would have been skipped. 13 training games involve Miami (OH) (7 away, 6 home); all 13 have trade rows on both markets and are kept. The games file is not edited; the downloader is not changed (its codes also feed ESPN and Polymarket matching and game ids), and a comment marks the issue there.
+
+A game whose trade file does not hold both team markets is excluded, never traded from one side (the favorite needs both own-market prices). Skip reason "missing market (<ticker>: no rows in the trade file)". Training: 1 game, cfb_20250831_lam_unt (LAM at UNT, KXNCAAFGAME-25AUG30LAMUNT). The UNT market exists under its expected ticker (KXNCAAFGAME-25AUG30LAMUNT-UNT, finalized, result yes; not the hyphen issue), but all 33 of its trades are from 2025-08-18 to 2025-08-30 21:47 UTC, the last one 2 h 12 min before the ESPN kickoff (2025-08-31 00:00 UTC), so it has 0 trades in the standard download window [kickoff - 2 h, kickoff + 5 h] used for every game, and its trade file holds only the LAM market (6 trades). Including it would need a different window for one game, so it stays excluded. (Checked from trade timestamps only.) Test: tests/test_strategy_a.py::test_game_with_one_missing_market_is_excluded_not_traded.
+
+### 6. Staleness on both markets (added 2026-10-03 18:20 ET, before any Strategy A run)
+
+At t = kickoff - 5 min, each team's own market must have at least one trade in (t - 10 min, t]. If either market has none, the game is skipped (reason "stale (no trade in the 10 min before t: <ticker>)") for every theta and both legs, and counted per theta (n_skipped_stale). The favorite is chosen only when both prices are fresh. This replaces the favorite-only check (v3 Amendment 2 item 2: "staleness on the favorite's market"; the placebo leg uses the same both-markets decision): an old underdog price can decide which team is the favorite (with a fresh favorite at 0.72 and an underdog last traded at 0.20 fifteen minutes earlier, the favorite-only rule would enter). Fake-game tests: tests/test_strategy_a.py::test_staleness_on_both_markets (underdog stale skipped; both fresh unchanged; a stale underdog that would decide the favorite skipped, where the previous rule entered). Rule only; no Strategy A result exists.
+
+### Disclosure
+
+Drafted 15:50 to 18:20 ET Oct 3, reviewed by Divi (walkthrough docs/review/strategy_a_walkthrough.md approved before this commit). Seen while preparing this amendment (incidental, no Strategy A computation): the Kalshi settlement fields above for the four blank-settlement games, the market lists and volume totals of the Kalshi series named in section 4, the count of NFL preseason games, and the key names of one Kalshi market object plus the counts of price_level_structure and tick step over the 2,534 training markets (no price field was kept). For section 5, only the market_id column of each game's trade file was read (market ids and row counts per market). Excluded game: cfb_20250831_lam_unt, reason above. No entry prices, fills, returns or win rates have been computed or looked at.
+
+Orientation check (run after the walkthrough was approved, before this commit; Divi's pre-run gate, training only, no fills or P&L): for every training game that reaches the favorite decision (ESPN kickoff, both markets present, both fresh, both priced at t), home own-market price + away own-market price at t (the as-of medians decide() uses): 1,135 games, median 1.0100, p5 1.0000, p95 1.0200, 0 outside [0.90, 1.10]. Gate: median in [0.97, 1.05] and under 2% outside: PASS. Before the decision, 122 games were skipped as stale and 9 for no pre-decision price.
