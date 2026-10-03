@@ -918,7 +918,9 @@ class PolymarketUS:
 
     def _rows(self, slug: str, bid, ask, bsz, asz, recv: int) -> list[dict]:
         snap = (bid, ask, bsz, asz)
-        if snap == self.top.get(slug):
+        old = self.top.get(slug)
+        # NaN-aware compare: a missing side (NaN) must not count as a change on every poll
+        if old is not None and all(a == b or (a != a and b != b) for a, b in zip(snap, old)):
             return []
         self.top[slug] = snap
         if self.markets[slug]["long_is_away"]:      # long = away: home bid = 1 - long ask, home ask = 1 - long bid
