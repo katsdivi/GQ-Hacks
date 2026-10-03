@@ -129,6 +129,9 @@ def kalshi_events(league: str) -> pd.DataFrame:
             continue
         out.append({"league": league, "k_event": ev, "k_date": gdate, "k_sep": sep, "k_away": away_name,
                     "k_home": home_name, "k_away_ticker": a.ticker, "k_home_ticker": h.ticker,
+                    # Known: a hyphenated team code loses its prefix here (Miami (OH) "M-OH" -> "OH"). Codes feed
+                    # ESPN/Polymarket matching and game ids, so this is left as is; Strategy A resolves the real
+                    # market ids from each game's trade file (strategy_a.team_markets). Use the tickers, not codes.
                     "k_away_code": a.ticker.rsplit("-", 1)[1], "k_home_code": h.ticker.rsplit("-", 1)[1],
                     "k_volume": float(g["vol"].sum())})
     return pd.DataFrame(out)

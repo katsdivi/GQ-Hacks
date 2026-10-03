@@ -19,7 +19,7 @@ Per game and theta:
     0.07 x C x P x (1 - P) rounded up to the cent per order (comparison). Settlement fee 0.
   Placebo: buy the underdog's own market under the same decision and the same fill rule.
   Preseason robustness (v3 Amendment 3 draft): NFL games with ESPN kickoff (ET date) before that season's
-    regular-season opener (2025: Thu Sep 4, 2025) are flagged "preseason" (49 in training, incl. the Hall of
+    regular-season opener (2025: Thu Sep 4, 2025; 2026: Wed Sep 9, 2026) are flagged "preseason" (49 in training, incl. the Hall of
     Fame game); they stay in the primary run, and summarize_side_by_side reports the run without them next to
     it. Theta selection uses the primary run only.
 
@@ -54,7 +54,8 @@ WEBULL_PER_CONTRACT = 0.02
 KALSHI_DIRECT_RATE = 0.07
 KICKOFF_SOURCES = ("espn", "espn_event_id")   # ESPN only (v3, docs/strategy_a_rules.md)
 DEFAULT_TICK = 0.01
-NFL_OPENER = {2025: date(2025, 9, 4)}           # regular-season opener (ET date), by season start year
+NFL_OPENER = {2025: date(2025, 9, 4),            # regular-season opener (ET date), by season start year
+              2026: date(2026, 9, 9)}            # Wed Sep 9, 2026 (Patriots at Seahawks), per Divi
 TRAINING_PRESEASON_N = 49
 
 
@@ -82,11 +83,12 @@ class Game:
     kickoff_source: str
     result: float          # home win 1.0 / home loss 0.0 / tie 0.5 / NaN unsettled
     tick: dict = field(default_factory=dict)    # team code -> price step of its market (DEFAULT_TICK if absent)
+    exclude: str = ""      # non-empty: the game is not traded (reason), e.g. a team market missing from the data
 
 
 def is_preseason(g: Game) -> bool:
     """NFL preseason = ESPN kickoff (US Eastern date) before that season's regular-season opener. 2025 opener
-    Thu Sep 4, 2025; 2025 training: 49 games (Hall of Fame game and the rest of the preseason). A season with no
+    Thu Sep 4, 2025; 2026 opener Wed Sep 9, 2026; 2025 training: 49 games (Hall of Fame game and the rest of the preseason). A season with no
     opener date set raises rather than guess."""
     if g.league.upper() != "NFL":
         return False
@@ -134,18 +136,42 @@ def apply_scalar_settlements(games: pd.DataFrame, meta: pd.DataFrame) -> pd.Data
     return g
 
 
-def load_games(games_csv, meta_csv, expect_preseason: int | None = TRAINING_PRESEASON_N) -> list[Game]:
-    """Games for Strategy A: the games file (never edited) + Kalshi metadata (scalar settlements, ticks)."""
+def team_markets(event: str, home_ticker: str, away_code: str, market_ids) -> tuple[str, str, str]:
+    """(home code, away code, exclude reason) from the market ids actually present in a game's trade file.
+    Team codes are everything after f"{event}-" in the ticker, so a code with a hyphen (Miami (OH) is "M-OH")
+    survives; the games file's away code came from ticker.rsplit("-", 1) and reads "OH" there. The away market is
+    the one other market of the event whose code ends with the file's away code. A game whose file does not hold
+    both team markets is excluded, never traded from one side."""
+    home = home_ticker[len(event) + 1:]
+    ids = set(market_ids)
+    others = [m for m in ids if m != home_ticker and m.startswith(event + "-")
+              and m[len(event) + 1:].split("-")[-1] == away_code.split("-")[-1]]
+    if home_ticker not in ids or len(others) != 1:
+        missing = [t for t, ok in ((home_ticker, home_ticker in ids), (f"{event}-{away_code}", len(others) == 1))
+                   if not ok]
+        return home, away_code, f"missing market ({', '.join(missing)}: no rows in the trade file)"
+    return home, others[0][len(event) + 1:], ""
+
+
+def load_games(games_csv, meta_csv, ticks_dir=None,
+               expect_preseason: int | None = TRAINING_PRESEASON_N) -> list[Game]:
+    """Games for Strategy A: the games file (never edited) + Kalshi metadata (scalar settlements, ticks).
+    ticks_dir (data/raw/kalshi_only): team market ids are resolved from each game's trade file (market_id
+    column only), see team_markets."""
     raw = pd.read_csv(games_csv)
     meta = pd.read_csv(meta_csv)
     g = apply_scalar_settlements(raw, meta)
     step = {(r.game_id, r.side): top_step(r.price_ranges) for r in meta.itertuples()}
     out = []
     for r in g.itertuples():
-        tick = {team: step[(r.game_id, side)] for team, side in ((r.home, "home"), (r.away, "away"))
+        home, away, excl = r.home, r.away, ""
+        if ticks_dir is not None:
+            ids = pd.read_parquet(f"{ticks_dir}/{r.game_id}.parquet", columns=["market_id"])["market_id"].unique()
+            home, away, excl = team_markets(r.kalshi_event, r.kalshi_ticker, r.away, ids)
+        tick = {team: step[(r.game_id, side)] for team, side in ((home, "home"), (away, "away"))
                 if not math.isnan(step.get((r.game_id, side), float("nan")))}
-        out.append(Game(r.game_id, r.league, r.home, r.away, r.kalshi_event,
-                        pd.Timestamp(r.kickoff_utc_espn), r.kickoff_source, r.settlement_result, tick))
+        out.append(Game(r.game_id, r.league, home, away, r.kalshi_event,
+                        pd.Timestamp(r.kickoff_utc_espn), r.kickoff_source, r.settlement_result, tick, excl))
     if expect_preseason is not None:
         n = sum(is_preseason(x) for x in out)
         assert n == expect_preseason, f"NFL preseason games: {n}, expected {expect_preseason}"
@@ -237,6 +263,15 @@ def evaluate_game(trades: pd.DataFrame, g: Game, thetas=THETAS, final_test: bool
         return [{"game_id": g.game_id, "league": g.league, "theta": th, "placebo": p, "entered": False,
                  "skip": f"kickoff not from ESPN ({g.kickoff_source})", "preseason": is_preseason(g)}
                 for th in thetas for p in (False, True)]
+    if g.exclude:
+        return [{"game_id": g.game_id, "league": g.league, "theta": th, "placebo": p, "entered": False,
+                 "skip": g.exclude, "preseason": is_preseason(g)} for th in thetas for p in (False, True)]
+    present = set(trades.loc[trades["kind"] == "trade", "market_id"].unique()) if len(trades) else set()
+    missing = [f"{g.event}-{t}" for t in (g.home, g.away) if f"{g.event}-{t}" not in present]
+    if missing:      # never pick the favorite from one side
+        return [{"game_id": g.game_id, "league": g.league, "theta": th, "placebo": p, "entered": False,
+                 "skip": f"missing market ({', '.join(missing)}: no rows in the trade file)",
+                 "preseason": is_preseason(g)} for th in thetas for p in (False, True)]
     d = decide(trades, g)
     rows = []
     for th in thetas:

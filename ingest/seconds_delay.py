@@ -1,7 +1,7 @@
 """Fetch the per-market sports taker delay for the frozen holdout polymarket.com markets.
 
-v2 Amendment 3: the polymarket.com taker delay is per market (3 s is not guaranteed; 1 s is being
-tested on some leagues). This reads ONLY the delay field from the public CLOB market endpoint
+v2 Amendment 3: the polymarket.com taker delay is a per-market value (read 2026-10-03 16:22 ET: all 112
+holdout markets at 1 s; the help center's 3 s is not used). This reads ONLY the delay field from the public CLOB market endpoint
 (GET clob.polymarket.com/markets/<condition_id>, field `seconds_delay`, the docs' market.trading.secondsDelay).
 
 SEAL: the market metadata also carries prices, outcome prices, volume and resolution. Nothing but the

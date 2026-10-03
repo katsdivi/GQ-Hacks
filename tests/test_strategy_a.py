@@ -124,8 +124,12 @@ def test_preseason_flag_and_side_by_side():
     sep3 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2025-09-04 03:00", tz="UTC"), "espn", 1.0)
     sep4 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2025-09-04 16:00", tz="UTC"), "espn", 1.0)
     assert A.is_preseason(sep3) and not A.is_preseason(sep4)
-    with pytest.raises(ValueError):                                               # 2026 opener not set
-        A.is_preseason(A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2026-08-10", tz="UTC"), "espn", 1.0))
+    # 2026: opener Wed Sep 9, 2026 (ET date); Sep 8 ET is preseason, Sep 9 ET is not
+    sep8 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2026-09-08 23:00", tz="UTC"), "espn", 1.0)
+    sep9 = A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2026-09-10 00:20", tz="UTC"), "espn", 1.0)
+    assert A.is_preseason(sep8) and not A.is_preseason(sep9)                      # 19:00 ET Sep 8 / 20:20 ET Sep 9
+    with pytest.raises(ValueError):                                               # 2027 opener not set
+        A.is_preseason(A.Game("nfl_x", "NFL", "H", "A", "X", pd.Timestamp("2027-08-10", tz="UTC"), "espn", 1.0))
     tr = trades(BASE + [(3, "HHH", 0.83)])
     rows = pd.DataFrame(A.evaluate_game(tr, game()) + [dict(r, game_id="nfl_x", preseason=True)
                                                        for r in A.evaluate_game(tr, game())])
@@ -193,3 +197,27 @@ def test_load_games_ticks_and_preseason_assert(tmp_path):
         A.load_games(gp, mp)                                      # the training default expects 49
     assert A.top_step('[{"end": "0.1", "start": "0", "step": "0.001"}, {"end": "1", "start": "0.1", "step": "0.01"}]') == 0.01
     assert math.isnan(A.top_step(None))
+
+
+def test_game_with_one_missing_market_is_excluded_not_traded():
+    """Only the home market has rows: Strategy A must not pick the favorite from one side."""
+    tr = trades(BASE + [(3, "HHH", 0.83)])
+    home_only = tr[tr["market_id"].str.endswith("-HHH")]
+    rows = A.evaluate_game(home_only, game())
+    assert not any(r["entered"] for r in rows) and len(rows) == 2 * len(A.THETAS)
+    assert all(r["skip"].startswith("missing market (KXNCAAFGAME-25OCT04AAAHHH-AAA") for r in rows)
+    assert any(r["entered"] for r in A.evaluate_game(tr, game()))              # both markets: trades
+    g = game()
+    g.exclude = "missing market (X: no rows in the trade file)"                  # flagged at load
+    assert all(not r["entered"] and r["skip"] == g.exclude for r in A.evaluate_game(tr, g))
+
+
+def test_team_markets_keeps_hyphenated_codes_and_flags_missing():
+    ev = "KXNCAAFGAME-25AUG28M-OHWIS"
+    ids = [f"{ev}-M-OH", f"{ev}-WIS"]
+    assert A.team_markets(ev, f"{ev}-WIS", "OH", ids) == ("WIS", "M-OH", "")     # games file says away "OH"
+    ev2 = "KXNCAAFGAME-25SEP20UNLVM-OH"
+    assert A.team_markets(ev2, f"{ev2}-M-OH", "UNLV", [f"{ev2}-M-OH", f"{ev2}-UNLV"]) == ("M-OH", "UNLV", "")
+    ev3 = "KXNCAAFGAME-25AUG30LAMUNT"                                            # the training case: UNT missing
+    h, a, why = A.team_markets(ev3, f"{ev3}-UNT", "LAM", [f"{ev3}-LAM"])
+    assert why == f"missing market ({ev3}-UNT: no rows in the trade file)"
