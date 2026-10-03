@@ -3,27 +3,27 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 10:45 AM ET)
+STATUS  (last update: Sat Oct 3, 11:00 AM ET)
 Current task: Saturday recording (Mac + Vultr); Amendment 2 DRAFT edited, NOT committed; branch t4h-ops-checks (not merged)
-Done this session:
-  Key hygiene: secrets/kalshi.pem and kalshi.env git-ignored; 0 commits ever touch secrets/; 0 secrets in git status
-  Polymarket US ask/bid asymmetry (14:15-14:25 UTC, identical on both machines): REAL one-sided book on 5 FCS mismatches
-    (gateway sends no bestBidQuote on the long/away side, so no home ask); crossed quotes 0. PLUS a collector dedup bug
-    (NaN != NaN) that rewrote the unchanged bid every poll (~301 rows/10 min/market). Fixed + tested (9c9b7b6); NOT deployed
-  Mac outage 14:13-14:15 UTC = Clamshell Sleep on battery (pmset 10:13:18 ET sleep, 10:14:35 ET lid wake); still on battery
-  collector/watch_vultr.sh: read-only, every 120 s, alerts on unit not active / ssh fail / missing or >60 s heartbeat;
-    running under caffeinate (cycles 10:28 and 10:30 ET: unit=active, feed ages 3-7 s)
-  data/live/holdout_candidates.csv: 112 CFB games (kickoff 2026-10-02 23:00Z to 2026-10-04 03:59Z), polymarket.com 112,
-    Polymarket US 102, both 102, 0 missing kickoffs (3 via hand-checked ESPN event ids); 14 Sunday NFL games are outside
-    the window. sha256 prefix d20247c7140ac7c9. Gitignored: needs git add -f in the Amendment 2 commit
-  Amendment 2 draft: same-machine placebo pairs, fixed candidate set, Friday-night exclusion rule, disclosure + commit lines
-  Polymarket US T&S training conversion: complete (276 day files, log ends 20260731)
-  Strategy A data: ingest/kalshi_only_train.py running (1267 training games: NFL 331, CFB 936; 57 post-seal events dropped;
-    test game nfl_20250905_dal_phi identical to data/ticks, 58,788 trades; ALBYIOWA home/away suspect; ~60-90 min)
-Blockers: Mac on battery (sleeps when lid closes; Vultr has no backup then)
-Next: Divi OK to redeploy the dedup fix (between games or after Saturday's last game); Alden review; commit Amendment 2
-  + candidate CSV; write the book-mid runner and laggard evaluator (synthetic data only)
-Decisions pending: dedup redeploy timing, include Sunday NFL?, Amendment 2, t9-costs review, Florida in-app check, B (deferred)
+Verified this session:
+  Keys: kalshi.pem IGNORED, kalshi.env IGNORED, 0 commits touch secrets/, 0 secrets in git status
+  Polymarket US 14:15-14:25 UTC: Mac ask 6 / bid 1,511, Vultr ask 6 / bid 1,521; crossed 0 on both. Real one-sided book
+    (no bid on the long/away side, 5 FCS mismatches) + dedup bug that only ADDS exact repeats: 1,500 of 1,517 rows are
+    repeats, 17 after read-time dedup; nothing dropped or corrupted. Fix 9c9b7b6 tested, NOT deployed (deploy after last game)
+  Mac 14:13 UTC outage: pmset "Clamshell Sleep ... Using Batt" 10:13:18 ET, lid wake 10:14:35 ET
+  Mac sleep: caffeinate -dims -w <collector pid> attached (no restart); supervise.sh now uses -dims for future starts.
+    On battery macOS ignores PreventSystemSleep (summary 0), so lid close still sleeps. Battery 95%, lowpowermode 0
+  Watchdog collector/watch_vultr.sh: cycles every ~2 min since 10:28 ET, unit=active, feed ages 0-10 s, no alerts
+  holdout_candidates.csv (cutoff Sun 06:00 ET, Sunday NFL out): 112 CFB, polymarket.com 112, Polymarket US 102, both 102,
+    0 empty kickoffs, sha256 prefix d20247c7140ac7c9 (gitignored, git add -f with Amendment 2)
+  docs/strategy_a_rules.md committed before any Strategy A code: ties pay 0.5 and stay in; ALBY at IOWA resolved from Kalshi
+    metadata (home Iowa, Iowa won) but excluded (no ESPN match); ESPN groups=90; no-ESPN-match games: 1 of 1,267
+  Strategy A download running: 350/1264 at 14:57Z; seal dropped 57 holdout events; no strategy code run
+Blockers: Mac on battery (lid close sleeps it; Vultr then has no backup)
+Next: plug in Mac; Alden review; commit Amendment 2 + candidate CSV; dedup redeploy after last game; book-mid runner +
+  laggard evaluator on synthetic data
+Decisions pending: ALBY at IOWA (exclude vs hand-checked ESPN id; v3 says drop only games ESPN does not have),
+  Amendment 2, t9-costs review, Florida in-app check, B (deferred)
 ```
 
 ## Log
