@@ -3,28 +3,30 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 11:58 AM ET)
-Current task: Saturday recording; v2 Amendment 2 (8a509ff) and v3 Amendment 1 (9507d6a) pre-registered on main
+STATUS  (last update: Sat Oct 3, 1:50 PM ET)
+Current task: Saturday recording; v2 Amendment 3 DRAFT (Alden's review) and v3 Amendment 2 DRAFT awaiting Divi
 Done:
-  v3 Amendment 1 on main 9507d6a, 2026-10-03 11:42:18 ET, pushed: combined A+B book, costs x2, French factors,
-    ESPN kickoffs for B, A fill = first trade >= t + 1 s + 1c (skip if none in 5 min), B fill = first trade >= t + 1 s
-    (skip if none in 60 s). No A/B code existed on any branch at commit (git grep checked)
-  strategy_a.py on branch t13-strategy-a (rule-7 review): 7 fake-game tests pass (fill 0.84 from 0.80 before t /
-    0.83 after t + 1 s; no trade in 5 min -> skipped and counted per theta; staleness, away favorite, tie 0.5,
-    underdog placebo, seal guard, ESPN-only kickoffs, theta selection >= 50 trades). Not run on real data
-  holdout_mid.py (Amendment 2 runner) on t13-strategy-a: synthetic test with 44 games on two fake machines passes
-    (Vultr 90 s outage -> Mac; outage on both -> excluded with reasons; one-sided book -> 0 mid changes, not
-    qualifying; pinned 0.98 ends window; placebo never crosses machines; 42 qualifying at lag 5 s). Full suite 50 passed
-  Frozen holdout maps (data/live/holdout_maps/, forced add on branch): polymarket.com 112 of 112 mapped, [away, home]
-    order confirmed for 112 of 112; 109 of 112 home tokens have Mac rows (ids only, no prices)
-  Power note: placebo lags are ~uniform over +-15 s (150 synthetic pairs: median 1 s, mean 0.17 s), so a 5 s lead
-    passes Mann-Whitney only ~60-70% of the time at ~40 games (fixture seed gave p 0.40 and 0.68)
-Running: Strategy A download 800/1264 at 15:52Z, ~9 games/min, ETA ~16:42Z (12:42 ET); then ALBY at IOWA re-fetch
+  Mann-Whitney red flag: NOT a code bug. On the fixture arrays custom p = scipy two-sided p (0.67537 / 0.39944, equal
+    to 1e-15). The fixture had 40 placebo pairs (not 150) with median +5.5 / +6.0 s (bad draw, seed 21). Same fixture
+    at seeds 1-5: placebo median -0.5 to +3 s, MW p 0.003 to 0.037, "kalshi leads" every time. 120 unrelated pairs per
+    setup (offset 0 / 600 s, streamed / polled): median -2 to +2 s, so no placebo bias in the generator
+  Implementation: MW now scipy.mannwhitneyu (custom kept as cross-check; equal to 1e-9 on hand cases with ties; scipy
+    exact only for tiny tie-free samples). Fixed-verdict tests restored: 80 games at 5 s vs 150 placebo -> "kalshi
+    leads" (p 0.0012); zero-lag linked -> not a lead. decide() has alpha; decide_holm (0.025 then 0.05) + runner run_all
+  v2 who-leads used a sign test, not MW; sign test = scipy binomtest exactly (2.32e-231, 4.86e-65). No correction
+  Runner per Alden: window kickoff - 90 min; REST-fallback time = Kalshi outage; feed start from heartbeats
+  Log-only counts (13:43 ET): past window start, clean machine: -90: 39 of 44, -30: 36 of 40 (all Vultr; misses are
+    Friday-night games). Exactly-noon kickoffs: 17; clean under -120: 0; under -90: 17. 60% rule: 0.181 (n=30), 0.078 (n=60)
+  strategy_a.py fees: implemented itself (lines 47-53), identical formulas to t9-costs costs.fee (Webull 0.02*C;
+    direct ceil(0.07*C*P*(1-P)) to the cent)
+  3 polymarket.com tokens without Mac rows (LIB-DEL, PITT-VT, PSU-NW, Friday night): 0 rows on Vultr too
+  Full test suite 56 passed (before the last runner change); runner tests 5 passed after it
+Running: power re-run (scipy MW, Amendment 2 mid rule) at 30/40/60/80 games, sonnet agent; fills X-Y in Amendment 3
+  Strategy A download 1040/1264 at 17:43Z, ~5 games/min, ETA ~18:30Z (2:30 PM ET); then ALBY at IOWA re-fetch
 Blockers: Mac on battery (lid close sleeps it)
-Next: Divi reviews HYPOTHESIS_v2_amendment3_DRAFT.md (runner choices; commit to main before the run); laggard
-  evaluator on synthetic books; Vultr rsync into data/live_vultr/ after the last game; dedup redeploy after the last game
-Decisions pending: Amendment 3 draft; merge t4h-ops-checks and t13-strategy-a (rule 7 review; merge, not rebase);
-  t9-costs review; v3 PROPOSED items for Alden; Florida in-app check
+Next: power numbers into Amendment 3; Divi says commit; laggard evaluator; Vultr rsync after last game
+Decisions pending: commit v2 Amendment 3 and v3 Amendment 2 drafts; merges (rule 7: t13-strategy-a, t4h-ops-checks,
+  t9-costs); Florida in-app check
 ```
 
 ## Log
