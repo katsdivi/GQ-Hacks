@@ -3,19 +3,24 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~12:20 AM ET)
-Current task: T5-T7 Made It BLOCKED on CLAUDE.md rule 7 (leadlag/strategy/costs/backtest are Divi-only); everything else running
-Done: T1-T3; v1 retired + corrected; HYPOTHESIS_v2.md committed d6bfa9c (00:01:46 ET, before any Polymarket price analysis);
-  T4 restart test PASSED on Mac; Polymarket websocket added to recorder (9fe423d)
+STATUS  (last update: Sat Oct 3, ~12:45 AM ET)
+Current task: Made It DONE on branch t5-made-it, tag v0-made-it (NOT merged to main); waiting on Divi's line-by-line review
+Done: T1-T4 (Mac), T5-T7 PROVISIONAL; rule 7 wording clarified (8cf0670); v2 committed d6bfa9c
 Verified numbers:
-  Restart test (Kalshi only): before 03:09-03:39 UTC 22,970 rows (15,640 trades), 0/30 empty min;
-    killed 03:39:28, up 03:39:34; after 03:39-04:09 UTC 25,136 rows (16,518 trades), 0/31 empty min
-  Recorder now: Kalshi 246 game markets (REST) + polymarket.com 124 game moneylines + 10 calibration markets (websocket)
-  D (match-to-block) PRELIMINARY, 49 trades: median +2.1 s, p90 +2.9 s; need >= 200 trades (rerun measure_d)
-  T8: 977 training games matched on both venues (NFL 283, CFB 694); download running, ~2.5 h total
-Blockers: rule 7 for T5-T7 (see report). Vultr IP / Kalshi key / TIGER_DATABASE_URL still pending.
-Next: Divi decides how to write leadlag/strategy/costs/backtest; Made It game picked by date rule = nfl_20251116_was_mia
-Decisions pending: rule 7 approach, B (Webull, deferred)
+  Fake game: 15/15 planted jumps found, median response +2.0 s, xcorr +2 s; placebo (kalshi leads) 0 trades;
+    net at latency 0 / 1 s: +10.0c / -88.0c over 15 trades (decision stamped at label + 1 s); 8 tests pass
+  nfl_20251116_was_mia (kalshi vs polymarket.com, PLACEHOLDER FEE 2c/fill, half-spread 0.5c, latency 1 s):
+    kalshi leads: 286 jumps, 164 covered, median response +10.0 s, xcorr +7 s; 149 trades on polymarket, net -267.6c
+    polymarket leads: 152 jumps, 70 covered, median response +6.0 s, xcorr -10 s; 41 trades on kalshi, net -222.0c
+    polymarket.com shifted 2.879 s earlier when traded (D p90)
+  D: median +2.119 s, p90 +2.879 s, 603 non-sports trades (experiments/d_estimate.json)
+  Fresh clone: stdout, leadlag/signals parquets and chart md5 identical for sample and was_mia
+Flags for review: v2 shift lets traded-venue fills see trades matched up to (D90 - D) s later (docs/review_t5.md);
+  286 kalshi "jumps" likely include last-trade bid/ask bounce (price definition needs Alden);
+  recorder 65 s stall 04:17-04:18 UTC (GAPS.md) + polymarket receipt delay in same minute
+Blockers: none. Pending from Divi: Kalshi key (websocket), Vultr IP, TIGER_DATABASE_URL
+Next: Divi reviews docs/review_t5.md + the 4 core files; Alden hand-checks outputs; T8 download continues (~2 h)
+Decisions pending: v2 shift sign-off (Alden), price definition for trades-only history, B (Webull, deferred)
 ```
 
 ## Task log
