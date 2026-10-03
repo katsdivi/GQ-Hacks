@@ -17,8 +17,8 @@ KO = W // 2
 EMPTY_S, COPY_S, COPY_LAG = 60, 240, 5
 
 
-def path(rng):
-    vol = np.where((np.arange(W) >= KO) & (np.arange(W) < KO + EMPTY_S + COPY_S), 0.02, 0.003)
+def path(rng, copy_s=COPY_S):
+    vol = np.where((np.arange(W) >= KO) & (np.arange(W) < KO + EMPTY_S + copy_s), 0.02, 0.003)
     jump = rng.random(W) < np.where(vol > 0.01, 0.5, 0.05)
     return np.clip(0.5 + np.cumsum(jump * rng.normal(0, vol)), 0.1, 0.9).round(2)
 
@@ -36,13 +36,13 @@ def book(ts_s, mids, venue, market, t0):
     return rows
 
 
-def game(rng, wiped=True):
+def game(rng, wiped=True, copy_s=COPY_S):
     t0 = 1_760_000_000 * NS
-    p = path(rng)
+    p = path(rng, copy_s)
     s = np.arange(W)
     k = book(s, p, "kalshi", "K", t0)
     other = p.copy()
-    copy = (s >= KO + EMPTY_S) & (s < KO + EMPTY_S + COPY_S)
+    copy = (s >= KO + EMPTY_S) & (s < KO + EMPTY_S + copy_s)
     other[copy] = p[np.flatnonzero(copy) - COPY_LAG]
     keep = (s < KO) | (s >= KO + EMPTY_S)
     o = book(s[keep], other[keep], "polymarket", "P", t0)
@@ -67,7 +67,31 @@ def test_wipe_found_and_mid_undefined_while_empty():
 def test_fallback_when_no_clear_recorded():
     tk, to, ko = game(np.random.default_rng(2), wiped=False)
     (lo, hi), src = H.wipe_exclusion(to, "polymarket", ko, ko // NS + W)
-    assert (src, lo, hi) == ("fallback", ko // NS - 120, ko // NS + 600)
+    assert (src, lo, hi) == ("fallback", ko // NS - 120, ko // NS + 1200)
+    # anchored at T = min(ESPN kickoff, gameStartTime): an earlier gameStartTime moves it, a later one does not
+    (lo, hi), _ = H.wipe_exclusion(to, "polymarket", ko, ko // NS + W, ko - 60 * NS)
+    assert (lo, hi) == (ko // NS - 180, ko // NS + 1140)
+    (lo, hi), _ = H.wipe_exclusion(to, "polymarket", ko, ko // NS + W, ko + 60 * NS)
+    assert (lo, hi) == (ko // NS - 120, ko // NS + 1200)
+
+
+def test_fifteen_minute_copy_leaks_under_plus10_not_plus20(monkeypatch):
+    """No clear recorded (the 2026-10-03 situation), copying lasts 15 min after a 60 s invisible empty period:
+    the old fallback [ko - 2, ko + 10 min] leaves 6 min of copying in and Kalshi looks like the leader;
+    [ko - 2, ko + 20 min] covers it."""
+    rng = np.random.default_rng(11)
+    games = [game(rng, wiped=False, copy_s=15 * 60) for _ in range(20)]
+    lags = {}
+    for name, fb in (("+10", (-120, 600)), ("+20", (-120, 1200))):
+        monkeypatch.setattr(H, "WIPE_FALLBACK", fb)
+        out = []
+        for tk, to, ko in games:
+            ex, src = H.wipe_exclusion(to, "polymarket", ko, ko // NS + W)
+            assert src == "fallback"
+            out.append(X.game_lag_mid(tk, "kalshi", to, "polymarket", exclude=[ex]))
+        lags[name] = np.array(out)
+    assert np.median(lags["+10"]) == COPY_LAG and (lags["+10"] == COPY_LAG).mean() >= 0.6   # leaks
+    assert (lags["+20"] == 0).mean() >= 0.9                              # does not leak
 
 
 def test_change_never_spans_exclusion():

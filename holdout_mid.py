@@ -21,9 +21,11 @@ Polymarket US):
   8. Book-wipe exclusion (Amendment 3 draft): polymarket.com sports books cancel all resting limit orders at
      the official game start. Per game, on the test's other venue: the first second at or after kickoff -
      30 min whose book has neither side; excluded for BOTH venues from 2 min before it to 5 min after that
-     book is two-sided again (to the window end if it never is). No such second -> excluded [kickoff - 2 min,
-     kickoff + 10 min]. A both-sides-empty book writes no row in the 2026-10-03 recordings (only a
-     "book_empty" marker row would show it), so on those recordings the fallback applies to every game.
+     book is two-sided again (to the window end if it never is). No such second -> excluded [T - 2 min,
+     T + 20 min], T = the earlier of the ESPN kickoff and the polymarket.com market's gameStartTime (frozen
+     map field game_start), for both venue tests. A both-sides-empty book writes no row in the 2026-10-03
+     recordings (only a "book_empty" marker row would show it), so on those recordings the fallback applies
+     to every game.
      Mid changes never span an excluded interval; the qualifying count and the lag use the rest.
 No prices are printed: outputs are counts, lags and decisions. Refuses games with kickoff >= 2026-08-01 unless
 holdout_run=True (the run is once, after Saturday's last game, when Divi says go).
@@ -51,7 +53,7 @@ MIN_CHANGES = 50
 PLACEBO_KICKOFF_S = 30 * 60
 WIPE_SEARCH_S = 30 * 60              # look for a full clear from kickoff - 30 min
 WIPE_PRE_S, WIPE_POST_S = 2 * 60, 5 * 60
-WIPE_FALLBACK = (-2 * 60, 10 * 60)   # no clear found: [kickoff - 2 min, kickoff + 10 min]
+WIPE_FALLBACK = (-2 * 60, 20 * 60)   # no clear found: [T - 2 min, T + 20 min], T = min(ESPN, gameStartTime)
 REST_HEARTBEAT_COVER_S = 15          # one connected kalshi_rest heartbeat covers this many seconds
 HB_FEED = {"kalshi": "kalshi_ws", "polymarket": "polymarket", "polymarket_us": "polymarket_us"}
 TESTS = {"polymarket.com": ("polymarket", 1.0), "Polymarket US": ("polymarket_us", 1.5)}
@@ -192,9 +194,13 @@ def pinned_end(gx: pd.Series, gy: pd.Series, lo_g: int, hi_g: int) -> int:
     return best
 
 
-def wipe_exclusion(to: pd.DataFrame, other: str, ko_ns: int, end_g: int) -> tuple[tuple[int, int], str]:
-    """Excluded grid seconds (lo_g, hi_g inclusive) and the source ("clear" or "fallback")."""
+def wipe_exclusion(to: pd.DataFrame, other: str, ko_ns: int, end_g: int,
+                   game_start_ns: int | None = None) -> tuple[tuple[int, int], str]:
+    """Excluded grid seconds (lo_g, hi_g inclusive) and the source ("clear" or "fallback").
+    ko_ns = ESPN kickoff (clear search starts at ko - 30 min); the fallback is anchored at
+    T = min(ko_ns, game_start_ns) when the polymarket.com gameStartTime is known."""
     ko_g = ko_ns // NS
+    t_g = min(ko_ns, game_start_ns) // NS if game_start_ns is not None else ko_g
     sides = X.sides_snapshots(to, other)
     if len(sides):
         g = pd.Series(sides.to_numpy(), index=sides.index.to_numpy() // NS).groupby(level=0).last()
@@ -204,15 +210,16 @@ def wipe_exclusion(to: pd.DataFrame, other: str, ko_ns: int, end_g: int) -> tupl
             back = g[(g.index > c) & (g == 2)]
             hi = int(back.index[0]) + WIPE_POST_S if len(back) else end_g
             return (c - WIPE_PRE_S, min(hi, end_g)), "clear"
-    return (ko_g + WIPE_FALLBACK[0], ko_g + WIPE_FALLBACK[1]), "fallback"
+    return (t_g + WIPE_FALLBACK[0], t_g + WIPE_FALLBACK[1]), "fallback"
 
 
 def instruments(c, maps: dict) -> dict:
     home = c.game_id.split("_")[-1].upper()
     pc = maps["polymarket_com"].get(c.kalshi_ticker)
     pu = [s for s, r in maps["polymarket_us"].items() if r.get("kalshi_event") == c.kalshi_ticker]
+    gs = pc.get("game_start") if pc else None       # polymarket.com gameStartTime, used by both venue tests
     return {"kalshi": f"{c.kalshi_ticker}-{home}", "polymarket": pc["collector_home_token"] if pc else None,
-            "polymarket_us": pu[0] if pu else None}
+            "polymarket_us": pu[0] if pu else None, "game_start_ns": pd.Timestamp(gs).value if gs else None}
 
 
 def game_on_machine(m: Machine, c, inst: dict, other: str) -> dict:
@@ -233,7 +240,7 @@ def game_on_machine(m: Machine, c, inst: dict, other: str) -> dict:
         out["reason"] = r
         return out
     lo_g, hi_g = lo // NS, end // NS - 1
-    ex, src = wipe_exclusion(to, other, ko, hi_g)
+    ex, src = wipe_exclusion(to, other, ko, hi_g, inst.get("game_start_ns"))
     exc = [ex]
     out.update(excl_lo_g=ex[0], excl_hi_g=ex[1], excl_source=src,
                excluded_s=max(0, min(ex[1], hi_g) - max(ex[0], lo_g) + 1))
