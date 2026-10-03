@@ -3,22 +3,32 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 7:50 PM ET)
-Current task: Strategy A training run done; stopped.
+STATUS  (last update: Sat Oct 3, 8:00 PM ET)
+Current task: 60-min queue done; stopped. Training only, no holdout prices, nothing on Vultr, no merges to main.
+Collector heartbeat checked before/after every job: kalshi_ws, polymarket, polymarket_us delivering throughout.
+  FLAG: the Mac has been on BATTERY since ~7:45 PM (caffeinate -s only holds on AC; lid close = sleep risk).
 Done:
-  1 Orientation check PASS (training, no P&L): home_px + away_px at t over 1,135 games reaching the favorite
-    decision: median 1.0100, p5 1.0000, p95 1.0200, 0 outside [0.90, 1.10].
-  2 v3 Amendment 3 committed on main: d349e50, 19:40:56 ET, pushed (merge only). Includes the orientation check.
-  3 Strategy A on training (runner a164987, strategy_a a3e4a55), 1,267 games, nothing tuned, holdout not loaded.
-    Selected theta (v3 rule) = 0.80. Favorite legs, Webull ROC [95% game bootstrap]: 0.70 -0.031 [-0.072, 0.008]
-    n 536; 0.80 -0.007 [-0.044, 0.026] n 302; 0.90 -0.026 [-0.065, 0.008] n 127. Kalshi direct at 0.80 +0.007
-    [-0.032, 0.042]. Placebo (underdog) legs -0.37 / -0.56 / -0.71, CIs all below 0.
-    0.80 win rate 0.911 vs mean fill 0.898 (+1.3 cents); P&L Webull -$21.40, direct +$19.06.
-    Costs x2 at 0.80: Webull -0.038 [-0.073, -0.005], direct -0.009 [-0.045, 0.024].
-    No NFL preseason: 0.80 and 0.90 unchanged (no preseason trades there); 0.70 -0.033.
-    6 rows appended to experiments/variants.csv. Outputs out/strategy_a/ (gitignored).
-Next: Divi reads the A result. B not run. Code still on branch t13-strategy-a (not merged).
-Decisions pending: merge t13-strategy-a to main after review
+  1 Strategy B (strategy_b.py ac2ffad, runner, 8 fake-game tests; walkthrough docs/review/strategy_b_walkthrough.md
+    ee29f9b). Orientation check PASS: 963 games, 579 both valid at ko-5min, |K-PM| median 1.0c, p95 2.0c, 0 > 10c.
+    963 games (14 Amendment-1 exclusions, asserted), 778 placebo pairs, valid-share median 0.48.
+    Every setting nets about -5 c/contract (Webull; = 4c fees + 1c half-spread); gross edge before costs
+    -0.12 to +0.14 c, placebo -0.01 to +0.11 c: no disagreement signal. Selected (v3 rule) k=5c m=10 T=300:
+    9,242 trades, -4.86 c [-5.02, -4.71] Webull, -3.67 c [-3.82, -3.52] direct, P&L -$4,496 / -$3,394;
+    costs x2 -9.86 c. 16 rows in variants.csv (8 settings + 8 placebo, labeled).
+  2 A exploratory (not a variant): win rate minus (fill - 1c), favorite +0.4 / +2.3 / +0.4 c at 0.70/0.80/0.90;
+    placebo -2.3 / -3.6 / -2.1 c (out/strategy_a/exploratory_gap_before_cent.csv).
+  3 report_book.py (65b31af; separate file, report.py untouched) + results/numbers.json (119 keys) +
+    results/equity_training.png. Season 2025-07-31..2026-01-25, 179 days. A (0.80): P&L -$21.40, ann ret -32%
+    of $137 base, Sharpe -0.60 (NW5 -0.58), max DD $77, skew -1.12, worst month 2025-09 (-$16.40), costs x2
+    Sharpe -2.95. B: P&L -$4,496, Sharpe -8.6, 1,033 contracts/day. Combined: P&L -$4,517, Sharpe -8.7.
+    French: A alpha t -0.33, R2 0.01; B alpha t -4.8 (its costs). Corr A,B -0.10 (121 days). DSR A own 0.14.
+    Caveats: A settles on kickoff + 4 h (proxy); the PROPOSED capital base (max committed) is $43 for B, so
+    B return levels are meaningless (Sharpe is base-free); total-21 DSR uses trial variance of the 12 trials
+    with daily series and is dominated by B. statsmodels broken with this scipy: OLS + Newey-West in numpy.
+  4 DRAFT HYPOTHESIS_v2_amendment4_DRAFT.md (not committed): kickoff <= 20:00 ET Oct 3 keeps 106 of 112,
+    drops 6 late CFB games (21:30 to 23:59 ET); last window ends by 00:30 ET Oct 4.
+Next: Divi reviews B walkthrough; decides Amendment 4.
+Decisions pending: commit v2 Amendment 4; merge t13-strategy-a after reviews; Mac power
 ```
 
 ## Log
