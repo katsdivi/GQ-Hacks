@@ -128,3 +128,12 @@ Deflated Sharpe (Bailey and Lopez de Prado, 2014) on daily returns, with the num
 Drafted 11:31 ET Oct 3; fill corrections (sections 4 and 5) added on Divi's approval before commit. No Strategy A or B code or result, on training or holdout, existed when this was written or committed. T8 kickoff errors found during a coverage check (no prices or results examined).
 
 Also seen before this amendment (incidental, no Strategy A or B computation): the Albany at Iowa 2025-08-30 settlement (Iowa won) and the ids of 3 blank-result NFL preseason games (docs/strategy_a_rules.md); per-game Kalshi trade counts in out/kalshi_only_train.log; the v2 who-leads summary (docs/results/v2_who_leads.md).
+
+## Amendment 2 (2026-10-03 13:57 ET)
+
+Committed before Strategy A is run on training data. Both are choices v3 and v3 Amendment 1 leave open; strategy_a.py implements them. No Strategy A result exists.
+
+1. No favorite: if the two teams' own-market as-of prices at t (trailing 3 s median, as-of t) are equal, the game has no favorite and is skipped and listed ("no favorite (equal prices)"). It is not traded on either side.
+2. Underdog placebo fill: the underdog placebo (v3 "buy the underdog ... at its own as-of price + 1 cent") uses the corrected fill of v3 Amendment 1 section 4 on the underdog's own market: the first underdog-market trade at or after t + 1.0 s, plus 1 cent; skipped and counted if there is none within 5 minutes after t. The placebo decision (favorite >= theta, staleness on the favorite's market) is the favorite leg's decision.
+
+Disclosure: committed 13:57 ET Oct 3. No Strategy A or B code has run on real data; strategy_a.py has run only on fake games in tests/test_strategy_a.py.

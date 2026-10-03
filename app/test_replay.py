@@ -1,10 +1,41 @@
 """Replay acceptance checks using synthetic data only; no pipeline execution."""
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import pandas as pd
 import pytest
 from streamlit.testing.v1 import AppTest
 
 from app import replay
+
+
+def test_recorded_game_loads_without_fabricating_results():
+    """A tiny test recording exercises the real-file path, with no real vendor data."""
+    with TemporaryDirectory(dir=Path(__file__).parent) as folder:
+        root = Path(folder)
+        (root / "data/ticks").mkdir(parents=True)
+        ticks = pd.DataFrame([
+            (0, "kalshi", "trade", .50),
+            (replay.SECOND, "kalshi", "trade", .55),
+        ], columns=["ts", "venue", "kind", "price"])
+        ticks.to_parquet(root / "data/ticks/training_game.parquet")
+        with patch.object(replay, "ROOT", root), \
+             patch.object(replay, "load_games", return_value=pd.DataFrame({"game_id": ["training_game"]})):
+            prices, signals, curve, _, _ = replay.load_game.__wrapped__("training_game", False)
+        assert prices.kalshi.tolist() == [.50, .55]
+        assert signals.empty and curve.empty
+        assert not signals.attrs["available"]
+        assert not (root / "out").exists()
+
+
+def test_missing_results_show_placeholders():
+    """Default UI must label missing results as unavailable, not zero profit."""
+    app = AppTest.from_file(str(Path(replay.__file__))).run(timeout=30)
+    assert not app.exception
+    metrics = {item.label: item.value for item in app.metric}
+    assert metrics["Running profit"] == "Unavailable"
+    assert metrics["Trades entered"] == "Unavailable"
+    assert len(app.get("image")) == 2
 
 
 def test_expanding_scale_and_strict_gap_threshold():
@@ -88,6 +119,7 @@ def test_streamlit_controls():
     """Pause freezes metrics; elapsed playback and restart use the same cursor."""
     app = AppTest.from_file(str(Path(replay.__file__))).run(timeout=30)
     assert not app.exception
+    app.checkbox[0].check().run(timeout=30)
     start = app.session_state.cursor
     app.button[0].click().run(timeout=30)
     assert app.session_state.cursor >= start
@@ -122,3 +154,4 @@ def test_streamlit_controls():
     app.button[0].click().run(timeout=30)
     assert start <= app.session_state.cursor < end
     assert not app.exception
+

@@ -80,7 +80,7 @@ def price_steps(ticks):
 
 
 @st.cache_data(show_spinner=False)
-def load_game(game_id):
+def load_game(game_id, use_fixtures=True):
     """Load one game's immutable files once, with sample-only fallback fixtures."""
     if game_id not in set(load_games().game_id):
         raise ValueError("Game is unavailable or belongs to the sealed test set.")
@@ -94,7 +94,7 @@ def load_game(game_id):
     notes = []
     if signal_path.exists():
         signals = pd.read_parquet(signal_path)
-    elif game_id == "sample":
+    elif game_id == "sample" and use_fixtures:
         signals = pd.read_parquet(FIXTURES / "sample_signals.parquet")
         notes.append("Trade markers and profit are synthetic UI fixtures, not backtest results.")
     else:
@@ -103,13 +103,15 @@ def load_game(game_id):
     if curve_path.exists():
         curve = pd.read_csv(curve_path)
         notes.append("Latency curve: latest report output; it may cover a different game set.")
-    elif game_id == "sample":
+    elif game_id == "sample" and use_fixtures:
         curve = pd.read_csv(FIXTURES / "latency_curve.csv")
         notes.append("Latency curve is a synthetic UI fixture.")
     else:
         curve = pd.DataFrame(columns=["latency_s", "edge_cents_mean", "edge_ci_low", "edge_ci_high", "n_trades"])
     require_columns(signals, SIGNAL_COLUMNS, "signals")
     require_columns(curve, ["latency_s", "edge_cents_mean", "edge_ci_low", "edge_ci_high", "n_trades"], "latency curve")
+    # Missing results are unknown, not zero-profit or zero-trade results.
+    signals.attrs["available"] = signal_path.exists() or (game_id == "sample" and use_fixtures)
     return price_steps(ticks), signals.sort_values("ts", kind="stable"), curve, notes, int(ticks.ts.max())
 
 
@@ -240,6 +242,13 @@ def main():
     st.html(f"<style>{css}</style>")
     st.title("StaleLine | Replay")
     st.caption("Paper trading only. Prices show P(home team wins).")
+    use_fixtures = st.sidebar.checkbox("Use sample demo fixtures", value=False,
+                                       help="Synthetic results for the sample only. Off uses recorded outputs or placeholders.")
+    if st.sidebar.button("Reload replay files"):
+        # New upstream outputs must replace cached missing-file results on demand.
+        load_games.clear()
+        load_game.clear()
+        st.session_state.playing = False
     try:
         games = load_games()
         # The catalog describes planned games too. Only offer recordings that
@@ -255,13 +264,20 @@ def main():
         picker, button, speed_control = st.columns([6, 1, 1])
         labels = {r.game_id: f"{r.home} vs {r.away} ({r.game_id})" for r in games.itertuples()}
         game_id = picker.selectbox("Game", list(labels), format_func=labels.get)
-        prices, signals, curve, notes, end = load_game(game_id)
+        prices, signals, curve, notes, end = load_game(game_id, use_fixtures)
     except (OSError, ValueError, KeyError) as exc:
         st.error(f"Cannot load replay: {exc}")
         return
     if prices.empty or not len(prices.columns):
         st.info("No supported venue prices are available.")
         return
+    signals_available = signals.attrs.get("available", True)
+    if game_id == "sample":
+        st.info("Sample price data only. No eligible real recording is currently selected.")
+    st.caption(f"Price source: data/ticks/{game_id}.parquet. Timestamps and signal prices are shown without manual shifts.")
+    if not signals_available:
+        st.image(str(Path(__file__).with_name("assets") / "signals_pending.svg"),
+                 caption="Trade signals unavailable. Markers, profit, and entry count await the real signal file.", width="stretch")
     start = int(prices.index.min())
     if st.session_state.get("game_id") != game_id:
         st.session_state.update(game_id=game_id, cursor=start, playing=False,
@@ -299,20 +315,22 @@ def main():
         metrics = replay_metrics(signals, cursor)
         # Fixed element positions keep Streamlit's DOM stable across frames.
         profit, count, replay_clock = st.columns(3)
-        profit.metric("Running profit", f"${metrics['profit']:.2f}")
-        count.metric("Trades entered", metrics["entries"])
+        profit.metric("Running profit", f"${metrics['profit']:.2f}" if signals_available else "Unavailable")
+        count.metric("Trades entered", metrics["entries"] if signals_available else "Unavailable")
         replay_clock.metric("Replay time (ET)", metrics["time"])
         st.caption("Last trade")
-        st.write(metrics["last"])
+        st.write(metrics["last"] if signals_available else "Waiting for recorded signals.")
         st.caption("Replay complete. Press Play to restart." if cursor >= end else "Replay in progress" if st.session_state.playing else "Replay paused")
         if cursor >= end and st.session_state.playing:
             st.session_state.playing = False
             st.rerun()
 
     render_frame()
-    st.plotly_chart(latency_chart(curve), width="stretch", key="latency", theme=None)
     if curve.empty:
-        st.caption("No latency curve output is available.")
+        st.image(str(Path(__file__).with_name("assets") / "latency_pending.svg"),
+                 caption="Latency results unavailable. This is a placeholder, not a measured curve.", width="stretch")
+    else:
+        st.plotly_chart(latency_chart(curve), width="stretch", key="latency", theme=None)
 
 
 if __name__ == "__main__":

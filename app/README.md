@@ -12,6 +12,22 @@ selected page refreshes. Health connection setup is documented in `HEALTH.md`.
 
 ## Standalone replay
 
+Deliverable 3 uses recorded outputs by default. When signals or the latency
+report are missing, the page shows labeled SVG placeholder images from
+`app/assets/`; unavailable metrics are not shown as zero. Enable **Use sample
+demo fixtures** in the sidebar to see the earlier synthetic example.
+
+Eligible real recordings are read from `data/ticks/<game_id>.parquet` and must
+have a matching catalog entry. Signal outputs are read from
+`out/signals/<game_id>.parquet`, and the latency report from
+`out/latency_curve.csv`. **Reload replay files** clears cached inputs after the
+team supplies new files. The app never creates those upstream outputs.
+
+Real-game acceptance is pending: this checkout currently has only sample ticks
+and no signal or latency outputs. Once available, inspect five real trade
+markers against the price moves. Preserve original timestamps and report any
+mismatch rather than shifting markers. Sealed test games remain excluded.
+
 From the repository root, with the project's requirements installed:
 
 ```powershell
