@@ -134,7 +134,8 @@ if pgrep -f "$TAG" >/dev/null 2>&1; then
   say "recorder $ID is already running (not starting a second copy)"
 else
   # The ": $TAG" no-op tags the loop's command line so pkill -f can find exactly this loop.
-  LOOP=": $TAG; cd \"$REPO\"; while true; do .venv/bin/python -m collector.run; echo \"\$(date -u +%FT%TZ) collector exited with \$?; restarting in 5 s\"; sleep 5; done"
+  # The loop writes its own PID so collector/teammate_stop.sh stops only this recorder's processes.
+  LOOP=": $TAG; cd \"$REPO\"; echo \$\$ > out/collector_$ID.loop.pid; while true; do .venv/bin/python -m collector.run; echo \"\$(date -u +%FT%TZ) collector exited with \$?; restarting in 5 s\"; sleep 5; done"
   export COLLECTOR_LIVE_DIR="$LIVE_DIR" COLLECTOR_GAPS_MD="$GAPS_MD"
   # Second recorder never writes Tiger Data and never uses Kalshi keys (public REST is enough).
   export TIGER_DATABASE_URL="" KALSHI_API_KEY_ID="" KALSHI_PRIVATE_KEY_PATH=""
@@ -167,8 +168,8 @@ Check health (row counts only, no prices), from $REPO:
   tail -n 20 out/collector_$ID.log
   cat out/GAPS_$ID.md
 
-Stop it:
-  pkill -f $TAG; pkill -f "python -m collector.run"
+Stop it (only this recorder's own processes; other recorders on the machine keep running):
+  bash collector/teammate_stop.sh $ID
 
 Restart later (same id, same folder):
   bash collector/teammate_setup.sh --id $ID
