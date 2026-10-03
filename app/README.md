@@ -1,4 +1,16 @@
-# Deliverable 1: replay
+# StaleLine app
+
+Launch both pages together, with sidebar navigation:
+
+```powershell
+app/.venv/Scripts/python -m streamlit run app/main.py
+```
+
+Select **Replay** or **Recorder Health** in the sidebar. Leaving Replay pauses
+it at the last displayed time; return and press Play to continue. Only the
+selected page refreshes. Health connection setup is documented in `HEALTH.md`.
+
+## Standalone replay
 
 From the repository root, with the project's requirements installed:
 

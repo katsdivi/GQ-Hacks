@@ -1,9 +1,20 @@
 /* Keep the page and chart mounting surface white, including in dark mode. */
 .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"],
+[data-testid="stSidebar"],
 [data-testid="stMain"], [data-testid="stPlotlyChart"] {
     background: #ffffff !important;
     color: #172033 !important;
     color-scheme: light;
+}
+
+/* Sidebar page links stay readable when the browser prefers dark mode. */
+[data-testid="stSidebarNav"] a, [data-testid="stSidebarNav"] span {
+    color: #172033 !important;
+    font-size: 1rem;
+}
+[data-testid="stSidebarNav"] a[aria-current="page"] {
+    background-color: #e8efff !important;
+    font-weight: 650;
 }
 
 /* Frequent fragment reruns should not dim the previous frame while waiting. */

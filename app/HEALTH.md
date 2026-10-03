@@ -1,5 +1,8 @@
 # Recorder health (deliverable 2)
 
+For sidebar switching between Replay and Recorder Health, launch
+`app/.venv/Scripts/python -m streamlit run app/main.py` instead.
+
 Run from the repository root:
 
 ```powershell
