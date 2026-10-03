@@ -1,2 +1,3 @@
 game_id,league,home,away,kickoff_utc,cme_symbol,kalshi_ticker,polymarket_token
 sample,NFL,HOME,AWAY,2026-09-27T17:00:00Z,FG-SAMPLE,KXNFLGAME-SAMPLE-HOME,
+nfl_20260118_lar_chi,NFL,CHI,LAR,2026-01-18T23:30:00Z,FGCHIF618 C0001,KXNFLGAME-26JAN18LACHI-CHI,

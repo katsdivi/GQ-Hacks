@@ -18,6 +18,7 @@ Script exists: `ingest/databento_cme.py` (untested against the real API).
 
 1. `list --date 2026-09-27` (last Sunday). Prints cost first. Filters `FG*` / `CG*`.
 2. If zero hits: inspect `asset`, `security_type`, `instrument_class` columns by hand; ask the Databento rep what root the sports contracts use. Do not burn money on `ALL_SYMBOLS` across many days.
+   Checked 2026-10-02: single-game contracts are options `FG<team><mon><y><dd> C0001` (parent `FG<team>.OPT`, group `NFLG`; college `CG...`, `CFBG`), priced 0 to 1. Databento has them from 2026-01-11 only. See STATUS.md.
 3. Pick one NFL game that also has a Kalshi market. `pull` trades + bbo-1s from 2 h before kickoff to 30 min after the end.
 4. Check on the first real pull: price scale (0 to 1 vs 0 to 100, set `--price-scale`), which team the contract pays on (`--away`), and that timestamps are UTC.
 
@@ -30,6 +31,7 @@ Write `ingest/kalshi.py`.
 - Base: `https://api.elections.kalshi.com/trade-api/v2`. Market data endpoints are public (no auth).
 - Find the series (likely `KXNFLGAME`, college maybe `KXNCAAFGAME`): `GET /series`, then `GET /markets?series_ticker=...&status=settled` (and `open`). Each game has one market per team; ticker ends with a team code. Use the home team's market, or the away one flipped.
 - Trades: `GET /markets/trades?ticker=...&min_ts=<unix s>&max_ts=<unix s>&limit=1000&cursor=...`, page until `cursor` is empty. Fields to expect: `created_time`, `yes_price` (cents) or `yes_price_dollars`, `count`, `taker_side`.
+  Checked 2026-10-02: fields are `created_time`, `yes_price_dollars`, `count_fp`, `taker_side`, `trade_id`. Anything before `GET /historical/cutoff` is only on `/historical/markets` and `/historical/trades`.
 - Convert: `ts` to UTC ns, price to 0 to 1, flip away, `kind=trade`, `side` from `taker_side` (yes = buy of the YES contract; swap if flipped).
 - Merge with the CME file into `data/ticks/<game_id>.parquet`. Add the row to `data/games.csv`.
 - Function signature: `fetch_trades(ticker, start_utc, end_utc) -> DataFrame` in the shared format; `find_game_markets(series, date) -> DataFrame`.
