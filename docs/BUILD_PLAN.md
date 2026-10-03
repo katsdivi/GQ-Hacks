@@ -126,7 +126,15 @@ Done when: `out/latency_curve.csv` + robustness table exist and Alden initialed 
 `execution/webull.py`: `fee(price, qty, side)`, `place_paper_order(market_id, side, qty, limit_price)` (real paper order if Decision B allows, else log only), every call to `out/orders.csv`. Run backtest through Webull costs and Kalshi direct.
 Done when: both numbers handed to Andrew.
 
-### T13. Polymarket third venue (with T12 window)
+### T5b. CME playoff lead/lag, descriptive only (after Made It)
+Run `leadlag.py` on all CME playoff games with data: 13 NFL games (26 team contracts, Jan 10 wild card only partly covered) plus the CFP final (2 contracts) (Jan to Feb 2026, data already in `data/raw/fg_cg_train_*.parquet`) against Kalshi. Report who leads and how often, with lag numbers. No trading, no strategy. The original brief: "if CME turns out to be the slow one, report it as the finding."
+Done when: one table (game, leader, median lag, n jumps) and one sentence for the team.
+
+### T13. ES vs SPY method check on Databento (replaces the Massive check)
+Use Databento ES futures (GLBX.MDP3) vs SPY (an equities dataset) as a known-answer check for `leadlag.py`: ES is expected to lead SPY by milliseconds. Show `get_cost` first and wait for Divi.
+Done when: leadlag.py reports the known direction on a few days.
+
+### T13b. Polymarket third venue (with T12 window)
 Gamma API for markets, data API for trades, order book websocket added to the recorder.
 Done when: third line on the overlay chart; lead/lag includes it.
 

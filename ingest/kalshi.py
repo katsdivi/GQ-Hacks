@@ -135,6 +135,13 @@ def fetch_trades(ticker: str, start_utc, end_utc, away: bool = False) -> pd.Data
         raw += _trades_raw("/historical/trades", ticker, start, min(end, cut))
     if end > cut:
         raw += _trades_raw("/markets/trades", ticker, max(start, cut), end)
+    df = trades_to_rows(raw, ticker, away)
+    df = df[(df["ts"] >= start.value) & (df["ts"] <= end.value)]
+    return df.reset_index(drop=True)
+
+
+def trades_to_rows(raw: list[dict], ticker: str, away: bool = False) -> pd.DataFrame:
+    """Raw Kalshi trade dicts -> shared-format rows in P(home wins) terms, sorted by ts."""
     if not raw:
         return pd.DataFrame({c: pd.Series(dtype=t) for c, t in
                              zip(COLS, ["int64", "string", "string", "string", "float64", "float64", "string"])})
@@ -151,8 +158,7 @@ def fetch_trades(ticker: str, start_utc, end_utc, away: bool = False) -> pd.Data
         "price": p.round(4).to_numpy(), "size": pd.to_numeric(t["count_fp"], errors="coerce").to_numpy(),
         "side": side.to_numpy(),
     })
-    df = df[(df["ts"] >= start.value) & (df["ts"] <= end.value)].dropna(subset=["price"])
-    df = df.sort_values("ts", kind="stable").reset_index(drop=True)
+    df = df.dropna(subset=["price"]).sort_values("ts", kind="stable").reset_index(drop=True)
     return df.astype({"ts": "int64", "venue": "string", "market_id": "string", "kind": "string",
                       "price": "float64", "size": "float64", "side": "string"})
 

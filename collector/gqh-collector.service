@@ -1,0 +1,16 @@
+[Unit]
+Description=StaleLine live recorder (Kalshi, later Polymarket)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/opt/gqh
+EnvironmentFile=/opt/gqh/.env
+ExecStart=/opt/gqh/.venv/bin/python -m collector.run
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
