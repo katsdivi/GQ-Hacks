@@ -208,6 +208,24 @@ def print_table(df: pd.DataFrame) -> None:
         print(f"ci_method: {m}")
 
 
+def liquidity_kalshi(meta_csv: Path = Path("data/raw/kalshi_market_meta.csv"),
+                     games_csv: Path = Path("data/raw/kalshi_only_games.csv")) -> pd.DataFrame:
+    """Liquidity section, Kalshi, training markets only: lifetime traded volume per market (contracts), median
+    and IQR, by league and overall. Open interest is NOT reported: Kalshi's metadata shows it after settlement
+    (0 on every training market), so it says nothing about pre-game depth."""
+    m = pd.read_csv(meta_csv)
+    g = pd.read_csv(games_csv)[["game_id", "league", "kickoff_utc_espn"]]
+    assert (pd.to_datetime(g["kickoff_utc_espn"], utc=True) < pd.Timestamp("2026-08-01", tz="UTC")).all(), "training markets only"
+    m = m.merge(g, on="game_id", how="inner")
+    m["volume"] = pd.to_numeric(m["volume_fp"], errors="coerce")
+    rows = []
+    for lg, d in [("all", m)] + list(m.groupby("league")):
+        v = d["volume"].dropna()
+        rows.append({"venue": "kalshi", "league": lg, "n_markets": len(v), "volume_median": v.median(),
+                     "volume_q25": v.quantile(0.25), "volume_q75": v.quantile(0.75)})
+    return pd.DataFrame(rows)
+
+
 def log_variants(df: pd.DataFrame, game_ids: list[str]) -> int:
     """Rule 3: one variants.csv row per (direction, bound, latency), same columns as run.py."""
     p = {**leadlag.PROVISIONAL, **strategy.PROVISIONAL}
