@@ -3,24 +3,21 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~1:05 AM ET)
-Current task: review fixes DONE on branch t5b-fixes (3d3cda7), not merged; main = a532304 (v0-made-it kept on 850f081)
-Done: merge t5-made-it -> main; HYPOTHESIS_v2.md Amendment 1 committed bc9d583 (00:41 ET) BEFORE the code change;
-  fill bounds, trailing 3 s median price, latency label, run.py fetches missing public ticks
-Verified numbers (latency 1 s; 0 s = decision within 1 s of the move; PLACEHOLDER FEE 2c/fill; PROVISIONAL):
-  Fake game: cme 15/15 jumps, median +2.0 s, xcorr +2 s; placebo (kalshi leads) 15 jumps, 0 signals, 0 trades;
-    edge -88.0c at 0 s and 1 s: the 3 s median adds ~1 s detection delay, using up the 2 s planted lag (5 s lag test: positive); 10 tests pass
-  Jumps with 3 s median vs last trade: was_mia kalshi 180 (was 286), polymarket.com 114 (was 152); fake 15 (was 15)
-  nfl_20251116_was_mia:
-    kalshi leads: 180 jumps, 116 covered, median +10.5 s, xcorr +10 s; 92 trades on polymarket.com:
-      lower bound -37.8c (-0.41c/trade), upper bound -21.7c (-0.24c/trade)
-    polymarket.com leads: 114 jumps, 57 covered, median +6.0 s, xcorr -10 s; 21 trades on kalshi -100.0c (-4.76c/trade)
-  Clean clone with NO data files: run.py fetched was_mia (49,291 kalshi + 2,977 polymarket.com trades), ticks identical
-    (52,268 rows); stdout, leadlag/signals parquets and chart md5 identical for both games
-Flags: lower-bound polymarket.com entry fills can use trades matched up to (D p90 - D) s after the fill (chosen adverse; decisions never see it)
-Blockers: none. Pending from Divi: Kalshi key (websocket), Vultr IP, TIGER_DATABASE_URL
-Next: Divi reviews t5b-fixes + docs/review_t5.md, merges; Alden hand-checks; T8 finishing (~1.5 h); no multi-game run yet
-Decisions pending: price definition (Alden), B (Webull, deferred)
+STATUS  (last update: Sat Oct 3, ~3:50 AM ET)
+Current task: v2 who-leads test RUN (main, frozen plan); STOPPED to report. Placebo FAILS: primary statistic is biased
+Done: v3 committed 508f2db (03:25:30 ET) before who-leads; leadlag no-jump fix merged (eedd1fe); restart test on websocket PASSED
+Verified numbers:
+  Who-leads (916 games tested, 61 dropped <50 trades; 838 qualifying >= 5 matched jumps):
+    kalshi first 827, polymarket.com first 9, ties 2; sign test p = 2.3e-231; median L +8.0 s (95% CI 7.5 to 8.0)
+    rule threshold for kalshi: median L >= 1 + D median = 3.119 s -> rule output "kalshi leads" (NFL +7.0 s, CFB +8.0 s)
+  Placebo, unrelated games (749 pairs, 603 qualifying): kalshi first 492, polymarket.com first 96, median L +7.0 s,
+    95.7% of pairs |L| >= 1 s, rule output "kalshi leads" -> the L statistic finds a ~7 s Kalshi "lead" between UNRELATED games
+  Secondary xcorr: real games median +7 s, 85% positive; placebo median +1 s, 50% positive / 47% negative
+  Restart test (websocket): before 66,719 kalshi book rows, 2,292 trades; after 44,959 book, 1,754 trades; 0/31 empty min both;
+    killed 06:50:21, up 06:50:28; Tiger book counts match local exactly
+Blockers: none. Decision needed: how to treat a primary statistic that fails its own placebo
+Next: Divi + Alden decide; A and B not started
+Decisions pending: v2 result interpretation, t9-costs review, B (Webull, deferred)
 ```
 
 ## Log
