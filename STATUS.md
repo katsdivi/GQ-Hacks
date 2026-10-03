@@ -3,7 +3,7 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 4:55 PM ET)
+STATUS  (last update: Sat Oct 3, 5:40 PM ET)
 Current task: 4:05 decisions list. A3 (v2) staged on main worktree, waiting for "commit A3". v3 A3 + strategy_a.py
   ready for line-by-line review. Sim (a) running (watcher copies a/ on DONE).
 Done:
@@ -31,7 +31,11 @@ Running: sim (a) on sim box, started 15:57 ET; background watcher scp's a/ to do
 Next: Divi reviews A3 -> "commit A3"; power table + note when (a) lands; v3 A3 review; item 7 liquidity
 Not done / flags: item 7 needs polymarket.com market-level volume/OI (only event volume stored) and PM US
   metadata; NFL 2026 opener date must be set before Strategy A final test (is_preseason raises)
-Decisions pending: Alden review time line in A3 disclosure; commit A3
+Since 4:55: 3 s leftovers removed (A3 13/16/17, laggard tests on the 1 s market delay, cd5eea2; 3 s only as the
+  counted missing fallback). 2026 opener Sep 9 set. Team-code bug: Miami (OH) "M-OH" cut to "OH" by the downloader;
+  13 games resolved from trade files, kept; cfb_20250831_lam_unt excluded (no UNT rows) (04d3bdd). Ticks 2,534 at
+  0.01. Kalshi training volume median 1.41M (IQR 185K-4.64M); OI 0 on all (settled), not usable.
+Decisions pending: commit A3
 ```
 
 ## Log
