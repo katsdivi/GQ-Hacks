@@ -6,7 +6,8 @@ Updated by Claude Code at the end of every task. Divi pastes the block below int
 STATUS  (last update: Sat Oct 3, 4:05 PM ET)
 Current task: 3:35 PM list done except sim part (a) (running) and the power sentence that waits on it
 Done:
-  1 Sim (b) on sim box (fa5b19f, seed 20261003, 500 reps, 8 procs, 585 s): docs/results/sim/ (8b2071d).
+  1 Sim (b) on sim box (fa5b19f, seed 20261003, 500 reps, 8 procs, 585 s): docs/results/sim/ (8b2071d),
+    CIs + rule: tests/sim_wilson.py.
     Lead/zero cells reproduce the 14:52 run 24/24. Preset rule -> DESIGN 1: D2 zero-lag upper 0.8% (pass),
     shared-shift (iid) D2 upper polymarket.com 6.8% n30, 5.6% n40, 8.2% n60 (FAIL); PM US 2.9/5.9/5.1% (pass).
     D2 point estimates no worse than D1 (0.036-0.058 vs 0.048-0.058); a 5%-sized test has expected upper 7.3%.
@@ -27,11 +28,16 @@ Done:
     9 clamshell sleeps today incl. 14:00:41 (226 s). Mac polymarket heartbeat live (last_ok 19:57:13Z).
     Holdout games kicked off by 15:57 ET (62/112), heartbeat/GAPS rule, nominal window end:
     polymarket.com 57 clean on Vultr, 0 only on Mac, 5 excluded; PM US 52 / 0 / 1, 9 no PM US instrument
-  7 Secrets scan clean (11 unpushed commits); all named branches pushed; nothing merged to main
+  7 Secrets scan clean; all named branches pushed incl. t14-laggard; nothing merged to main.
+    Worktrees left: ../wt-t9 (t9-costs), ../wt-t14 (t14-laggard)
   8 laggard.py on t14-laggard (7e2f760, = t13 + merge of t9-costs): 9 synthetic tests pass
 Running: sim (a) power n=30/40/60/80 on sim box (tmux gqhsim), started 15:57 ET, ~3.2 h
 Next: scp (a) -> docs/results/sim/a, fill A3 power sentence; Divi commits A3 (v2) and reviews v3 A3
-Decisions pending: D1 vs D2 rule per venue or joint (joint applied -> D1); keep Mac on AC with lid open
+Not done / flags: capped-fill counts per theta need the A run (wired: n_capped_fills); laggard.py has no
+  capacity (sizes not read) though Amendment 2 asks for it on polymarket.com; games CSV re-settled in place,
+  original at data/raw/kalshi_only_games.before_resettle_20261003.csv
+Decisions pending: D1/D2 rule joint (D1) or per venue (PM US alone -> D2); preseason = Jul/Aug ET (49, incl.
+  Hall of Fame game) or literal August (48); Mac on AC with lid open tonight (9 clamshell sleeps today)
 ```
 
 ## Log
