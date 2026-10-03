@@ -3,21 +3,21 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~3:50 AM ET)
-Current task: v2 who-leads test RUN (main, frozen plan); STOPPED to report. Placebo FAILS: primary statistic is biased
-Done: v3 committed 508f2db (03:25:30 ET) before who-leads; leadlag no-jump fix merged (eedd1fe); restart test on websocket PASSED
+STATUS  (last update: Sat Oct 3, ~6:00 AM ET)
+Current task: Amendment 2 DRAFT ready for Alden (8 AM); NOT committed; no Polymarket US or holdout prices examined
+Done: v3 committed 508f2db; v2 who-leads INCONCLUSIVE (primary L failed unrelated-games placebo); polymarket_us live since 08:30:24 UTC;
+  Time & Sales verified (execution time, ns, D = 0) and training counts done; synthetic activity-bias test done
 Verified numbers:
-  Who-leads (916 games tested, 61 dropped <50 trades; 838 qualifying >= 5 matched jumps):
-    kalshi first 827, polymarket.com first 9, ties 2; sign test p = 2.3e-231; median L +8.0 s (95% CI 7.5 to 8.0)
-    rule threshold for kalshi: median L >= 1 + D median = 3.119 s -> rule output "kalshi leads" (NFL +7.0 s, CFB +8.0 s)
-  Placebo, unrelated games (749 pairs, 603 qualifying): kalshi first 492, polymarket.com first 96, median L +7.0 s,
-    95.7% of pairs |L| >= 1 s, rule output "kalshi leads" -> the L statistic finds a ~7 s Kalshi "lead" between UNRELATED games
-  Secondary xcorr: real games median +7 s, 85% positive; placebo median +1 s, 50% positive / 47% negative
-  Restart test (websocket): before 66,719 kalshi book rows, 2,292 trades; after 44,959 book, 1,754 trades; 0/31 empty min both;
-    killed 06:50:21, up 06:50:28; Tiger book counts match local exactly
-Blockers: none. Decision needed: how to treat a primary statistic that fails its own placebo
-Next: Divi + Alden decide; A and B not started
-Decisions pending: v2 result interpretation, t9-costs review, B (Webull, deferred)
+  Activity bias (xcorr, 400 simulated games per case; rule on 10 studies x 40 games):
+    390 vs 5/min: no link 0/10 false; zero-lag link +1.0 s median, 3/10 false "Kalshi leads"; true 5 s lead 10/10 found (median +6 s)
+    390 vs 1/min: no link 0/10 false; zero-lag link +5.0 s median, 10/10 false; true 5 s lead 10/10 (median +8 s)
+    -> xcorr is biased at ~1 trade/min; the unrelated-games placebo cannot detect it (it only tests "no link")
+    activity-matched null (exploratory, 40 games): removes the 1/min false lead but loses the true 5 s lead (p 0.098); does not fix 5/min
+  Polymarket US training: 215 games matched to Kalshi, median in-game 1.0 trades/min (NFL 0.0, CFB 3.0), 165 games >= 50 trades
+  State sources: no first-party Polymarket US state list; Arizona "unavailable" only from third-party guides; earlier Arizona C&D claim unverified
+Blockers: none. Decisions for Divi + Alden: activity-matched null / min trade rate / Part B untestable; Florida check in-app
+Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; nothing runs on Polymarket US or holdout until it is committed
+Decisions pending: Amendment 2, t9-costs review, B (Webull, deferred)
 ```
 
 ## Log
@@ -63,7 +63,7 @@ Retired in `HYPOTHESIS.md` (appended section, original text untouched): 0 CME NF
 
 ## Polymarket feasibility (checked 2026-10-02, no prices examined)
 
-- **Access, trading.** Two venues. Polymarket international (polymarket.com, on-chain order book) blocks US persons from trading. Polymarket US (CFTC regulated via QCEX since Nov 2025, sports only) is rolling out by state; it is NOT available in Arizona (Arizona Dept of Gaming cease-and-desist; Arizona also filed criminal charges against Kalshi in March 2026; the CFTC has sued Arizona). Paper trading only for us anyway (hard rule 6).
+- **Access, trading.** Two venues. Polymarket international (polymarket.com, on-chain order book) blocks US persons from trading. Polymarket US (CFTC regulated via QCEX since Nov 2025, sports only) is rolling out by state; third-party guides list it as unavailable in Arizona (no first-party state list found; the Arizona cease-and-desist naming Polymarket is UNVERIFIED, see Amendment 2 draft; Arizona criminal charges against Kalshi and the CFTC suit also from third-party sources). Paper trading only for us anyway (hard rule 6).
 - **Access, data.** International venue data is public, no key: Gamma API (`gamma-api.polymarket.com`) for events and markets, Data API (`data-api.polymarket.com/trades?market=<conditionId>`) for trades, CLOB (`clob.polymarket.com`) for live book and price history, public market websocket for live books. Polymarket US market data API not checked yet.
 - **Historical trades.** Data API returns full taker trade history per market, checked on 3 games (taker notional is about half of reported two-sided volume). Limits: `offset` max 10,000 and `limit` up to 10,000, so markets with more than ~20,000 taker trades will be cut short; timestamps are whole seconds (15 to 23% of in-game trades share a second). Historical order book: CLOB `/orderbook-history` stopped producing snapshots around 2026-02-20, so no free historical book for most games; trades only (fill model must be trade+halfspread).
 - **Game counts, training period (kickoff 2025-08-01 to 2026-07-31).** NFL: 285 game events (series 10187), all with a moneyline market (full 2025 season incl. playoffs and Super Bowl). CFB: 829 game events (series 10210), 715 with a moneyline market. Current season is under different series ids (12185 NFL, 12756 CFB); holdout listings not counted on purpose.
