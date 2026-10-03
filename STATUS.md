@@ -3,21 +3,18 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~5:15 AM ET)
-Current task: Amendment 2 DRAFT revised for Alden (8 AM); NOT committed. Nothing runs on holdout or Polymarket US prices until it is
-Done: trade-based vs quote-based activity-bias simulation (docs/results/activity_bias.md); recorder now stores venue server
-  timestamps on book rows (polymarket.com, Kalshi deltas) from 09:07:50 UTC
-Verified numbers (simulated data only):
-  Trade-based xcorr: linked zero-lag reads +1.0 s at 5 trades/min (false "Kalshi leads" 3/10 studies), +5.0 s at 1/min (10/10)
-  Book-midpoint xcorr: linked zero-lag reads 0 s in 100% of games (false 0/10) for streamed and 1 s polled quotes;
-    true 5 s lead reads 5 s in 100% of games; rule power 5/10 at 40 games, 6-7/10 at 30-60, 10/10 at 80
-  Unrelated-games placebo false-positive rate 0/10 in every case (it cannot detect activity bias)
-Draft changes: confirmatory test = book-mid xcorr on recorded holdout games (Fri night + Sat), run once after Saturday's last game;
-  trade-based results exploratory only; Polymarket US on trades "not testable at ~1 trade/min"; one pre-registered
-  trade-the-laggard setting (jump 4c, window 10 s, entry gap 3c, timeout 60 s) on recorded books; 81-grids removed
-Recording caveat: Friday-night games only partly recorded (Kalshi from 03:09 UTC, polymarket.com 04:11, Polymarket US 08:30)
-Blockers: none. For Alden: final-whistle definition, Kalshi server ts use, power (~80 games needed for 10/10)
-Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md
+STATUS  (last update: Sat Oct 3, ~6:00 AM ET)
+Current task: recorder heartbeats + outage logging DONE and verified live; Amendment 2 DRAFT (not committed) awaits Alden at 8 AM
+Done: per-feed heartbeats every 10 s (data/live/heartbeat/), outages auto-logged to GAPS.md (disconnects of any length,
+  > 60 s without heartbeat, every restart); polymarket.com silence threshold now 60 s; draft exclusion rule = outage > 60 s
+Verified live (induced, logged in GAPS.md, all recovered):
+  kalshi_ws induced disconnect: logged, 1 s | polymarket.com induced disconnect: logged, 29 s (reconnect re-lists markets)
+  polymarket_us 75 s poll stall: outage detected at 61 s, logged 78 s | restart: auto-logged, 6 s since last heartbeat
+  first heartbeat-code restart (09:51:48-09:51:55 UTC, 7 s) logged by hand (no earlier heartbeats to measure from)
+Recorder now: Kalshi websocket (REST fallback after 30 s), polymarket.com websocket, Polymarket US 1 s poll, Tiger + parquet,
+  venue server timestamps on book rows since 09:07:50 UTC
+Blockers: none
+Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; Saturday games recorded write-only
 Decisions pending: Amendment 2, t9-costs review, Florida in-app check, B (Webull, deferred)
 ```
 
