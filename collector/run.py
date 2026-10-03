@@ -88,6 +88,111 @@ def log_gap(start_ns: int, end_ns: int, venue: str, cause: str) -> None:
     log(f"GAP {venue} {(end_ns - start_ns) / 1e9:.0f}s: {cause}")
 
 
+HEARTBEAT_EVERY_S = 10
+OUTAGE_SILENCE_S = 60
+HEARTBEAT_DIR = LIVE_DIR / "heartbeat"
+
+
+class Health:
+    """Per-feed heartbeats and automatic outage logging to GAPS.md.
+
+    Feeds: kalshi_ws, kalshi_rest (only while it is the active book source), polymarket (websocket),
+    polymarket_us (REST poll). A feed is alive when it calls ok(): any websocket message, a pong to our
+    10 s ping (Kalshi), a PONG reply (polymarket.com), a successful poll (Polymarket US, Kalshi REST).
+    An outage starts at a disconnect event, or when a connected feed has had no heartbeat for more
+    than OUTAGE_SILENCE_S; it is written to GAPS.md (venue, start, end, duration, cause) when it ends.
+    Disconnects are logged whatever their length. Every HEARTBEAT_EVERY_S a heartbeat line per feed
+    goes to data/live/heartbeat/<YYYYMMDD>.jsonl. Test hook: a file data/live/test_drop_<feed>
+    containing "disconnect" or "stall" makes that feed drop its connection or stop for 75 s once.
+    """
+
+    def __init__(self) -> None:
+        self.f: dict[str, dict] = {}
+        HEARTBEAT_DIR.mkdir(parents=True, exist_ok=True)
+
+    def _feed(self, name: str) -> dict:
+        return self.f.setdefault(name, {"connected": False, "last_ok": None, "last_msg": None,
+                                        "outage_start": None, "cause": ""})
+
+    def _end(self, name: str, now: int) -> None:
+        x = self.f[name]
+        if x["outage_start"] is not None:
+            dur = (now - x["outage_start"]) / 1e9
+            log_gap(x["outage_start"], now, name, f"{x['cause']}; duration {dur:.0f} s; recovered")
+            x["outage_start"], x["cause"] = None, ""
+
+    def connected(self, name: str) -> None:
+        x, now = self._feed(name), time.time_ns()
+        x["connected"], x["last_ok"] = True, now
+        self._end(name, now)
+
+    def ok(self, name: str, msg: bool = False) -> None:
+        x, now = self._feed(name), time.time_ns()
+        x["last_ok"] = now
+        if msg:
+            x["last_msg"] = now
+        if x["connected"] and x["outage_start"] is not None:
+            self._end(name, now)
+
+    def disconnected(self, name: str, cause: str) -> None:
+        x, now = self._feed(name), time.time_ns()
+        if x["connected"] and x["outage_start"] is None:
+            x["outage_start"], x["cause"] = now, cause
+        x["connected"] = False
+
+    def pause(self, name: str) -> None:
+        """Stop monitoring a feed that was switched off on purpose (Kalshi REST when the websocket is up)."""
+        x = self._feed(name)
+        x["connected"], x["outage_start"], x["cause"] = False, None, ""
+
+    def check(self) -> None:
+        now = time.time_ns()
+        lines = []
+        for name, x in self.f.items():
+            if x["connected"] and x["outage_start"] is None and x["last_ok"] and (now - x["last_ok"]) / 1e9 > OUTAGE_SILENCE_S:
+                x["outage_start"], x["cause"] = x["last_ok"], f"no heartbeat for > {OUTAGE_SILENCE_S} s"
+                log(f"OUTAGE {name}: no heartbeat for > {OUTAGE_SILENCE_S} s")
+            iso = lambda ns: datetime.fromtimestamp(ns / 1e9, tz=timezone.utc).isoformat() if ns else None
+            lines.append(json.dumps({"venue": name, "recv_utc": iso(now), "connected": x["connected"],
+                                     "last_ok_utc": iso(x["last_ok"]), "last_msg_utc": iso(x["last_msg"]),
+                                     "in_outage": x["outage_start"] is not None}))
+        if lines:
+            with (HEARTBEAT_DIR / f"{datetime.now(timezone.utc):%Y%m%d}.jsonl").open("a") as fh:
+                fh.write("\n".join(lines) + "\n")
+
+    def log_restart(self) -> None:
+        """Log the restart itself: from the last heartbeat on disk to now, for all feeds."""
+        files = sorted(HEARTBEAT_DIR.glob("*.jsonl"))
+        if not files:
+            return
+        try:
+            last = json.loads(files[-1].read_text().strip().splitlines()[-1])["recv_utc"]
+            start = int(pd.Timestamp(last).value)
+            log_gap(start, time.time_ns(), "all", f"collector restart (pid {os.getpid()}); duration "
+                    f"{(time.time_ns() - start) / 1e9:.0f} s since the last heartbeat")
+        except (IndexError, KeyError, ValueError):
+            pass
+
+    @staticmethod
+    def test_trigger(name: str) -> str | None:
+        f = LIVE_DIR / f"test_drop_{name}"
+        if not f.exists():
+            return None
+        what = f.read_text().strip() or "disconnect"
+        f.unlink()
+        log(f"TEST trigger on {name}: {what}")
+        return what
+
+
+HEALTH = Health()
+
+
+async def health_loop(stop: asyncio.Event) -> None:
+    while not stop.is_set():
+        await asyncio.sleep(HEARTBEAT_EVERY_S)
+        HEALTH.check()
+
+
 class Writer:
     def __init__(self) -> None:
         self.buf_local: list[dict] = []
@@ -166,8 +271,7 @@ class KalshiPoller:
         self.had_ok_poll = False
         self.last_ok_ns = time.time_ns()
         prev = st.get("last_ok_ns")
-        if prev and (self.last_ok_ns - prev) / 1e9 > GAP_LOG_S:
-            log_gap(prev, self.last_ok_ns, "kalshi", "collector not running (restart or crash); books lost, trades backfilled")
+        # Restarts and outages are logged by Health (heartbeats), not here.
 
     def get(self, path: str, params: dict) -> dict:
         for attempt in range(6):
@@ -316,6 +420,8 @@ class KalshiPoller:
 
     async def run(self, stop: asyncio.Event) -> None:
         last_refresh = 0.0
+        if not self.ws_enabled:
+            HEALTH.connected("kalshi_rest")
         while not stop.is_set():
             t0 = time.monotonic()
             try:
@@ -328,13 +434,16 @@ class KalshiPoller:
                     log("kalshi REST book polling " + ("ON (websocket down %.0f s)" % down_s if want_rest
                                                       else "OFF (websocket enabled; connected or reconnecting)"))
                     self.rest_books_on = want_rest
+                    if want_rest:
+                        HEALTH.connected("kalshi_rest")
+                    else:
+                        HEALTH.pause("kalshi_rest")
                 if want_rest:
                     await asyncio.to_thread(self.poll_books)
+                    HEALTH.ok("kalshi_rest", msg=True)
                 else:
                     await asyncio.to_thread(self.process_pending)   # trades flagged by the websocket
                 now = time.time_ns()
-                if self.had_ok_poll and (now - self.last_ok_ns) / 1e9 > GAP_LOG_S:
-                    log_gap(self.last_ok_ns, now, "kalshi", "polling stalled (errors, rate limit or host asleep)")
                 self.last_ok_ns, self.had_ok_poll = now, True
                 self.save_state()
             except Exception as e:
@@ -438,18 +547,32 @@ class KalshiWS:
             tickers = sorted(self.p.markets)
             try:
                 async with websockets.connect(WS_URL, additional_headers=self.headers(), open_timeout=20,
-                                              ping_interval=10, ping_timeout=20, max_size=None) as ws:
+                                              ping_interval=None, max_size=None) as ws:
                     await ws.send(json.dumps({"id": 1, "cmd": "subscribe", "params": {
                         "channels": ["orderbook_delta", "trade"], "market_tickers": tickers}}))
                     self.books, last_seq = {}, {}
                     self.p.ws_connected, backoff = True, 1
+                    HEALTH.connected("kalshi_ws")
                     log(f"kalshi websocket subscribed to {len(tickers)} markets")
-                    last_check = time.monotonic()
+                    last_check, last_ping, pong, cause = time.monotonic(), time.monotonic(), None, "websocket closed"
+                    stall_until = 0.0
                     while not stop.is_set():
+                        trig = HEALTH.test_trigger("kalshi_ws")
+                        if trig == "disconnect":
+                            cause = "TEST: induced disconnect"
+                            break
+                        if trig == "stall":
+                            stall_until = time.monotonic() + 75
+                        if pong is not None and pong.done() and not pong.cancelled() and time.monotonic() > stall_until:
+                            HEALTH.ok("kalshi_ws")
+                            pong = None
+                        if time.monotonic() - last_ping > HEARTBEAT_EVERY_S:
+                            pong, last_ping = await ws.ping(), time.monotonic()
                         if time.monotonic() - last_check > 60:
                             last_check = time.monotonic()
                             if sorted(self.p.markets) != tickers:
                                 log("kalshi market set changed; resubscribing")
+                                cause = "resubscribe (market set changed)"
                                 break
                         try:
                             raw = await asyncio.wait_for(ws.recv(), timeout=5)
@@ -460,14 +583,20 @@ class KalshiWS:
                         sid, seq = m.get("sid"), m.get("seq")
                         if seq is not None and sid in last_seq and seq != last_seq[sid] + 1:
                             log(f"kalshi ws sequence gap on sid {sid} ({last_seq[sid]} -> {seq}); resubscribing")
+                            cause = "resubscribe (sequence gap)"
                             break
                         if seq is not None:
                             last_seq[sid] = seq
+                        if time.monotonic() > stall_until:
+                            HEALTH.ok("kalshi_ws", msg=True)
                         self.handle(m, recv)
             except Exception as e:
                 if stop.is_set():
                     break
+                cause = f"websocket error {type(e).__name__}"
                 log(f"kalshi websocket {type(e).__name__}: {e}; reconnect in {backoff}s")
+            if not stop.is_set():
+                HEALTH.disconnected("kalshi_ws", locals().get("cause", "websocket closed"))
             if self.p.ws_connected:
                 self.p.ws_connected = False
                 self.p.ws_down_since_ns = time.time_ns()
@@ -618,8 +747,14 @@ class PolymarketWS:
                 async with websockets.connect(self.URL, ping_interval=None, max_size=None, open_timeout=20) as ws:
                     await ws.send(json.dumps({"assets_ids": sorted(self.tokens), "type": "market"}))
                     log(f"polymarket websocket subscribed to {len(self.tokens)} tokens")
-                    backoff, last_ping = 1, time.monotonic()
+                    HEALTH.connected("polymarket")
+                    backoff, last_ping, stall_until = 1, time.monotonic(), 0.0
                     while not stop.is_set():
+                        trig = HEALTH.test_trigger("polymarket")
+                        if trig == "disconnect":
+                            raise ConnectionResetError("TEST: induced disconnect")
+                        if trig == "stall":
+                            stall_until = time.monotonic() + 75
                         if time.monotonic() - last_ping > 10:
                             await ws.send("PING")
                             last_ping = time.monotonic()
@@ -627,15 +762,16 @@ class PolymarketWS:
                             last_refresh = time.monotonic()
                             if await asyncio.to_thread(self.refresh):
                                 log("polymarket market set changed; resubscribing")
+                                HEALTH.disconnected("polymarket", "resubscribe (market set changed)")
                                 break
                         try:
                             msg = await asyncio.wait_for(ws.recv(), timeout=5)
                         except asyncio.TimeoutError:
                             continue
                         recv = time.time_ns()
-                        if (recv - self.last_msg_ns) / 1e9 > 120:
-                            log_gap(self.last_msg_ns, recv, "polymarket", "no websocket messages")
                         self.last_msg_ns = recv
+                        if time.monotonic() > stall_until:
+                            HEALTH.ok("polymarket", msg=msg not in ("PONG", ""))
                         if msg in ("PONG", ""):
                             continue
                         d = json.loads(msg)
@@ -645,10 +781,8 @@ class PolymarketWS:
                 if stop.is_set():
                     break
                 log(f"polymarket websocket {type(e).__name__}: {e}; reconnect in {backoff}s")
-                t0 = time.time_ns()
+                HEALTH.disconnected("polymarket", str(e)[:60] if str(e).startswith("TEST") else f"websocket error {type(e).__name__}")
                 await asyncio.sleep(backoff)
-                if backoff >= 8:
-                    log_gap(t0 - backoff * 1_000_000_000, time.time_ns(), "polymarket", f"websocket reconnect ({type(e).__name__})")
                 backoff = min(backoff * 2, 30)
 
 
@@ -804,10 +938,11 @@ class PolymarketUS:
 
     def poll_batch(self) -> None:
         slugs = sorted(self.markets)
-        rows = []
+        rows, any_ok = [], False
         for i in range(0, len(slugs), 100):
             d = self.get("/v1/markets", [("slug", x) for x in slugs[i:i + 100]] + [("limit", 100)])
             recv = time.time_ns()
+            any_ok = any_ok or bool(d and d.get("markets"))
             for m in (d or {}).get("markets", []):
                 if m.get("slug") not in self.markets:
                     continue
@@ -816,6 +951,8 @@ class PolymarketUS:
                                    old[2], old[3], recv)
         if rows:
             self.w.add(pd.DataFrame(rows), rows[0]["ts"])
+        if any_ok:
+            HEALTH.ok("polymarket_us", msg=True)
 
     def poll_bbo(self, n: int) -> None:
         slugs = sorted(self.markets)
@@ -843,9 +980,16 @@ class PolymarketUS:
                 self.w.add(pd.DataFrame(rows), recv)
 
     async def run(self, stop: asyncio.Event) -> None:
-        last_refresh, last_map, last_batch = 0.0, 0.0, 0.0
+        last_refresh, last_map, last_batch, stall_until = 0.0, 0.0, 0.0, 0.0
+        HEALTH.connected("polymarket_us")
         while not stop.is_set():
             t0 = time.monotonic()
+            trig = HEALTH.test_trigger("polymarket_us")
+            if trig:   # "stall" or "disconnect": simulate 75 s of failed polls
+                stall_until = time.monotonic() + 75
+            if time.monotonic() < stall_until:
+                await asyncio.sleep(1)
+                continue
             try:
                 if time.monotonic() - last_refresh > (REFRESH_MARKETS_S if self.markets else 60):
                     await asyncio.to_thread(self.refresh)
@@ -889,7 +1033,8 @@ async def main_async(minutes: float | None) -> None:
     k = KalshiPoller(w)
     pmws = PolymarketWS(w)
     pmus = PolymarketUS(w, k)
-    tasks = [k.run(stop), pmws.run(stop), pmus.run(stop), writer_loop(w, stop)]
+    HEALTH.log_restart()
+    tasks = [k.run(stop), pmws.run(stop), pmus.run(stop), writer_loop(w, stop), health_loop(stop)]
     kid, kpath = os.getenv("KALSHI_API_KEY_ID") or "", os.getenv("KALSHI_PRIVATE_KEY_PATH") or ""
     if kid and kpath and Path(kpath).is_file():
         tasks.append(KalshiWS(k, kid, kpath).run(stop))
