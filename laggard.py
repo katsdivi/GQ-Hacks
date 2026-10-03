@@ -16,8 +16,8 @@ never measured across one.
 Timing: a decision from grid label g is knowable at (g + 1) s (strategy.decision_time_ns). The order is sent
 then and fills at decision + venue delay + latency:
   polymarket.com: the market's own sports taker delay (v2 Amendment 3): seconds_delay from
-  data/live/holdout_seconds_delay.csv (CLOB field seconds_delay, read 2026-10-03 20:22 UTC, frozen; all 112
-  holdout markets are 1 s), joined by condition id. A market missing from the file gets 3 s (the help-center
+  data/live/holdout_seconds_delay.csv (CLOB field seconds_delay, read 2026-10-03 16:22 ET, frozen; all 112
+  holdout markets at 1 s), joined by condition id. A market missing from the file gets 3 s (the help-center
   figure) and is counted (delay_source "missing->3"). latency_s in the output is the total time from decision
   to fill, so each market's latency curve starts at its own delay (1, 1.25, ..., 11 s for a 1 s market).
   Polymarket US: no documented delay, 0 s.
@@ -50,7 +50,8 @@ import xcorr_lead as X
 NS = 1_000_000_000
 SEAL = pd.Timestamp("2026-08-01", tz="UTC")
 SETTING = dict(jump_cents=4.0, window_s=10, entry_gap_cents=3.0, exit_gap_cents=1.0, timeout_s=60, qty=10)
-VENUE_DELAY_S = {"polymarket": 3.0, "polymarket_us": 0.0}  # polymarket.com: fallback when a market is missing
+VENUE_DELAY_S = {"polymarket": 3.0, "polymarket_us": 0.0}  # polymarket.com 3.0: ONLY for a market missing from
+#   holdout_seconds_delay.csv (0 of 112); every holdout market uses its own value (all 1 s, read 16:22 ET)
 SECONDS_DELAY_CSV = Path("data/live/holdout_seconds_delay.csv")
 LATENCIES_S = (0.0, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0)     # added to the venue delay
 LABELS = {"polymarket": "paper only; polymarket.com not available to US residents",
