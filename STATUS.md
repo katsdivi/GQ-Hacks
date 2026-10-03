@@ -3,19 +3,18 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, ~6:00 AM ET)
-Current task: recorder heartbeats + outage logging DONE and verified live; Amendment 2 DRAFT (not committed) awaits Alden at 8 AM
-Done: per-feed heartbeats every 10 s (data/live/heartbeat/), outages auto-logged to GAPS.md (disconnects of any length,
-  > 60 s without heartbeat, every restart); polymarket.com silence threshold now 60 s; draft exclusion rule = outage > 60 s
-Verified live (induced, logged in GAPS.md, all recovered):
-  kalshi_ws induced disconnect: logged, 1 s | polymarket.com induced disconnect: logged, 29 s (reconnect re-lists markets)
-  polymarket_us 75 s poll stall: outage detected at 61 s, logged 78 s | restart: auto-logged, 6 s since last heartbeat
-  first heartbeat-code restart (09:51:48-09:51:55 UTC, 7 s) logged by hand (no earlier heartbeats to measure from)
-Recorder now: Kalshi websocket (REST fallback after 30 s), polymarket.com websocket, Polymarket US 1 s poll, Tiger + parquet,
-  venue server timestamps on book rows since 09:07:50 UTC
-Blockers: none
-Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; Saturday games recorded write-only
-Decisions pending: Amendment 2, t9-costs review, Florida in-app check, B (Webull, deferred)
+STATUS  (last update: Sat Oct 3, 10:22 AM ET)
+Current task: two recorders live (Mac + Vultr) for Saturday's games; Amendment 2 DRAFT awaiting Alden, NOT committed
+Done: Vultr deployed (Atlanta, systemd, chrony offset ~0.6 ms, local parquet only, own log out/GAPS_vultr.md);
+  heartbeats + auto outage logging on every feed (both machines); one-machine-per-game rule in the draft
+Verified numbers:
+  Vultr 10 min (14:11:28-14:21:23 UTC): kalshi ask 8,678 / bid 8,880 / trade 2,335; polymarket ask 2,280 / bid 2,280 / trade 47;
+    polymarket_us ask 228 / bid 1,698; 0 of 11 minutes empty; outages: none except two logged restarts (systemctl restart test passed)
+  Kalshi websocket on one key from two machines: no conflict seen on either side (Mac and Vultr both subscribed)
+  Mac: outages again 14:13-14:15 UTC (kalshi_ws 116 s, polymarket 112 s, polymarket_us 78 s) and 09:06-09:49 ET (sleep on battery)
+Blockers: Mac sleeps on battery / lid closed -> Vultr is the primary recorder per the draft rule
+Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; commit after approval; after Saturday's last game run the book-mid test once
+Decisions pending: Amendment 2, t9-costs (3 commits, rule 7 review), Florida in-app check, Tiger single-writer choice, B (Webull, deferred)
 ```
 
 ## Log
