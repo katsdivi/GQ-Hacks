@@ -3,28 +3,35 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 3:30 PM ET)
-Current task: fees hardened; Amendment 3 additions drafted (NOT committed); Webull client drafted
+STATUS  (last update: Sat Oct 3, 4:05 PM ET)
+Current task: 3:35 PM list done except sim part (a) (running) and the power sentence that waits on it
 Done:
-  Strategy A download complete: 1,267 games (CFB 936, NFL 331), 0 duplicates, 0 zero-trade, max kickoff 2026-01-18
-    (seal 2026-08-01). ALBY at IOWA re-fetched with ESPN event 401752799: kickoff 22:00Z, 1,317 trades (was 53)
-  Fees: t9-costs 735eae2 and t13 ae90e8a use exact Decimal, ROUND_CEILING per order. The old code was already right
-    (round-9 guard); identical on 59,700 cases to an integer reference; 7 float-noise cases tested
-  Book-wipe exclusion in holdout_mid.py / xcorr_lead.py (2c23dec), synthetic test: 5 s fake lead -> 0 s
-  execution/webull.py (41f12a6): sandbox only, dry run default, 30 req/60 s limiter, 12 mocked tests
-  Full suite: 127 + 12 passed
-Findings to decide:
-  GB at DAL 2025-09-28 was a 40-40 tie; downloader left settlement NaN, so Strategy A drops it (rule says 0.5)
-  3 NFL preseason games unsettled; 49 Aug preseason NFL games included: keep for Strategy A training?
-  NFL stops 2026-01-18: conference championships and Super Bowl missing (likely a different Kalshi series)
-  Strategy A fill = trade + 1 cent can reach 1.00 when the trade is 0.99 (not a valid Kalshi price)
-  costs.py has no Polymarket US schedule (fees.md: taker 0.0695 from 2026-10-01, not implemented, no date gate)
-  Both-empty books write no row (both venues): full clears invisible today, fallback [ko-2, ko+10 min] applies
-  Mac polymarket.com gaps cover the noon kickoffs (11:57-12:34 ET etc.); Vultr feed fresh (max 11 s) all day
-Running: nothing. Strategy A NOT run (waiting for "run A on training")
-Next: Webull keys (~/keys/webull.env, env vars only); SDK install after the last game; Vultr rsync after last game
-Decisions pending: power sim 500 reps (~3.2 h) vs 150 (~57 min) on the sim box (box stays up until then);
-  Amendment 3 (fallback width, PM US fallback yes/no); placebo design D2; merges (rule 7)
+  1 Sim (b) on sim box (fa5b19f, seed 20261003, 500 reps, 8 procs, 585 s): docs/results/sim/ (8b2071d).
+    Lead/zero cells reproduce the 14:52 run 24/24. Preset rule -> DESIGN 1: D2 zero-lag upper 0.8% (pass),
+    shared-shift (iid) D2 upper polymarket.com 6.8% n30, 5.6% n40, 8.2% n60 (FAIL); PM US 2.9/5.9/5.1% (pass).
+    D2 point estimates no worse than D1 (0.036-0.058 vs 0.048-0.058); a 5%-sized test has expected upper 7.3%.
+    Reverse lead: Kalshi-leads 0/500 every cell. Clustered shared-shift (sensitivity): <= 1% everywhere.
+  2 Fees: t9-costs ba36a6a + 7528eab (fees.md). polymarket.com 5 dp HALF_UP (direction unstated in docs), no
+    cent ceiling; Polymarket US 0.0695, HALF_EVEN cents, raises before 2026-10-01 14:00 UTC. Hand tests incl.
+    C=120 P=0.50 raw 2.085 -> 2.08, C=1000 -> 17.38. Integer reference grid 79,600 cases (199 prices x C 1..100
+    x 4 schedules; the old 59,700 was x 3) all equal. t13: no Polymarket fee code exists there, nothing to fix.
+  3 A3 draft (uncommitted): fallback [T-2, T+20], T = min(ESPN, map game_start = Gamma gameStartTime; equal
+    in 111/112, 1 min later in 1). Runner + test a0ea17d: 15-min copy leaks under +10 in 15/20, under +20 0/20.
+    Limitation paragraph added; placebo sentence filled (Design 1); power sentence placeholder.
+  4 v3 Amendment 3 draft (uncommitted, for review): all 4 blank settlements are Kalshi "scalar" 0.5000
+    (GB-DAL + 3 preseason); games table re-settled (777/486/4 x 0.5). Preseason flag (NFL Jul/Aug ET, 49 games)
+    + side-by-side summary; fill cap 0.99 with n_capped_fills; strategy_a a1b24c9. Conf champs + SB excluded
+    (no 2-market Kalshi game event; SB only in 32-market KXSB-26). A NOT run.
+  5 .venv-exec with webull-openapi-python-sdk 3.0.2 (d34b762); collector .venv pip freeze identical (63 pkgs)
+  6 Mac gap 11:57-12:34 ET = lid closed on battery ("Clamshell Sleep", pmset), DarkWakes only until 12:40;
+    9 clamshell sleeps today incl. 14:00:41 (226 s). Mac polymarket heartbeat live (last_ok 19:57:13Z).
+    Holdout games kicked off by 15:57 ET (62/112), heartbeat/GAPS rule, nominal window end:
+    polymarket.com 57 clean on Vultr, 0 only on Mac, 5 excluded; PM US 52 / 0 / 1, 9 no PM US instrument
+  7 Secrets scan clean (11 unpushed commits); all named branches pushed; nothing merged to main
+  8 laggard.py on t14-laggard (7e2f760, = t13 + merge of t9-costs): 9 synthetic tests pass
+Running: sim (a) power n=30/40/60/80 on sim box (tmux gqhsim), started 15:57 ET, ~3.2 h
+Next: scp (a) -> docs/results/sim/a, fill A3 power sentence; Divi commits A3 (v2) and reviews v3 A3
+Decisions pending: D1 vs D2 rule per venue or joint (joint applied -> D1); keep Mac on AC with lid open
 ```
 
 ## Log
