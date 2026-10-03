@@ -3,26 +3,23 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 5:40 PM ET)
-Current task: post-review list. A3 still staged in ../wt-main, NOT committed (waiting for literal "commit A3").
+STATUS  (last update: Sat Oct 3, 6:28 PM ET)
+Current task: stopped for Divi's line-by-line review of docs/review/strategy_a_walkthrough.md.
 Done:
-  1 Hyphen audit (ids only). Only hyphenated Kalshi code in any series touched: M-OH (Miami (OH)), 13 training CFB
-    events, 0 NFL. HOLDOUT CLEAN: 126 Kalshi events Oct 2-4 listed, 0 hyphenated; all 112 candidates' home and away
-    instruments exist; both frozen maps' Kalshi events exist (14 PM US entries outside candidates = Oct 4-5 NFL).
-    Training: games file codes "OH" (wrong code, fixed at load from trade files, 04d3bdd); ESPN kickoffs 13/13
-    correct (home/away right); T8 polymarket.com 10/10 correct, 3 unmatched correctly (2 have no moneyline market,
-    LINW not listed); B ticks 10/10 have both Kalshi markets (bulk download used real tickers). Latent, unused:
-    download_all.fetch_game line 366 (clean-clone path) would build a wrong away ticker for the 10 B games;
-    collector discovery (rsplit) would skip a hyphenated market live. Fixes proposed, not applied.
-  2 LAM at UNT: UNT market exists at the expected ticker (finalized, yes); its 33 trades all end 2 h 12 min before
-    kickoff, 0 in the [ko-2h, ko+5h] window. Not the hyphen bug; stays excluded; v3 A3 reason updated.
-  3 Liquidity: report.liquidity_kalshi, volume only (OI dropped). Kalshi training volume median 1.41M contracts
-    (IQR 185K-4.64M); CFB 794K, NFL 5.30M. polymarket.com / PM US not started (low priority).
-  4 docs/review/strategy_a_walkthrough.md (63bb03e): 11 blocks with [TIME]/[MONEY] tags, tests per block, 3
-    lookahead points with line numbers, 5 review notes. Strategy A NOT run.
+  1 A3 (v2) COMMITTED on main: ed5db9b, 2026-10-03 18:14:20 ET, pushed (origin/main = ed5db9b). Heading time
+    18:14 ET. Before the 7 PM kickoffs. No rebase/squash anywhere; merges only.
+  2 Staleness on BOTH markets (strategy_a.py 221-225, a3e4a55, branch only): either market with no trade in
+    (t - 10 min, t] -> game skipped, n_skipped_stale per theta; favorite chosen only when both fresh. Tests a/b/c;
+    (c) verified the previous rule ENTERED that game. v3 A3 draft section 6 (18:20 ET). Walkthrough regenerated.
+  3 fetch_game (download_all.py): away market from the event's market list (/historical/markets?event_ticker),
+    never from codes (8bd117a). 10 Miami (OH) B games: 10/10 equal the bulk tickers (old rebuild 0/10). All B
+    games live: 977/977 equal the bulk plan; 1 outside the plan (nfl_20260118_lar_chi, T3) resolves to -LA, its
+    T3 tick file is home-only by design of the old T3 download. 151 tests pass.
+  4 docs/known_limitations.md: collector discovery would skip a hyphenated market; 0 holdout games affected
+    (audit 5:40 PM). Collector not changed or deployed.
 Running: sim (a) on sim box (started 15:57 ET); watcher copies a/ on DONE
-Next: "commit A3" -> commit on main (merge only), push, hash + ET time; power table + note when (a) lands
-Decisions pending: commit A3; apply the two latent hyphen fixes (fetch_game, collector after Saturday)
+Next: Divi reviews walkthrough. v3 A3 commits only on "commit v3 A3"; Strategy A runs only on "run A on training".
+Decisions pending: commit v3 A3; run A on training
 ```
 
 ## Log
