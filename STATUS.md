@@ -3,17 +3,19 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Fri Oct 2, ~11:50 PM ET)
-Current task: HYPOTHESIS_v2.md final text out for Alden's review (not committed); T4 recorder live on the Mac
-Done: T1, T2, T3; CME vs Kalshi retired (f12c1dc) + count correction ~14 games (d37d9df); recorder committed (d842ead)
+STATUS  (last update: Sat Oct 3, ~12:20 AM ET)
+Current task: T5-T7 Made It BLOCKED on CLAUDE.md rule 7 (leadlag/strategy/costs/backtest are Divi-only); everything else running
+Done: T1-T3; v1 retired + corrected; HYPOTHESIS_v2.md committed d6bfa9c (00:01:46 ET, before any Polymarket price analysis);
+  T4 restart test PASSED on Mac; Polymarket websocket added to recorder (9fe423d)
 Verified numbers:
-  Recorder (Mac, Kalshi REST polling, 218 game markets, local parquet only):
-    before restart 03:09:16-03:39:16 UTC: 15,640 trades, 3,821 bid + 3,509 ask rows, 0 of 30 minutes empty
-    killed 03:39:28, back up 03:39:34 (6 s); after-restart 30-min window ends 04:09:34 UTC
-  polymarket.com trade timestamp = on-chain block time (20 of 20 trades, two training games); match-to-block delay not measured yet
-Blockers: none tonight. Waiting on Divi: Vultr IP, Kalshi API key + .pem, TIGER_DATABASE_URL (deploy script ready: collector/deploy_vultr.sh)
-Next: Alden reads v2 -> commit v2 -> Polymarket book websocket in recorder; Vultr deploy when keys arrive; then T5-T7 Made It on one training game
-Decisions pending: v2 approval (Alden), B (Webull paper orders, deferred)
+  Restart test (Kalshi only): before 03:09-03:39 UTC 22,970 rows (15,640 trades), 0/30 empty min;
+    killed 03:39:28, up 03:39:34; after 03:39-04:09 UTC 25,136 rows (16,518 trades), 0/31 empty min
+  Recorder now: Kalshi 246 game markets (REST) + polymarket.com 124 game moneylines + 10 calibration markets (websocket)
+  D (match-to-block) PRELIMINARY, 49 trades: median +2.1 s, p90 +2.9 s; need >= 200 trades (rerun measure_d)
+  T8: 977 training games matched on both venues (NFL 283, CFB 694); download running, ~2.5 h total
+Blockers: rule 7 for T5-T7 (see report). Vultr IP / Kalshi key / TIGER_DATABASE_URL still pending.
+Next: Divi decides how to write leadlag/strategy/costs/backtest; Made It game picked by date rule = nfl_20251116_was_mia
+Decisions pending: rule 7 approach, B (Webull, deferred)
 ```
 
 ## Task log
