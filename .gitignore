@@ -22,3 +22,6 @@ __pycache__/
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Local key files (Kalshi private key, key ID). Never committed.
+secrets/
