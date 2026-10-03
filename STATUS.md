@@ -18,7 +18,8 @@ Done this session:
     the window. sha256 prefix d20247c7140ac7c9. Gitignored: needs git add -f in the Amendment 2 commit
   Amendment 2 draft: same-machine placebo pairs, fixed candidate set, Friday-night exclusion rule, disclosure + commit lines
   Polymarket US T&S training conversion: complete (276 day files, log ends 20260731)
-  Strategy A data: ingest/kalshi_only_train.py running in background (1267 training games planned; seal max kickoff check)
+  Strategy A data: ingest/kalshi_only_train.py running (1267 training games: NFL 331, CFB 936; 57 post-seal events dropped;
+    test game nfl_20250905_dal_phi identical to data/ticks, 58,788 trades; ALBYIOWA home/away suspect; ~60-90 min)
 Blockers: Mac on battery (sleeps when lid closes; Vultr has no backup then)
 Next: Divi OK to redeploy the dedup fix (between games or after Saturday's last game); Alden review; commit Amendment 2
   + candidate CSV; write the book-mid runner and laggard evaluator (synthetic data only)
