@@ -1,3 +1,5 @@
 ts_utc,git_sha,game_set,jump_cents,window_s,entry_gap,timeout_s,latency_s,n_games,n_trades,edge_cents_mean,notes
 2026-10-03T04:27:45Z,8cf0670,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,149,-1.7957,kalshi leads polymarket; PROVISIONAL; PLACEHOLDER FEE; pm_shift=2.879
 2026-10-03T04:27:45Z,8cf0670,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,41,-5.4146,polymarket leads kalshi; PROVISIONAL; PLACEHOLDER FEE; pm_shift=0.0
+2026-10-03T04:28:15Z,621e625,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,149,-1.7957,kalshi leads polymarket; PROVISIONAL; PLACEHOLDER FEE; pm_shift=2.879
+2026-10-03T04:28:15Z,621e625,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,41,-5.4146,polymarket leads kalshi; PROVISIONAL; PLACEHOLDER FEE; pm_shift=0.0
