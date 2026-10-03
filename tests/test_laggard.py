@@ -118,3 +118,97 @@ def test_no_lookahead_future_rows_do_not_change_past_decisions():
                         latencies=(0.0,), holdout_run=True).iloc[0]
     assert (t.entry_fill_ns, t.exit_fill_ns, t.entry_px, t.exit_px) == \
         (full.entry_fill_ns, full.exit_fill_ns, full.entry_px, full.exit_px)
+
+
+# --- v2 Amendment 3: per-market delay, no carry across breaks or the window end, capacity ---------------
+
+def test_per_market_delay_from_file_and_missing_counted(tmp_path):
+    f = tmp_path / "d.csv"
+    f.write_text("market_id,seconds_delay,fetched_at_utc\nC1,1,x\nC2,,x\n")
+    delays = L.load_seconds_delay(f)
+    assert delays == {"C1": 1}
+    k, o = books(step(100), "kalshi", "K"), books(step(108), "polymarket", "P")
+    t = L.evaluate_game("syn", KO, k, o, "polymarket", T0, T0 + W * NS, latencies=(0.0, 0.25), holdout_run=True,
+                        condition="C1", delays=delays)
+    assert t.latency_s.tolist() == [1.0, 1.25] and (t.delay_source == "seconds_delay file").all()
+    assert t.iloc[0].entry_fill_ns == T0 + 102 * NS                       # decision 101 s + 1 s
+    for cond in ("C2", None):                                              # blank in file, or not in it
+        m = L.evaluate_game("syn", KO, k, o, "polymarket", T0, T0 + W * NS, latencies=(0.0,), holdout_run=True,
+                            condition=cond, delays=delays)
+        assert m.iloc[0].venue_delay_s == 3.0 and m.iloc[0].delay_source == "missing->3"
+    us = L.evaluate_game("syn", KO, k, books(step(108), "polymarket_us", "P"), "polymarket_us", T0, T0 + W * NS,
+                         latencies=(0.0,), holdout_run=True, condition="C1", delays=delays)
+    assert us.iloc[0].venue_delay_s == 0.0
+
+
+# The follower's only snapshots are at 0.2 s (mid 0.50) and 108.2 s (0.56). Without a break its 0.50 mid is
+# carried to second 107 and the Kalshi jump at 100 trades (test_signal_and_exact_pnl_at_3s).
+
+def test_mid_not_carried_across_outage():
+    o = books(step(108), "polymarket", "P")
+    br = L._breaks_g((), [(T0 + 60 * NS, T0 + 65 * NS)])
+    assert br == [(T0 // NS + 60, T0 // NS + 64)]
+    g = L._grid(o, "polymarket", T0 // NS, T0 // NS + W - 1, br)
+    assert g.loc[T0 // NS + 59] == pytest.approx(0.50)                     # before the outage: carried
+    assert g.loc[T0 // NS + 60:T0 // NS + 107].isna().all()               # in it and after it: undefined
+    assert g.loc[T0 // NS + 108] == pytest.approx(0.56)                    # first snapshot after it
+    t = L.evaluate_game("syn", KO, books(step(100), "kalshi", "K"), o, "polymarket", T0, T0 + W * NS,
+                        outages=[(T0 + 60 * NS, T0 + 65 * NS)], latencies=(0.0,), holdout_run=True)
+    assert t.empty or not t["filled"].any()
+
+
+def test_mid_not_carried_across_kickoff_cut():
+    o = books(step(108), "polymarket", "P")
+    cut = (T0 // NS + 60, T0 // NS + 70)                                   # inclusive grid seconds
+    g = L._grid(o, "polymarket", T0 // NS, T0 // NS + W - 1, [cut])
+    assert g.loc[T0 // NS + 59] == pytest.approx(0.50) and g.loc[T0 // NS + 71:T0 // NS + 107].isna().all()
+    assert g.loc[T0 // NS + 108] == pytest.approx(0.56)
+    k = books(step(100), "kalshi", "K")
+    gk = L._grid(k, "kalshi", T0 // NS, T0 // NS + W - 1, [cut])
+    assert gk.loc[T0 // NS + 71:T0 // NS + 99].isna().all()                # Kalshi too: no carry past the cut
+    t = run(exclude=[cut], latencies=(0.0,))
+    assert t.empty or not t["filled"].any()
+
+
+def test_mid_not_carried_past_window_end_and_fill_after_end_skipped():
+    o = books(step(108), "polymarket", "P")
+    hi_g = T0 // NS + 105
+    g = L._grid(o, "polymarket", T0 // NS, hi_g, [])
+    assert g.index.max() == hi_g                                           # nothing past the window end
+    k = books(step(100), "kalshi", "K")
+    # window ends at 110 s: entry fills at 104 s, exit decision at the last label (timeout clipped) fills
+    # after 110 s -> the round trip is skipped, never filled from the last quote before the end
+    t = L.evaluate_game("syn", KO, k, o, "polymarket", T0, T0 + 110 * NS, latencies=(0.0,), holdout_run=True)
+    r = t.iloc[0]
+    assert not r.filled and r.skip == "after window end at exit"
+    c = L.latency_curve(t)
+    assert c.n_skipped_after_end.item() == 1 and c.n_trades.item() == 0
+
+
+def test_fill_scheduled_across_outage_is_skipped():
+    # outage 102.5 to 103.5 s: the signal at label 100 stands (decision 101 s), but the 3 s fill at 104 s
+    # would use the 0.2 s snapshot from before the outage -> skipped as "break"
+    out = [(T0 + 102_500_000_000, T0 + 103_500_000_000)]
+    t = L.evaluate_game("syn", KO, books(step(100), "kalshi", "K"), books(step(108), "polymarket", "P"),
+                        "polymarket", T0, T0 + W * NS, outages=out, latencies=(0.0,), holdout_run=True)
+    r = t.iloc[0]
+    assert r.entry_fill_ns == T0 + 104 * NS and not r.filled and r.skip == "break at entry"
+    assert L.latency_curve(t).n_skipped_break.item() == 1
+    q = L.book(books(step(108), "polymarket", "P"), "polymarket")
+    br = [(a * NS, (b + 1) * NS) for a, b in L._breaks_g((), out)]
+    assert L.quote_at(q, T0 + 104 * NS, "ask", br)[2] == "break"
+    assert L.quote_at(q, T0 + 109 * NS, "ask", br)[:2][0] == pytest.approx(0.57)  # snapshot after it: fine
+
+
+def test_capacity_is_best_level_size_at_fill():
+    o = books(step(108), "polymarket", "P")
+    o["size"] = np.where(o["kind"] == "ask", 25.0, 40.0)
+    t = L.evaluate_game("syn", KO, books(step(100), "kalshi", "K"), o, "polymarket", T0, T0 + W * NS,
+                        latencies=(0.0,), holdout_run=True)
+    r = t.iloc[0]
+    assert r.cap_contracts == 25.0 and r.cap_dollars == pytest.approx(25 * 0.51)   # buy at the ask 0.51
+    cap = L.capacity(t)
+    assert cap.cap_contracts_median.item() == 25.0 and cap.cap_dollars_total.item() == pytest.approx(12.75)
+    us = L.evaluate_game("syn", KO, books(step(100), "kalshi", "K"), books(step(108), "polymarket_us", "P"),
+                         "polymarket_us", T0, T0 + W * NS, latencies=(0.0,), holdout_run=True)
+    assert np.isnan(us.iloc[0].cap_contracts) and np.isnan(L.capacity(us).cap_contracts_total.item())
