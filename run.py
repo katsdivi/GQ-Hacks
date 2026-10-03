@@ -100,7 +100,7 @@ def run_direction(ticks: pd.DataFrame, a: str, b: str, d: dict, latency_s: float
         shifted_q, _ = backtest.follower_quotes(ticks, b, d["D_p90_s"])
         bounds = {"lower bound": (shifted_q, raw_q), "upper bound": (raw_q, raw_q)}
     else:
-        bounds = {"kalshi traded (unshifted)": (raw_q, raw_q)}
+        bounds = {f"{b} traded (unshifted)": (raw_q, raw_q)}
     fills = {}
     for name, (qe, qx) in bounds.items():
         t = backtest.simulate(sig, qe, qx, b, latency_s)
