@@ -29,3 +29,35 @@
 | Sat Oct 03 10:13:19 | Sat Oct 03 10:14:37 | polymarket_us | no heartbeat for > 60 s; duration 78 s; recovered | auto-logged by collector |
 | Sat Oct 03 10:13:19 | Sat Oct 03 10:15:11 | polymarket | no heartbeat for > 60 s; duration 112 s; recovered | auto-logged by collector |
 | Sat Oct 03 10:13:19 | Sat Oct 03 10:15:15 | kalshi_ws | no heartbeat for > 60 s; duration 116 s; recovered | auto-logged by collector |
+| Sat Oct 03 11:57:07 | Sat Oct 03 12:14:52 | polymarket_us | no heartbeat for > 60 s; duration 1065 s; recovered | auto-logged by collector |
+| Sat Oct 03 11:57:08 | Sat Oct 03 12:14:53 | kalshi_ws | no heartbeat for > 60 s; duration 1065 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:31:31 | Sat Oct 03 12:31:32 | kalshi_ws | websocket error ConnectionClosedError; duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 11:57:08 | Sat Oct 03 12:34:40 | polymarket | no heartbeat for > 60 s; duration 2252 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:31:35 | Sat Oct 03 12:38:10 | kalshi_ws | no heartbeat for > 60 s; duration 395 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:34:48 | Sat Oct 03 12:38:32 | polymarket | no heartbeat for > 60 s; duration 224 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:38:34 | Sat Oct 03 12:38:39 | polymarket | websocket error ConnectionClosedError; duration 6 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:38:51 | Sat Oct 03 12:40:30 | polymarket_us | no heartbeat for > 60 s; duration 100 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:38:53 | Sat Oct 03 12:41:01 | polymarket | no heartbeat for > 60 s; duration 129 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:38:53 | Sat Oct 03 12:41:07 | kalshi_ws | no heartbeat for > 60 s; duration 134 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:41:03 | Sat Oct 03 12:41:08 | polymarket | websocket error ConnectionClosedError; duration 5 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:41:13 | Sat Oct 03 12:41:14 | kalshi_ws | websocket error ConnectionClosedError; duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:44:54 | Sat Oct 03 12:50:11 | kalshi_ws | no heartbeat for > 60 s; duration 317 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:51:45 | Sat Oct 03 13:04:55 | polymarket_us | no heartbeat for > 60 s; duration 790 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:51:45 | Sat Oct 03 13:04:55 | kalshi_ws | no heartbeat for > 60 s; duration 790 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:05:26 | Sat Oct 03 13:08:59 | polymarket_us | no heartbeat for > 60 s; duration 213 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:05:27 | Sat Oct 03 13:09:15 | kalshi_ws | no heartbeat for > 60 s; duration 228 s; recovered | auto-logged by collector |
+| Sat Oct 03 12:44:54 | Sat Oct 03 13:09:21 | polymarket | no heartbeat for > 60 s; duration 1467 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:09:30 | Sat Oct 03 13:11:32 | polymarket_us | no heartbeat for > 60 s; duration 121 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:09:31 | Sat Oct 03 13:11:35 | kalshi_ws | no heartbeat for > 60 s; duration 124 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:11:44 | Sat Oct 03 13:11:45 | kalshi_ws | websocket error ConnectionClosedError; duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:09:31 | Sat Oct 03 13:13:27 | polymarket | no heartbeat for > 60 s; duration 236 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:13:28 | Sat Oct 03 13:13:38 | polymarket | websocket error ConnectionClosedError; duration 9 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:27:51 | Sat Oct 03 13:27:52 | kalshi_ws | websocket error ConnectionClosedError; duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:13:51 | Sat Oct 03 13:30:06 | polymarket | no heartbeat for > 60 s; duration 974 s; recovered | auto-logged by collector |
+| Sat Oct 03 13:59:47 | Sat Oct 03 13:59:56 | polymarket | websocket error ConnectionClosedError; duration 8 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:00:09 | Sat Oct 03 14:00:16 | polymarket | websocket error ConnectionClosedError; duration 7 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:00:43 | Sat Oct 03 14:04:37 | polymarket_us | no heartbeat for > 60 s; duration 235 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:05:40 | Sat Oct 03 14:05:42 | kalshi_ws | websocket error ConnectionClosedError; duration 2 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:15:42 | Sat Oct 03 14:15:43 | kalshi_ws | websocket error ConnectionClosedError; duration 1 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:00:44 | Sat Oct 03 14:16:56 | polymarket | no heartbeat for > 60 s; duration 972 s; recovered | auto-logged by collector |
+| Sat Oct 03 14:00:44 | Sat Oct 03 14:18:30 | all (Mac) | CPU starvation: a synthetic power simulation (8 worker processes) pushed load average to 182 on 8 cores; polymarket heartbeat gap 972 s logged above; Mac also on battery (53%, 56 min) | simulation killed 14:18 ET; no heavy compute on the recorder machines during games |

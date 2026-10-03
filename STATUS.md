@@ -3,30 +3,24 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 1:50 PM ET)
-Current task: Saturday recording; v2 Amendment 3 DRAFT (Alden's review) and v3 Amendment 2 DRAFT awaiting Divi
+STATUS  (last update: Sat Oct 3, 2:21 PM ET)
+URGENT: Mac battery 53%, ~56 min left at 14:18 ET. Plug in now or the Mac recorder (backup) dies.
+Current task: Saturday recording; v3 Amendment 2 on main; v2 Amendment 3 DRAFT (power sentence pending)
 Done:
-  Mann-Whitney red flag: NOT a code bug. On the fixture arrays custom p = scipy two-sided p (0.67537 / 0.39944, equal
-    to 1e-15). The fixture had 40 placebo pairs (not 150) with median +5.5 / +6.0 s (bad draw, seed 21). Same fixture
-    at seeds 1-5: placebo median -0.5 to +3 s, MW p 0.003 to 0.037, "kalshi leads" every time. 120 unrelated pairs per
-    setup (offset 0 / 600 s, streamed / polled): median -2 to +2 s, so no placebo bias in the generator
-  Implementation: MW now scipy.mannwhitneyu (custom kept as cross-check; equal to 1e-9 on hand cases with ties; scipy
-    exact only for tiny tie-free samples). Fixed-verdict tests restored: 80 games at 5 s vs 150 placebo -> "kalshi
-    leads" (p 0.0012); zero-lag linked -> not a lead. decide() has alpha; decide_holm (0.025 then 0.05) + runner run_all
-  v2 who-leads used a sign test, not MW; sign test = scipy binomtest exactly (2.32e-231, 4.86e-65). No correction
-  Runner per Alden: window kickoff - 90 min; REST-fallback time = Kalshi outage; feed start from heartbeats
-  Log-only counts (13:43 ET): past window start, clean machine: -90: 39 of 44, -30: 36 of 40 (all Vultr; misses are
-    Friday-night games). Exactly-noon kickoffs: 17; clean under -120: 0; under -90: 17. 60% rule: 0.181 (n=30), 0.078 (n=60)
-  strategy_a.py fees: implemented itself (lines 47-53), identical formulas to t9-costs costs.fee (Webull 0.02*C;
-    direct ceil(0.07*C*P*(1-P)) to the cent)
-  3 polymarket.com tokens without Mac rows (LIB-DEL, PITT-VT, PSU-NW, Friday night): 0 rows on Vultr too
-  Full test suite 56 passed (before the last runner change); runner tests 5 passed after it
-Running: power re-run (scipy MW, Amendment 2 mid rule) at 30/40/60/80 games, sonnet agent; fills X-Y in Amendment 3
-  Strategy A download 1040/1264 at 17:43Z, ~5 games/min, ETA ~18:30Z (2:30 PM ET); then ALBY at IOWA re-fetch
-Blockers: Mac on battery (lid close sleeps it)
-Next: power numbers into Amendment 3; Divi says commit; laggard evaluator; Vultr rsync after last game
-Decisions pending: commit v2 Amendment 3 and v3 Amendment 2 drafts; merges (rule 7: t13-strategy-a, t4h-ops-checks,
-  t9-costs); Florida in-app check
+  v3 Amendment 2 on main 37170aa, 2026-10-03 13:57:27 ET, pushed (no favorite on equal prices; underdog placebo uses
+    the corrected fill). t13-strategy-a pushed (12309ea at push time)
+  Fee test: strategy_a fees == t9-costs costs.fee (6213f5d) on P 0.05..0.95 x C {1, 10, 100}, both lines: 57 passed
+    (values vendored; replace with direct calls once t9-costs is merged)
+  Placebo design simulation script committed (tests/placebo_design_sim.py, ring of 3,000 games per venue, exact
+    reuse for Design 2); smoke test OK; NOT run yet
+INCIDENT 14:00-14:18 ET: the power re-run (sonnet agent, 8 worker processes) pushed load to 182 on 8 cores and
+  starved the Mac collector (polymarket heartbeat gap 972 s, logged in GAPS.md with cause). Simulation killed 14:18;
+  load 65 a minute later, collector writing every minute. Vultr unaffected (watchdog: active, feeds 6-7 s)
+  Kalshi HTTP 429 on the Mac collector's trade polling, sporadic, during the Strategy A download (same IP); books unaffected
+Running: Strategy A download 1150/1264 at 18:16Z (~20 min left); then ALBY at IOWA re-fetch, then STOP
+Not running: power re-run and placebo-design simulation. Held until the Mac is on AC; then nice -n 19 with 2 processes
+Next: final download counts; simulations (niced) -> Amendment 3 power sentence from the design Divi approves
+Decisions pending: placebo design (after the simulation); commit v2 Amendment 3; merges (rule 7); Florida in-app check
 ```
 
 ## Log
