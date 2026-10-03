@@ -3,26 +3,28 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 11:35 AM ET)
-Current task: Saturday recording (Mac + Vultr); Amendment 2 on main (8a509ff); v3 Amendment 1 DRAFT awaiting Divi
+STATUS  (last update: Sat Oct 3, 11:58 AM ET)
+Current task: Saturday recording; v2 Amendment 2 (8a509ff) and v3 Amendment 1 (9507d6a) pre-registered on main
 Done:
-  GitHub: pushed main, t4h-ops-checks, t9-costs to github.com/katsdivi/GQ-Hacks (PUBLIC). Pre-push scan of all history:
-    private keys 0, Vultr IP 0, real .env/kalshi values in history 0 of 7, 6 credential-pattern hits all placeholders,
-    no blob > 1 MB, data/ only games.csv, sample.parquet, sample_truth.csv, holdout_candidates.csv (no vendor data)
-  game_lag_mid fixed to the Amendment 2 mid rule (2f79319, xcorr_lead.py only): mid only when both sides exist, no fill
-    across an empty side, change = defined mid differs from previous defined mid. Tests: 30 s empty side -> no mid/changes;
-    3x duplicated and repeat rows -> 9 changes either way; one-sided bug case -> 0; zero-lag 0 s and 5 s lead recovered
-    (both venues); identical to old function on two-sided books. Full suite 40 passed. No holdout data touched.
-  T8 kickoff scan, all 977: ESPN matched 977; |T8 - ESPN| > 15 min: 14 (all fail B coverage, all in the v2 916-game run);
-    > 1 min: 26. docs/results/t8_kickoff_check.md; docs/results/v2_who_leads.md created (v2 numbers + disclosure, not rerun)
-  HYPOTHESIS_v3_amendment1_DRAFT.md written (combined A+B book, costs x2, French factors, ESPN kickoffs for B, 21 trials)
-Running: Strategy A download 610/1264 at 15:30Z, ~8 games/min, ETA ~16:55Z (12:55 ET); then ALBY at IOWA re-fetch
-Recorders 11:31 ET: Mac 0 of 6 empty minutes; Vultr unit=active, feed ages 2-3 s
+  v3 Amendment 1 on main 9507d6a, 2026-10-03 11:42:18 ET, pushed: combined A+B book, costs x2, French factors,
+    ESPN kickoffs for B, A fill = first trade >= t + 1 s + 1c (skip if none in 5 min), B fill = first trade >= t + 1 s
+    (skip if none in 60 s). No A/B code existed on any branch at commit (git grep checked)
+  strategy_a.py on branch t13-strategy-a (rule-7 review): 7 fake-game tests pass (fill 0.84 from 0.80 before t /
+    0.83 after t + 1 s; no trade in 5 min -> skipped and counted per theta; staleness, away favorite, tie 0.5,
+    underdog placebo, seal guard, ESPN-only kickoffs, theta selection >= 50 trades). Not run on real data
+  holdout_mid.py (Amendment 2 runner) on t13-strategy-a: synthetic test with 44 games on two fake machines passes
+    (Vultr 90 s outage -> Mac; outage on both -> excluded with reasons; one-sided book -> 0 mid changes, not
+    qualifying; pinned 0.98 ends window; placebo never crosses machines; 42 qualifying at lag 5 s). Full suite 50 passed
+  Frozen holdout maps (data/live/holdout_maps/, forced add on branch): polymarket.com 112 of 112 mapped, [away, home]
+    order confirmed for 112 of 112; 109 of 112 home tokens have Mac rows (ids only, no prices)
+  Power note: placebo lags are ~uniform over +-15 s (150 synthetic pairs: median 1 s, mean 0.17 s), so a 5 s lead
+    passes Mann-Whitney only ~60-70% of the time at ~40 games (fixture seed gave p 0.40 and 0.68)
+Running: Strategy A download 800/1264 at 15:52Z, ~9 games/min, ETA ~16:42Z (12:42 ET); then ALBY at IOWA re-fetch
 Blockers: Mac on battery (lid close sleeps it)
-Next: Divi approves v3 Amendment 1 (commit to main BEFORE any A/B code); book-mid runner + laggard evaluator on synthetic
-  data; dedup redeploy after Saturday's last game
-Decisions pending: v3 Amendment 1 PROPOSED items (capital base, x365 annualization, NW 5 lags) for Alden; merge
-  t4h-ops-checks (merge, not rebase); t9-costs review; Florida in-app check
+Next: Divi reviews HYPOTHESIS_v2_amendment3_DRAFT.md (runner choices; commit to main before the run); laggard
+  evaluator on synthetic books; Vultr rsync into data/live_vultr/ after the last game; dedup redeploy after the last game
+Decisions pending: Amendment 3 draft; merge t4h-ops-checks and t13-strategy-a (rule 7 review; merge, not rebase);
+  t9-costs review; v3 PROPOSED items for Alden; Florida in-app check
 ```
 
 ## Log
