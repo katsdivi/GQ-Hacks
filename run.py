@@ -191,7 +191,7 @@ def main() -> None:
                  "latency_s": a.latency, "n_games": 1, "n_trades": len(f["trades"]),
                  "edge_cents_mean": round(f["edge_mean"], 4) if len(f["trades"]) else "",
                  "notes": f"{r['leader']} leads {r['follower']}; {name}; price=trailing {PRICE_WINDOW_S:g}s median; "
-                          f"latency {LATENCY_NOTE}; PROVISIONAL; PLACEHOLDER FEE"}
+                          f"latency {LATENCY_NOTE}; PROVISIONAL; fees as if traded today (Webull route)"}
                 for r in res for name, f in r["fills"].items()]
         pd.DataFrame(rows).to_csv(VARIANTS, mode="a", header=False, index=False)
         print(f"appended {len(rows)} rows to experiments/variants.csv")

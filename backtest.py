@@ -6,7 +6,8 @@ backward only):
   * book exists (bid and ask rows): buy at the as-of ask, sell at the as-of bid;
   * trades only: as-of last trade price + HALF_SPREAD for a buy, - HALF_SPREAD for a sell
     (fill_model = "trade+halfspread").
-Fees: costs.fee on every fill (PLACEHOLDER until Andrew's file).
+Fees: costs.fee on every fill (docs/research/fees.md, costs as if traded today). For Kalshi the
+route is a parameter: "webull" (primary, default) or "direct" (comparison line).
 
 Entry and exit fills can use different quote tables (HYPOTHESIS_v2.md Amendment 1). When
 polymarket.com is traded, run.py passes entry quotes shifted EARLIER by D p90 and unshifted exit
@@ -52,7 +53,7 @@ def follower_quotes(ticks: pd.DataFrame, venue: str, shift_s: float = 0.0) -> tu
 
 
 def simulate(sig: pd.DataFrame, entry_quotes: pd.DataFrame, exit_quotes: pd.DataFrame, venue: str,
-             latency_s: float = 1.0) -> pd.DataFrame:
+             latency_s: float = 1.0, kalshi_route: str | None = None) -> pd.DataFrame:
     """One row per round trip with entry/exit fill prices, fees and net P&L in cents."""
     if sig.empty:
         return pd.DataFrame(columns=["entry_fill_ns", "exit_fill_ns", "direction", "entry_px", "exit_px",
@@ -75,8 +76,9 @@ def simulate(sig: pd.DataFrame, entry_quotes: pd.DataFrame, exit_quotes: pd.Data
             px_in, px_out = a["ask"], b["bid"]
         else:                     # short: sell at bid, buy back at ask
             px_in, px_out = a["bid"], b["ask"]
-        fees = costs.fee(px_in, s.qty, "buy" if s.direction == 1 else "sell", venue) + \
-            costs.fee(px_out, s.qty, "sell" if s.direction == 1 else "buy", venue)
+        kw = {"route": kalshi_route} if venue == "kalshi" else {}
+        fees = costs.fee(px_in, s.qty, "buy" if s.direction == 1 else "sell", venue, **kw) + \
+            costs.fee(px_out, s.qty, "sell" if s.direction == 1 else "buy", venue, **kw)
         pnl = (s.direction * (px_out - px_in) * s.qty - fees) * 100
         rows.append({"entry_fill_ns": t_in, "exit_fill_ns": t_out, "direction": s.direction, "qty": s.qty,
                      "entry_px": round(float(px_in), 4), "exit_px": round(float(px_out), 4),

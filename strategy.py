@@ -1,7 +1,8 @@
 """Signal rule: trade the follower venue B after a jump on the leader venue A (venue-neutral).
 
 PROVISIONAL (pre-spec) defaults from docs/BUILD_PLAN.md T6: entry_gap=2c, exit when the gap
-is under 1c or after timeout_s=60 s, 1 contract. Alden to confirm.
+is under 1c or after timeout_s=60 s. Order size per signal: 10 contracts (costs.ORDER_SIZE,
+frozen in docs/stats_plan.md). Alden to confirm.
 
 Inputs are per-second grid series (align.py). A decision taken from grid label g only uses
 values at labels <= g and is stamped at g + 1 s, the first instant those values are all known.
@@ -11,7 +12,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-PROVISIONAL = dict(entry_gap_cents=2.0, exit_gap_cents=1.0, timeout_s=60, qty=1)
+PROVISIONAL = dict(entry_gap_cents=2.0, exit_gap_cents=1.0, timeout_s=60, qty=10)
 EPS = 1e-9
 
 
