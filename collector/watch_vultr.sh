@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 : "${VULTR_HOST:?set VULTR_HOST}"
 INTERVAL_S=${INTERVAL_S:-120}
 MAX_AGE_S=${MAX_AGE_S:-60}
-LOG=out/vultr_watch.log
+LOG=${LOG:-out/vultr_watch.log}
 mkdir -p out
 
 read -r -d '' REMOTE <<EOF
@@ -52,6 +52,8 @@ while true; do
         line="$stamp unit=$state ages_s: $ages"
         echo "$line" | tee -a "$LOG"
         [ "$state" != "active" ] && alert "gqh-collector is $state"
+        # A broken remote heartbeat read must alert, not pass silently
+        [ "$(echo "$out" | tail -n +2 | grep -c .)" -lt 3 ] && alert "heartbeat ages missing on Vultr"
         echo "$out" | tail -n +2 | while read -r v a; do
             [ "${a%.*}" -gt "$MAX_AGE_S" ] 2>/dev/null && alert "$v heartbeat ${a} s old"
         done
