@@ -10,10 +10,10 @@ net P&L in cents. Signals do not depend on latency (only backtest.simulate does)
 signals are reused at every latency; this is checked at run time.
 
 Outputs:
-  out/latency_curve.csv  contract columns first (latency_s, n_trades, edge_cents_mean, edge_ci_low,
+  out/latency_curve_<set>_<UTC stamp>.csv (latest also copied to out/latency_curve.csv)  contract columns first (latency_s, n_trades, edge_cents_mean, edge_ci_low,
                          edge_ci_high, pnl_total), then direction, bound, n_games, ci_method.
                          One row per (direction, bound, latency).
-  out/latency_curve.png  one line per (direction, bound) with its CI band.
+  out/latency_curve_<set>_<UTC stamp>.png  one line per (direction, bound) with its CI band.
 
 Confidence intervals: block bootstrap by game (resample whole games with replacement, 2000 draws,
 seed 20261003, percentiles 2.5 and 97.5 of the pooled mean edge per trade). With one game a game
@@ -95,11 +95,9 @@ def load_games(game_ids: list[str], fake_lag: int | None = None, final_test: boo
         rows[g] = row
     games = {}
     for g, row in rows.items():
-        path = run.TICKS / f"{g}.parquet"
-        if g == "sample":
-            path = run.ensure_ticks(g, row)    # regenerates the fake game if missing, never fetches
-        elif not path.exists():
-            raise SystemExit(f"missing {path.relative_to(ROOT)}; run `python run.py --game {g}` first")
+        # Same as run.py: regenerates the fake game, or fetches a missing real game from the public
+        # Kalshi and polymarket.com APIs (sealed games were already refused above).
+        path = run.ensure_ticks(g, row)
         games[g] = pd.read_parquet(path).sort_values(["ts", "venue", "kind"], kind="stable")
     return games
 
@@ -227,7 +225,7 @@ def log_variants(df: pd.DataFrame, game_ids: list[str]) -> int:
     return len(rows)
 
 
-def main(argv: list[str] | None = None, out_dir: Path = OUT) -> pd.DataFrame:
+def main(argv: list[str] | None = None, out_dir: Path = OUT, stamp: str | None = None) -> pd.DataFrame:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--games", default="sample", help="comma list of game_ids from data/games.csv")
     ap.add_argument("--latencies", default=",".join(f"{x:g}" for x in DEFAULT_LATENCIES),
@@ -246,12 +244,19 @@ def main(argv: list[str] | None = None, out_dir: Path = OUT) -> pd.DataFrame:
 
     df = curve(games, lats)
     out_dir.mkdir(parents=True, exist_ok=True)
+    # One file pair per run, never overwritten: latency_curve_<game_or_set>_<UTC timestamp>.
+    label = game_set if len(game_set) <= 60 else f"{len(games)}games"
+    label = "".join(ch if ch.isalnum() or ch in "-_" else "+" for ch in label)
+    stamp = stamp or pd.Timestamp.now(tz="UTC").strftime("%Y%m%dT%H%M%SZ")
+    stem = f"latency_curve_{label}_{stamp}"
+    df.to_csv(out_dir / f"{stem}.csv", index=False)
+    chart(df, game_set, out_dir / f"{stem}.png")
+    # CLAUDE.md contract path (what Olmer reads): a copy of the latest run.
     df.to_csv(out_dir / "latency_curve.csv", index=False)
-    chart(df, game_set, out_dir / "latency_curve.png")
     print()
     print_table(df)
     shown = out_dir.relative_to(ROOT) if out_dir.is_relative_to(ROOT) else out_dir
-    print(f"\nsaved {shown / 'latency_curve.csv'}, {shown / 'latency_curve.png'}")
+    print(f"\nsaved {shown / (stem + '.csv')}, {shown / (stem + '.png')} (latest also copied to {shown / 'latency_curve.csv'})")
     if not any(is_synthetic(g) for g in games):
         print(f"appended {log_variants(df, list(games))} rows to experiments/variants.csv")
     return df
