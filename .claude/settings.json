@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Edit(./HYPOTHESIS.md)",
+      "Bash(cat .env)"
+    ]
+  }
+}

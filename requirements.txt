@@ -1,0 +1,13 @@
+databento
+pandas
+pyarrow
+numpy
+requests
+websockets
+psycopg[binary]
+plotly
+streamlit
+python-dotenv
+matplotlib
+cryptography
+pytest
