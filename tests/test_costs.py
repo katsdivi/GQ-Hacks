@@ -44,3 +44,8 @@ def test_backtest_kalshi_route_switch():
     direct = backtest.simulate(sig, q, q, "kalshi", 0.0, kalshi_route="direct")
     assert web["fees"].iloc[0] == pytest.approx(0.40)              # 2 fills x 10 x $0.02
     assert direct["fees"].iloc[0] == pytest.approx(0.18 + 0.18)   # ceil(0.07*10*0.51*0.49), ceil(0.07*10*0.54*0.46)
+
+
+def test_polymarket_comparison_rate_override():
+    assert costs.fee(0.5, 10, "buy", "polymarket", polymarket_rate=0.03) == pytest.approx(0.08)  # 0.075 -> 0.08
+    assert costs.fee(0.5, 10, "buy", "polymarket", polymarket_rate=0.0) == 0.0

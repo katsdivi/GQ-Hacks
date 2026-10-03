@@ -35,11 +35,13 @@ def _ceil_cent(x: float) -> float:
     return math.ceil(round(x * 100, 9)) / 100
 
 
-def fee(price: float, qty: float, side: str, venue: str, route: str | None = None) -> float:
+def fee(price: float, qty: float, side: str, venue: str, route: str | None = None,
+        polymarket_rate: float | None = None) -> float:
     """Fee in dollars for one order of qty contracts filled at price.
 
     venue "kalshi": route "webull" (default, KALSHI_ROUTE) or "direct".
-    venue "polymarket": polymarket.com taker schedule.
+    venue "polymarket": polymarket.com taker schedule; primary rate 0.05 flat. polymarket_rate
+      overrides it for the comparison line (per-market feeSchedule.rate listed on 2026-10-03).
     venue "cme": fake game only, charged the Webull line. Any other venue raises.
     side is accepted for the fixed signature; current schedules are symmetric.
     """
@@ -52,7 +54,8 @@ def fee(price: float, qty: float, side: str, venue: str, route: str | None = Non
             return _ceil_cent(KALSHI_DIRECT_RATE * c * p * (1 - p))
         raise ValueError(f"unknown Kalshi route {r!r}")
     if venue == "polymarket":
-        return _ceil_cent(POLYMARKET_RATE * c * p * (1 - p))
+        rate = POLYMARKET_RATE if polymarket_rate is None else polymarket_rate
+        return _ceil_cent(rate * c * p * (1 - p))
     if venue == "cme":
         # Fake game only (CME is not a trading venue in this project): charge the Webull line.
         return WEBULL_PER_CONTRACT * c

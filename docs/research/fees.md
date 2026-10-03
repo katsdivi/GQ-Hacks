@@ -40,4 +40,11 @@ Read from the Gamma API (market fields `feeType`, `feeSchedule`) and the CLOB AP
 - Example: Colts vs. Commanders (2026-10-04 13:30 UTC): feeType `zero_fees`, feeSchedule rate 0; CLOB taker_base_fee 1000, fee-rate base_fee 1000.
 - `taker_base_fee` / `base_fee` = 1000 on every market checked (sports and non-sports), so it is not the effective rate; likely a signing cap in bps. The effective rate is per market in `feeSchedule.rate`.
 - Non-sports for comparison: politics 0.04, economics 0.05.
-- The schedule name `sports_fees_nfl_cfb_oct26` suggests a new NFL/CFB schedule at 0.03 for October 2026, which conflicts with "0.05 since 2026-07-10". STOPPED here for Divi's decision; costs.py still uses 0.05.
+- The schedule name `sports_fees_nfl_cfb_oct26` suggests a new NFL/CFB schedule at 0.03 for October 2026, which conflicts with "0.05 since 2026-07-10". Divi decided the rule below.
+
+## polymarket.com fee rule (Divi, decided 2026-10-03, before any result)
+
+- Primary: 0.05 x C x P x (1 - P) flat, rounded up per order, applied to every game (documented sports maximum, conservative).
+- Comparison line: per-market feeSchedule.rate as listed on 2026-10-03 (table above for live markets; for training games, whatever the Gamma API lists for that market on 2026-10-03).
+- Note: 2025-season NFL markets had 0 polymarket.com fees at the time.
+- Scope: polymarket.com-traded rows only; those are measurement-only for US residents.
