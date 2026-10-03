@@ -111,7 +111,33 @@ def test_seal_guard_and_rest_cover(world, tmp_path):
     md = tmp_path / "GAPS.md"
     md.write_text("| Sat Oct 03 10:00:00 | Sat Oct 03 10:05:00 | kalshi_ws | drop | auto |\n")
     a = pd.Timestamp("2026-10-03 14:00:00", tz="UTC").value
-    full = H.parse_gaps(md, [(a, a + 300 * NS)])
-    assert full.empty                                                 # REST delivered the whole gap: no outage
-    part = H.parse_gaps(md, [(a, a + 200 * NS)])
-    assert len(part) == 1 and (part.end_ns - part.start_ns).item() == 100 * NS
+    g = H.parse_gaps(md, [])
+    assert len(g) == 1 and g.venue.item() == "kalshi" and (g.end_ns - g.start_ns).item() == 300 * NS
+    # REST fallback connected is itself Kalshi outage time (consecutive heartbeats merge into one span)
+    rest = [(a + 600 * NS + k * 10 * NS, a + 600 * NS + k * 10 * NS + 15 * NS) for k in range(12)]
+    g = H.parse_gaps(md, rest)
+    assert len(g) == 2 and (g.end_ns - g.start_ns).max() == 300 * NS and (g.end_ns - g.start_ns).min() == 125 * NS
+
+
+def test_feed_start_prefers_heartbeat(tmp_path):
+    hb = tmp_path / "hb"
+    hb.mkdir()
+    (hb / "20261003.jsonl").write_text(
+        '{"venue": "kalshi_ws", "recv_utc": "2026-10-03T09:52:05+00:00", "connected": true, "last_ok_utc": null}\n'
+        '{"venue": "kalshi_ws", "recv_utc": "2026-10-03T09:52:15+00:00", "connected": true, "last_ok_utc": "2026-10-03T09:52:14+00:00"}\n')
+    d = tmp_path / "data" / "live" / "kalshi" / "20261003"
+    d.mkdir(parents=True)
+    (d / "1790996971_1.parquet").write_bytes(b"")                     # earlier file, ignored when heartbeats exist
+    m = H.Machine("mac", tmp_path, tmp_path / "none.md", heartbeat_dir=hb)
+    assert m.feed_start_ns("kalshi") == pd.Timestamp("2026-10-03T09:52:14Z").value
+    m2 = H.Machine("mac", tmp_path, tmp_path / "none.md")
+    assert m2.feed_start_ns("kalshi") == 1790996971 * NS
+
+
+def test_run_all_applies_holm(world):
+    cands, maps, machines = world
+    out = H.run_all(cands, maps, machines)
+    levels = sorted(v["decision"]["holm_level"] for v in out.values())
+    assert levels in ([0.025, 0.05], [0.0, 0.025])
+    for v in out.values():
+        assert v["decision"]["alpha"] == v["decision"]["holm_level"]

@@ -6,12 +6,13 @@ Polymarket US):
      holdout_maps/polymarket_com_map.json), Polymarket US slug (holdout_maps/polymarket_us_map.json). One
      instrument per venue; the two books of a game are never merged. [Clarification needed: Amendment 2 does
      not name the instrument; home is the default here.]
-  2. Window: kickoff - 30 min to the earlier of kickoff + 4.5 h or the first second from which either venue's
+  2. Window: kickoff - 90 min to the earlier of kickoff + 4.5 h or the first second from which either venue's
      defined mid stays >= 0.98 or <= 0.02 for 60 s (the window ends at the start of that run).
   3. Machines: Vultr if neither venue has an outage longer than 60 s inside the window, else the Mac if it has
      none, else excluded. One machine per game, never spliced. Outages: GAPS table rows for the venue (and
-     "all"), plus the span before a feed's first recorded file (a feed not yet recording is an outage). For
-     Kalshi a kalshi_ws gap counts only where the REST fallback was not connected (heartbeat kalshi_rest).
+     "all"), plus the span before a feed's start (first heartbeat with a delivered message; the first recorded
+     file only on a machine with no heartbeat log). For Kalshi every kalshi_ws gap is an outage, and so is any
+     time the REST fallback was connected (REST polling degrades timing and biases Kalshi late).
   4. Qualifying: >= 50 mid changes (xcorr_lead.n_mid_changes) on each venue inside the window.
   5. Lag: xcorr_lead.game_lag_mid on the window.
   6. Placebo: Kalshi from game A vs the other venue from game B = the next qualifying game in kickoff order
@@ -36,12 +37,13 @@ import xcorr_lead as X
 
 NS = 1_000_000_000
 SEAL = pd.Timestamp("2026-08-01", tz="UTC")
-PRE_S, POST_S = 30 * 60, int(4.5 * 3600)
+PRE_S, POST_S = 90 * 60, int(4.5 * 3600)       # window: kickoff - 90 min (Amendment 3 draft) to + 4.5 h
 PIN_HI, PIN_LO, PIN_S = 0.98, 0.02, 60
 MAX_OUTAGE_S = 60
 MIN_CHANGES = 50
 PLACEBO_KICKOFF_S = 30 * 60
 REST_HEARTBEAT_COVER_S = 15          # one connected kalshi_rest heartbeat covers this many seconds
+HB_FEED = {"kalshi": "kalshi_ws", "polymarket": "polymarket", "polymarket_us": "polymarket_us"}
 TESTS = {"polymarket.com": ("polymarket", 1.0), "Polymarket US": ("polymarket_us", 1.5)}
 
 
@@ -59,11 +61,27 @@ class Machine:
         return sorted(glob.glob(str(self.root / "data" / "live" / venue / "*" / "*.parquet")))
 
     def feed_start_ns(self, venue: str) -> int | None:
-        """First recorded file of a feed, from the unix-second filename prefix (no rows read)."""
+        """First heartbeat of the feed with a delivered message (last_ok set). Only a machine without a
+        heartbeat log falls back to the first recorded file's unix-second prefix. No rows are read."""
         if venue not in self._start:
-            fs = [int(Path(f).name.split("_")[0]) for f in self.files(venue)]
-            self._start[venue] = min(fs) * NS if fs else None
+            hb = self.heartbeat_first_ok(HB_FEED[venue]) if self.heartbeat_dir else None
+            if hb is not None or self.heartbeat_dir:
+                self._start[venue] = hb
+            else:
+                fs = [int(Path(f).name.split("_")[0]) for f in self.files(venue)]
+                self._start[venue] = min(fs) * NS if fs else None
         return self._start[venue]
+
+    def heartbeat_first_ok(self, feed: str) -> int | None:
+        for f in sorted(glob.glob(str(self.heartbeat_dir / "*.jsonl"))):
+            for line in open(f):
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if r.get("venue") == feed and r.get("last_ok_utc"):
+                    return pd.Timestamp(r["last_ok_utc"]).value
+        return None
 
     def rows(self, venue: str, market: str, lo_ns: int, hi_ns: int) -> pd.DataFrame:
         fs = self.files(venue)
@@ -102,23 +120,10 @@ def _et(s: str, year: int = 2026) -> int:
     return pd.to_datetime(f"{s} {year}", format="%a %b %d %H:%M:%S %Y").tz_localize("America/New_York").value
 
 
-def _subtract(a: int, b: int, cover: list[tuple[int, int]]) -> list[tuple[int, int]]:
-    """Interval [a, b] minus the union of cover intervals."""
-    out, cur = [], a
-    for lo, hi in sorted(cover):
-        if hi <= cur or lo >= b:
-            continue
-        if lo > cur:
-            out.append((cur, lo))
-        cur = max(cur, hi)
-    if cur < b:
-        out.append((cur, b))
-    return out
-
-
 def parse_gaps(md: Path, rest: list[tuple[int, int]], year: int = 2026) -> pd.DataFrame:
-    """GAPS table rows -> (venue, start_ns, end_ns). Times are ET (2026). kalshi_ws gaps lose the spans where
-    the REST fallback was connected; kalshi_ws and kalshi_rest rows are reported as venue "kalshi"."""
+    """GAPS table rows -> (venue, start_ns, end_ns). Times are ET (GAPS rows carry no year). For the lead test
+    Kalshi is out whenever the websocket is: every kalshi_ws gap is a Kalshi outage, and every span where the
+    REST fallback was connected (heartbeat) is one too. Reported as venue "kalshi"."""
     rows = []
     if md and Path(md).exists():
         for line in open(md):
@@ -127,12 +132,24 @@ def parse_gaps(md: Path, rest: list[tuple[int, int]], year: int = 2026) -> pd.Da
                 continue
             a, b, v = _et(m.group(1), year), _et(m.group(2), year), m.group(3)
             if v == "kalshi_ws":
-                rows += [("kalshi", lo, hi) for lo, hi in _subtract(a, b, rest)]
+                rows.append(("kalshi", a, b))
             elif v == "kalshi_rest":
-                continue          # REST alone being down is not an outage while the websocket delivers
+                continue          # REST being down is not an outage while the websocket delivers
             else:
                 rows.append((v, a, b))
+    rows += [("kalshi", lo, hi) for lo, hi in _merge(rest)]
     return pd.DataFrame(rows, columns=["venue", "start_ns", "end_ns"])
+
+
+def _merge(iv: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """Union of intervals (consecutive REST heartbeats become one span)."""
+    out = []
+    for lo, hi in sorted(iv):
+        if out and lo <= out[-1][1]:
+            out[-1] = (out[-1][0], max(out[-1][1], hi))
+        else:
+            out.append((lo, hi))
+    return out
 
 
 def outage_reason(m: Machine, venues: tuple[str, str], lo: int, hi: int) -> str:
@@ -251,3 +268,14 @@ def run_test(cands: pd.DataFrame, maps: dict, machines: list[Machine], test: str
 def load_maps(d: Path) -> dict:
     return {"polymarket_com": json.loads((d / "polymarket_com_map.json").read_text()),
             "polymarket_us": json.loads((d / "polymarket_us_map.json").read_text())}
+
+
+def run_all(cands: pd.DataFrame, maps: dict, machines: list[Machine], holdout_run: bool = False) -> dict:
+    """Both venue tests, then Holm across them (Amendment 3 draft). Returns per-test tables and final decisions."""
+    res = {t: run_test(cands, maps, machines, t, holdout_run) for t in TESTS}
+    inputs = {}
+    for t, (per, pl, _dec) in res.items():
+        q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)]
+        inputs[t] = (q["lag_s"].to_numpy(float), pl["lag_s"].to_numpy(float), TESTS[t][0], TESTS[t][1])
+    final = X.decide_holm(inputs)
+    return {t: {"per_game": res[t][0], "placebo": res[t][1], "decision": final[t]} for t in TESTS}
