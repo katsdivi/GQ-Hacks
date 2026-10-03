@@ -89,3 +89,11 @@ def test_trailing_median_uses_only_past_trades():
     i = 500
     want = tr["price"].iloc[i - 2: i + 1].median()
     assert ev["price"].iloc[i] == want
+
+
+def test_no_jumps_gives_empty_table_not_crash():
+    import numpy as np
+    flat = pd.Series(np.full(600, 0.5), index=np.arange(600, dtype="int64"))
+    resp, summ = leadlag.leadlag(flat, flat)
+    assert len(resp) == 0 and {"response_s", "covered"} <= set(resp.columns)
+    assert summ["n_jumps"] == 0 and summ["n_covered"] == 0

@@ -70,7 +70,8 @@ def response_times(jumps: pd.DataFrame, follower: pd.Series, cover: float = 0.8,
             rows.append({"response_s": float(g_hit - j.jump_g), "covered": True})
         else:
             rows.append({"response_s": np.nan, "covered": False})
-    return pd.concat([jumps.reset_index(drop=True), pd.DataFrame(rows)], axis=1)
+    out = pd.DataFrame(rows, columns=["response_s", "covered"])   # columns exist even with no jumps
+    return pd.concat([jumps.reset_index(drop=True), out], axis=1)
 
 
 def xcorr_lag(a: pd.Series, b: pd.Series, max_lag_s: int = 15) -> tuple[int, dict]:
