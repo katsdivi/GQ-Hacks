@@ -6,7 +6,8 @@ Source: Andrew's fee research, relayed by Divi on 2026-10-03. Sources named: Web
 |---|---|---|---|---|
 | Kalshi via Webull | $0.02 per contract per fill | none | as of 2026-10-03 (Andrew) | primary |
 | Kalshi direct, taker | 0.07 x C x P x (1 - P) | rounded UP to the cent per order (conservative; Kalshi's exact rounding unconfirmed) | 2026-07-07 | comparison line |
-| polymarket.com, taker | 0.05 x C x P x (1 - P) | rounded UP to the cent per order | 2026-07-10 | the only polymarket.com schedule; venue to confirm: polymarket.com vs Polymarket US |
+| polymarket.com, taker | 0.05 x C x P x (1 - P) | rounded to 5 decimal places, smallest fee 0.00001 USDC (docs.polymarket.com/trading/fees); direction not stated, we use half up | 2026-07-10 | polymarket.com rows (laggard evaluator) |
+| Polymarket US, taker | 0.0695 x C x P x (1 - P) | nearest $0.01, banker's rounding (half to even), per order (docs.polymarket.us/fees) | 2026-10-01 10:00 ET (14:00 UTC); earlier timestamps raise | Polymarket US rows; we never post, so no maker rebate |
 
 C = contracts in the order, P = fill price in dollars (0.01 to 0.99).
 
