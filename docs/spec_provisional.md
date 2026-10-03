@@ -1,6 +1,6 @@
 # Frozen provisional spec (pre Alden's math_spec.md)
 
-Frozen 2026-10-03 against code at branch t9-costs (19a1001) and experiments/d_estimate.json (603 trades). Every number here is PROVISIONAL until Alden's `docs/math_spec.md` lands; if it differs, that file wins and this one is superseded with a dated note, never edited in place. Applies to the who-leads test and the tuning pipeline in `docs/stats_plan.md`.
+Frozen 2026-10-03 against experiments/d_estimate.json (603 trades). The fee lines below are implemented on branch t9-costs, which is under Divi's line-by-line review (rule 7) and not yet on main; until it merges, main's costs.py still carries the PLACEHOLDER fee. Every number here is PROVISIONAL until Alden's `docs/math_spec.md` lands; if it differs, that file wins and this one is superseded with a dated note, never edited in place. Applies to the who-leads test and the tuning pipeline in `docs/stats_plan.md`.
 
 ## Clock
 
@@ -52,7 +52,7 @@ Consequence: the median moves only once two of the three trades in its window ar
 | Kalshi traded | unshifted |
 | Kalshi fee, primary | Webull $0.02 per contract per fill |
 | Kalshi fee, comparison line | 0.07 x C x P x (1 - P), rounded up to the cent per order |
-| polymarket.com fee | 0.05 x C x P x (1 - P), rounded up per order; fee venue to confirm (polymarket.com vs Polymarket US) |
+| polymarket.com fee | primary: 0.05 x C x P x (1 - P) flat, rounded up per order, every game; comparison line: per-market feeSchedule.rate as listed on 2026-10-03 (see stats_plan.md, fee rule) |
 | Fee dates | current schedules (Kalshi 2026-07-07, Polymarket 2026-07-10) applied to all games: "costs as if traded today" |
 
 ## D (match-to-block delay)

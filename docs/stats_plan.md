@@ -44,6 +44,21 @@ Reported regardless of outcome: number of games, qualifying games, first-counts 
 - Selection rule: best mean net edge per trade (lower bound, Webull line) among settings with at least 30 trades; ties broken by more trades, then the smaller jump threshold.
 - Then ONE run on the holdout with the chosen setting, when Divi says "final test run".
 
+## polymarket.com fee rule (decided 2026-10-03, before any result)
+
+- Primary: 0.05 x C x P x (1 - P) flat, rounded up to the cent per order, applied to every game. 0.05 is the documented sports maximum (since 2026-07-10), so it is the conservative choice.
+- Comparison line: the per-market feeSchedule.rate as listed on 2026-10-03, reported next to the primary.
+- Note in every output: 2025-season NFL markets actually had 0 polymarket.com fees at the time (0 for NFL before 2026-03-30).
+- Scope: only polymarket.com-traded rows. Those are measurement-only for US residents (v2), so this does not change any US-executable result.
+- Live fee settings observed 2026-10-03 ~05:25 UTC (Gamma `feeType` / `feeSchedule.rate`; CLOB `base_fee` = 1000 on every market, not the effective rate):
+
+| Open moneylines | rate 0.03 (`sports_fees_nfl_cfb_oct26`) | rate 0.05 (`sports_fees_v3`) | rate 0 (`zero_fees`) |
+|---|---|---|---|
+| NFL, 59 markets | 43 | 0 | 16 |
+| CFB, 100 markets | 2 | 4 | 94 |
+
+Historical markets (training games) may not keep their 2025 fee settings; the comparison line uses whatever `feeSchedule.rate` the Gamma API lists for that market on 2026-10-03, and says so.
+
 ## Latency curve and robustness (report.py)
 
 - Latency 0, 0.25, 0.5, 1, 2, 5, 10 s; axis label "0 s = decision within 1 s of the move".
