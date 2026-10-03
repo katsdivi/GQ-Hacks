@@ -1,0 +1,10 @@
+{
+ "n_trades": 603,
+ "D_median_s": 2.119,
+ "D_p90_s": 2.879,
+ "meets_v2_minimum": true,
+ "measured_at_utc": "2026-10-03T04:24:08.134966+00:00",
+ "first_recv_utc": "2026-10-03T04:11:19.064109+00:00",
+ "last_recv_utc": "2026-10-03T04:21:02.240798+00:00",
+ "source": "collector/measure_d.py on polymarket_dcal (non-sports) trades"
+}

@@ -58,10 +58,11 @@ MONTHS = {m: i for i, m in enumerate(["JAN", "FEB", "MAR", "APR", "MAY", "JUN",
 # Kalshi NFL code -> polymarket.com slug code, where they differ.
 NFL_ALIAS = {"JAC": "jax", "LA": "la", "LV": "lv", "WAS": "was", "NE": "ne", "NO": "no",
              "GB": "gb", "KC": "kc", "SF": "sf", "TB": "tb"}
-MAX_REQ_PER_S = 5.0     # shared Kalshi budget with the live recorder
+MAX_REQ_PER_S = 2.0     # Kalshi budget; the live recorder gets priority (override with --rate)
 
 _s = requests.Session()
 _next = [0.0]
+RATE = [MAX_REQ_PER_S]
 
 
 def get(url: str, params: dict | None = None, throttle: bool = True):
@@ -70,7 +71,7 @@ def get(url: str, params: dict | None = None, throttle: bool = True):
             w = _next[0] - time.monotonic()
             if w > 0:
                 time.sleep(w)
-            _next[0] = max(_next[0], time.monotonic()) + 1.0 / MAX_REQ_PER_S
+            _next[0] = max(_next[0], time.monotonic()) + 1.0 / RATE[0]
         try:
             r = _s.get(url, params=params, timeout=60)
         except requests.RequestException:
@@ -349,7 +350,9 @@ def main() -> None:
     ap.add_argument("--plan", action="store_true", help="only build the matched game list")
     ap.add_argument("--replan", action="store_true", help="rebuild the game list even if it exists")
     ap.add_argument("--limit", type=int)
+    ap.add_argument("--rate", type=float, default=MAX_REQ_PER_S, help="max Kalshi requests per second")
     a = ap.parse_args()
+    RATE[0] = a.rate
     TICKS.mkdir(parents=True, exist_ok=True)
     OUT.mkdir(exist_ok=True)
     plan = build_plan() if (a.plan or a.replan or not PLAN_CSV.exists()) else pd.read_csv(

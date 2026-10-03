@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DCAL = ROOT / "data" / "live" / "polymarket_dcal"
 OUT = ROOT / "out" / "d_measurement.csv"
 CACHE = ROOT / "data" / "raw" / "polygon_block_ts.json"
+ESTIMATE = ROOT / "experiments" / "d_estimate.json"   # committed: run.py reads D from here
 RPCS = ["https://polygon-bor-rpc.publicnode.com", "https://polygon.drpc.org", "https://1rpc.io/matic"]
 
 
@@ -77,6 +78,13 @@ def main() -> None:
     print(f"D_src = block_ts - ws ts: median {qs[0.5]:+.2f} s, p90 {qs[0.9]:+.2f} s")
     print("note: block_ts is whole seconds, so D has up to 1 s of rounding; a negative D means the block "
           "time is earlier than our receipt (network delay to us exceeds the match-to-block delay)")
+    est = {"n_trades": int(n), "D_median_s": round(float(q[0.5]), 3), "D_p90_s": round(float(q[0.9]), 3),
+           "meets_v2_minimum": bool(n >= a.min_trades), "measured_at_utc": pd.Timestamp.now(tz="UTC").isoformat(),
+           "first_recv_utc": pd.Timestamp(int(tx["recv_ns"].min()), tz="UTC").isoformat(),
+           "last_recv_utc": pd.Timestamp(int(tx["recv_ns"].max()), tz="UTC").isoformat(),
+           "source": "collector/measure_d.py on polymarket_dcal (non-sports) trades"}
+    ESTIMATE.write_text(json.dumps(est, indent=1) + "\n")
+    print(f"saved {ESTIMATE.relative_to(ROOT)}")
     if n < a.min_trades:
         print(f"NOT ENOUGH: {n} < {a.min_trades} trades required by HYPOTHESIS_v2.md; rerun later")
 
