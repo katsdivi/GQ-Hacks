@@ -44,4 +44,23 @@ Reverse lead: "Kalshi leads" 0.000 [0.000, 0.008] in every cell; "other venue le
 
 ## Part (a): power at n = 30, 40, 60, 80
 
-Running (started 19:57:33Z, about 3.2 h expected). Results will be added in a/.
+Started 19:57:33Z (15:57 ET), ended 23:03:13Z (19:03 ET), wall 11,140 s, exit 0 (driver.log). Code tests/power_sim_quotes.py at fa5b19f, seed 20261003, 500 studies per cell, 8 processes. Files in a/: power_sim_quotes.csv (counts per cell), power_sim_quotes_studies.csv (one row per study), run.log.
+
+Cases: no_link (unrelated series), zero_lag, lead_5s (every game 5 s), lead_jitter (per-game true lag 5 s + N(0, 2 s), rounded, clipped to [0, 12]). Each study: n qualifying games plus a no-link placebo of the same size (n pairs; the pre-registered Design 1 uses about n - 1), xcorr_lead.decide with the venue's min lead (1.0 s polymarket.com, 1.5 s Polymarket US). alpha 0.025 is the Holm level for the smaller of the two venue p values; 0.05 applies to the second test only if the first passes.
+
+Full-rule "Kalshi leads" rate [Wilson 95% CI], 500 studies:
+
+| venue | n | lead 5 s + N(0, 2 s) jitter, alpha 0.025 | same, alpha 0.05 | fixed 5 s lead, alpha 0.025 | no-link null, alpha 0.025 | zero-lag null, alpha 0.025 | reverse lead called, any case |
+|---|---|---|---|---|---|---|---|
+| polymarket.com | 30 | 0.496 [0.452, 0.540] | 0.614 [0.571, 0.656] | 0.542 [0.498, 0.585] | 0.008 [0.003, 0.020] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| polymarket.com | 40 | 0.618 [0.575, 0.660] | 0.692 [0.650, 0.731] | 0.680 [0.638, 0.719] | 0.006 [0.002, 0.017] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| polymarket.com | 60 | 0.782 [0.744, 0.816] | 0.856 [0.823, 0.884] | 0.812 [0.775, 0.844] | 0.012 [0.006, 0.026] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| polymarket.com | 80 | 0.892 [0.862, 0.916] | 0.940 [0.916, 0.958] | 0.892 [0.862, 0.916] | 0.006 [0.002, 0.017] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| Polymarket US | 30 | 0.466 [0.423, 0.510] | 0.588 [0.544, 0.630] | 0.522 [0.478, 0.565] | 0.010 [0.004, 0.023] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| Polymarket US | 40 | 0.590 [0.546, 0.632] | 0.696 [0.654, 0.735] | 0.648 [0.605, 0.689] | 0.006 [0.002, 0.017] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| Polymarket US | 60 | 0.796 [0.758, 0.829] | 0.860 [0.827, 0.888] | 0.802 [0.765, 0.835] | 0.006 [0.002, 0.017] | 0.000 [0.000, 0.008] | 0 of 1500 |
+| Polymarket US | 80 | 0.848 [0.814, 0.877] | 0.902 [0.873, 0.925] | 0.872 [0.840, 0.898] | 0.004 [0.001, 0.014] | 0.000 [0.000, 0.008] | 0 of 1500 |
+
+## Note text for HYPOTHESIS_v2.md Amendment 3 (draft; to be appended on main only when Divi says so)
+
+Note to Amendment 3: power (appended <HH:MM> ET 2026-10-03; changes no rule). Simulation run (a), seed 20261003, 500 studies per cell, started 15:57 ET and finished 19:03 ET (docs/results/sim/README.md, part (a)). If Kalshi truly leads by 5 s with per-game jitter N(0, 2 s), the full rule calls "Kalshi leads" in 47% to 80% of studies with 30 to 60 qualifying games at alpha 0.025 (the Holm level for the smaller p), and in 59% to 86% at alpha 0.05; with 80 games, 85% to 89% at alpha 0.025. With no link it called a lead in at most 1.2% of studies per cell (Wilson upper bound 2.6%), with zero lag in 0 of 500 per cell, and it never called the reverse direction. Smaller leads are caught less often, so an inconclusive result does not mean there is no lead. The simulated placebo has n pairs; the pre-registered Design 1 has about n - 1.
