@@ -23,6 +23,10 @@ Next: Divi reviews t5b-fixes + docs/review_t5.md, merges; Alden hand-checks; T8 
 Decisions pending: price definition (Alden), B (Webull, deferred)
 ```
 
+## Log
+
+- 2026-10-03 ~07:15 UTC: leadlag.py crash fix (no-jump games) merged after spec freeze; method unchanged; no results seen before the fix. (eedd1fe, merged to main)
+
 ## Task log
 
 | Task | Status | Verified with | Notes |

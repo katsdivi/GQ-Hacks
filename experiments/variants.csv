@@ -6,3 +6,4 @@ ts_utc,git_sha,game_set,jump_cents,window_s,entry_gap,timeout_s,latency_s,n_game
 2026-10-03T04:44:10Z,e00615a,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,92,-0.4113,kalshi leads polymarket; lower bound; price=trailing 3s median; latency 0 s = decision within 1 s of the move; PROVISIONAL; PLACEHOLDER FEE
 2026-10-03T04:44:10Z,e00615a,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,92,-0.2354,kalshi leads polymarket; upper bound; price=trailing 3s median; latency 0 s = decision within 1 s of the move; PROVISIONAL; PLACEHOLDER FEE
 2026-10-03T04:44:10Z,e00615a,nfl_20251116_was_mia,3.0,10,2.0,60,1.0,1,21,-4.7619,polymarket leads kalshi; kalshi traded (unshifted); price=trailing 3s median; latency 0 s = decision within 1 s of the move; PROVISIONAL; PLACEHOLDER FEE
+2026-10-03T07:13:52Z,eedd1fe,,,,,,,,,,leadlag.py crash fix (no-jump games) merged after spec freeze; method unchanged; no results seen before the fix.
