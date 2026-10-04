@@ -458,3 +458,31 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 303 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 11
+
+Run 2026-10-04 06:05 ET. Source: Rule 1 (Clegg, Song, Cartlidge, arXiv 2605.16066). ESPN states: 531 of 1,267
+training games pass the strict defect filter (735 dropped, 1 mapping failure); s fitted walk-forward.
+
+- Taker +0.018 [-0.045, +0.080] (425 trades), maker +0.037 [-0.031, +0.105] (412). Not monotone in |gap|: mean
+  P&L per trade is LOWER for gaps > 0.10 (taker $0.04 vs $0.16 for 0.06 to 0.10), the opposite of the success
+  criterion, so the larger "mispricings" are model error, not Kalshi error. No edge.
+
+### All Round 11 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R11.MODEL.maker | 412 | 0.0369 | -0.0305 | 0.1053 | 2.331 | 0.0433 | 2.714 | 52.84 | 1.929 | 1 |
+| R11.MODEL.taker | 425 | 0.0183 | -0.0453 | 0.08 | 1.195 | 0.0183 | 1.195 | 9.26 | 1.034 | 1 |
+
+### Cumulative correction after Round 11
+
+Trials: own 158 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 0 (not found yet); regress 0 (not found yet)) = 305. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.383. DSR of that best: 3.37e-29 (project convention;
+normal-returns version 1.95e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 305 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.

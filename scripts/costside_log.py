@@ -20,7 +20,10 @@ EXT = {"search": ("../wt-search/results/posthoc_search/trials.csv", "../wt-searc
        "maker": ("../wt-costside-maker/results/posthoc_costside_maker/trials_log.csv",
                  "../wt-costside-maker/results/posthoc_costside_maker/daily_pnl.csv"),
        "patterns": ("../wt-costside-patterns/results/posthoc_costside_patterns/trials_log.csv",
-                    "../wt-costside-patterns/results/posthoc_costside_patterns/daily_pnl.csv")}
+                    "../wt-costside-patterns/results/posthoc_costside_patterns/daily_pnl.csv"),
+       "unsup": ("../wt-unsup/results/posthoc_unsup/trials_log.csv", "../wt-unsup/results/posthoc_unsup/daily_pnl.csv"),
+       "regress": ("../wt-regress/results/posthoc_regress/trials_log.csv",
+                   "../wt-regress/results/posthoc_regress/daily_pnl.csv")}
 
 
 def external() -> tuple[dict, dict]:

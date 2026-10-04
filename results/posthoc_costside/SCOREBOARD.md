@@ -52,5 +52,7 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 10 | ELO: strength from past outcomes vs Kalshi | +10 | new |
 | 10 | Pre-game "fair value" models ruled out (Elo here; sportsbook line in Idea 13; past Kalshi errors in Round 8) | +5 | ruled out |
 
-**Total after Round 10: +210.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
+| 11 | MODEL: pregame-anchored in-game score model (Clegg et al.) | +10 | new |
+
+**Total after Round 11: +220.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
 three repeats/finer grids already listed; no lookahead, holdout/live data, unlogged trial or undisclosed rerun.
