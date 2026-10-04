@@ -3,32 +3,36 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 8:00 PM ET)
-Current task: 60-min queue done; stopped. Training only, no holdout prices, nothing on Vultr, no merges to main.
-Collector heartbeat checked before/after every job: kalshi_ws, polymarket, polymarket_us delivering throughout.
-  FLAG: the Mac has been on BATTERY since ~7:45 PM (caffeinate -s only holds on AC; lid close = sleep risk).
+STATUS  (last update: Sat Oct 3, 8:43 PM ET)
+Current task: holdout download running (save only); final-run script + dry run done on t15-final.
 Done:
-  1 Strategy B (strategy_b.py ac2ffad, runner, 8 fake-game tests; walkthrough docs/review/strategy_b_walkthrough.md
-    ee29f9b). Orientation check PASS: 963 games, 579 both valid at ko-5min, |K-PM| median 1.0c, p95 2.0c, 0 > 10c.
-    963 games (14 Amendment-1 exclusions, asserted), 778 placebo pairs, valid-share median 0.48.
-    Every setting nets about -5 c/contract (Webull; = 4c fees + 1c half-spread); gross edge before costs
-    -0.12 to +0.14 c, placebo -0.01 to +0.11 c: no disagreement signal. Selected (v3 rule) k=5c m=10 T=300:
-    9,242 trades, -4.86 c [-5.02, -4.71] Webull, -3.67 c [-3.82, -3.52] direct, P&L -$4,496 / -$3,394;
-    costs x2 -9.86 c. 16 rows in variants.csv (8 settings + 8 placebo, labeled).
-  2 A exploratory (not a variant): win rate minus (fill - 1c), favorite +0.4 / +2.3 / +0.4 c at 0.70/0.80/0.90;
-    placebo -2.3 / -3.6 / -2.1 c (out/strategy_a/exploratory_gap_before_cent.csv).
-  3 report_book.py (65b31af; separate file, report.py untouched) + results/numbers.json (119 keys) +
-    results/equity_training.png. Season 2025-07-31..2026-01-25, 179 days. A (0.80): P&L -$21.40, ann ret -32%
-    of $137 base, Sharpe -0.60 (NW5 -0.58), max DD $77, skew -1.12, worst month 2025-09 (-$16.40), costs x2
-    Sharpe -2.95. B: P&L -$4,496, Sharpe -8.6, 1,033 contracts/day. Combined: P&L -$4,517, Sharpe -8.7.
-    French: A alpha t -0.33, R2 0.01; B alpha t -4.8 (its costs). Corr A,B -0.10 (121 days). DSR A own 0.14.
-    Caveats: A settles on kickoff + 4 h (proxy); the PROPOSED capital base (max committed) is $43 for B, so
-    B return levels are meaningless (Sharpe is base-free); total-21 DSR uses trial variance of the 12 trials
-    with daily series and is dominated by B. statsmodels broken with this scipy: OLS + Newey-West in numpy.
-  4 DRAFT HYPOTHESIS_v2_amendment4_DRAFT.md (not committed): kickoff <= 20:00 ET Oct 3 keeps 106 of 112,
-    drops 6 late CFB games (21:30 to 23:59 ET); last window ends by 00:30 ET Oct 4.
-Next: Divi reviews B walkthrough; decides Amendment 4.
-Decisions pending: commit v2 Amendment 4; merge t13-strategy-a after reviews; Mac power
+  1 v2 Amendment 4 on main: f6aa3b5, 20:25:33 ET, pushed (merge only), before 21:30. Runner applies it on the
+    holdout run (holdout_mid.amendment4, a132047): 106 of 112 kept (tested against the real candidates file).
+  2 Holdout download (ingest/holdout_download.py, --holdout-download required, writes only data/holdout_raw/,
+    gitignored; counts and ids only). Kalshi 779 game events Aug 1..Oct 3 (98 NFL, 681 CFB); ESPN kickoff for
+    772, 7 not found (FCS, 6 involve Albany; dropped and listed per v3). polymarket.com events Aug 1..Oct 3:
+    804 moneylines. Throttle Kalshi 4 req/s (half of the 20/s basic limit would be 10; collector shares the IP),
+    PM/ESPN 2/s, nice 19, 1 process; collector check every 10 min, pause on kalshi_ws outage or new 429.
+    At 20:41: 79/772 Kalshi games, 0 failures. ETA: Kalshi ~21:40 ET, polymarket.com ~21:50 ET.
+    Seal checks in strategy_a / strategy_b unchanged (final_test=True required).
+  3 Regression: kept numpy OLS + Newey-West; tests/test_ols_nw.py matches a hand-computed example (exact
+    fractions) to 1e-8. requirements unchanged.
+  4 report_book: B per contract (-4.86 c Webull, -3.67 c direct; x2 -9.86 / -7.47) and Sharpe only; B return
+    levels and regression coefficient levels dropped (t-stats, R2 kept); total-21 DSR note says B dominates.
+  5 Branch t15-final = t13 + merge of t14-laggard (e117058, pushed; nothing merged to main). 201 tests pass.
+    scripts/final_test_run.py: --i-am-the-one-run (refuses if results/holdout/ exists; lock created only after
+    the checklist passes) or --dry-run. Checklist: per-machine file counts per feed (needs data/vultr/ rsync copy
+    + GAPS_vultr.md), seconds_delay hash, map hashes, Amendment 4 count, gap parsing. Then lead test (Holm),
+    laggard (per-market delay, breaks, curve, capacity), A theta 0.80, B (5c, 10 s, 300 s) + placebo + x2,
+    combined book via report_book.build (training bases + trial Sharpes; OOS French "not available": factors
+    end 2026-08-31), RUN_LOG.md with git sha and ET start/end.
+    Dry run (synthetic fixtures, results/dryrun/, gitignored): completes in 14.7 s; all 20 output files and
+    15 required numbers.json keys present (110 keys); exercises the 3 s missing-delay fallback (1 market).
+    report_book refactor reproduces every training number exactly (only note texts + 1 new key differ).
+Not done: Vultr rsync to data/vultr/ (not touched, per rules); PM US dedup fix NOT deployed (read-time dedup).
+  The real run must be launched from a checkout of t15-final with data present (staleline/).
+FLAG: Mac on battery since ~7:45 PM.
+Decisions pending: when to rsync Vultr and launch the one run; merges after B review
 ```
 
 ## Log
