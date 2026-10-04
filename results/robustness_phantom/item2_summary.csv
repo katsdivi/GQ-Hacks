@@ -1,0 +1,3 @@
+venue,games,rows,residue_rows,share_residue_rows,grid_s,share_grid_residue_top,share_grid_mid_differ,mid_differ_to_undefined,mid_differ_both_defined,max_game_share_mid_differ,games_share_mid_differ_gt_0.1pct,mid_changes_all_total,mid_changes_clean_total,games_mid_changes_differ,games_clean_below_50_changes
+kalshi,88,9120086,58213,0.00638294419592096,1332138,0.012079829567207,0.012079829567207,16092,0,0.5084715212689257,48,96459,95253,52,2
+polymarket,88,3655289,0,0.0,1332138,0.0,0.0,0,0,0.0,0,111737,111737,0,0
