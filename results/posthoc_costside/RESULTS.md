@@ -202,3 +202,60 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 257 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 5
+
+Run 2026-10-04 05:44 ET.
+
+- Pre-game pairs lose even when both legs fill (h 0.01: 267 pairs -$24; orphans -$333): Kalshi's two markets
+  carry about a 1 cent overround pre-game, so a pair bought 1 cent under each last trade still costs about 0.99
+  plus maker fees. h 0.02 almost never fills.
+- Stop-loss exits hurt both entries (all CIs below 0, worse at the tighter stop): prices that fall 10 to 20 cents
+  after a fill recover often enough that cutting them sells low.
+- polymarket.com-anchored one-sided maker quotes: -0.045 [-0.112, +0.028]; the fills are adversely selected like
+  every other in-game maker fill.
+
+## Search stopped (2026-10-04 05:45 ET): out of genuinely new mechanisms
+
+Every mechanism on Divi's list has now been tried by this branch, the two helpers or the broad search: maker
+execution of every signal, two-sided spread capture (maker helper) and pairs with three orphan treatments,
+passive completion and calm filters, closing-line and pre-game drift, longshot bias by band, phase and league,
+slate correlation and time-slot liquidity (patterns helper), polymarket.com leadership by volatility regime, fee
+bands and fee rounding, take-profit and stop-loss exits, consensus and online weighting (broad search),
+two-market complement arbitrage and polymarket.com-anchored quoting. CME leadership could not be tested (1 mapped
+training game). Remaining variations would be the same grids made finer, which the brief rules out.
+
+**Final: 5 rounds, 117 own trials, 264 cumulative trials (own 117 + broad search 54 + maker helper 36 + patterns
+helper 57). No trial meets the stop condition. Reality Check p for the best of all 264 (patterns P3-08) = 0.33;
+Holm survivors: none.** Best own trial with >= 100 trades: R2.VOL.low.maker (polymarket.com lead, maker entry,
+calm Kalshi markets), ROC +0.050 [-0.008, +0.107], 687 trades; the same fills with 100-contract orders +0.051
+[-0.007, +0.108]. Neither clears 0, and against 264 trials neither is distinguishable from the best of noise.
+
+What it implies: on the training data, Kalshi football prices already reflect the information in every source we
+have (polymarket.com, sportsbook lines, ESPN, taker flow, own price history) to within the cost of trading, and
+passive execution does not escape that cost because the fills it gets are adversely selected. There is no
+recommendation for a holdout test ("run costside holdout" not warranted).
+
+### All Round 5 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R5.PAIRPRE.h0.01 | 1705 | -0.0218 | -0.0301 | -0.0131 | -2.095 | -0.0169 | -1.616 | -432.5 | -8.37 | 1 |
+| R5.PAIRPRE.h0.02 | 155 | -0.0315 | -0.0556 | -0.0035 | -3.061 | -0.0272 | -2.632 | -77.33 | -5.205 | 1 |
+| R5.ANCHOR | 695 | -0.0454 | -0.1116 | 0.0276 | -2.14 | -0.0374 | -1.748 | -194 | -2.56 | 1 |
+| R5.SL.R2.VOL.low.maker.sl0.2 | 687 | -0.0482 | -0.0882 | -0.0061 | -2.665 | -0.0416 | -2.284 | -227.7 | -3.67 | 1 |
+| R5.SL.R1.A.I12.A1.W300.sl0.2 | 689 | -0.0554 | -0.1026 | -0.0059 | -2.659 | -0.0475 | -2.264 | -227.9 | -3.458 | 1 |
+| R5.SL.R1.A.I12.A1.W300.sl0.1 | 689 | -0.088 | -0.1214 | -0.052 | -4.226 | -0.0804 | -3.831 | -335.9 | -7.676 | 1 |
+| R5.SL.R2.VOL.low.maker.sl0.1 | 687 | -0.0917 | -0.1206 | -0.0632 | -5.071 | -0.0854 | -4.69 | -392.3 | -7.921 | 1 |
+
+### Cumulative correction after Round 5
+
+Trials: own 117 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 264. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.330. DSR of that best: 1.29e-31 (project convention;
+normal-returns version 4.02e-10). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 264 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
