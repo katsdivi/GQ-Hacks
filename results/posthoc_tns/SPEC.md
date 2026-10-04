@@ -111,7 +111,7 @@ in-window prints), so the last print <= t is correct at window start. Exact dupl
 universe prints) and same-ns prints (87,290 share a time and slug with another print) are kept: they are
 separate fills. No raw T&S prints are written to the repo; only our simulated round trips.
 
-### Disclosure added 2026-10-04 03:40 ET (after the real-data run at 03:37 ET; rule, code and results unchanged)
+### Disclosure added 2026-10-04 03:38 ET (after the real-data run at 03:37 ET; rule, code and results unchanged)
 
 Read results/holdout/lead_Polymarket US_per_game.csv (staleline) as follows. (1) Between about 03:15 and
 03:31 ET, before this SPEC was committed: once with `head -c 300` in the shell, which displayed the header line
