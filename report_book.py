@@ -48,7 +48,7 @@ def a_trades(rows: pd.DataFrame, theta: float, placebo: bool = False) -> pd.Data
     rel = pd.to_datetime(e["kickoff"], utc=True) + pd.Timedelta(hours=4)
     e["day"] = rel.dt.tz_convert(ET).dt.date
     e["open_ns"] = e["fill_ts"].astype("int64")
-    e["close_ns"] = rel.astype("int64")
+    e["close_ns"] = rel.dt.as_unit("ns").astype("int64")      # ns under pandas 2 and 3 (pandas 3 defaults to us)
     e["capital"] = e["fill_price"] * QTY + e["fee_webull"]
     e["contracts"] = QTY
     e["notional"] = e["fill_price"] * QTY

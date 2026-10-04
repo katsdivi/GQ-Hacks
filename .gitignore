@@ -30,3 +30,4 @@ secrets/
 # final_test_run.py dry-run outputs (synthetic fixtures)
 results/dryrun/
 results/dryrun_gatefail/
+.venv-run/

@@ -288,13 +288,23 @@ def pm_trades(condition: str, home_index: int, start, end) -> tuple[pd.DataFrame
     return df[(df["ts"] >= start.value) & (df["ts"] <= end.value)].sort_values("ts", kind="stable"), truncated
 
 
+def complete(f: Path, kickoff) -> bool:
+    """A file is complete if it was written at or after its game's download window end (kickoff + 5 h). File
+    modification time is the write time (files are written once, after the whole window is fetched)."""
+    k = pd.Timestamp(kickoff)
+    k = k.tz_localize("UTC") if k.tzinfo is None else k.tz_convert("UTC")
+    return pd.Timestamp(f.stat().st_mtime, unit="s", tz="UTC") >= k + POST
+
+
 # ---------- main ----------
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--holdout-download", action="store_true", required=True,
                     help="required: download the SEALED holdout (save only)")
-    ap.parse_args()
+    ap.add_argument("--refetch-incomplete", action="store_true",
+                    help="refetch every game whose file was written before its window end (kickoff + 5 h)")
+    args = ap.parse_args()
     for d in ("kalshi", "polymarket", "espn"):
         _path(OUT / d).mkdir(parents=True, exist_ok=True)
     ok, why = collector_ok()
@@ -321,8 +331,15 @@ def main() -> None:
     log(f"ESPN kickoff found {ev['espn_kickoff'].notna().sum()}, not found {len(no_espn)}: {list(no_espn['k_event'])}")
     use = ev[ev["espn_kickoff"].notna()]
     sett, n_rows, fails = [], 0, []
+    n_refetch, not_ended = 0, []
     for i, r in enumerate(use.itertuples(), 1):
         f = _path(OUT / "kalshi" / f"{r.game_id}.parquet")
+        if args.refetch_incomplete and f.exists() and not complete(f, r.espn_kickoff):
+            if pd.Timestamp.now(tz="UTC") < r.espn_kickoff + POST:
+                not_ended.append(r.game_id)          # window still open: a refetch would be incomplete too
+            else:
+                f.unlink()
+                n_refetch += 1
         if not f.exists():
             try:
                 s, e = r.espn_kickoff - PRE, r.espn_kickoff + POST
@@ -336,6 +353,8 @@ def main() -> None:
             sett.append({"game_id": r.game_id, "side": side, "ticker": t, **settlement_fields(t)})
         if i % 50 == 0:
             log(f"kalshi {i}/{len(use)} games, rows written this run {n_rows}, failures {len(fails)}")
+    if args.refetch_incomplete:
+        log(f"refetch: {n_refetch} incomplete kalshi files refetched; window not yet ended (left as is): {not_ended}")
     pd.DataFrame(sett).to_csv(_path(OUT / "settlements.csv"), index=False)
     st = pd.DataFrame(sett)
     log(f"kalshi done: {len(use)} games, rows this run {n_rows}, failures {fails}; settlement status counts "
@@ -354,6 +373,9 @@ def main() -> None:
     n_pm, trunc = 0, []
     for r in pmap.itertuples():
         f = _path(OUT / "polymarket" / f"{r.game_id}.parquet")
+        if args.refetch_incomplete and f.exists() and not complete(f, r.kickoff) \
+                and pd.Timestamp.now(tz="UTC") >= r.kickoff + POST:
+            f.unlink()
         if f.exists():
             continue
         try:

@@ -96,6 +96,8 @@ def summarize(t: pd.DataFrame, n_games: int) -> pd.DataFrame:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--no-variants-log", action="store_true",
+                    help="reproduction of an already logged run: do not append duplicate variants.csv rows")
     a = ap.parse_args()
     g = games()
     use = g[g["covered"]].copy()
@@ -148,7 +150,8 @@ def main() -> None:
                         "edge_cents_mean": r.edge_webull_cents,
                         "notes": f"Strategy B v3+A1; {label}; k={r.k} m={r.m} T={r.T}; edge = net cents per contract "
                                  f"(Webull); direct {r.edge_direct_cents:.4f}; selected {sel}"})
-    pd.DataFrame(var).to_csv(VARIANTS, mode="a", header=False, index=False)
+    if not a.no_variants_log:
+        pd.DataFrame(var).to_csv(VARIANTS, mode="a", header=False, index=False)
     pd.set_option("display.width", 250, "display.max_columns", 40)
     print(f"games {len(use)} (excluded {len(g) - len(use)}), placebo pairs {len(pairs)}, valid share median "
           f"{vs['valid_share'].median():.3f}; selected {sel}; variants rows {len(var)}")
