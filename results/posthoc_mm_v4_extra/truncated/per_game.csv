@@ -1,0 +1,13 @@
+label,game,arm,kickoff_et,recording_end_et,ingame_recorded_min,share_game_covered,trades_in_recording,fills,contracts,fills_mark_after_cutoff,pnl60_usd,pnl60_c_per_contract,settled,pnlset_usd
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_fres_wsu,A,21:30,00:34,164.4,0.878,427,15,150.0,0,-0.1999999999999994,-0.13333333333333294,True,-12.2
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_fres_wsu,B,21:30,00:34,164.4,0.878,427,2,20.0,0,0.7000000000000001,3.5000000000000004,True,-3.4000000000000004
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_bay_asu,A,22:30,00:34,104.4,0.592,280,3,30.0,0,0.8499999999999999,2.833333333333333,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_bay_asu,B,22:30,00:34,104.4,0.592,280,1,10.0,0,0.5499999999999999,5.499999999999999,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_ewu_ucd,A,22:30,00:34,104.4,0.592,20,0,0.0,0,0.0,,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_ewu_ucd,B,22:30,00:34,104.4,0.592,20,0,0.0,0,0.0,,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_txst_sdsu,A,22:30,00:34,104.3,0.592,117,6,60.0,0,1.01,1.6833333333333331,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_txst_sdsu,B,22:30,00:34,104.3,0.592,117,1,10.0,0,0.44999999999999984,4.499999999999998,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_cin_ariz,A,23:00,00:34,74.4,0.45,214,5,50.0,0,0.7499999999999996,1.4999999999999991,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_cin_ariz,B,23:00,00:34,74.4,0.45,214,3,30.0,0,0.7499999999999996,2.4999999999999982,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_sjsu_haw,A,23:59,00:34,15.4,0.169,67,5,50.0,0,0.3499999999999981,0.6999999999999962,False,
+"descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1",cfb_20261004_sjsu_haw,B,23:59,00:34,15.4,0.169,67,0,0.0,0,0.0,,False,

@@ -1,0 +1,5 @@
+# posthoc-mm-v4-extra ledger (descriptive and synthetic only; NOT evidence for HYPOTHESIS_v4)
+
+| ET time | entry |
+|---|---|
+| 2026-10-04 08:03 | Part 1, truncated late games (descriptive, truncated recordings, outside HYPOTHESIS_v4 rule; not test set 1). Requested by Divi ("run the cutoff games as well"). Committed maker scripts/posthoc_mm_v4.py (1d3d68a) run once, Arm A and Arm B, F1, maker fee 0, on the 6 Oct 3 games kicking off after 20:00 ET, recorded portion only (Vultr, ends 00:34 ET). Window kickoff - 90 min to min(kickoff + 4.5 h, end of recording). The single run wrote per_game.csv and totals.csv, then crashed writing RESULTS.md (pandas to_markdown needs tabulate, not installed); RESULTS.md was rebuilt from those CSVs with --md-only, no recompute. Settlement only from data/holdout_raw/settlements.csv (no API calls): only fres_wsu is settled there. Results: Arm A 34 fills, +$2.76 at +60 s (+0.81 c/contract); Arm B 7 fills, +$2.45 (+3.5 c/contract); settlement (fres_wsu only) A -$12.20, B -$3.40. No CI (n small). |
