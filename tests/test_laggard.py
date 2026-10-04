@@ -271,3 +271,35 @@ def test_latency_curve_ci_is_game_bootstrap():
     assert (c.edge_ci_low, c.edge_ci_high) == (np.percentile(m, 2.5), np.percentile(m, 97.5))
     assert 10 <= c.edge_ci_low <= c.edge_ci_high <= 20
     assert "per_trade_normal_ci_low (not the plan's CI)" in c.index
+
+
+def test_gradual_move_is_stamped_at_detection_not_start():
+    """Kalshi mid 0.50, then +1 cent per second from label 100 (0.50) to label 107 (0.57); the 4-cent threshold
+    (vs the trailing 10 s minimum 0.50) is first crossed at label 104 (0.54). The follower stays at 0.50.
+    The entry must be decided at the detection label 104 and stamped 105 s, never at the start label + 1 s
+    (101 s), and the entry gap must be the gap at label 104 (4 cents), not at the start (0)."""
+    path = np.full(W, 0.50)
+    for i, lab in enumerate(range(100, 108)):
+        path[lab] = round(0.50 + 0.01 * i, 2)
+    path[108:] = 0.57
+    k = books(path, "kalshi", "K")
+    o = books(np.full(W, 0.50), "polymarket", "P")
+    sig = L.signals(k, o, "polymarket", T0, T0 + W * NS)
+    s = sig.iloc[0]
+    g0 = T0 // NS
+    assert s.entry_g == g0 + 104 and s.direction == 1
+    assert s.entry_decision_ns == (g0 + 105) * NS >= (g0 + 105) * NS
+    assert s.entry_decision_ns != (g0 + 101) * NS
+    assert s.gap_at_entry_cents == pytest.approx(4.0)                      # read at 104: 0.54 - 0.50
+    j = L.leadlag.detect_jumps(L._grid(k, "kalshi", g0, g0 + W - 1, []), 4.0, 10).iloc[0]
+    assert j.jump_g == g0 + 104 and j.start_g < g0 + 104                   # start label kept as information only
+
+
+def test_exit_reason_window_end_vs_timeout():
+    """Follower never converges: with a long window the exit is a 60 s timeout; with the window ending 20 s after
+    the jump the exit is at the last label with reason "window end"."""
+    k, o = books(step(100), "kalshi", "K"), books(np.full(W, 0.50), "polymarket", "P")
+    s = L.signals(k, o, "polymarket", T0, T0 + W * NS).iloc[0]
+    assert s.exit_reason == "timeout" and s.exit_g == s.entry_g + 60
+    s = L.signals(k, o, "polymarket", T0, T0 + 121 * NS).iloc[0]
+    assert s.exit_reason == "window end" and s.exit_g == T0 // NS + 120
