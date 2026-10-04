@@ -1,0 +1,20 @@
+,value
+label,"post-hoc, exploratory; broad search over strategies already seen to fail on training; walk-forward on training only; every grid point is a trial; holdout not run"
+trials,54
+rc_p_best,0.9905
+spa_p,0.621
+rc_best_trial,e_fine_I9_signal_sized
+best_by_sharpe,a_consensus_m3_pre_all
+dsr_best_54,0.0017906773990330103
+dsr_best_131,4.531403238047101e-05
+holm_survivors,4
+candidate_edges,0
+insample_cell,I9:signal
+insample_quantile,0.9
+insample_cut,0.19292
+insample_band,all
+insample_trades,73
+insample_roc,0.3311151948969708
+insample_net_c_per_contract,5.552054794520547
+insample_pnl_total,40.529999999999994
+insample_n_combinations,512
