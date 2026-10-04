@@ -1,0 +1,3 @@
+venue,largest_latency_ci_low_above_0,mean_crosses_0_at_s (linear interp.),mean_positive_at_all_latencies,mean_negative_at_all_latencies
+polymarket,,,False,True
+polymarket_us,5.0,,True,False

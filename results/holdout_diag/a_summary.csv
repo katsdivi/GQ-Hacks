@@ -1,0 +1,5 @@
+test,kind,n,recomputed_lag_matches_recorded,games_with_tied_max,games_lag0,median_margin_to_next,median_corr_lag0,median_corr_best_negative,median_both_moved_lag0,median_both_moved_lag-1,median_both_moved_lag+1
+Polymarket US,placebo,71,71,0,4,0.005102212457681866,-0.0004828971040999079,0.018785484043016172,13.0,14.0,12.0
+Polymarket US,real,76,76,0,1,0.011715453286676282,0.004205868267266107,0.030222697837952235,24.0,24.0,26.0
+polymarket.com,placebo,83,83,0,1,0.0034466384146864745,-0.0006013387126285609,0.016899020120376473,80.0,84.0,82.0
+polymarket.com,real,88,88,0,77,0.15495134054731616,0.37053043265832153,0.05583982621645493,449.0,305.5,363.5

@@ -1,0 +1,6 @@
+game_id,decision_time_et,direction,kalshi_mid_g-10 (illustrative),kalshi_mid_g (illustrative),fill_time_minus_decision_s,quote_used_received_minus_decision_s,quote_used_received_minus_fill_time_s,pmus_bid,pmus_ask,entry_px,fee_entry,exit_reason,exit_px,fee_exit,exit_quote_received_minus_exit_fill_s,net_cents,net_cents_per_contract
+cfb_20261003_fla_mizz,15:53:47,-1,0.315,0.28500000000000003,1.0,-15.103916032,-16.103916032,0.33,0.335,0.33,0.15,gap_closed,0.28,0.14,-1.768672256,21.0,2.1
+cfb_20261003_iw_sfa,21:36:38,1,0.91,0.965,1.0,-6.86110976,-7.86110976,0.895,0.93,0.93,0.05,gap_closed,0.975,0.02,-1.967090176,38.0,3.8
+cfb_20261004_nau_idst,20:33:03,-1,0.585,0.56,1.0,-29.486540288,-30.486540288,0.59,0.605,0.59,0.17,gap_closed,0.59,0.17,-1.664866816,-34.0,-3.4
+cfb_20261003_utrgv_etam,21:22:57,1,0.5549999999999999,0.585,1.0,-10.37023488,-11.37023488,0.5,0.56,0.56,0.17,gap_closed,0.575,0.17,-1.340583936,-19.0,-1.9
+cfb_20261003_norf_rmu,16:59:13,-1,0.9199999999999999,0.88,1.0,-21.6734336,-22.6734336,0.91,0.92,0.91,0.06,gap_closed,0.87,0.08,-1.431512064,26.0,2.6

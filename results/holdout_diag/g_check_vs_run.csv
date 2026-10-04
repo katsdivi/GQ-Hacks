@@ -1,0 +1,15 @@
+venue,latency_s,same_n,same_mean,same_ci
+polymarket,1.0,True,True,True
+polymarket,1.25,True,True,True
+polymarket,1.5,True,True,True
+polymarket,2.0,True,True,True
+polymarket,3.0,True,True,True
+polymarket,6.0,True,True,True
+polymarket,11.0,True,True,True
+polymarket_us,0.0,True,True,True
+polymarket_us,0.25,True,True,True
+polymarket_us,0.5,True,True,True
+polymarket_us,1.0,True,True,True
+polymarket_us,2.0,True,True,True
+polymarket_us,5.0,True,True,True
+polymarket_us,10.0,True,True,True
