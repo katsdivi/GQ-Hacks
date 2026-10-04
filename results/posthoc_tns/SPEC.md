@@ -110,3 +110,21 @@ polymarket_us, latency_s 1.0, filled, exit_fill_ns < C on the same 57 games (604
 in-window prints), so the last print <= t is correct at window start. Exact duplicate rows (5,479 among
 universe prints) and same-ns prints (87,290 share a time and slug with another print) are kept: they are
 separate fills. No raw T&S prints are written to the repo; only our simulated round trips.
+
+### Disclosure added 2026-10-04 03:40 ET (after the real-data run at 03:37 ET; rule, code and results unchanged)
+
+Read results/holdout/lead_Polymarket US_per_game.csv (staleline) as follows. (1) Between about 03:15 and
+03:31 ET, before this SPEC was committed: once with `head -c 300` in the shell, which displayed the header line
+(all column names, including lag_s) and the first data row only (cfb_20261002_lib_del, a non-qualifying game
+with no Polymarket US instrument; its result fields are blank). Then twice with pd.read_csv on the whole file
+(no usecols); columns used: game_id, kickoff_utc, machine, qualifying, window_start_ns; printed: count of
+qualifying games (76), count with window start before 17:00 ET (57), machine counts, and a table of game_id,
+kickoff ET, T&S print count and run fill count per game. lag_s, n_changes_kalshi, n_changes_other,
+excluded_s, excl_lo_g, excl_hi_g, excl_source, pin_start_g, kalshi_rows, other_rows and reason were loaded
+in memory but not displayed. (2) At 03:37 ET by scripts/posthoc_tns.py (whole file, no usecols); columns used:
+qualifying, window_start_ns, game_id, kickoff_utc, machine, pin_start_g, excl_lo_g, excl_hi_g; nothing from it
+printed except game_ids. Also read before the SPEC commit: results/holdout/laggard_trades.csv (whole file);
+printed its column names, the restricted count 604 fills / 39 games / mean +2.2397 c at 1 s before 17:00 ET,
+and per-game run fill counts for the 57 games (all already known from the prior diagnostic). Also read the T&S
+file before the SPEC commit for metadata only (slug print counts, timestamp formats, duplicates, price decimals);
+no prices or signals were computed.
