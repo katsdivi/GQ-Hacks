@@ -63,3 +63,27 @@ the holdout-period Kalshi trades already on disk (data/holdout_raw/kalshi/), run
 trial.
 
 Stop at 08:00 ET whatever the state. No experiments/variants.csv writes. LEDGER.md logs every step.
+
+## Amendment 1: CME maker variant (Divi's text, committed before any maker computation)
+
+Label: descriptive, post-hoc, 14 games; queue position unknown, trade-through fill is a lower bound on fills.
+Written after the Stage 1 results (01c3200) were seen; it is descriptive, not a trial, and adds no Stage 2.
+
+- After a Kalshi signal (same definition and timestamp convention as Stage 1, J = 5 c), post a resting limit order on
+  CME at the current best bid (for an up move) or best ask (down move), size 10, alive for W in {5, 30} s.
+  Implementation, per CME contract of the game: "up move" means the signal favours that contract's team (buy limit
+  at that contract's best bid in the book state at ts_event <= t); "down move" means it favours the other team (sell
+  limit at that contract's best ask). A contract with the needed side missing at t is not attempted (counted).
+- Fill rule (strict): filled only if a later CME TRADE prints strictly through our price within W, using CME trade
+  prints at CME venue time (ts_event in (t, t + W]): below our bid for a buy, above our ask for a sell. Touching our
+  price is NOT a fill. Fill price = our limit; fill time = the first such print. CME trade prints are on disk for
+  all 28 contracts (data/raw/fg_cg_train_trades.parquet, 103 to 4,546 prints per contract in [kickoff - 2 h,
+  kickoff + 5 h]; LA at CAR prints start mid-game), so no purchase is needed.
+- Exit: hold to settlement, and separately the CME bid (to close a buy) or ask (to close a sell) at fill + 60 s
+  (book state at ts_event <= fill + 60 s; missing side counted as "no exit quote").
+- Costs: $0.01 per contract per CME trade (CME 25-466 Appendix D). Break-even broker commission per contract per
+  trade = profit per contract after exchange fees / trades per contract (1 for settlement, 2 for the 60 s exit).
+- Placebo: unrelated-game Kalshi signals, same rule (game B's signals at the same time since kickoff on game A's
+  contracts, every ordered pair A != B).
+- Report per (W, exit): attempts, fill rate, profit per filled contract with game-bootstrap CI (2,000, seed
+  20261004), placebo, real minus placebo (with CI), top-5-games-excluded, break-even broker commission.
