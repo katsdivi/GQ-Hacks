@@ -49,3 +49,15 @@ Opportunities: 3039 in 84 games (home leg 1600, away leg 1439). Duration median 
 
 Settlement check (games with an executed opportunity at any L: 63): disagreements 63: ['cfb_20261003_aamu_jkst', 'cfb_20261003_akr_cmu', 'cfb_20261003_alcn_gram', 'cfb_20261003_alst_cook', 'cfb_20261003_ark_txam', 'cfb_20261003_army_lt', 'cfb_20261003_arpb_sou', 'cfb_20261003_aub_tenn', 'cfb_20261003_bc_smu', 'cfb_20261003_bgsu_moh', 'cfb_20261003_byu_tcu', 'cfb_20261003_cal_unlv', 'cfb_20261003_cit_scst', 'cfb_20261003_colg_harv', 'cfb_20261003_cor_gtwn', 'cfb_20261003_day_drke', 'cfb_20261003_elon_unh', 'cfb_20261003_emu_mass', 'cfb_20261003_fla_mizz', 'cfb_20261003_gaso_ccar', 'cfb_20261003_inst_sdak', 'cfb_20261003_iw_sfa', 'cfb_20261003_lou_ncst', 'cfb_20261003_md_neb', 'cfb_20261003_mer_vmi', 'cfb_20261003_mhu_liu', 'cfb_20261003_mia_clem', 'cfb_20261003_mich_minn', 'cfb_20261003_morg_vill', 'cfb_20261003_msu_wis', 'cfb_20261003_mtu_ku', 'cfb_20261003_navy_afa', 'cfb_20261003_ncat_bry', 'cfb_20261003_nd_unc', 'cfb_20261003_norf_rmu', 'cfb_20261003_ohio_kent', 'cfb_20261003_orst_csu', 'cfb_20261003_osu_iowa', 'cfb_20261003_penn_dart', 'cfb_20261003_pur_ill', 'cfb_20261003_rich_laf', 'cfb_20261003_syr_conn', 'cfb_20261003_tem_usf', 'cfb_20261003_tnst_wiu', 'cfb_20261003_tol_ball', 'cfb_20261003_tows_monm', 'cfb_20261003_ttu_colo', 'cfb_20261003_ucf_hou', 'cfb_20261003_uk_scar', 'cfb_20261003_ulm_usa', 'cfb_20261003_una_eky', 'cfb_20261003_ust_pre', 'cfb_20261003_utsa_rice', 'cfb_20261003_uva_fsu', 'cfb_20261003_valp_more', 'cfb_20261003_wash_usc', 'cfb_20261003_wmu_buff', 'cfb_20261003_wof_fur', 'cfb_20261003_wvu_isu', 'cfb_20261003_wyo_ndsu', 'cfb_20261003_ysu_siu', 'cfb_20261004_suu_utu', 'cfb_20261004_web_cp']. Kalshi: data/holdout_raw/settlements.csv; polymarket.com: Gamma API outcomePrices (cached data/pm_resolution/).
 Taker delay defaulted to 1 s (condition missing from holdout_seconds_delay.csv): 0 games.
+
+## Notes added after the run (04:30 ET, no numbers above changed)
+
+- (b) above is INVALID for P&L and the settlement check: polymarket.com resolutions came back empty (Gamma query
+  lacked closed=true), so P&L was NaN (printed 0) and every game showed as a disagreement. Corrected by a
+  settlement-only step over the saved executions (fix 7f35e9d): see RESULTS_b.md. Opportunity counts, durations,
+  sizes and executed/missed counts above are unaffected and identical there.
+- a3 reading: BOTH pre-fixed conditions hold (a2 IQR 0 ms with a1 median +90 ms not equal to a2's +70 ms; and a1
+  median +90 ms >= +30 ms with share > 0 = 0.989). The rule lists the offset branch first and the script applied
+  it in that order. Note also that the a1 placebo median is +80 ms and Mann-Whitney real vs placebo p = 0.64 on
+  the receipt clock (p = 0.024 on venue time), so the receipt-clock lag is not distinguishable from unrelated-game
+  pairs.
