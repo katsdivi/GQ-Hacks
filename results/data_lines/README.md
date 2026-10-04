@@ -38,6 +38,15 @@ Spread values are the home and away points (home -1.5 means home favored). Money
 | Polymarket | Extra venue, not a sportsbook. CLOB `prices-history` returns timestamped prices; data already in data/raw/polymarket_*. |
 | TeamRankings odds-history | Season results pages with line history; ToS not cleared. Not used. |
 
+## Round 2 probes (still no free intraday source)
+- ESPN core odds: providers returned per game are ESPN BET (58) and ESPN Bet Live Odds (59) for most games, and DraftKings (100) alone for some bowl games (e.g. 401779840). `/odds/{p}/history/{0,1}/movement?limit=1000` returns count 0 for every provider id tried (58, 59, 100, 40, 38, 31, 1002, 1003, 1004, 2000, 45) on 4 games (NFL 401772830 and 401772613, CFB 401752665, bowl 401779840). `/odds/{p}/history` and `/propBets` are 404. `predictor`, `probabilities` (about 170 to 185 timestamped items, but ESPN's own win-probability model, not a book) and `powerindex` exist and are not line moves.
+- ESPN web JSON (cdn.espn.com/core/.../game?xhr=1, site.api summary, site.web.api scoreboard header): zero hits for movement or lineMovement; scoreboard header carries open/current only.
+- Wayback CDX: espn.com/nfl/odds has 106 captures Sep 2025 to Jan 2026 but the HTML holds no odds data (JS rendered). Archived Pinnacle guest API (300) and Action Network API (112) captures are random unrelated endpoints, not per-game series. Dead end.
+- GitHub: nielsenz/odds-api-current-save and G4-Admin/nfl-line-tracker archive Odds API snapshots (daily to hourly) but only from Sep 2026 on, so they miss the training window. They are useful only as a forward collector pattern. A third repo (harbin-nfl-analytics) archives ESPN open/close and states it has no verified capture timestamps.
+- Reddit/X/Kaggle/HuggingFace searches: no dataset with several timestamps per game for 2025 football. Kaggle spreadspoke and Australian Sports Betting Excel are closing only.
+- Betfair BASIC (free, 1 minute last traded price): requires a Betfair account and log in to download, which was not done; NFL availability unconfirmed, and it is an exchange, not a book. Report only.
+- OddsPortal/OddsHarvester, Covers, Action Network: movement with timestamps exists but terms or robots forbid scraping, so skipped. Apify spend remains $0.
+
 ## Apify
 Spent: $0. Runs: none. Candidate actors were priced (zen-studio/action-network-odds $0.00399 per line-history game, parseforge/covers-scraper $0.004) but both scrape sites with restrictive terms and cover current games.
 
