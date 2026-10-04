@@ -1,0 +1,2 @@
+label,candidates,eval_candidates,eval_weeks,first_eval_week,last_eval_week,ridge_oos_corr,m1_oos_auc,m2_oos_auc,best_cells_chosen,missing_inputs
+"post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only",18565,17216,19,2025-09-08,2026-01-12,0.014626447844334724,0.7693444663763206,0.7686646377868303,A:favorite:6; I9:signal:5; I13:placebo:2; I7:placebo:2; I9:placebo:1; I4:favorite:1; I12:signal:1,

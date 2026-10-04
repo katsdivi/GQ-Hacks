@@ -1,0 +1,23 @@
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only
+candidates 18565; eval weeks 19 (2025-09-08 to 2026-01-12); missing []
+M1 done
+M2 done
+                                                                                                            label                                book  trades  games  roc_mean  roc_ci_lo  roc_ci_hi  net_c_per_contract  pnl_total  hit_rate  mean_breakeven  game_days  sharpe_daily  max_drawdown  worst_day  excl_top5_roc  excl_top5_pnl  sharpe_x365
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only                         M1 logistic    2463  938.0   -0.1214    -0.2222    -0.0187             -1.7869    -440.12    0.3212          0.3413      107.0       -0.1610        487.81    -103.47        -0.1607        -600.59      -3.0764
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only                     M2 tree depth 3    2751  964.0   -0.1538    -0.2247    -0.0765             -3.0233    -831.70    0.3799          0.4101      110.0       -0.3402        831.70     -97.16        -0.1775        -965.43      -6.4991
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only           secondary: ridge pred > 0     935  606.0   -0.0702    -0.1890     0.0631             -3.1525    -294.76    0.4406          0.4832       93.0       -0.2255        346.39     -73.01        -0.1543        -382.26      -4.3083
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only         benchmark a: all candidates   17216 1023.0   -0.0948    -0.1096    -0.0797             -3.2678   -5625.86    0.3187          0.5312      112.0       -0.6413       5625.86    -315.68        -0.0977       -5710.68     -12.2522
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only benchmark b: best cell walk-forward     514  514.0   -0.1122    -0.2028    -0.0136             -4.4070    -226.52    0.5195          0.5635       77.0       -0.2422        249.62     -48.39        -0.1674        -268.45      -4.6264
+post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only               benchmark c: no trade       0    NaN       NaN        NaN        NaN                 NaN       0.00       NaN             NaN        NaN           NaN           NaN        NaN            NaN            NaN          NaN
+                                                                                                                                   0
+label              post-hoc, exploratory; meta-model over strategies already seen to fail on training; walk-forward on training only
+candidates                                                                                                                     18565
+eval_candidates                                                                                                                17216
+eval_weeks                                                                                                                        19
+first_eval_week                                                                                                           2025-09-08
+last_eval_week                                                                                                            2026-01-12
+ridge_oos_corr                                                                                                              0.014626
+m1_oos_auc                                                                                                                  0.769344
+m2_oos_auc                                                                                                                  0.768665
+best_cells_chosen                  A:favorite:6; I9:signal:5; I13:placebo:2; I7:placebo:2; I9:placebo:1; I4:favorite:1; I12:signal:1
+missing_inputs                                                                                                                      
