@@ -103,8 +103,11 @@ def kalshi_one(r, times: dict, validate: bool) -> dict:
     mid = pd.read_parquet(mid_path) if mid_path.exists() else empty()
     pieces, info = [], {"game_id": r.game_id, "kickoff": ko}
     lo_all, hi_all = None, None
-    for team, away in ((r.home, False), (r.away, True)):
-        tk = f"{r.kalshi_event}-{team}"
+    home_tk = r.kalshi_ticker
+    others = [m for m in mid["market_id"].dropna().unique() if m != home_tk] if len(mid) else []
+    # Away ticker from the existing file when present: team codes such as OH can be M-OH in the ticker.
+    away_tk = others[0] if len(others) == 1 else f"{r.kalshi_event}-{r.away}"
+    for tk, away in ((home_tk, False), (away_tk, True)):
         ot = times.get(tk) or market_time_api(tk)
         if ot is None:
             info[f"{'away' if away else 'home'}_err"] = "no open/close time"
@@ -333,8 +336,11 @@ def run_candles(limit: int | None) -> None:
         ko = utc(r.kickoff_utc_espn)
         parts, info = [], {"game_id": r.game_id}
         try:
-            for team, is_home in ((r.home, True), (r.away, False)):
-                tk = f"{r.kalshi_event}-{team}"
+            midf = RAW / "kalshi_only" / f"{r.game_id}.parquet"
+            mids = pd.read_parquet(midf, columns=["market_id"])["market_id"].dropna().unique() if midf.exists() else []
+            others = [m for m in mids if m != r.kalshi_ticker]
+            away_tk = others[0] if len(others) == 1 else f"{r.kalshi_event}-{r.away}"
+            for tk, team, is_home in ((r.kalshi_ticker, r.home, True), (away_tk, r.away, False)):
                 ot = times.get(tk) or market_time_api(tk)
                 if ot is None:
                     continue
@@ -357,14 +363,46 @@ def run_candles(limit: int | None) -> None:
 
 # ---------- report ----------
 
+VAL_COLS = ["game_id", "kickoff", "val_home_new", "val_home_old", "val_home_only_new", "val_home_only_old",
+            "val_away_new", "val_away_old", "val_away_only_new", "val_away_only_old", "open", "close", "n_mid",
+            "n_full", "n_pre", "n_post", "first_trade"]
+
+
+def read_manifest(mf: Path) -> pd.DataFrame:
+    """Manifests are appended row by row and validation/error rows carry different columns (the header is
+    the first row's), so rows are mapped by field count."""
+    import csv
+    with open(mf) as fh:
+        rows = list(csv.reader(fh))
+    head, out = rows[0], []
+    for r in rows[1:]:
+        if len(r) == len(head):
+            out.append(dict(zip(head, r)))
+        elif len(r) == len(VAL_COLS):
+            out.append(dict(zip(VAL_COLS, r)))
+        elif len(r) == len(head) + 1 and head[:2] == ["game_id", "kickoff"]:
+            out.append({"game_id": r[0], "error": f"partial: {r[2]}"})
+        elif len(r) == 2:
+            out.append({"game_id": r[0], "error": r[1]})
+        else:
+            out.append({"game_id": r[0], "error": f"unparsed manifest row ({len(r)} fields)"})
+    m = pd.DataFrame(out).replace("", np.nan)
+    for c in m.columns:
+        if c.startswith(("n_", "val_", "pages", "stuck", "fills_", "rows_", "bid_")):
+            m[c] = pd.to_numeric(m[c], errors="coerce")
+    if "error" not in m:
+        m["error"] = np.nan
+    return m
+
+
 def report() -> None:
     res = {}
     for venue in ("kalshi", "polymarket"):
         mf = OUT / f"{venue}_manifest.csv"
         if not mf.exists():
             continue
-        m = pd.read_csv(mf).drop_duplicates("game_id", keep="last")
-        ok = m[m.get("error").isna()] if "error" in m else m
+        m = read_manifest(mf).drop_duplicates("game_id", keep="last")
+        ok = m[m["error"].isna()]
         ko = pd.to_datetime(ok["kickoff"], utc=True)
         ft = pd.to_datetime(ok["first_trade"], utc=True)
         pre_h = ((ko - ft).dt.total_seconds() / 3600).dropna()
@@ -377,7 +415,7 @@ def report() -> None:
             r["mid_trades_median"] = float(ok["n_mid"].median())
             vcols = [c for c in ok.columns if c.startswith("val_")]
             if vcols:
-                v = ok.dropna(subset=["val_home_new"])
+                v = ok.dropna(subset=["val_home_new"]).fillna({c: 0 for c in vcols})
                 r["validation_games"] = int(len(v))
                 for s in ("home", "away"):
                     r[f"val_{s}_new_total"] = int(v[f"val_{s}_new"].sum())
@@ -389,7 +427,17 @@ def report() -> None:
         else:
             r["stuck_steps_total"] = int(ok["stuck_steps"].sum())
             r["pages_max"] = int(ok["pages"].max())
+            r["fills_rows_median"] = float(ok["fills_rows"].median())
+            r["last_trade_after_kickoff_h_median"] = float(((pd.to_datetime(ok["last_trade"], utc=True) - ko).dt.total_seconds() / 3600).median())
         res[venue] = r
+    cf = OUT / "kalshi_candles_manifest.csv"
+    if cf.exists():
+        c = read_manifest(cf).drop_duplicates("game_id", keep="last")
+        okc = c[c["error"].isna()]
+        res["kalshi_candles"] = {"games": int(len(c)), "ok": int(len(okc)), "errors": int(len(c) - len(okc)),
+                                 "rows_1m_median": float(okc["rows_1m"].median()),
+                                 "rows_60m_median": float(okc["rows_60m"].median()),
+                                 "games_with_bid_ask_1m": int((okc["bid_ask_1m_nonnull"] > 0).sum())}
     print(json.dumps(res, indent=1, default=str))
     (OUT / "coverage.json").write_text(json.dumps(res, indent=1, default=str))
 

@@ -1,0 +1,47 @@
+{
+ "kalshi": {
+  "games": 1267,
+  "ok": 1267,
+  "errors": 0,
+  "pre_hours_median": 234.41074134583332,
+  "pre_hours_p10": 147.73818573050002,
+  "pre_hours_p90": 628.2331652068333,
+  "trades_per_game_median": 9497.0,
+  "pre_trades_median": 1610.0,
+  "post_trades_median": 0.0,
+  "mid_trades_median": 7803.0,
+  "validation_games": 50,
+  "val_home_new_total": 618868,
+  "val_home_old_total": 618868,
+  "val_home_only_new_total": 0,
+  "val_home_only_old_total": 0,
+  "val_away_new_total": 704580,
+  "val_away_old_total": 704580,
+  "val_away_only_new_total": 0,
+  "val_away_only_old_total": 0,
+  "validation_games_exact": 50
+ },
+ "polymarket": {
+  "games": 977,
+  "ok": 977,
+  "errors": 0,
+  "pre_hours_median": 117.63166666666666,
+  "pre_hours_p10": 78.91652777777777,
+  "pre_hours_p90": 179.47722222222222,
+  "trades_per_game_median": 778.0,
+  "pre_trades_median": 220.0,
+  "post_trades_median": 2.0,
+  "stuck_steps_total": 0,
+  "pages_max": 3,
+  "fills_rows_median": 1729.0,
+  "last_trade_after_kickoff_h_median": 5.330277777777778
+ },
+ "kalshi_candles": {
+  "games": 1267,
+  "ok": 1267,
+  "errors": 0,
+  "rows_1m_median": 2477.0,
+  "rows_60m_median": 556.0,
+  "games_with_bid_ask_1m": 1267
+ }
+}
