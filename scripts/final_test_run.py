@@ -41,6 +41,7 @@ import report_book as RB  # noqa: E402
 import run_strategy_a as RA  # noqa: E402
 import run_strategy_b as RBB  # noqa: E402
 import strategy_a as A  # noqa: E402
+import strategy_a_maker as AM  # noqa: E402
 import strategy_b as B  # noqa: E402
 
 NS = 1_000_000_000
@@ -53,10 +54,11 @@ REQUIRED = ["RUN_LOG.md", "checklist.json", "lead_decisions.json", "lead_polymar
             "lead_polymarket.com_placebo.csv", "lead_Polymarket US_per_game.csv", "lead_Polymarket US_placebo.csv",
             "receipt_diagnostic.csv", "laggard_trades.csv", "laggard_latency_curve.csv", "laggard_capacity.csv",
             "strategy_a_rows.parquet", "strategy_a_summary.csv", "strategy_a_checks.csv",
+            "strategy_a_maker_summary.csv", "strategy_a_maker_roc_ci.csv",
             "strategy_b_trades.parquet", "strategy_b_summary.csv", "strategy_b_placebo_summary.csv",
             "strategy_b_costs_x2.csv", "equity_oos.png", "numbers.json"]
 REQUIRED_KEYS = ["OOS.lead.polymarket.com.decision", "OOS.lead.Polymarket US.decision", "OOS.lead.n_candidates",
-                 "OOS.laggard.n_trades", "OOS.A.n_games", "OOS.A.roc_webull", "OOS.A.roc_webull_ci",
+                 "OOS.laggard.n_trades", "OOS.A.n_games", "OOS.A_maker.attempts", "OOS.A_maker.fills", "OOS.A.roc_webull", "OOS.A.roc_webull_ci",
                  "OOS.B.n_trades", "OOS.B.edge_webull_cents", "OOS.B.edge_webull_ci", "OOS.season_first_day",
                  "OOS.season_last_day", "OOS.A.sharpe", "OOS.combined.pnl_total", "OOS.corr_A_B.days_either_traded"]
 
@@ -285,6 +287,38 @@ def orientation_gate(c: Ctx, games: list, num: dict) -> tuple[bool, str]:
     return ok, msg
 
 
+def strategy_a_maker(c: Ctx, num: dict, games: list) -> pd.DataFrame:
+    """v3 Amendment 5: Strategy A-maker at theta 0.80 on the same holdout games (final_test=True)."""
+    rows = []
+    for g in games:
+        for r in AM.evaluate_game(a_ticks(c, g), g, final_test=True):
+            rows.append(r)
+    rows = pd.DataFrame(rows)
+    rows.drop(columns=[x for x in rows.columns if x.startswith("_")], errors="ignore").to_parquet(c.out / "strategy_a_maker_rows.parquet")
+    s = AM.summarize(rows)
+    s.to_csv(c.out / "strategy_a_maker_summary.csv", index=False)
+    ci = []
+    for pl, r in rows.groupby("placebo"):
+        e = r[r["entered"].astype(bool)]
+        for sample, d in (("primary", e), ("costs x2", AM.costs_x2(e) if len(e) else e)):
+            for line in ("webull", "direct"):
+                x = d[f"roc_{line}"].to_numpy(float) if len(d) else np.array([])
+                lo, hi = RA.boot_ci(x, np.random.default_rng(RA.SEED))
+                ci.append({"leg": "placebo (underdog)" if pl else "favorite", "sample": sample,
+                           "line": line if line == "webull" else "direct (taker formula, upper bound)", "n": len(x),
+                           "roc_mean": x.mean() if len(x) else np.nan, "ci_lo": lo, "ci_hi": hi})
+    ci = pd.DataFrame(ci)
+    ci.to_csv(c.out / "strategy_a_maker_roc_ci.csv", index=False)
+    f = s.set_index("leg").loc["favorite"]
+    num["OOS.A_maker.attempts"] = int(f["attempts"])
+    num["OOS.A_maker.fills"] = int(f["fills"])
+    num["OOS.A_maker.win_minus_fill"] = float(f["win_minus_fill"])
+    fw = ci[(ci["leg"] == "favorite") & (ci["sample"] == "primary") & (ci["line"] == "webull")].iloc[0]
+    num["OOS.A_maker.roc_webull"] = float(fw["roc_mean"])
+    num["OOS.A_maker.roc_webull_ci"] = [float(fw["ci_lo"]), float(fw["ci_hi"])]
+    return rows
+
+
 def strategy_a(c: Ctx, num: dict, games: list) -> pd.DataFrame:
     rows = []
     for g in games:
@@ -394,6 +428,8 @@ def run(c: Ctx) -> dict:
         return finish(c, num, start, t0, gi, gate_msg)
     rows = strategy_a(c, num, games)
     print(f"Strategy A: games {num['OOS.A.n_games']}, trades {num['OOS.A.n_trades']}")
+    strategy_a_maker(c, num, games)
+    print(f"Strategy A-maker: attempts {num['OOS.A_maker.attempts']}, fills {num['OOS.A_maker.fills']}")
     bt, b2 = strategy_b(c, num)
     print(f"Strategy B: games {num['OOS.B.n_games']}, trades {num['OOS.B.n_trades']}")
     t_rows, t_bt, t_b2, t_sel, t_kos = c.training
@@ -401,7 +437,7 @@ def run(c: Ctx) -> dict:
     kos = pd.concat([pd.Series(pd.to_datetime(rows["kickoff"], utc=True)),
                      pd.to_datetime(c.b_games["espn_kickoff"], utc=True)], ignore_index=True)
     bnum, _, _ = RB.build(rows.assign(theta=RB.A_THETA), bt, b2, SEL_B, kos, c.fac, c.out, prefix="OOS.",
-                          label="Out-of-sample", bases=bases, trial_srs=trial, png="equity_oos.png")
+                          label="Out-of-sample", bases=bases, trial_srs=trial, png="equity_oos.png", n_total=22)
     num.update({k: v["value"] for k, v in bnum.items()})
     return finish(c, num, start, t0, gi, gate_msg)
 
@@ -438,6 +474,7 @@ def real_ctx(checklist_only: bool = False) -> Ctx:
     st = pd.read_csv(hr / "settlements.csv")
     home = st[st["side"] == "home"].set_index("game_id")["result"]
     ev = ev[ev["espn_kickoff"].notna()]
+    ev = ev[pd.to_datetime(ev["espn_kickoff"], utc=True) <= AB_CUTOFF]          # v3 Amendment 4
     a_games = pd.DataFrame({"game_id": ev["game_id"], "league": ev["league"], "home": ev["k_home_code"],
                             "away": ev["k_away_code"], "kalshi_event": ev["k_event"], "kalshi_ticker": ev["k_home_ticker"],
                             "kickoff_utc_espn": ev["espn_kickoff"], "kickoff_source": "espn",
@@ -445,6 +482,7 @@ def real_ctx(checklist_only: bool = False) -> Ctx:
     a_meta = st.assign(price_ranges=None)
     pm = pd.read_csv(hr / "pm_map.csv")
     b_games = pd.DataFrame({"game_id": pm["game_id"], "espn_kickoff": pm["kickoff"]})
+    b_games = b_games[pd.to_datetime(b_games["espn_kickoff"], utc=True) <= AB_CUTOFF]   # v3 Amendment 4
     b_games = b_games[[(hr / "kalshi" / f"{g}.parquet").exists() and (hr / "polymarket" / f"{g}.parquet").exists()
                        for g in b_games["game_id"]]]
     fac = pd.read_csv(ROOT / "data" / "raw" / "french" / "factors_daily.csv", parse_dates=["date"])
@@ -488,7 +526,7 @@ def main() -> None:
     numbers = run(c)
     gate_failed = not numbers.get("OOS.orientation_gate", {}).get("value", {}).get("pass", False)
     req = [f for f in REQUIRED if not (gate_failed and f.startswith(("strategy_", "equity_oos")))]
-    req_keys = [k for k in REQUIRED_KEYS if not (gate_failed and k.split(".")[1] in ("A", "B", "season_first_day",
+    req_keys = [k for k in REQUIRED_KEYS if not (gate_failed and k.split(".")[1] in ("A", "A_maker", "B", "season_first_day",
                                                                                       "season_last_day", "combined", "corr_A_B"))]
     missing = [f for f in req if not (c.out / f).exists()]
     missing_keys = [k for k in req_keys + ["OOS.orientation_gate"] if k not in numbers]
