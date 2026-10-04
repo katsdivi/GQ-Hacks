@@ -34,3 +34,5 @@ results/dryrun_gatefail/
 results/holdout/inputs_a_meta.csv
 results/holdout_diag/h2_tns_trades_39_games.csv
 results/holdout_diag/h3_trade_delays.csv
+results/posthoc_costside_maker/per_trade/
+results/posthoc_costside_maker/trials_log_full.csv
