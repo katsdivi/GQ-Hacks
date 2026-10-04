@@ -13,7 +13,7 @@ Steps (resumable; a game whose files exist is skipped):
      P(home)). Settlement fields (status, result, settlement_value_dollars) -> settlements.csv.
   4. polymarket.com (current series 12185 NFL, 12756 CFB) moneylines matched to the Kalshi games
      (download_all.match_games) -> pm_map.csv; taker trades in the same window -> polymarket/<game_id>.parquet.
-Throttle: Kalshi 4 requests/s (basic read limit 20/s; the backup collector shares this IP), polymarket.com and
+Throttle: Kalshi 2 requests/s (4/s caused 429s on the backup collector's REST polling, which shares this IP), polymarket.com and
 ESPN 2/s. Every 10 min the collector is checked: a Kalshi feed outage (kalshi_ws not connected, or no delivered
 message for > 60 s) or a new "HTTP 429" line in out/collector.log pauses the download for 5 min, then rechecks.
 Late games with no settlement yet stay unsettled (excluded by the existing rules); re-run later for settlements.
@@ -46,7 +46,7 @@ PRE, POST = pd.Timedelta(hours=2), pd.Timedelta(hours=5)
 K_SERIES = {"NFL": "KXNFLGAME", "CFB": "KXNCAAFGAME"}
 PM_SERIES = {"NFL": "12185", "CFB": "12756"}
 MON = {m: i for i, m in enumerate("JAN FEB MAR APR MAY JUN JUL AUG SEP OCT NOV DEC".split(), 1)}
-RATE = {"kalshi": 4.0, "pm": 2.0, "espn": 2.0}
+RATE = {"kalshi": 2.0, "pm": 2.0, "espn": 2.0}   # Kalshi 4/s caused 3 collector REST 429s (20:55 ET); 2/s
 CHECK_EVERY_S, PAUSE_S = 600, 300
 HB_DIR = ROOT / "data" / "live" / "heartbeat"
 COLLECTOR_LOG = ROOT / "out" / "collector.log"
@@ -300,13 +300,20 @@ def main() -> None:
     ok, why = collector_ok()
     log(f"start; collector {'OK' if ok else 'NOT OK'} ({why}); rates {RATE}")
     _state["last_check"] = time.monotonic()
-    ev = kalshi_events()
+    cached = _path(OUT / "events.csv")
+    if cached.exists():                  # resume: reuse the saved event list (ids, names, ESPN kickoffs)
+        ev = pd.read_csv(cached, parse_dates=["k_date"])
+        ev["espn_kickoff"] = pd.to_datetime(ev["espn_kickoff"], utc=True)
+        log(f"resumed from events.csv: {len(ev)} events")
+    else:
+        ev = kalshi_events()
     log(f"kalshi events with 2 markets, {LO.date()}..{HI.date()}: {len(ev)} "
         f"({(ev['league'] == 'NFL').sum()} NFL, {(ev['league'] == 'CFB').sum()} CFB)")
-    cache, ko = {}, []
-    for r in ev.itertuples():
-        ko.append(espn_kickoff(r._asdict(), cache))
-    ev["espn_kickoff"] = ko
+    if "espn_kickoff" not in ev:
+        cache, ko = {}, []
+        for r in ev.itertuples():
+            ko.append(espn_kickoff(r._asdict(), cache))
+        ev["espn_kickoff"] = ko
     ev["game_id"] = [f"{r.league.lower()}_{(r.espn_kickoff if pd.notna(r.espn_kickoff) else pd.Timestamp(r.k_date, tz='UTC')):%Y%m%d}_"
                      f"{r.k_away_code.split('-')[-1].lower()}_{r.k_home_code.split('-')[-1].lower()}" for r in ev.itertuples()]
     ev.to_csv(_path(OUT / "events.csv"), index=False)
