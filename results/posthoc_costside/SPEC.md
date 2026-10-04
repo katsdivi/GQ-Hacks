@@ -295,3 +295,76 @@ trade within 10 min before t. Buy the team with the larger Elo minus Kalshi gap 
 - e in {0.05, 0.10} x {taker (5-min window), maker (limit = own last trade, W 300 s)} = 4 trials.
 
 Cumulative own trials after Round 10: 152 + 4 = 156.
+
+## Resumed again (2026-10-04 05:59 ET): literature-sourced mechanisms, Rounds 11 to 17 (all pre-listed here before any of them touches data)
+
+Source document: research/trading_ideas.md (GQ HACKS/research, research pass 2026-10-04); each round cites its
+rule. Time cap 09:30 ET. The "mechanisms exhausted" status after Round 10 is superseded for these new mechanisms.
+
+**Common rules for Rounds 11 to 17.** A set, walk-forward test weeks (as before); anything "fitted" uses only games
+from earlier ET weeks. ESPN: summaries from ../wt-idea6/data/espn_raw (read-only), orientation by the Idea 6 rule;
+strict defect filter of Round 7 (any play outside [kickoff, kickoff + 6 h] or > 5 min out of order drops the
+game); only plays with wallclock <= the decision time are used. **ESPN known-time = play wallclock + 60 s** (as
+Ideas 9/10 and Round 7; the research rules that decide at the play time are moved to +60 s to avoid using ESPN data
+before it is published). Kalshi price P(t) = last print at or before t (P(home) both markets; team's own market for
+team prices). **Entry: first own-market print at or after decision + 5 s, within 60 s, + 1 c, cap 0.99, taker fee
+rounded up per 10-contract order (research rule); maker variant (where listed): limit = own last print at the
+decision, filled on a strict trade-through in (decision + 5 s, decision + 60 s].** Exits: settlement, or the
+first own print at or after entry + H, price - 1 c, taker fee (no print within 120 s: settlement). In-game window:
+regulation only (periods 1 to 4). Kickoff price K = median of Kalshi P(home) prints in the 5 min before ESPN
+kickoff (as the research rule; games without one are skipped). Game clock: min_left = (4 - period) x 15 + clock
+minutes. Thin-book gate (research note 2) where listed: >= 5 prints (both markets) in the 3 min before the decision.
+
+### Round 11: pregame-anchored in-game model (Rule 1; Clegg, Song, Cartlidge, arXiv 2605.16066) - 2 trials
+Model p_home = Phi((lead + m) / (s x sqrt(min_left))), lead = home - away score at the last play known at t;
+m set so p_home = K at kickoff (min_left = 60, lead 0): m = s x sqrt(60) x Phi^-1(K); s fitted walk-forward = SD of
+(final lead - lead at the state) / sqrt(min_left) over all sampled states of earlier-week games. Decisions: each
+game minute boundary from Q2 start to 5 min left (decision time = wallclock of the first play at or past that
+boundary + 60 s). Gate: >= 5 prints in prior 3 min. Signal: |p - P(t)| >= 0.06; buy the underpriced team; first
+qualifying signal per game; hold to settlement. Trials: taker, maker. Descriptive: P&L by |gap| bucket 0.06 to
+0.10, > 0.10 (the 0.04 to 0.06 bucket is reported descriptively from signals that did not trade).
+
+### Round 12: change-vs-change underreaction (Rules 2 and 3; arXiv 2606.07811) - 10 trials, one family
+Event: a play with |dWP| >= 0.05, dWP = ESPN home WP after the play minus after the previous play (Kalshi home
+orientation). R = P(t_e + 60 s) - P(t_e - 15 s), t_e = play wallclock. Decision t_d = t_e + 60 s. If R / dWP < 0.6,
+buy in the dWP direction. Liquidity = Kalshi prints in [t_d - 10 min, t_d]; split at the walk-forward median of that
+count over earlier-week events. Arms: NS = non-salient (not a scoring play), ALL = every play. Cells: {NS, ALL} x
+{low, high liquidity} x exit {H 6 min (primary), settlement} = 8 taker trials, plus the primary cell (NS, low) with
+maker entry x 2 exits = 2. One open position per game at a time (6-min exit) or one per game (settlement).
+**Primary: R12.NS.low.taker.H360.**
+
+### Round 13: surprise-lead underdog (Rule 4; Angelini, De Angelis, Singleton, IJF 2022) - 4 trials
+Universe: one side's K <= 0.30 (K as P(team)). Event: first play end at which the underdog leads by >= 1, in Q3/Q4
+(primary) or Q1/Q2 (secondary). Decision = that play's wallclock + 60 s; buy the underdog; hold to settlement.
+{Q34, Q12} x {taker, maker}. Descriptive control: walk-forward cell baseline (earlier weeks' states of trailing-at-
+kickoff teams that lead, same 5 c price bin and 15-min game bin) win rate vs realised win.
+
+### Round 14: disposition-effect lead state (Rule 5; QJF 2012 Tradesports NFL) - 2 trials
+Decisions: each game minute from Q2 start to 8 min left in Q4 (as Round 11 timing). Leader ahead by 3 to 14.
+Cell = lead bucket {3 to 7, 8 to 14} x quarter {2, 3, 4} x leader kickoff price bucket {< 0.35, 0.35 to 0.65,
+> 0.65}. Walk-forward rate = mean final win of leaders over all earlier-week game-minute states in the cell (>= 30
+earlier games in the cell). Buy the leader if P(leader) <= rate - 0.03; first per game; hold. {taker, maker}.
+
+### Round 15: skilled-wallet following (Rule 6) - 0 trials
+Check whether the polymarket.com training trade files carry wallet, maker or taker addresses. If not, log "needs
+data we lack" and skip.
+
+### Round 16: non-play jumps, news proxy (Rule 7) - 4 trials
+Event: Kalshi P(home) print differing by >= 0.05 from the as-of price 90 s earlier, with no ESPN scoring play,
+possession-change drive end (Round 7 set) or period change whose wallclock is in [t - 120 s, t] (deviation from the
+research rule's t + 30 s, which would use ESPN data after the decision). Only defect-free ESPN games. Volume =
+contracts traded in [t - 90 s, t]; thin = <= the walk-forward 25th percentile of earlier-week events, thick =
+>= 75th. Decision t + 20 s (research rule): thin follows the jump, thick fades it. Exit H 5 min (primary) or
+settlement. {thin follow, thick fade} x {H300, settle}, taker.
+
+### Round 17: quick kill tests (Rules 8 and 9) - 2 trials
+- **R17.IMPACT**: a print with size >= the 90th percentile of the game's earlier prints and P(home) differing by
+  >= 0.03 from the previous print, no ESPN play with wallclock in [t - 60 s, t] (defect-free games only). Buy the
+  opposite direction at the first own print >= t + 20 s; exit at + 3 min; taker.
+- **R17.SUM104**: each print on one team market, with the sister market's last print within the prior 5 s: if
+  YES_A + YES_B >= 1.04, buy NO on both (NO price = 1 - next YES print on that market at or after t + 5 s, + 1 c,
+  each within 60 s), taker fee each leg; locked payout 1. Episodes counted; first per game.
+
+Rule 10 (early-season calibration) is reported descriptively only (no trial).
+
+Cumulative own trials after Round 17: 156 + 2 + 10 + 4 + 2 + 0 + 4 + 2 = 180.
