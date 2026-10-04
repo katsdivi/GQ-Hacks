@@ -189,3 +189,25 @@ At t = kickoff - 5 min, each team's own market must have at least one trade in (
 Drafted 15:50 to 18:20 ET Oct 3, reviewed by Divi (walkthrough docs/review/strategy_a_walkthrough.md approved before this commit). Seen while preparing this amendment (incidental, no Strategy A computation): the Kalshi settlement fields above for the four blank-settlement games, the market lists and volume totals of the Kalshi series named in section 4, the count of NFL preseason games, and the key names of one Kalshi market object plus the counts of price_level_structure and tick step over the 2,534 training markets (no price field was kept). For section 5, only the market_id column of each game's trade file was read (market ids and row counts per market). Excluded game: cfb_20250831_lam_unt, reason above. No entry prices, fills, returns or win rates have been computed or looked at.
 
 Orientation check (run after the walkthrough was approved, before this commit; Divi's pre-run gate, training only, no fills or P&L): for every training game that reaches the favorite decision (ESPN kickoff, both markets present, both fresh, both priced at t), home own-market price + away own-market price at t (the as-of medians decide() uses): 1,135 games, median 1.0100, p5 1.0000, p95 1.0200, 0 outside [0.90, 1.10]. Gate: median in [0.97, 1.05] and under 2% outside: PASS. Before the decision, 122 games were skipped as stale and 9 for no pre-decision price.
+
+## Amendment 4 (2026-10-03 23:20 ET): holdout scope for Strategies A and B, and complete holdout files
+
+Committed before the holdout run of Strategies A and B and before any holdout price, plot or statistic is examined.
+
+### 1. Holdout games
+
+The holdout games for Strategies A and B are the Kalshi game events (KXNFLGAME, KXNCAAFGAME) with an ESPN kickoff from 2026-08-01 through 2026-10-03 20:00 ET, the same cutoff as HYPOTHESIS_v2.md Amendment 4. Games ESPN does not have are dropped and listed (v3, unchanged). Strategy B's holdout games are those of them matched to a polymarket.com moneyline (current series 12185 NFL, 12756 CFB) by the same matcher as training (ingest/download_all.match_games).
+
+- Kalshi game events dated 2026-08-01 to 2026-10-03 with two team markets: 780.
+- No ESPN kickoff found (dropped, listed by v3): 7 (KXNCAAFGAME-26AUG27LAFGTWN, -26AUG28UNHALBY, -26OCT03DSUALBY, -26SEP03ALBYBUFF, -26SEP12ALBYLIU, -26SEP19MONMALBY, -26SEP26ALBYPRIN).
+- Kept for Strategy A: 768 (98 NFL, 670 CFB), ESPN kickoffs 2026-08-06 20:00 ET to 2026-10-03 20:00 ET.
+- Dropped by the 20:00 ET cutoff: 5, all CFB on Saturday 2026-10-03: cfb_20261004_fres_wsu (21:30 ET), cfb_20261004_bay_asu (22:30), cfb_20261004_ewu_ucd (22:30), cfb_20261004_txst_sdsu (22:30), cfb_20261004_cin_ariz (23:00).
+- Strategy B: the kept games matched to a polymarket.com moneyline; the matched and unmatched counts are reported in the holdout run disclosure (the polymarket.com download was still running when this was committed).
+
+### 2. Complete files only
+
+A game's holdout file must be written after its window has ended: kickoff + 5 h for the downloaded trades (Strategy A uses [kickoff - 2 h, kickoff + 5 h]); kickoff + 4.5 h is Strategy B's window end and is inside it. Any game whose file was written before its window ended is refetched (scripts/stop_and_sync.sh, after the recorders stop, starting no earlier than the last included window end, 01:00 ET 2026-10-04). The run's checklist verifies that every A and B holdout file was written after its game's window end. Games still unsettled at the run stay excluded under the existing rule (strategy_a: "unsettled").
+
+### Disclosure
+
+No holdout prices, plots or statistics were examined. The issue was found by the downloader's completeness check at 22:48 ET on 2026-10-03: 38 games of 2026-10-03 had been downloaded while their [kickoff - 2 h, kickoff + 5 h] window was still open (row counts and file timestamps only). The counts above come from game ids, ESPN kickoff times and file listings only.
