@@ -259,3 +259,47 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 264 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 6
+
+Run 2026-10-04 05:50 ET.
+
+- BIG prints: neither following nor fading the first large print (> p99 and >= 1,000 contracts) has edge; all
+  four CIs include or sit below 0, win rate below break-even in every trial.
+- IMB: following trailing aggressor imbalance loses at every horizon (taker CIs below 0 at 10, 60, 120 s); fading
+  it also loses. Aggressor flow in-game carries no information beyond the price at these horizons.
+- GAP: price moves after long no-trade gaps are rare (4 to 58 trades) and negative.
+- Kalshi in-game microstructure (size, aggressor side, gaps) is ruled out as a signal source on this data.
+
+### All Round 6 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R6.BIG.follow.maker | 611 | -0.0302 | -0.1074 | 0.0456 | -1.428 | -0.0223 | -1.049 | -131.6 | -1.573 | 1 |
+| R6.BIG.fade.maker | 626 | -0.0371 | -0.0993 | 0.0286 | -1.921 | -0.0299 | -1.538 | -163.5 | -2.003 | 1 |
+| R6.IMB.fade.w60.taker | 904 | -0.0401 | -0.087 | 0.0027 | -2.412 | -0.0401 | -2.412 | -261.4 | -2.957 | 1 |
+| R6.BIG.follow.taker | 908 | -0.0407 | -0.0989 | 0.0139 | -2.023 | -0.0407 | -2.023 | -228.3 | -2.791 | 1 |
+| R6.IMB.follow.w10.maker | 633 | -0.0515 | -0.1279 | 0.0286 | -2.241 | -0.0431 | -1.863 | -186.7 | -2.626 | 1 |
+| R6.IMB.follow.w60.maker | 622 | -0.0571 | -0.1392 | 0.028 | -2.324 | -0.0484 | -1.95 | -190.1 | -2.635 | 1 |
+| R6.IMB.fade.w60.maker | 639 | -0.0652 | -0.1247 | -0.0079 | -3.809 | -0.0591 | -3.432 | -286.4 | -3.733 | 1 |
+| R6.BIG.fade.taker | 890 | -0.066 | -0.1208 | -0.0137 | -3.559 | -0.066 | -3.559 | -361.9 | -4.425 | 1 |
+| R6.IMB.follow.w120.maker | 609 | -0.0671 | -0.148 | 0.0187 | -2.639 | -0.0584 | -2.276 | -205.6 | -2.713 | 1 |
+| R6.IMB.follow.w10.taker | 948 | -0.0786 | -0.1383 | -0.0197 | -3.548 | -0.0786 | -3.548 | -381.3 | -4.499 | 1 |
+| R6.IMB.follow.w60.taker | 950 | -0.0792 | -0.1392 | -0.02 | -3.425 | -0.0792 | -3.425 | -370.1 | -4.946 | 1 |
+| R6.GAP.g300.taker | 16 | -0.0856 | -0.4771 | 0.3452 | -4.681 | -0.0856 | -4.681 | -28.77 | -3.92 | 1 |
+| R6.IMB.follow.w120.taker | 949 | -0.1012 | -0.1682 | -0.0337 | -4.121 | -0.1012 | -4.121 | -435.4 | -5.067 | 1 |
+| R6.GAP.g120.taker | 58 | -0.1522 | -0.3781 | 0.0694 | -7.738 | -0.1522 | -7.738 | -82.34 | -6.058 | 1 |
+| R6.GAP.g120.maker | 24 | -0.1913 | -0.5062 | 0.0552 | -9.858 | -0.1863 | -9.542 | -40.74 | -9.064 | 1 |
+| R6.GAP.g300.maker | 4 | -0.3311 | -1 | 0.4032 | -12.38 | -0.3243 | -12 | 0 | -6.725 | 1 |
+
+### Cumulative correction after Round 6
+
+Trials: own 133 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 280. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.342. DSR of that best: 6.32e-30 (project convention;
+normal-returns version 1.21e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 280 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.

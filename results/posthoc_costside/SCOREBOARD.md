@@ -36,4 +36,9 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 5 | SL ruled out (all CIs below 0) | +5 | ruled out |
 | 5 | ANCHOR: polymarket.com-anchored maker quote | +10 | new |
 
-**Total after Round 5: +115.** Stop condition (+100): not met.
+| 6 | BIG: large single prints, follow and fade | +10 | new (trade size never used before) |
+| 6 | IMB: in-game aggressor imbalance 10 to 120 s, follow and fade | +10 | new horizon and phase (Idea 8 was pre-game 30 min only) |
+| 6 | GAP: moves after no-trade gaps | +10 | new |
+| 6 | In-game Kalshi microstructure ruled out (16 trials, none with CI above 0, every win rate below break-even) | +5 | ruled out |
+
+**Total after Round 6: +150.** Stop condition (+100): not met.
