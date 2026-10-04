@@ -383,12 +383,23 @@ def main() -> None:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--i-am-the-one-run", action="store_true")
     g.add_argument("--dry-run", action="store_true")
+    g.add_argument("--checklist-only", action="store_true", help="real inputs, checklist only; no lock, nothing run")
     ap.add_argument("--dry-run-flip-away", action="store_true", help=argparse.SUPPRESS)  # dry run: force a FAIL gate
     a = ap.parse_args()
     if a.dry_run:
         import scripts.final_test_fixtures as FX
         c = FX.dry_ctx(ROOT / "results" / ("dryrun_gatefail" if a.dry_run_flip_away else "dryrun"),
                        flip_away=a.dry_run_flip_away)
+    elif a.checklist_only:
+        c = real_ctx()
+        ck = checklist(c)
+        print("PRE-RUN CHECKLIST (checklist only; nothing evaluated, no lock)")
+        for m, f in ck["feeds"].items():
+            print(f"  {m} files per feed: {f}")
+        for k, v in ck["checks"].items():
+            print(f"  {'OK ' if v['ok'] else 'BAD'} {k}: {v['value']}" + (f" (expected {v['expected']})" if "expected" in v else ""))
+        print("checklist", "PASS" if all(v["ok"] for v in ck["checks"].values()) else "FAIL")
+        return
     else:
         if (ROOT / "results" / "holdout").exists():
             raise SystemExit("results/holdout/ exists: the one run has already happened")
