@@ -1,4 +1,8 @@
-# IDEA 3 results, Kalshi reversal after large taker trades. POST-HOC, EXPLORATORY (formed after seeing the holdout)
+# INVALID, LOOKAHEAD. IDEA 3 results, Kalshi reversal after large taker trades. POST-HOC, EXPLORATORY (formed after seeing the holdout)
+
+## INVALID, LOOKAHEAD (note added 2026-10-04 03:49 ET)
+
+On Divi's instruction (via the orchestrator, after the run), a 95th-percentile size threshold computed over the whole game window uses future trade sizes; that is lookahead and is not allowed. The idea 3 run (script d13e473, 03:48:12 to 03:48:40 ET, results commit a7b1dd8) used exactly that threshold, so ALL idea 3 outputs (idea3_results.csv, idea3_trades.csv, idea3_RESULTS.md) are INVALID, LOOKAHEAD. Per the instruction it is NOT rerun (no corrected threshold, no second run). It still counts as 3 variants (one per L) in the DSR total.
 
 Spec: results/posthoc_latency/SPEC_idea3.md (commit 4e60e8c). One run on real data, no changes after output. Games: 88 (vultr). Net c/contract after Kalshi direct fees on both legs. CI: laggard.game_bootstrap_ci on per-game sums (2,000 draws, seed 20261003), games with >= 1 trade. The 95th percentile threshold uses the whole game window (lookahead in the threshold, a property of the given rule). No interpretation.
 
