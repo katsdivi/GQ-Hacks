@@ -20,10 +20,10 @@
 
 ## Deflated Sharpe with all variants
 
-Additional line next to the pre-registered values (not replacing them). Trials = final experiments/variants.csv row count = 73. Same function (report_book.deflated_sharpe) and inputs as the run; trial-Sharpe variance still from the 12 training trials with daily series. Source: results/posthoc/dsr_posthoc.json (scripts/posthoc_dsr.py; the total-22 values reproduce exactly).
+Additional line next to the pre-registered values (not replacing them). Trials = final experiments/variants.csv row count = 74. Same function (report_book.deflated_sharpe) and inputs as the run; trial-Sharpe variance still from the 12 training trials with daily series. Source: results/posthoc/dsr_posthoc.json (scripts/posthoc_dsr.py; the total-22 values reproduce exactly).
 
-| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | DSR, 73 trials (post-hoc line) |
-|---|---|---|
-| A | 1.27e-09 | 3.75e-12 |
-| combined | 1.18e-34 | 6.12e-42 |
-| B | 9.57e-38 | 9.89e-46 |
+| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | DSR, 73 trials (post-hoc line) | DSR, 74 trials (post-hoc line) |
+|---|---|---|---|
+| A | 1.27e-09 | 3.75e-12 | 3.52e-12 |
+| combined | 1.18e-34 | 6.12e-42 | 5.09e-42 |
+| B | 9.57e-38 | 9.89e-46 | 8.08e-46 |

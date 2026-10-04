@@ -1,0 +1,29 @@
+{
+ "label": "post-hoc, exploratory; cells chosen by training ROC after all results were seen",
+ "cells": [
+  "Strategy A taker theta 0.80 favorite",
+  "Strategy A-maker theta 0.80 favorite"
+ ],
+ "sources": [
+  "results/holdout/strategy_a_rows.parquet",
+  "results/holdout/strategy_a_maker_rows.parquet"
+ ],
+ "fee_line": "kalshi_direct (A-maker: taker formula, upper bound)",
+ "sharpe_note": "daily P&L summed by ET kickoff date over game days only; x365 = daily Sharpe x sqrt(365)",
+ "trades": 272,
+ "trades_by_cell": {
+  "A taker": 263,
+  "A-maker": 9
+ },
+ "games": 263,
+ "pnl_total": -45.39999999999996,
+ "roc_mean": -0.01880011458202187,
+ "roc_ci_lo": -0.060441185491336924,
+ "roc_ci_hi": 0.02152086652445832,
+ "game_days": 19,
+ "sharpe_daily": -0.2042767635425616,
+ "sharpe_x365": -3.902702087663062,
+ "max_drawdown": 45.39999999999998,
+ "worst_day": -34.339999999999996,
+ "worst_day_date": "2026-10-03"
+}

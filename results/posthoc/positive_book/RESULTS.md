@@ -32,3 +32,27 @@ Rule: TRAINING ROC (Kalshi direct, costs x1, net) > 0 and >= 20 trades. Any leg 
 | Idea 13 placebo e 0.04 (+0.032) | 6 trades (< 20); other Idea 13 cells ROC < 0 or 0 trades |
 
 Subsets (Idea 7 and 12 "excl_flagged", "excl_stale12") give the same signs; the "all" rows were scanned.
+
+## 2. Holdout book (2026-10-04 05:09 ET)
+
+Both included cells have committed holdout outputs (results/holdout/strategy_a_rows.parquet, results/holdout/strategy_a_maker_rows.parquet), so the book was computed from those files only; no strategy was run. 10 contracts per trade as run, no reweighting, Kalshi direct (A-maker: taker fee formula, upper bound, as in its committed output). Script: scripts/posthoc_positive_book.py; output: metrics.json.
+
+| Metric | Value |
+|---|---|
+| Trades | 272 (A taker 263, A-maker 9; 263 games) |
+| Total P&L | -$45.40 |
+| ROC (mean per trade) [game-bootstrap 95% CI, 2,000 reps, seed 20261004] | -0.0188 [-0.0604, +0.0215] |
+| Net cents per contract | -1.67 |
+| Game days | 19 |
+| Daily Sharpe (game days) | -0.204 |
+| Sharpe x365 (daily Sharpe x sqrt(365), game days) | -3.90 |
+| Max drawdown | $45.40 |
+| Worst day | -$34.34 (2026-10-03) |
+
+Reading: the only two training-positive cells with >= 20 trades are both Strategy A theta 0.80 favorite variants (taker and maker). Their combined holdout book loses money; the ROC CI includes 0. The A taker part is the pre-registered Strategy A holdout result (ROC direct -0.0147); A-maker adds 9 fills.
+
+## 3. Bookkeeping
+
+- experiments/variants.csv: 1 row appended (74 rows). Divi's message expected 77, which assumed the 3 T&S laggard rows were added first; they were not added here (a separate change).
+- Deflated Sharpe rerun at 74 trials (scripts/posthoc_dsr.py), kept next to the 22 (pre-registered) and 73 lines; see results/posthoc/SUMMARY.md and dsr_posthoc.json.
+- Keys: posthoc_posbook_* in results/posthoc/numbers_posthoc.json; paper/numbers.tex regenerated.

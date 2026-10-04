@@ -1862,17 +1862,32 @@
  "posthoc_dsr_A_trials_73": {
   "value": 3.7529592243764526e-12,
   "source": "results/posthoc/dsr_posthoc.json",
-  "column": "values.OOS.A.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+  "column": "history.73.OOS.A.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
  },
  "posthoc_dsr_B_trials_73": {
   "value": 9.889869520514859e-46,
   "source": "results/posthoc/dsr_posthoc.json",
-  "column": "values.OOS.B.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+  "column": "history.73.OOS.B.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
  },
  "posthoc_dsr_combined_trials_73": {
   "value": 6.117231365045925e-42,
   "source": "results/posthoc/dsr_posthoc.json",
-  "column": "values.OOS.combined.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+  "column": "history.73.OOS.combined.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+ },
+ "posthoc_dsr_A_trials_74": {
+  "value": 3.5172309874294692e-12,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.74.OOS.A.deflated_sharpe_total_74 (report_book.deflated_sharpe, n_total=74)"
+ },
+ "posthoc_dsr_B_trials_74": {
+  "value": 8.083912188019218e-46,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.74.OOS.B.deflated_sharpe_total_74 (report_book.deflated_sharpe, n_total=74)"
+ },
+ "posthoc_dsr_combined_trials_74": {
+  "value": 5.089377402896855e-42,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.74.OOS.combined.deflated_sharpe_total_74 (report_book.deflated_sharpe, n_total=74)"
  },
  "posthoc_dsr_A_trials_22_preregistered": {
   "value": 1.2688037762570972e-09,
@@ -1890,8 +1905,81 @@
   "column": "stored_total_22.OOS.combined.deflated_sharpe_total_22 (results/holdout/numbers.json)"
  },
  "posthoc_variants_rows_total": {
-  "value": 73,
+  "value": 74,
   "source": "experiments/variants.csv",
   "column": "row count"
+ },
+ "posthoc_posbook_trades": {
+  "value": 272,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "trades"
+ },
+ "posthoc_posbook_games": {
+  "value": 263,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "games"
+ },
+ "posthoc_posbook_pnl_total": {
+  "value": -45.39999999999996,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "pnl_total"
+ },
+ "posthoc_posbook_roc_mean": {
+  "value": -0.01880011458202187,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "roc_mean"
+ },
+ "posthoc_posbook_game_days": {
+  "value": 19,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "game_days"
+ },
+ "posthoc_posbook_sharpe_daily": {
+  "value": -0.2042767635425616,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "sharpe_daily"
+ },
+ "posthoc_posbook_sharpe_x365": {
+  "value": -3.902702087663062,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "sharpe_x365"
+ },
+ "posthoc_posbook_max_drawdown": {
+  "value": 45.39999999999998,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "max_drawdown"
+ },
+ "posthoc_posbook_worst_day": {
+  "value": -34.339999999999996,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "worst_day"
+ },
+ "posthoc_posbook_worst_day_date": {
+  "value": "2026-10-03",
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "worst_day_date"
+ },
+ "posthoc_posbook_roc_ci": {
+  "value": [
+   -0.060441185491336924,
+   0.02152086652445832
+  ],
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_posbook_trades_A_taker": {
+  "value": 263,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "trades_by_cell.A taker"
+ },
+ "posthoc_posbook_trades_A_maker": {
+  "value": 9,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "trades_by_cell.A-maker"
+ },
+ "posthoc_posbook_n_cells": {
+  "value": 2,
+  "source": "results/posthoc/positive_book/metrics.json",
+  "column": "cells"
  }
 }

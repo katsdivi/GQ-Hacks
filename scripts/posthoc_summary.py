@@ -292,11 +292,24 @@ trained("idea13", "13", "e", ("signal", "placebo"), "NFL no-vig closing moneylin
 dsr_f = P / "dsr_posthoc.json"
 dsr = json.loads(dsr_f.read_text())
 n = dsr["n_trials"]
-for k, v in dsr["values"].items():
-    put(f"dsr_{k.split('.')[1]}_trials_{n}", v, dsr_f, f"values.{k} (report_book.deflated_sharpe, n_total={n})")
+for hn, hv in sorted(dsr.get("history", {str(n): dsr["values"]}).items(), key=lambda x: int(x[0])):
+    for k, v in hv.items():
+        put(f"dsr_{k.split('.')[1]}_trials_{hn}", v, dsr_f, f"history.{hn}.{k} (report_book.deflated_sharpe, n_total={hn})")
 for k, v in dsr["stored_total_22"].items():
     put(f"dsr_{k.split('.')[1]}_trials_22_preregistered", v, dsr_f, f"stored_total_22.{k} (results/holdout/numbers.json)")
 put("variants_rows_total", n, Path("experiments/variants.csv"), "row count")
+
+# ---------- training-positive book (results/posthoc/positive_book, scripts/posthoc_positive_book.py) ----------
+pb_f = P / "positive_book" / "metrics.json"
+if pb_f.exists():
+    pb = json.loads(pb_f.read_text())
+    for k in ("trades", "games", "pnl_total", "roc_mean", "game_days", "sharpe_daily", "sharpe_x365", "max_drawdown",
+              "worst_day", "worst_day_date"):
+        put(f"posbook_{k}", pb[k], pb_f, k)
+    put("posbook_roc_ci", [pb["roc_ci_lo"], pb["roc_ci_hi"]], pb_f, "roc_ci_lo, roc_ci_hi")
+    put("posbook_trades_A_taker", pb["trades_by_cell"]["A taker"], pb_f, "trades_by_cell.A taker")
+    put("posbook_trades_A_maker", pb["trades_by_cell"]["A-maker"], pb_f, "trades_by_cell.A-maker")
+    put("posbook_n_cells", len(pb["cells"]), pb_f, "cells")
 
 # ---------- write ----------
 cols = ["idea", "hypothesis", "spec", "output", "variants", "selected", "headline (95% CI)", "placebo", "holdout", "verdict"]
@@ -314,8 +327,14 @@ md += ["", "## Deflated Sharpe with all variants", "",
        "Same function (report_book.deflated_sharpe) and inputs as the run; trial-Sharpe variance still from the 12 training trials "
        "with daily series. Source: results/posthoc/dsr_posthoc.json (scripts/posthoc_dsr.py; the total-22 values reproduce exactly).", "",
        "| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | DSR, " + str(n) + " trials (post-hoc line) |", "|---|---|---|"]
+hist = dsr.get("history", {str(n): dv})
+hns = sorted(hist, key=int)
+md[-2] = ("| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | "
+          + " | ".join(f"DSR, {h} trials (post-hoc line)" for h in hns) + " |")
+md[-1] = "|---|---|" + "---|" * len(hns)
 for b in ("A", "combined", "B"):
-    md.append(f"| {b} | {dsr['stored_total_22'][f'OOS.{b}.deflated_sharpe_total_22']:.3g} | {dv[f'OOS.{b}.deflated_sharpe_total_{n}']:.3g} |")
+    md.append(f"| {b} | {dsr['stored_total_22'][f'OOS.{b}.deflated_sharpe_total_22']:.3g} | "
+              + " | ".join(f"{hist[h][f'OOS.{b}.deflated_sharpe_total_{h}']:.3g}" for h in hns) + " |")
 (P / "SUMMARY.md").write_text("\n".join(md) + "\n")
 (P / "numbers_posthoc.json").write_text(json.dumps(num, indent=1, default=float))
 print("\n".join(md))

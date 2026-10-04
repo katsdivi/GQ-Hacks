@@ -58,8 +58,13 @@ def main() -> None:
         s = stored[k]["value"]
         assert abs(v - s) <= 1e-12 * max(1.0, abs(s)) or (s != 0 and abs(v / s - 1) < 1e-9), (k, v, s)
     new = oos_dsr(n_rows, rows, bt, kos, fac, bases, trial)
+    hist = json.loads(OUT.read_text()).get("history", {}) if OUT.exists() else {}
+    if OUT.exists() and not hist:                 # first run wrote no history: keep its line
+        prev = json.loads(OUT.read_text())
+        hist = {str(prev["n_trials"]): prev["values"]}
+    hist[str(n_rows)] = new                       # earlier trial counts are kept, never overwritten
     out = {"n_trials": n_rows, "check_total_22_reproduced": check, "values": new,
-           "stored_total_22": {k: stored[k]["value"] for k in check}}
+           "stored_total_22": {k: stored[k]["value"] for k in check}, "history": hist}
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, indent=1))
     print(json.dumps(out, indent=1))
