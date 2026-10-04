@@ -1,0 +1,1 @@
+Caveat: the collector writes a Polymarket US row only when that market's top of book changes (collector/run.py PolymarketUS._rows), so a gap between recorded snapshots is time between quote CHANGES (no-change polls and failed polls are both invisible), and snapshot age at a fill is time since the last recorded change, not time since the last poll.

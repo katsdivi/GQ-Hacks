@@ -1,0 +1,1 @@
+Classification (fixed before looking at any of the 25 games): MISMATCH if at >= 3 of the 4 checkpoints (kickoff -30/0/+60/+120 min) both prices exist, |K - PM| > 0.20 and |K - (1 - PM)| < 0.05. Else STALE VENUE if, at the game's B decision times, the median age of the last trade on one venue is > 120 s (that venue named). Else REAL DISAGREEMENT.

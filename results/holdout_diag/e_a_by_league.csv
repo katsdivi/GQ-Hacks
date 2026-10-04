@@ -1,0 +1,5 @@
+sample,league,games,trades,skip_stale,skip_no pre-decision price,skip_equal prices,skip_below theta,skip_no post-decision trade,skip_missing market,skip_non-ESPN kickoff,skip_unsettled
+holdout,CFB,670,259,90,8,1,261,51,0,0,0
+holdout,NFL,98,4,0,0,1,93,0,0,0,0
+training,CFB,936,258,121,9,2,491,54,1,0,0
+training,NFL,331,44,1,0,3,282,1,0,0,0

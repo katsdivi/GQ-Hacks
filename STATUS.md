@@ -3,36 +3,53 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 8:43 PM ET)
-Current task: holdout download running (save only); final-run script + dry run done on t15-final.
-Done:
-  1 v2 Amendment 4 on main: f6aa3b5, 20:25:33 ET, pushed (merge only), before 21:30. Runner applies it on the
-    holdout run (holdout_mid.amendment4, a132047): 106 of 112 kept (tested against the real candidates file).
-  2 Holdout download (ingest/holdout_download.py, --holdout-download required, writes only data/holdout_raw/,
-    gitignored; counts and ids only). Kalshi 779 game events Aug 1..Oct 3 (98 NFL, 681 CFB); ESPN kickoff for
-    772, 7 not found (FCS, 6 involve Albany; dropped and listed per v3). polymarket.com events Aug 1..Oct 3:
-    804 moneylines. Throttle Kalshi 4 req/s (half of the 20/s basic limit would be 10; collector shares the IP),
-    PM/ESPN 2/s, nice 19, 1 process; collector check every 10 min, pause on kalshi_ws outage or new 429.
-    At 20:41: 79/772 Kalshi games, 0 failures. ETA: Kalshi ~21:40 ET, polymarket.com ~21:50 ET.
-    Seal checks in strategy_a / strategy_b unchanged (final_test=True required).
-  3 Regression: kept numpy OLS + Newey-West; tests/test_ols_nw.py matches a hand-computed example (exact
-    fractions) to 1e-8. requirements unchanged.
-  4 report_book: B per contract (-4.86 c Webull, -3.67 c direct; x2 -9.86 / -7.47) and Sharpe only; B return
-    levels and regression coefficient levels dropped (t-stats, R2 kept); total-21 DSR note says B dominates.
-  5 Branch t15-final = t13 + merge of t14-laggard (e117058, pushed; nothing merged to main). 201 tests pass.
-    scripts/final_test_run.py: --i-am-the-one-run (refuses if results/holdout/ exists; lock created only after
-    the checklist passes) or --dry-run. Checklist: per-machine file counts per feed (needs data/vultr/ rsync copy
-    + GAPS_vultr.md), seconds_delay hash, map hashes, Amendment 4 count, gap parsing. Then lead test (Holm),
-    laggard (per-market delay, breaks, curve, capacity), A theta 0.80, B (5c, 10 s, 300 s) + placebo + x2,
-    combined book via report_book.build (training bases + trial Sharpes; OOS French "not available": factors
-    end 2026-08-31), RUN_LOG.md with git sha and ET start/end.
-    Dry run (synthetic fixtures, results/dryrun/, gitignored): completes in 14.7 s; all 20 output files and
-    15 required numbers.json keys present (110 keys); exercises the 3 s missing-delay fallback (1 market).
-    report_book refactor reproduces every training number exactly (only note texts + 1 new key differ).
-Not done: Vultr rsync to data/vultr/ (not touched, per rules); PM US dedup fix NOT deployed (read-time dedup).
-  The real run must be launched from a checkout of t15-final with data present (staleline/).
-FLAG: Mac on battery since ~7:45 PM.
-Decisions pending: when to rsync Vultr and launch the one run; merges after B review
+STATUS  (last update: Sun Oct 4, 3:30 AM ET)
+HOLDOUT RUN: done once, 02:00:23 to 02:32:24 ET Oct 4, RUN_COMMIT 872ff43, exit 0, missing files/keys none.
+  Outputs committed on main 5ef528f (02:53:39 ET), pushed; results/holdout/inputs_a_meta.csv gitignored (raw Kalshi
+  settlement records, sha256 cf7ffbc6...dce5e). Before the run: stop script failed at step 3b (01:00:44 ET); steps
+  4, 5, 3b, 6 done by hand on 872ff43; refetch 45 Kalshi + 25 polymarket.com files (guard bypassed at runtime);
+  checklist PASS. Disclosure cfcdbb7 (t17).
+PRE-REGISTERED RESULTS (results/holdout/, numbers.json):
+  Orientation gate PASS (n 670, median 1.0100, p5 1.0000, p95 1.0200, 0 outside).
+  Lead, polymarket.com: 88 qualifying, median lag 0.0 s, share positive 0.125, MW p 0.709 vs Holm 0.05,
+    placebo median -1.0 s -> I (neither venue leads; all 3 conditions fail).
+  Lead, Polymarket US: 76 qualifying, median 7.5 s, share positive 0.921, MW p 3.24e-08 vs Holm 0.025,
+    placebo median 0.0 s -> K (kalshi leads).
+  Receipt diagnostic (Vultr): kalshi median 0.030 s p90 0.034; polymarket.com 0.052 / 0.218; Polymarket US 0 rows.
+  Laggard (exploratory): polymarket.com 521 trades at 1 s, -3.60 c [-4.72, -2.58]; Polymarket US 1,688 at 0 s,
+    +1.55 c [+0.99, +2.07]; PM US capacity not measurable.
+  A (theta 0.80): 263 trades / 768 games, ROC Webull -0.0300 [-0.0687, +0.0061], direct -0.0147
+    [-0.0504, +0.0205]; placebo -0.4626. A-maker: 314 attempts, 9 fills, ROC Webull -0.150 [-0.496, +0.111].
+  B (5c/10s/300s): 2,478 trades, net -4.67 c [-4.98, -4.36] Webull, -3.45 direct; costs x2 -9.67.
+  Combined: Sharpe -7.78 (ann.), max DD $1,224, skew -3.18, worst month 2026-09 -$678; French n/a.
+  B orientation check (0014b1e rule): 0 flagged of 477; median |K - PM| 0.0375; 25 games > 0.10.
+POST-RUN DIAGNOSTICS (exploratory, results/holdout_diag/ on t17, do not change any pre-registered result):
+  a  Lag = first max over -15..+15 (ties go to the MOST NEGATIVE lag). 0 tied games in every group; recomputed lag
+     = recorded in 318/318. polymarket.com: 77 at 0, 11 at +1 (corr at 0 median 0.371 vs best negative 0.056).
+     Polymarket US: 17 of 76 at +13..+15 (top of range).
+  b  Polymarket US rows carry no venue timestamp (src_ts_ns null in 317,105 rows; ts = poll receipt). Not measurable
+     from recorded data.
+  c  PM US laggard: 1 s +1.480 [+0.924, +1.998]; 2 s +1.329 [+0.776, +1.842]; 5 s +0.930 [+0.361, +1.432];
+     fee 0.0695 x C x P(1-P) banker's cent; 10 contracts assumed, no depth.
+  d  25 games: 0 mismatch, 12 stale venue (polymarket.com), 13 real disagreement; B excl. them -4.62 c
+     [-4.93, -4.31] (all: -4.67).
+  e  A by league, holdout: CFB 259 trades / 670 games, NFL 4 / 98 (training CFB 258 / 936, NFL 44 / 331).
+  f  A costs x2 ROC (run_strategy_a.costs_x2 + boot_ci): holdout Webull -0.0584 [-0.0957, -0.0233], direct
+     -0.0283 [-0.0664, +0.0076]; training check exact (-0.0377).
+  g  Only latency varied; reproduces the run's 14 points exactly. PM US mean > 0 at every latency 0..10 s; CI
+     lower bound > 0 up to 5 s (7.5 s: [-0.05, +0.95]); mean does not cross 0 by 10 s (+0.08). polymarket.com
+     < 0 at every latency (1..11 s). Daily Sharpe degenerate (one trading day), not reported. Per-game Sharpe
+     (not annualized) PM US 1 s 0.547, 82% of games positive; excl. top 5 games +1.08 c.
+  h0 Vultr: 0 PM US 429s / 0 errors logged (200s are not logged; /bbo never polled). Mac: 0 429s, 138 request
+     errors (126 in 20:00-21:00 ET). Median gap between recorded PM US quote CHANGES ~31.6 s; snapshot age at
+     1 s fills median 17.3 s entry / 1.7 s exit; fills with both ages <= 1.5 s: 28, +0.43 c [-1.37, +2.45].
+  h1 LIVE: the polled endpoint is Cloudflare-cached, Cache-Control public max-age=30, cf-cache-status HIT,
+     Age 1..29 s. No body change in 120 s (03:14 ET).
+  h2-h5 (partial: before 17:00 ET Oct 3; T&S 20261003 file, 604 fills / 39 games): delay (receipt - venue trade
+     time) median 19.2 s, p10 5.3, p90 28.2 (n 30,181 matched; 30 s cutoff). Fills confirmed by a real print
+     at our price or better within [-1 s, +2 s]: both legs 2.3% at 1 s (entry 5.3%, exit 41.7%). Subset all
+     fills +2.24 c [+1.59, +2.74]; both-confirmed (14 fills) -4.09 c [-5.47, -2.37].
+NEXT: nothing started. Pending Divi: whether/how to disclose the PM US cache finding; t17 merge; numbers sheet.
 ```
 
 ## Log

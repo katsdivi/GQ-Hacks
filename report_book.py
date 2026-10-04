@@ -207,6 +207,9 @@ def build(rows: pd.DataFrame, bt: pd.DataFrame, b2: pd.DataFrame, sel, game_kick
             if name == "B" and k in ("alpha_daily", "beta_mkt_rf", "beta_hml", "beta_umd"):
                 continue                       # levels scale with B's $43 base; t-stats and R^2 do not
             put(f"{name}.french.{k}", v)
+    if len(A):          # Strategy A, selected theta: mean return on capital per entered favorite trade
+        put("A.roc_webull", float(A["roc_webull"].mean()))
+        put("A.roc_direct", float(A["roc_direct"].mean()))
     for line in ("webull", "direct"):
         if len(Bk):
             put(f"B.edge_{line}_cents_per_contract", float(Bk[f"pnl_{line}"].sum() / (QTY * len(Bk)) * 100))
