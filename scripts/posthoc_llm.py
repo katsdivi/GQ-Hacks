@@ -99,7 +99,9 @@ def prep() -> None:
 def train(k: int) -> None:
     d = CACHE / f"fold_{k}"
     n = sum(1 for _ in open(d / "train.jsonl"))
-    iters = min(375, n // 8)
+    # SPEC: cut below ~1 epoch only to keep a fold near 15 min. Fold 1 ran 375 iters at ~4 s/iter under load
+    # (about 25 min), so folds 2 to 4 are capped at 225 iters; counts are reported.
+    iters = min(375 if k == 1 else 225, n // 8)
     cfg = d / "lora.yaml"
     cfg.write_text(f"""model: {MODEL}
 train: true
