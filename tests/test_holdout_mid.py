@@ -172,3 +172,13 @@ def test_receipt_diagnostic(tmp_path):
     diag = H.receipt_diagnostic(cands, maps, [m], {"polymarket.com": per}).set_index("venue")
     assert diag.loc["kalshi", "n_rows"] == 900 and abs(diag.loc["kalshi", "median_s"] - 0.2) < 1e-9
     assert diag.loc["polymarket", "median_s"] == 0.5 and diag.loc["polymarket", "p90_s"] > 0.5
+
+
+def test_amendment4_cutoff():
+    c = pd.DataFrame({"game_id": ["a", "b", "c"],
+                      "kickoff_utc": ["2026-10-04T00:00:00Z", "2026-10-04T00:00:01Z", "2026-10-03T16:00:00Z"]})
+    assert H.amendment4(c)["game_id"].tolist() == ["a", "c"]        # 20:00:00 ET kept, 20:00:01 ET dropped
+    real = pd.read_csv("data/live/holdout_candidates.csv") if __import__("os").path.exists(
+        "data/live/holdout_candidates.csv") else None
+    if real is not None:
+        assert len(H.amendment4(real)) == 106

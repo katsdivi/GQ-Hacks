@@ -62,6 +62,12 @@ WIPE_FALLBACK = (-2 * 60, 20 * 60)   # no clear found: [T - 2 min, T + 20 min], 
 REST_HEARTBEAT_COVER_S = 15          # one connected kalshi_rest heartbeat covers this many seconds
 HB_FEED = {"kalshi": "kalshi_ws", "polymarket": "polymarket", "polymarket_us": "polymarket_us"}
 TESTS = {"polymarket.com": ("polymarket", 1.0), "Polymarket US": ("polymarket_us", 1.5)}
+KICKOFF_CUTOFF = pd.Timestamp("2026-10-03 20:00", tz="America/New_York")   # v2 Amendment 4 (f6aa3b5)
+
+
+def amendment4(cands: pd.DataFrame) -> pd.DataFrame:
+    """v2 Amendment 4: keep only candidates with ESPN kickoff at or before 20:00 ET Oct 3 (106 of 112)."""
+    return cands[pd.to_datetime(cands["kickoff_utc"], utc=True) <= KICKOFF_CUTOFF].copy()
 
 
 @dataclass
@@ -328,6 +334,8 @@ def load_maps(d: Path) -> dict:
 
 def run_all(cands: pd.DataFrame, maps: dict, machines: list[Machine], holdout_run: bool = False) -> dict:
     """Both venue tests, then Holm across them (Amendment 3 draft). Returns per-test tables and final decisions."""
+    if holdout_run:
+        cands = amendment4(cands)
     res = {t: run_test(cands, maps, machines, t, holdout_run) for t in TESTS}
     inputs = {}
     for t, (per, pl, _dec) in res.items():
