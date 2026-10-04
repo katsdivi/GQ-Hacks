@@ -99,6 +99,38 @@ def checklist(c: Ctx) -> dict:
     for m in c.machines:
         g = m.gaps()
         out["checks"][f"{m.name} gaps parsed"] = {"value": int(len(g)), "ok": True}
+    if not c.dry:
+        out["checks"].update(manifest_checks(c.machines))
+    return out
+
+
+MANIFEST = ROOT / "results" / "holdout_inputs_manifest.txt"
+
+
+def manifest_checks(machines, manifest: Path = MANIFEST, root: Path = ROOT) -> dict:
+    """Every GAPS table and heartbeat log the runner's Machine objects read must be listed in the manifest with the
+    same sha256, the manifest must list nothing in those places that is missing, and no machine may read the
+    tracked GAPS.md."""
+    out = {}
+    if not manifest.exists():
+        return {"inputs manifest present": {"value": str(manifest), "ok": False}}
+    man = {}
+    for line in manifest.read_text().splitlines():
+        if line.strip():
+            h, path = line.split(maxsplit=1)
+            man[(root / path.strip()).resolve()] = h
+    for m in machines:
+        read = [Path(m.gaps_md).resolve()] + sorted(Path(x).resolve() for x in (m.heartbeat_dir or Path("/nonexistent")).glob("*.jsonl"))
+        bad = [str(p.relative_to(root.resolve())) for p in read
+               if p not in man or hashlib.sha256(p.read_bytes()).hexdigest() != man[p]]
+        hb = (m.heartbeat_dir or Path("/nonexistent")).resolve()
+        listed = [p for p in man if p.parent == hb]
+        missing = [str(p.relative_to(root.resolve())) for p in listed if not p.exists()]
+        out[f"{m.name} frozen inputs match manifest"] = {
+            "value": f"{len(read)} files read ({len(read) - 1} heartbeat logs); mismatched {bad}; listed but missing {missing}",
+            "ok": not bad and not missing and len(read) > 1}
+        out[f"{m.name} does not read tracked GAPS.md"] = {"value": str(Path(m.gaps_md).resolve().relative_to(root.resolve())),
+                                                       "ok": Path(m.gaps_md).resolve() != (root / "GAPS.md").resolve()}
     return out
 
 
@@ -354,9 +386,11 @@ def finish(c: Ctx, num: dict, start: str, t0: float, gi: dict, gate_msg: str) ->
 def real_ctx() -> Ctx:
     out = ROOT / "results" / "holdout"          # created (the lock) only after the checklist passes, in run()
     live = ROOT / "data" / "live"
-    vroot = ROOT / "data" / "vultr"
-    machines = [H.Machine("vultr", vroot, vroot / "GAPS_vultr.md", vroot / "data" / "live" / "heartbeat"),
-                H.Machine("mac", ROOT, ROOT / "GAPS.md", live / "heartbeat")]
+    vroot, mroot = ROOT / "data" / "vultr", ROOT / "data" / "mac"
+    # FROZEN inputs (scripts/stop_and_sync.sh step 3): GAPS tables and heartbeat logs copied after the recorders
+    # stopped and hashed into results/holdout_inputs_manifest.txt; never the tracked, auto-logged GAPS.md.
+    machines = [H.Machine("vultr", vroot, vroot / "GAPS_vultr.md", vroot / "heartbeats"),
+                H.Machine("mac", ROOT, mroot / "GAPS_mac.md", mroot / "heartbeats")]
     md = live / "holdout_maps"
     hr = ROOT / "data" / "holdout_raw"
     ev = pd.read_csv(hr / "events.csv")
