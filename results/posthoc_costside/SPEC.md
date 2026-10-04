@@ -108,3 +108,30 @@ games.
   never-filled signals are missing (small, stated).
 - Stop condition (Divi): walk-forward ROC CI lower bound > 0 on the primary line, Reality Check p < 0.05 over the
   cumulative trials, >= 100 trades, excluding the top 5 games still > 0.
+
+## Round 2 (16 trials; written 2026-10-04 05:58 ET, before Round 2 touches data)
+
+What Round 1 taught: (1) maker execution cuts cost but is adversely selected: for Idea 12 the UNFILLED signals win
+0.55 to 0.61 vs 0.45 to 0.48 for filled ones; (2) the only positive in-game lead-lag cell is polymarket.com
+leading with maker entry held to settlement; fast exits (60 s, 300 s) always lose; (3) Kalshi own 5 c moves have
+no momentum or reversal edge; (4) in-game longshots below 0.20 are badly overpriced. Helpers own spread capture,
+drift, longshot-by-phase, slate correlation and time-slot liquidity; the broad search owns consensus and online
+weighting. Round 2 therefore tries four mechanisms none of those cover:
+
+- **R2.ARB, Kalshi two-market complement arbitrage (2 trials), A set, whole trade window.** At each Kalshi trade
+  time t: last trade of each team's own market, each within 10 s before t. If last_home + last_away <= S, buy 10
+  YES of both (taker, each leg its own first trade at or after t + 1 s within 60 s, + 1 c, cap 0.99, taker fee);
+  if only one leg fills it is naked, held to settlement. One arbitrage per game. S in {0.95, 0.97}.
+- **R2.CONS, broad-search 2-leg pre-game consensus signal with maker entry (4 trials).** Signal = the trades of
+  posthoc-search trial a_consensus_m2_pre_hyp (results/posthoc_search/trades.csv at 1e12415; per game the latest
+  t_ns among its rows, its team). Maker limit {A1 = last own trade, A2 = last - 1 c} x W {60 s, 300 s}; hold to
+  settlement; maker175 primary.
+- **R2.VOL, polymarket.com lead conditioned on Kalshi volatility regime (4 trials), B set.** C1 signals at d 0.05,
+  s 15 (Round 1 definition). Regime of a signal = Kalshi P(home) realized volatility over the 10 min before t (sum
+  of absolute trade-to-trade changes). Threshold = median of that statistic over all C1 signals in weeks before the
+  signal's week (walk-forward). Trials: {low, high} x {taker, maker} entry, hold to settlement.
+- **R2.TP, take-profit exits (6 trials).** Entries: I12 maker A1 W300, I9 maker A2 W300, C1 d 0.05 s 15 maker
+  (Round 1 definitions). Exit: sell at the first own-market trade at or after the fill with price >= entry + tp
+  (sell at that trade - 1 c, taker fee); if none within 60 min of the fill, hold to settlement. tp in {0.03, 0.06}.
+
+Cumulative after Round 2: own 79 + 16 = 95, plus external trials.
