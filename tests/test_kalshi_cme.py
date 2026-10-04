@@ -33,3 +33,19 @@ def test_leg_enters_at_t_plus_L_and_charges_fees():
 def test_moved_mid_is_not_executable():
     b = _book([(0, 1, 0.40, 0.42, 5, 5), (1 * NS, 2, 0.42, 0.44, 5, 5)])
     assert not S.legs(b, 0, 1, 1, 1.0)[0]["executable"]
+
+
+import kalshi_cme_maker as M
+
+
+def test_maker_fill_strictly_through_only():
+    tts = np.array([1, 2, 3], np.int64) * NS
+    assert M.first_through(tts, np.array([0.40, 0.40, 0.40]), 0, 5, 0.40, 1) is None   # touching is not a fill
+    assert M.first_through(tts, np.array([0.40, 0.39, 0.38]), 0, 5, 0.40, 1) == 2 * NS
+    assert M.first_through(tts, np.array([0.41, 0.42, 0.40]), 0, 5, 0.41, -1) == 2 * NS
+    assert M.first_through(tts, np.array([0.30]), 0, 0, 0.40, 1) is None                # outside W
+
+
+def test_maker_no_print_at_or_before_t():
+    tts = np.array([0, 10 * NS], np.int64)
+    assert M.first_through(tts, np.array([0.30, 0.40]), 0, 30, 0.40, 1) is None         # the print at t is excluded
