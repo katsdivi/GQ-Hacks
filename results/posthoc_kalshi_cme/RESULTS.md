@@ -53,3 +53,29 @@ Selection rule (Divi's): best placebo-adjusted profit with >= 50 executable sign
 
 Gate: real profit after costs > 0: NO; placebo clearly worse (diff CI lower bound >
 0): NO. **Gate FAILED. Stage 2 does not run, no 2026 CME data is downloaded, no money is spent, and that is the result.**
+
+
+## Amendment 1: CME maker variant (spec f1b2677, code e05f28c, 6 synthetic tests passed)
+
+Label: descriptive, post-hoc, 14 games; queue position unknown, trade-through fill is a lower bound on fills.
+
+1,437 Kalshi signals at J = 5 c gave 2,449 contract attempts (343 more had no CME quote on the needed side at t).
+Resting limit at the CME best bid (buy) or best ask (sell), size 10, filled only on a CME trade print strictly
+through the limit within W.
+
+| W_s | exit | attempts | fills | fill_rate | traded | games | gross_pc | profit_pc | ci_lo | ci_hi | excl_top5_profit_pc | breakeven_commission_per_contract_per_trade | placebo_fill_rate | placebo_profit_pc | real_minus_placebo | diff_ci_lo | diff_ci_hi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 5 | settle | 2449 | 11 | 0.0045 | 11 | 5 | 0.0400 | 0.0300 | -0.3882 | 0.4479 | nan | 0.0300 | 0.0013 | -0.0416 | 0.0716 | -0.3078 | 0.4545 |
+| 5 | t60 | 2449 | 11 | 0.0045 | 11 | 5 | -0.0845 | -0.1045 | -0.1767 | -0.0133 | nan | -0.0523 | 0.0013 | -0.0543 | -0.0502 | -0.1250 | 0.0541 |
+| 30 | settle | 2449 | 164 | 0.0670 | 164 | 13 | -0.0064 | -0.0164 | -0.0917 | 0.0571 | -0.1072 | -0.0164 | 0.0561 | -0.0252 | 0.0088 | -0.0628 | 0.0856 |
+| 30 | t60 | 2449 | 164 | 0.0670 | 153 | 13 | -0.0328 | -0.0528 | -0.0732 | -0.0338 | -0.0613 | -0.0264 | 0.0561 | -0.0427 | -0.0101 | -0.0305 | 0.0061 |
+
+What it shows:
+- Fills are rare: 0.45% of attempts within 5 s and 6.7% within 30 s (placebo 0.13% and 5.6%), as expected from a
+  strict trade-through rule (a lower bound on fills).
+- W = 5 s: 11 fills in 5 games, far too few to say anything (settlement +3.0 c [-38.8, +44.8]).
+- W = 30 s: 164 fills in 13 games. Held to settlement -1.6 c per contract [-9.2, +5.7] after the CME fee; the 60 s
+  exit -5.3 c [-7.3, -3.4]. Real minus placebo +0.9 c [-6.3, +8.6] (settlement) and -1.0 c [-3.1, +0.6] (60 s).
+- Break-even broker commission is negative in every cell with enough fills, i.e. no commission level makes it
+  profitable. Maker fills on CME, like maker fills on Kalshi, come when the market is about to move against the
+  order.
