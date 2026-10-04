@@ -51,3 +51,5 @@ Verdict depends on the reading of (3):
 Caveats: the rule was written after the results were seen. Condition (2) passes with a point estimate of +0.15 c whose
 CI is [-0.48, +0.77]. One day, top of book only, queue position unknown, maker fee 0 per the cached Gamma metadata,
 and polymarket.com is not available to US persons.
+
+Reading of condition (3) decided by Divi at 08:15 ET: all 88 games (38.6% positive, FAIL). Verdict: Plain maker N on polymarket.com is not distinguishable from noise on one day.
