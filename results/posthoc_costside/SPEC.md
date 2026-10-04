@@ -162,3 +162,21 @@ lose more; the patterns helper's best is favourites 0.80 to 0.90 at kickoff - 5 
   values in earlier weeks: {low, high} x 2 signals.
 
 Cumulative own trials after Round 3: 95 + 11 = 106.
+
+## Round 4 (4 trials; written 2026-10-04 05:41 ET, before Round 4 touches data)
+
+What Round 3 taught: passive pairs are profitable when both legs fill (+$892 on 5,067 pairs) and orphans lose
+more (-$1,694 on 4,491 even with an immediate taker hedge; orphans win 0.393 vs fill 0.461). Two ways to shrink the
+orphan cost, both new mechanisms (orphan management), pre-listed:
+
+- **R4.PAIRCALM, pairs only in calm slots (2 trials).** R3.PAIR HEDGENOW, but a slot is quoted only if the Kalshi
+  P(home) volatility statistic over the 10 min before t (Round 2 definition) is at or below the walk-forward median
+  of that statistic over all slots in earlier weeks. h (bid offset below each team's last trade) in {0.02, 0.03}.
+- **R4.REQUOTE, passive orphan completion (1 trial).** R3.PAIR slots, h 0.02. When exactly one leg has filled
+  (at e1, time f1), the other leg's bid is replaced by a maker bid at L2 = min(0.99 - e1, other team's last trade
+  at or before f1), valid in (f1 + 1 s, t + 900 s], trade-through fill. If still unfilled at t + 900 s: taker hedge
+  at the first other-team trade at or after t + 900 s, + 1 c (no trade within 60 s: hold to settlement). If both
+  original bids fill, as R3.PAIR.
+- **R4.REQUOTECALM (1 trial).** R4.REQUOTE restricted to calm slots (R4.PAIRCALM rule, h 0.02).
+
+Cumulative own trials after Round 4: 106 + 4 = 110.
