@@ -19,10 +19,13 @@
 # --rehearse: everything runs against throwaway copies in a temp dir: a clone of this repo at main (with a fake
 # "t13" branch and a ../wt-main worktree), a local fake Vultr tree instead of ssh/rsync to the host, uniquely named
 # fake collector processes, and fake recordings and heartbeats. The 00:30 gate is skipped. Nothing real is stopped
-# and no real git state changes (the only real file read is data/live/holdout_seconds_delay.csv, copied for step 6).
+# and no real git state changes (the only real file read is data/live/holdout_seconds_delay.csv, copied for step 6;
+# REHEARSE_DATA_FROM=<checkout with data/> when rehearsing from a checkout without data, e.g. ../wt-main).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 REH=0
+# rehearsal fake processes never outlive the script
+trap '[ "${REH:-0}" = 1 ] && [ -n "${T:-}" ] && pkill -f "$T/fake" 2>/dev/null; true' EXIT
 [ "${1:-}" = "--rehearse" ] && REH=1
 END_ET="2026-10-04 00:30:00"
 FEEDS="kalshi polymarket polymarket_us"
@@ -56,7 +59,7 @@ if [ $REH = 1 ]; then
   # fake Mac recordings, heartbeats and an auto-logged GAPS.md change; the real delay file for the hash check
   for f in $FEEDS; do mkdir -p "data/live/$f/20261003"; echo "fake mac $f" > "data/live/$f/20261003/1_1.parquet"; done
   mkdir -p data/live/heartbeat && cp "$V/data/live/heartbeat/20261003.jsonl" data/live/heartbeat/
-  cp "$REAL/data/live/holdout_seconds_delay.csv" data/live/holdout_seconds_delay.csv
+  cp "${REHEARSE_DATA_FROM:-$REAL}/data/live/holdout_seconds_delay.csv" data/live/holdout_seconds_delay.csv
   echo "| Sun Oct 04 00:30:01 | Sun Oct 04 00:30:02 | kalshi_ws | rehearsal auto-logged row | rehearsal |" >> GAPS.md
   RUN_COMMIT=$(git rev-parse main)
   RSRC="$V"

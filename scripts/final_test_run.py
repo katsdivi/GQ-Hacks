@@ -439,7 +439,10 @@ def main() -> None:
             print(f"  {m} files per feed: {f}")
         for k, v in ck["checks"].items():
             print(f"  {'OK ' if v['ok'] else 'BAD'} {k}: {v['value']}" + (f" (expected {v['expected']})" if "expected" in v else ""))
-        print("checklist", "PASS" if all(v["ok"] for v in ck["checks"].values()) else "FAIL")
+        ok = all(v["ok"] for v in ck["checks"].values())
+        print("checklist", "PASS" if ok else "FAIL")
+        if not ok:
+            raise SystemExit(1)       # stop_and_sync.sh step 6 must fail loudly
         return
     else:
         if (ROOT / "results" / "holdout").exists():
