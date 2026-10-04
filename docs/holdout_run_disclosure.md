@@ -44,11 +44,11 @@ At Divi's request, at about 23:43 ET on 2026-10-03 (before v3 Amendment 5 was co
 
 ## Recorder incidents
 
-- **Kalshi HTTP 429 on the Mac backup collector's REST trade polling** (9 in total on Oct 3; the 5 from this project's holdout queries and download are the 20:25 to 20:56 ones) (out/collector.log; the collector backs off 1 s and retries; its websocket stayed connected; Vultr, the primary, unaffected):
-  - 16:22:36 ET (1): during training-side Kalshi metadata work in this session; cause not determined.
-  - 20:25:37 and 20:28:25 ET (2): unthrottled Kalshi event-count queries (holdout ids only) from the same IP.
+- **Kalshi HTTP 429 on the Mac backup collector's REST trade polling**: 248 on 2026-10-03 (ET), by hour: 11:00 6, 13:00 19, 14:00 101, 15:00 75, 16:00 39, 20:00 5, 23:00 3 (out/collector.log). The collector backs off 1 s and retries; its websocket feed stayed connected; Vultr (the primary recorder) does not share this IP and is unaffected. Attributable to this project's own Kalshi requests from the Mac:
+  - 20:25:37 and 20:28:25 ET (2): unthrottled Kalshi event-count queries (holdout ids only).
   - 20:54:59 to 20:56:52 ET (3): the holdout download at 4 requests/s; it paused automatically and restarted at 2 requests/s.
-  - 23:28:46, 23:30:04, 23:30:07 ET (3): not from the download (its Kalshi phase ended 23:25); likely the collector's own polling load or another process on the IP; not determined.
+  - 16:00 to 16:59 ET (39): overlaps training-side Kalshi metadata requests (ingest/kalshi_market_meta.py at 4 requests/s from 16:33 ET); not separated from the collector's own load.
+  - The rest (11:00 to 15:59 ET, 201; 23:28 to 23:30 ET, 3) coincide with heavy live-game polling (noon and afternoon kickoff waves) and are not attributed; the 23:28 to 23:30 ones are not from the holdout download (its Kalshi phase ended at 23:25 ET).
 - **Mac backup outages longer than 60 s** (GAPS.md heartbeat rows, Oct 3 ET): 09:06 to 09:49 (several feeds, up to 880 s), 10:13 to 10:15, 11:57 to 12:41 (lid closed on battery, "Clamshell Sleep" in pmset; polymarket.com gap 2,252 s), 12:44 to 13:30 (up to 1,467 s), 14:00 to 14:18 (CPU starvation from an 8-process simulation, 972 s), 16:08 to 16:09, 16:42 to 16:47, 20:12 to 20:23 (Mac on battery since about 19:45 ET; kalshi_ws 633 s). The lead test picks Vultr first and excludes a game on a machine with any outage over 60 s in its window (v2 Amendment 3 item 10).
 - **Polymarket US recorder** wrote exact-repeat rows when one side was empty; removed at read time (v2 Amendment 2 disclosure); the fix was not deployed during the holdout.
 
