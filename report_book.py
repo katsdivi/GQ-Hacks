@@ -160,7 +160,8 @@ def deflated_sharpe(r: np.ndarray, trial_srs: list[float], n_trials: int) -> flo
 
 def build(rows: pd.DataFrame, bt: pd.DataFrame, b2: pd.DataFrame, sel, game_kickoffs: pd.Series, fac: pd.DataFrame,
           res_dir: Path, prefix: str = "", label: str = "Training", bases: dict | None = None,
-          trial_srs: dict | None = None, png: str = "equity_training.png") -> tuple[dict, dict, dict]:
+          trial_srs: dict | None = None, png: str = "equity_training.png",
+          n_total: int = 21) -> tuple[dict, dict, dict]:
     """All book numbers for one sample. prefix "" = training keys, "OOS." = test keys. bases: the training
     capital bases (v3 A1: fixed from training and reused on the test); None = compute here (training).
     trial_srs: {"A": [...], "B": [...], "all": [...]} training trial Sharpes for the deflated Sharpe; None =
@@ -244,7 +245,7 @@ def build(rows: pd.DataFrame, bt: pd.DataFrame, b2: pd.DataFrame, sel, game_kick
         r = (p / bases[name]).to_numpy()
         put(f"{name}.sharpe_daily", sr(p))
         put(f"{name}.deflated_sharpe_own_grid", deflated_sharpe(r, own, n_own))
-        put(f"{name}.deflated_sharpe_total_21", deflated_sharpe(r, trial_srs["all"], 21))
+        put(f"{name}.deflated_sharpe_total_{n_total}", deflated_sharpe(r, trial_srs["all"], n_total))
     put("deflated_sharpe.note", "total-21 deflated Sharpe: trial-Sharpe variance from the 12 TRAINING trials with "
                                 "daily series (A 3, B 8, combined 1; the other 9 of the 21 have no daily series); "
                                 "B's 8 trials, all strongly negative, dominate that variance")
