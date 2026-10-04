@@ -47,4 +47,6 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 
 | 8 | PRIOR: team prior from past Kalshi closing errors (under and over) | +10 | new |
 
-**Total after Round 8: +185.** Stop condition (+100): not met.
+| 9 | Filter combinations on the near-miss and the prior signal (5 trials) | +10 | new combinations requested in the brief (item 5); scored once |
+
+**Total after Round 9: +195.** Stop condition (+100): not met.

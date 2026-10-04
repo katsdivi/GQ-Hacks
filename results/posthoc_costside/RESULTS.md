@@ -372,3 +372,34 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 294 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 9
+
+Run 2026-10-04 05:53 ET.
+
+- Every independent filter keeps R2.VOL.low.maker in the same +0.04 to +0.08 range with a CI that still includes
+  0 (best: ESPN-calm subset +0.077 [-0.024, +0.180] on 243 trades). The filters only shrink the sample; none
+  separates winners from losers. These are subsets of the same fills, so they are not independent evidence.
+- polymarket.com agreement makes the Round 8 prior signal worse (-0.036 on 112 trades).
+
+### All Round 9 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R9.VOLLOW.espncalm | 243 | 0.0769 | -0.0239 | 0.1798 | 4.201 | 0.0846 | 4.593 | 59.21 | 3.714 | 1 |
+| R9.VOLLOW.prior | 365 | 0.0539 | -0.0244 | 0.1248 | 3.099 | 0.0609 | 3.474 | 71.97 | 2.991 | 1 |
+| R9.VOLLOW.imb | 559 | 0.049 | -0.0175 | 0.1139 | 2.672 | 0.0563 | 3.054 | 105.1 | 3.38 | 1 |
+| R9.VOLLOW.regular | 651 | 0.0416 | -0.0185 | 0.1025 | 2.292 | 0.0488 | 2.671 | 104.6 | 3.015 | 1 |
+| R9.PRIOR.pm | 112 | -0.0361 | -0.1884 | 0.1081 | -1.939 | -0.029 | -1.545 | -59.53 | -1.071 | 1 |
+
+### Cumulative correction after Round 9
+
+Trials: own 152 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 299. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.380. DSR of that best: 1.70e-29 (project convention;
+normal-returns version 1.61e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 299 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.

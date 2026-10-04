@@ -282,3 +282,16 @@ filters use only data at or before each signal's decision time t; fills are the 
   trade within 10 min before t, venue time) is >= its Kalshi own last trade (venues agree in direction).
 
 Cumulative own trials after Round 9: 147 + 5 = 152.
+
+## Round 10 (4 trials; Elo strength from past results; written 2026-10-04 05:52 ET, before Round 10 touches data)
+
+Why: item 4 of the brief (strength of schedule from past results only); Round 8 used Kalshi's own past errors,
+Elo uses past OUTCOMES independent of Kalshi prices. A set, both leagues separately. Elo ratings start at 1500,
+K = 20, home advantage 50 points (65 for NFL), updated with each game's Kalshi settlement (1 / 0 / 0.5) in kickoff
+order, only for games whose kickoff + 6 h < the decision time. Fixed constants, no tuning. Elo probability for a
+team at decision t = kickoff - 5 min; only teams with >= 3 rated past games on both sides. Kalshi K = own last
+trade within 10 min before t. Buy the team with the larger Elo minus Kalshi gap if >= e; hold to settlement.
+
+- e in {0.05, 0.10} x {taker (5-min window), maker (limit = own last trade, W 300 s)} = 4 trials.
+
+Cumulative own trials after Round 10: 152 + 4 = 156.
