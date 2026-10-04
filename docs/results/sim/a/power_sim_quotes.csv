@@ -1,0 +1,9 @@
+venue,games,studies,no_link_kalshi_k@0.05,no_link_reverse_k@0.05,no_link_kalshi_k@0.025,no_link_reverse_k@0.025,no_link_median_lag,zero_lag_kalshi_k@0.05,zero_lag_reverse_k@0.05,zero_lag_kalshi_k@0.025,zero_lag_reverse_k@0.025,zero_lag_median_lag,lead_5s_kalshi_k@0.05,lead_5s_reverse_k@0.05,lead_5s_kalshi_k@0.025,lead_5s_reverse_k@0.025,lead_5s_median_lag,lead_jitter_kalshi_k@0.05,lead_jitter_reverse_k@0.05,lead_jitter_kalshi_k@0.025,lead_jitter_reverse_k@0.025,lead_jitter_median_lag
+Polymarket US,30,500,7,9,5,7,0.0,0,0,0,0,0.0,296,0,261,0,5.0,294,0,233,0,5.0
+Polymarket US,40,500,6,6,3,6,0.0,0,0,0,0,0.0,355,0,324,0,5.0,348,0,295,0,5.0
+Polymarket US,60,500,8,3,3,3,0.0,0,0,0,0,0.0,432,0,401,0,5.0,430,0,398,0,5.0
+Polymarket US,80,500,4,5,2,4,0.0,0,0,0,0,0.0,450,0,436,0,5.0,451,0,424,0,5.0
+polymarket.com,30,500,8,6,4,5,0.0,0,0,0,0,0.0,315,0,271,0,5.0,307,0,248,0,5.0
+polymarket.com,40,500,7,8,3,3,0.0,0,0,0,0,0.0,365,0,340,0,5.0,346,0,309,0,5.0
+polymarket.com,60,500,8,1,6,1,0.0,0,0,0,0,0.0,435,0,406,0,5.0,428,0,391,0,5.0
+polymarket.com,80,500,5,4,3,0,0.0,0,0,0,0,0.0,470,0,446,0,5.0,470,0,446,0,5.0

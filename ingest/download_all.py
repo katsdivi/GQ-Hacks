@@ -129,6 +129,9 @@ def kalshi_events(league: str) -> pd.DataFrame:
             continue
         out.append({"league": league, "k_event": ev, "k_date": gdate, "k_sep": sep, "k_away": away_name,
                     "k_home": home_name, "k_away_ticker": a.ticker, "k_home_ticker": h.ticker,
+                    # Known: a hyphenated team code loses its prefix here (Miami (OH) "M-OH" -> "OH"). Codes feed
+                    # ESPN/Polymarket matching and game ids, so this is left as is; Strategy A resolves the real
+                    # market ids from each game's trade file (strategy_a.team_markets). Use the tickers, not codes.
                     "k_away_code": a.ticker.rsplit("-", 1)[1], "k_home_code": h.ticker.rsplit("-", 1)[1],
                     "k_volume": float(g["vol"].sum())})
     return pd.DataFrame(out)
@@ -345,6 +348,25 @@ def download(plan: pd.DataFrame, limit: int | None) -> None:
         upsert_games(games_rows)
 
 
+def pick_away_ticker(home_ticker: str, event_tickers) -> str:
+    """The away market = the event's one other market, from Kalshi's own market list. Never rebuilt from team
+    codes (a code can contain a hyphen: Miami (OH) is "M-OH", which ticker.rsplit("-", 1) cuts to "OH")."""
+    ts = set(event_tickers)
+    others = sorted(ts - {home_ticker})
+    if home_ticker not in ts or len(others) != 1:
+        raise ValueError(f"{home_ticker}: event market list {sorted(ts)} does not hold exactly home + one other")
+    return others[0]
+
+
+def event_away_ticker(home_ticker: str, event: str) -> str:
+    """Away market ticker from the event's market list (historical endpoint first; ids only are used)."""
+    for path in ("/historical/markets", "/markets"):
+        ms = [m["ticker"] for m in get(f"{KALSHI}{path}", {"event_ticker": event, "limit": 100}).get("markets", [])]
+        if ms:
+            return pick_away_ticker(home_ticker, ms)
+    raise ValueError(f"{event}: no markets listed")
+
+
 def fetch_game(game_id: str, league: str, home: str, away: str, kickoff_utc, kalshi_home_ticker: str,
                pm_condition: str) -> pd.DataFrame:
     """Fetch one game's public ticks from scratch (used by run.py on a clean clone). Writes the same
@@ -360,7 +382,7 @@ def fetch_game(game_id: str, league: str, home: str, away: str, kickoff_utc, kal
     km = get(f"{KALSHI}/historical/markets/{kalshi_home_ticker}")["market"]
     t = re.match(r"^(.*?)\s+(at|vs\.?)\s+(.*?)(\s+Winner\?)?$", km.get("title") or "")
     k_away_name, k_home_name = (t.group(1), t.group(3)) if t else ("", km.get("yes_sub_title", ""))
-    away_ticker = kalshi_home_ticker.rsplit("-", 1)[0] + "-" + away
+    away_ticker = event_away_ticker(kalshi_home_ticker, km["event_ticker"])   # from the event, not from codes
     probe = get(f"{PMDATA}/trades", {"market": pm_condition, "limit": 500, "takerOnly": "true"}, throttle=False)
     names = {int(x["outcomeIndex"]): x["outcome"] for x in probe}
     slug = probe[0]["eventSlug"] if probe else ""

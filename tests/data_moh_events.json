@@ -1,0 +1,102 @@
+[
+ {
+  "game_id": "cfb_20250920_unlv_oh",
+  "event": "KXNCAAFGAME-25SEP20UNLVM-OH",
+  "home": "KXNCAAFGAME-25SEP20UNLVM-OH-M-OH",
+  "event_markets": [
+   "KXNCAAFGAME-25SEP20UNLVM-OH-M-OH",
+   "KXNCAAFGAME-25SEP20UNLVM-OH-UNLV"
+  ],
+  "bulk_away": "KXNCAAFGAME-25SEP20UNLVM-OH-UNLV"
+ },
+ {
+  "game_id": "cfb_20251004_oh_niu",
+  "event": "KXNCAAFGAME-25OCT04M-OHNIU",
+  "home": "KXNCAAFGAME-25OCT04M-OHNIU-NIU",
+  "event_markets": [
+   "KXNCAAFGAME-25OCT04M-OHNIU-M-OH",
+   "KXNCAAFGAME-25OCT04M-OHNIU-NIU"
+  ],
+  "bulk_away": "KXNCAAFGAME-25OCT04M-OHNIU-M-OH"
+ },
+ {
+  "game_id": "cfb_20251011_oh_akr",
+  "event": "KXNCAAFGAME-25OCT11M-OHAKR",
+  "home": "KXNCAAFGAME-25OCT11M-OHAKR-AKR",
+  "event_markets": [
+   "KXNCAAFGAME-25OCT11M-OHAKR-AKR",
+   "KXNCAAFGAME-25OCT11M-OHAKR-M-OH"
+  ],
+  "bulk_away": "KXNCAAFGAME-25OCT11M-OHAKR-M-OH"
+ },
+ {
+  "game_id": "cfb_20251018_emu_oh",
+  "event": "KXNCAAFGAME-25OCT18EMUM-OH",
+  "home": "KXNCAAFGAME-25OCT18EMUM-OH-M-OH",
+  "event_markets": [
+   "KXNCAAFGAME-25OCT18EMUM-OH-EMU",
+   "KXNCAAFGAME-25OCT18EMUM-OH-M-OH"
+  ],
+  "bulk_away": "KXNCAAFGAME-25OCT18EMUM-OH-EMU"
+ },
+ {
+  "game_id": "cfb_20251025_wmu_oh",
+  "event": "KXNCAAFGAME-25OCT25WMUM-OH",
+  "home": "KXNCAAFGAME-25OCT25WMUM-OH-M-OH",
+  "event_markets": [
+   "KXNCAAFGAME-25OCT25WMUM-OH-M-OH",
+   "KXNCAAFGAME-25OCT25WMUM-OH-WMU"
+  ],
+  "bulk_away": "KXNCAAFGAME-25OCT25WMUM-OH-WMU"
+ },
+ {
+  "game_id": "cfb_20251105_oh_ohio",
+  "event": "KXNCAAFGAME-25NOV04M-OHOHIO",
+  "home": "KXNCAAFGAME-25NOV04M-OHOHIO-OHIO",
+  "event_markets": [
+   "KXNCAAFGAME-25NOV04M-OHOHIO-M-OH",
+   "KXNCAAFGAME-25NOV04M-OHOHIO-OHIO"
+  ],
+  "bulk_away": "KXNCAAFGAME-25NOV04M-OHOHIO-M-OH"
+ },
+ {
+  "game_id": "cfb_20251113_tol_oh",
+  "event": "KXNCAAFGAME-25NOV12TOLM-OH",
+  "home": "KXNCAAFGAME-25NOV12TOLM-OH-M-OH",
+  "event_markets": [
+   "KXNCAAFGAME-25NOV12TOLM-OH-M-OH",
+   "KXNCAAFGAME-25NOV12TOLM-OH-TOL"
+  ],
+  "bulk_away": "KXNCAAFGAME-25NOV12TOLM-OH-TOL"
+ },
+ {
+  "game_id": "cfb_20251129_ball_oh",
+  "event": "KXNCAAFGAME-25NOV29BALLM-OH",
+  "home": "KXNCAAFGAME-25NOV29BALLM-OH-M-OH",
+  "event_markets": [
+   "KXNCAAFGAME-25NOV29BALLM-OH-BALL",
+   "KXNCAAFGAME-25NOV29BALLM-OH-M-OH"
+  ],
+  "bulk_away": "KXNCAAFGAME-25NOV29BALLM-OH-BALL"
+ },
+ {
+  "game_id": "cfb_20251206_oh_wmu",
+  "event": "KXNCAAFGAME-25DEC06M-OHWMU",
+  "home": "KXNCAAFGAME-25DEC06M-OHWMU-WMU",
+  "event_markets": [
+   "KXNCAAFGAME-25DEC06M-OHWMU-M-OH",
+   "KXNCAAFGAME-25DEC06M-OHWMU-WMU"
+  ],
+  "bulk_away": "KXNCAAFGAME-25DEC06M-OHWMU-M-OH"
+ },
+ {
+  "game_id": "cfb_20251227_oh_fres",
+  "event": "KXNCAAFGAME-25DEC27M-OHFRES",
+  "home": "KXNCAAFGAME-25DEC27M-OHFRES-FRES",
+  "event_markets": [
+   "KXNCAAFGAME-25DEC27M-OHFRES-FRES",
+   "KXNCAAFGAME-25DEC27M-OHFRES-M-OH"
+  ],
+  "bulk_away": "KXNCAAFGAME-25DEC27M-OHFRES-M-OH"
+ }
+]

@@ -1,0 +1,2130 @@
+{
+ "KXNCAAFGAME-26OCT02LIBDEL": {
+  "league": "cfb",
+  "slug": "cfb-librty-del-2026-10-02",
+  "condition": "0xab609bd6badc7a3778fa631be12f1ff8c2bc4234edea7d501f4f86f4136cdf95",
+  "game_start": "2026-10-02T23:00:00+00:00",
+  "outcomes": [
+   "Liberty",
+   "Delaware"
+  ],
+  "token_ids": [
+   "43436966083087007331570372301761570175772836924996282950292161184847088466044",
+   "57626964100959601492819760632253677497012657380068664331808707999885942434640"
+  ],
+  "closed": true,
+  "game_id": "cfb_20261002_lib_del",
+  "match_score": 1.0,
+  "collector_home_token": "57626964100959601492819760632253677497012657380068664331808707999885942434640",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT02MTSTIDHO": {
+  "league": "cfb",
+  "slug": "cfb-monst-idaho-2026-10-02",
+  "condition": "0x6223d41d741f62497da75b8799abad75f640662053e137687a68cd833bf0a89f",
+  "game_start": "2026-10-03T02:30:00+00:00",
+  "outcomes": [
+   "Montana State",
+   "Idaho"
+  ],
+  "token_ids": [
+   "94655325460069147869402429218575435827680005678804087183284212234638023364802",
+   "105259964619327190649549506799274533638382248734302930605153593268392634730581"
+  ],
+  "closed": true,
+  "game_id": "cfb_20261003_mtst_idho",
+  "match_score": 1.0,
+  "collector_home_token": "105259964619327190649549506799274533638382248734302930605153593268392634730581",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT02PITTVT": {
+  "league": "cfb",
+  "slug": "cfb-pitt-vtech-2026-10-02",
+  "condition": "0x3f297899eaa9f13e5cd374fa09c663ff289a6b873c6c8840ae010cb37dd50188",
+  "game_start": "2026-10-02T23:00:00+00:00",
+  "outcomes": [
+   "Pittsburgh",
+   "Virginia Tech"
+  ],
+  "token_ids": [
+   "1781020043817527953447451699454010026678701521796251237109051763473460757394",
+   "46836206381679876639183924639779072303435836778122333705531837377152739922333"
+  ],
+  "closed": true,
+  "game_id": "cfb_20261002_pitt_vt",
+  "match_score": 1.0,
+  "collector_home_token": "46836206381679876639183924639779072303435836778122333705531837377152739922333",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT02PSUNW": {
+  "league": "cfb",
+  "slug": "cfb-pennst-nw-2026-10-02",
+  "condition": "0xb1f9bb144567e84476f89bb1cf893999d1e019467d3dc264bde370a87831484e",
+  "game_start": "2026-10-03T00:00:00+00:00",
+  "outcomes": [
+   "Penn State",
+   "Northwestern"
+  ],
+  "token_ids": [
+   "39937686242628318708378020349995412655628278023987869228796407832978991870210",
+   "33364272171077651186188827901106727412004452734198458232424834955925157454201"
+  ],
+  "closed": true,
+  "game_id": "cfb_20261003_psu_nw",
+  "match_score": 1.0,
+  "collector_home_token": "33364272171077651186188827901106727412004452734198458232424834955925157454201",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03AAMUJKST": {
+  "league": "cfb",
+  "slug": "cfb-alaam-jackst-2026-10-03",
+  "condition": "0x16e1ebe1dd9d2ee16a0f0f6e5cafe7ef1c81924d766c431a3dd9922c0d2f4eb2",
+  "game_start": "2026-10-03T21:00:00+00:00",
+  "outcomes": [
+   "Alabama A&M",
+   "Jackson State"
+  ],
+  "token_ids": [
+   "46429813738514886562427577792639134517494462301747134987900396266916820346363",
+   "37786277623504722031582937058558304066773254304155551907392849716289820114082"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_aamu_jkst",
+  "match_score": 1.0,
+  "collector_home_token": "37786277623504722031582937058558304066773254304155551907392849716289820114082",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03AKRCMU": {
+  "league": "cfb",
+  "slug": "cfb-akron-cmich-2026-10-03",
+  "condition": "0x114750ef20eab33e2b54df7ae5157f0d8946f685325614438ce45b39192e59d2",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Akron",
+   "Central Michigan"
+  ],
+  "token_ids": [
+   "7362240399859846964049854656532220651704763010668065599250668891709541727179",
+   "50228300852569554522108845301945649691476642583243094337476386931407812506753"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_akr_cmu",
+  "match_score": 1.0,
+  "collector_home_token": "50228300852569554522108845301945649691476642583243094337476386931407812506753",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ALAMSST": {
+  "league": "cfb",
+  "slug": "cfb-ala-mspst-2026-10-03",
+  "condition": "0xcfbd24ca5c9e6d129aa72817fb466435bf3ac7dc4a2f2e7b9652bb192d8856d1",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Alabama",
+   "Mississippi State"
+  ],
+  "token_ids": [
+   "73675634126844636860252916713407567597274107877022289152803586610512398053550",
+   "197305954639902228770890798441414374970161195621294956348257526059797587900"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ala_msst",
+  "match_score": 1.0,
+  "collector_home_token": "197305954639902228770890798441414374970161195621294956348257526059797587900",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ALCNGRAM": {
+  "league": "cfb",
+  "slug": "cfb-alcst-grmbst-2026-10-03",
+  "condition": "0x5d85669b628897e7ca1040e7a840f8c4e42afa0c1d4f38053fe2c630c056ebcb",
+  "game_start": "2026-10-03T19:00:00+00:00",
+  "outcomes": [
+   "Alcorn State",
+   "Grambling State"
+  ],
+  "token_ids": [
+   "103260613329875177143060857948401692723950517819647352229852004514423415437186",
+   "29029708398287826483270722011291092108801480031572099507472458089811644335220"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_alcn_gram",
+  "match_score": 1.0,
+  "collector_home_token": "29029708398287826483270722011291092108801480031572099507472458089811644335220",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ALSTCOOK": {
+  "league": "cfb",
+  "slug": "cfb-alast-bcook-2026-10-03",
+  "condition": "0xf01f0aeece2b754bbcfa1b69523caf73856c2e01de509c349e4b68787b15c1d8",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "Alabama State",
+   "Bethune-Cookman"
+  ],
+  "token_ids": [
+   "54459724774392634232989112712239292467959675049934116801443120306480203609799",
+   "97913474151388922928181327066115538349843030328207993033434163809085393326837"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_alst_cook",
+  "match_score": 1.0,
+  "collector_home_token": "97913474151388922928181327066115538349843030328207993033434163809085393326837",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ARKTXAM": {
+  "league": "cfb",
+  "slug": "cfb-ark-txam-2026-10-03",
+  "condition": "0x90798cbe657e5badd5497cf9078d675ca17ade0a08dc9a10d36017631dc4c029",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Arkansas",
+   "Texas A&M"
+  ],
+  "token_ids": [
+   "4318549932122064102452942165408851925158830268201729696586433574138952721786",
+   "70391354440828354476301245508682933141296271164547386825753611631855253645631"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ark_txam",
+  "match_score": 1.0,
+  "collector_home_token": "70391354440828354476301245508682933141296271164547386825753611631855253645631",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ARMYLT": {
+  "league": "cfb",
+  "slug": "cfb-army-loutch-2026-10-03",
+  "condition": "0xd3f380a89143c863067dcfb220c314403c063787a73214097418ced69dc585bd",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Army",
+   "Louisiana Tech"
+  ],
+  "token_ids": [
+   "5131533355804593173979805655141047601825332975494339771940196399813887639120",
+   "40206704768479071344147803532355104186653063211326998350015430996975803733029"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_army_lt",
+  "match_score": 1.0,
+  "collector_home_token": "40206704768479071344147803532355104186653063211326998350015430996975803733029",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ARPBSOU": {
+  "league": "cfb",
+  "slug": "cfb-arpb-south-2026-10-03",
+  "condition": "0x843a8881f9bd841e63740fd56d99026870256a95d4be485e902f105f1c028ac9",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Arkansas-Pine Bluff",
+   "Southern University"
+  ],
+  "token_ids": [
+   "67912501672145950902264361024945276615216078264357585922173141407341622834108",
+   "38184408503493402374990168394817099930878730439641102003492281635766322810418"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_arpb_sou",
+  "match_score": 1.0,
+  "collector_home_token": "38184408503493402374990168394817099930878730439641102003492281635766322810418",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ARSTULL": {
+  "league": "cfb",
+  "slug": "cfb-arkst-loulaf-2026-10-03",
+  "condition": "0xd3a965a8653b29923e6a18c61ab0e941a6e39ac3bb9afe4723ca5561f9036957",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "Arkansas State",
+   "Louisiana"
+  ],
+  "token_ids": [
+   "50894508874250481625320869613962473550938632085662175658244157652890042268081",
+   "101934947143599825678613935443953344208840763996923010516728298479042240903660"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_arst_ull",
+  "match_score": 1.0,
+  "collector_home_token": "101934947143599825678613935443953344208840763996923010516728298479042240903660",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03AUBTENN": {
+  "league": "cfb",
+  "slug": "cfb-aubrn-tenn-2026-10-03",
+  "condition": "0xd48b5a74029722c1381e3327c5c725d1e22ebca248e1db944281a5fc1fc78df2",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Auburn",
+   "Tennessee"
+  ],
+  "token_ids": [
+   "34297041852393542513226735816156738950949015146141075514769956911839128573019",
+   "70806343787965028239948980783867759382055026710511772983313913558379990998791"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_aub_tenn",
+  "match_score": 1.0,
+  "collector_home_token": "70806343787965028239948980783867759382055026710511772983313913558379990998791",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03BAYASU": {
+  "league": "cfb",
+  "slug": "cfb-bayl-arzst-2026-10-03",
+  "condition": "0x8bdc11090ae93f158736d93686c9dd39fd658757a84415420ad54d8d835f0c36",
+  "game_start": "2026-10-04T02:30:00+00:00",
+  "outcomes": [
+   "Baylor",
+   "Arizona State"
+  ],
+  "token_ids": [
+   "91909502503968469596521628577384416668314678002933440430411899526706832290102",
+   "11900184068257481099319822713250817014097569261595631836305337057125338296748"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_bay_asu",
+  "match_score": 1.0,
+  "collector_home_token": "11900184068257481099319822713250817014097569261595631836305337057125338296748",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03BCSMU": {
+  "league": "cfb",
+  "slug": "cfb-boscol-smu-2026-10-03",
+  "condition": "0x603c8bd00983ca43d5a866fb56de94cbafd09d763c01d5c0ba9382408017ba86",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Boston College",
+   "SMU"
+  ],
+  "token_ids": [
+   "61728912720067150072050029162433485287443564406492476069907845532366936505667",
+   "62199264535271485859766426225403697824753495476190851007395945433527256209678"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_bc_smu",
+  "match_score": 1.0,
+  "collector_home_token": "62199264535271485859766426225403697824753495476190851007395945433527256209678",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03BGSUMOH": {
+  "league": "cfb",
+  "slug": "cfb-bowlgr-miaoh-2026-10-03",
+  "condition": "0x17ead43c98dc2793869f49c51a9a3f506e35130d5dfb14f08f68ba0cad72a0a3",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Bowling Green",
+   "Miami (OH)"
+  ],
+  "token_ids": [
+   "14419137802330848869373558915654882408620263232210101330150473140296881509335",
+   "22950517726809453532319289048986320162657962649469080886777483155419423012548"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_bgsu_moh",
+  "match_score": 1.0,
+  "collector_home_token": "22950517726809453532319289048986320162657962649469080886777483155419423012548",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03BRWNURI": {
+  "league": "cfb",
+  "slug": "cfb-brwn-ri-2026-10-03",
+  "condition": "0x31ce31437d27b29fd01c4d8a3534035e8065ee552f8a0dab9f804cc77961d2e1",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Brown",
+   "Rhode Island"
+  ],
+  "token_ids": [
+   "101430253973292325578382727080958201304851984493182472802055588830378182685611",
+   "18412804081209322576824575612223280214421583664826400470553795660209665332226"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_brwn_uri",
+  "match_score": 1.0,
+  "collector_home_token": "18412804081209322576824575612223280214421583664826400470553795660209665332226",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03BYUTCU": {
+  "league": "cfb",
+  "slug": "cfb-byu-tcu-2026-10-03",
+  "condition": "0x8c3562b29deacb77a8c09df3fa1a740a952a1e61d33a6b70d2c2f980def87760",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "BYU",
+   "TCU"
+  ],
+  "token_ids": [
+   "11513321974528709959979729038663588070421500325711475817844853244964787641342",
+   "51368532468572719300408924732516870832279324711711210088082747822135767539222"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_byu_tcu",
+  "match_score": 1.0,
+  "collector_home_token": "51368532468572719300408924732516870832279324711711210088082747822135767539222",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CALUNLV": {
+  "league": "cfb",
+  "slug": "cfb-cah-unlv-2026-10-03",
+  "condition": "0x796770f1475c3fbff51e27571fb7023f0ccdf05e285fb71f4c9447c62f984b10",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "California",
+   "UNLV"
+  ],
+  "token_ids": [
+   "99287699998672520143667516245973720064220231999608168490071823944649811850848",
+   "38062263292070542165970973507819463546618279032280471435013025329250689168425"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_cal_unlv",
+  "match_score": 1.0,
+  "collector_home_token": "38062263292070542165970973507819463546618279032280471435013025329250689168425",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CAMPNCCU": {
+  "league": "cfb",
+  "slug": "cfb-camp-ncc-2026-10-03",
+  "condition": "0xd2d392b695156b74d54ea53f15bc7274c6563ff40820b1f5ccf67a2f01c484f6",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Campbell",
+   "North Carolina Central"
+  ],
+  "token_ids": [
+   "72903072434798856192218374852033977663022586967052365954667203383972000822952",
+   "10691785621457751454061621291106962324511006074394734245415356150793812132274"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_camp_nccu",
+  "match_score": 1.0,
+  "collector_home_token": "10691785621457751454061621291106962324511006074394734245415356150793812132274",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CHATETSU": {
+  "league": "cfb",
+  "slug": "cfb-chat-etnst-2026-10-03",
+  "condition": "0xa0bc89a84f329c2a76e3680a4fefa083caa692e88253a4b14805904cbb6adc24",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Chattanooga",
+   "East Tennessee State"
+  ],
+  "token_ids": [
+   "106416121694125159427372581801032613028418731963239242705227229245448045029697",
+   "65003510002040500536767429216653867689024308078486611663932362648975270962407"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_chat_etsu",
+  "match_score": 1.0,
+  "collector_home_token": "65003510002040500536767429216653867689024308078486611663932362648975270962407",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CHSTARL": {
+  "league": "cfb",
+  "slug": "cfb-chs-tarl-2026-10-03",
+  "condition": "0xbeda34d0447946d4c5d76450906ec6a4f83b53f6990489846dfe6f5aaafaeb52",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Chicago State",
+   "Tarleton State"
+  ],
+  "token_ids": [
+   "79034052777182214671112485613114666533571667187579700186745791982576308306348",
+   "3775192257386794455252174575113385406333149456667750316772253872349912371792"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_chs_tarl",
+  "match_score": 1.0,
+  "collector_home_token": "3775192257386794455252174575113385406333149456667750316772253872349912371792",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CINARIZ": {
+  "league": "cfb",
+  "slug": "cfb-cin-arz-2026-10-03",
+  "condition": "0x987a8f71da5e8eaf82a63a8afa667c932e516d502f615febdace4be8a0f510ec",
+  "game_start": "2026-10-04T03:00:00+00:00",
+  "outcomes": [
+   "Cincinnati",
+   "Arizona"
+  ],
+  "token_ids": [
+   "29814109223877131388157731042057879890906712251235374455748413517772061870143",
+   "82833433281283639625232358847042743915641243235790884063312293447126801094962"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_cin_ariz",
+  "match_score": 1.0,
+  "collector_home_token": "82833433281283639625232358847042743915641243235790884063312293447126801094962",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CITSCST": {
+  "league": "cfb",
+  "slug": "cfb-cita-scarst-2026-10-03",
+  "condition": "0x80083b7c94e0d0da3df77d786c87ac1f06fe7727b463755a3abee7050b8c1180",
+  "game_start": "2026-10-03T18:00:00+00:00",
+  "outcomes": [
+   "The Citadel",
+   "South Carolina State"
+  ],
+  "token_ids": [
+   "77808971781584572999645278354626940451322090988748466641454660346940789114264",
+   "93787645680114697575292028189175711912952432363292988020032074876109354303212"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_cit_scst",
+  "match_score": 1.0,
+  "collector_home_token": "93787645680114697575292028189175711912952432363292988020032074876109354303212",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03COLGHARV": {
+  "league": "cfb",
+  "slug": "cfb-colg-harv-2026-10-03",
+  "condition": "0x8aee3b316488c65b0f0f04a63e624a91bf379a2f5e4f23478ce6815b1d06c57f",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Colgate",
+   "Harvard"
+  ],
+  "token_ids": [
+   "31543692146604262221816528726958621792619888392931631346835507541089285987401",
+   "6447011646814631671636089611563049680333188446336629002328670742992530631837"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_colg_harv",
+  "match_score": 1.0,
+  "collector_home_token": "6447011646814631671636089611563049680333188446336629002328670742992530631837",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03CORGTWN": {
+  "league": "cfb",
+  "slug": "cfb-cor-gtwn-2026-10-03",
+  "condition": "0x771d1f2af2022daff830d1e23af18fe3cec06726b7e6a08c435e0f74a2b33550",
+  "game_start": "2026-10-03T16:30:00+00:00",
+  "outcomes": [
+   "Cornell",
+   "Georgetown"
+  ],
+  "token_ids": [
+   "34572273295693168328280039024934178222333181692648232717024641775329876806319",
+   "97854288466158192619901288430882531497404239980870499315656939167798118403078"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_cor_gtwn",
+  "match_score": 1.0,
+  "collector_home_token": "97854288466158192619901288430882531497404239980870499315656939167798118403078",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03DAVUSD": {
+  "league": "cfb",
+  "slug": "cfb-dav-usd-2026-10-03",
+  "condition": "0xf5601588c6c28490fbdf718074e163dc6f9329a49dbb40af9d846d740e437522",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "Davidson",
+   "San Diego"
+  ],
+  "token_ids": [
+   "36624642512415427446044043673557120993031522667519457023479643584379373995892",
+   "86960741140210306280062431689006529817236165278902648990080026838536254047355"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_dav_usd",
+  "match_score": 1.0,
+  "collector_home_token": "86960741140210306280062431689006529817236165278902648990080026838536254047355",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03DAYDRKE": {
+  "league": "cfb",
+  "slug": "cfb-day-drake-2026-10-03",
+  "condition": "0x625fadb4433cfdfcc8ad3b08e09ec4c84177f4a25faeeb7dce2ee3b6f3beebd3",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Dayton",
+   "Drake"
+  ],
+  "token_ids": [
+   "97724335487313114849112754647712290049954049191167859965451860408680572914130",
+   "105933188287159373229065251584886694856186052480625284779340269192491188924695"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_day_drke",
+  "match_score": 1.0,
+  "collector_home_token": "105933188287159373229065251584886694856186052480625284779340269192491188924695",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03DSUALBY": {
+  "league": "cfb",
+  "slug": "cfb-delst-albny-2026-10-03",
+  "condition": "0xd87d2ee1b50943acf2bd8de1f2e1a65b7c7e57bd4389efee133d3d005d9bbe63",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Delaware State",
+   "University at Albany"
+  ],
+  "token_ids": [
+   "84927556900261199834149000244926668621421154758149378647968316210565191444380",
+   "89574523545572848749659222001411883642251605739211098316473348364945712927628"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_dsu_alby",
+  "match_score": 1.0,
+  "collector_home_token": "89574523545572848749659222001411883642251605739211098316473348364945712927628",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ELONUNH": {
+  "league": "cfb",
+  "slug": "cfb-elon-nhamp-2026-10-03",
+  "condition": "0x5d334ea922baafc0eea74ce0010f83b1f9249a637349327b12a1349d72d3630f",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Elon",
+   "New Hampshire"
+  ],
+  "token_ids": [
+   "16122529266870866246662517181224188639831520517751605156168362400537105005424",
+   "97111417748122873394008692852515151097000403569591826567338648241774621885911"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_elon_unh",
+  "match_score": 1.0,
+  "collector_home_token": "97111417748122873394008692852515151097000403569591826567338648241774621885911",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03EMUMASS": {
+  "league": "cfb",
+  "slug": "cfb-emich-umass-2026-10-03",
+  "condition": "0x12c74f816921864441d969ea20fcc8da7a60c3ad6d9d15e0c27515e4decc04ce",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Eastern Michigan",
+   "UMass"
+  ],
+  "token_ids": [
+   "72483681943091928475278958868109175001280497475347937982418867382886904624324",
+   "46585871448087608818797827951415560412470551725086498256942938294501035635683"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_emu_mass",
+  "match_score": 1.0,
+  "collector_home_token": "46585871448087608818797827951415560412470551725086498256942938294501035635683",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03EWUUCD": {
+  "league": "cfb",
+  "slug": "cfb-ewash-ucdv-2026-10-03",
+  "condition": "0xe9249a7712b5337a850194b8f7795f28cf4a1dffdb1d53c9d8e271a3b44d30e0",
+  "game_start": "2026-10-04T02:30:00+00:00",
+  "outcomes": [
+   "Eastern Washington",
+   "UC Davis"
+  ],
+  "token_ids": [
+   "79773118461638765959786555067542737303190778779626485559462010889502772578749",
+   "52536372598471356235735005951598088201296878259972909827629635843511283111367"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_ewu_ucd",
+  "match_score": 1.0,
+  "collector_home_token": "52536372598471356235735005951598088201296878259972909827629635843511283111367",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03FLAMIZZ": {
+  "league": "cfb",
+  "slug": "cfb-fl-missr-2026-10-03",
+  "condition": "0xb4aff9957f15ff9dd5d6f073f9a82b7293950a522f22c7a0790171f55796ae93",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Florida",
+   "Missouri"
+  ],
+  "token_ids": [
+   "3423683074176871800308805932121031185954894303548635630849291601707235594559",
+   "57573662817422343288917119541823269719118353075017161506803003818071315923329"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_fla_mizz",
+  "match_score": 1.0,
+  "collector_home_token": "57573662817422343288917119541823269719118353075017161506803003818071315923329",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03FORLEH": {
+  "league": "cfb",
+  "slug": "cfb-fordm-lehi-2026-10-03",
+  "condition": "0xeb25569cc4794829b5259a167c3e8e2d7d7e1da110b4d5a2210412fb1dccbad2",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Fordham",
+   "Lehigh"
+  ],
+  "token_ids": [
+   "45179881173261095748550144141968566735219012074679516776178114450152066695579",
+   "55115498816231649348372371881622077374573153133324386545086372005720014125497"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_for_leh",
+  "match_score": 1.0,
+  "collector_home_token": "55115498816231649348372371881622077374573153133324386545086372005720014125497",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03FRESWSU": {
+  "league": "cfb",
+  "slug": "cfb-frest-washst-2026-10-03",
+  "condition": "0x1c04b2c2d2e60ade1e249821bf31cdeebabfd49d17b489a7b678cb6f10151e73",
+  "game_start": "2026-10-04T01:30:00+00:00",
+  "outcomes": [
+   "Fresno State",
+   "Washington State"
+  ],
+  "token_ids": [
+   "41689177551753126240695940271393637111996357647573635092248465436238404715452",
+   "96669385801460725541332455540257306649483827231524311723720242244156633966779"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_fres_wsu",
+  "match_score": 1.0,
+  "collector_home_token": "96669385801460725541332455540257306649483827231524311723720242244156633966779",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03GASOCCAR": {
+  "league": "cfb",
+  "slug": "cfb-gas-coast-2026-10-03",
+  "condition": "0x46238638392d7ca9f9a369620d50258ffbb6a686c29710e0f76a37bd478693da",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Georgia Southern",
+   "Coastal Carolina"
+  ],
+  "token_ids": [
+   "86079101914735754094747559651146747947766319628193518183569782135994165469036",
+   "14956295846395896015071609159727347751079762126598381342898316873819698611123"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_gaso_ccar",
+  "match_score": 1.0,
+  "collector_home_token": "14956295846395896015071609159727347751079762126598381342898316873819698611123",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03HCWM": {
+  "league": "cfb",
+  "slug": "cfb-holy-wm-2026-10-03",
+  "condition": "0x75e23fb7ced35d929850b6fc726806d2ef085efe7f4849568535677bd4ada770",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Holy Cross",
+   "William & Mary"
+  ],
+  "token_ids": [
+   "66881021705064495878270704377082410891694473109394740270930309034357752759453",
+   "45948242726128117966186620838292268713137174374939906205900574470557603849221"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_hc_wm",
+  "match_score": 1.0,
+  "collector_home_token": "45948242726128117966186620838292268713137174374939906205900574470557603849221",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03HOWHAMP": {
+  "league": "cfb",
+  "slug": "cfb-howrd-hamp-2026-10-03",
+  "condition": "0xb0c8b956f1844392b8f8d80c8f7af0a4e801bfcd266f9dce6ee3b36fd9329d1f",
+  "game_start": "2026-10-03T19:00:00+00:00",
+  "outcomes": [
+   "Howard",
+   "Hampton"
+  ],
+  "token_ids": [
+   "63790626528395248213679142775022316961275103768875161584602937916900124029796",
+   "2481048666165978895590222165893402280666706071373944576045384960072445120345"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_how_hamp",
+  "match_score": 1.0,
+  "collector_home_token": "2481048666165978895590222165893402280666706071373944576045384960072445120345",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03INDRUTG": {
+  "league": "cfb",
+  "slug": "cfb-ind-rutger-2026-10-03",
+  "condition": "0xdc210b277acd284fc7fc0ee0c42592c1129a39c049d1fa810654fdf25a4f8032",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "Indiana",
+   "Rutgers"
+  ],
+  "token_ids": [
+   "27579835746450996714346394230112396979092152110420384088215706613667582312699",
+   "12981506920270465063743730208368393960572237758764469017911850043924353620478"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_ind_rutg",
+  "match_score": 1.0,
+  "collector_home_token": "12981506920270465063743730208368393960572237758764469017911850043924353620478",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03INSTSDAK": {
+  "league": "cfb",
+  "slug": "cfb-indst-sdak-2026-10-03",
+  "condition": "0xa8ca91791790f98ca92dce9c0eecf9baf07dfd2d27d4f44ed29967947fd78771",
+  "game_start": "2026-10-03T19:00:00+00:00",
+  "outcomes": [
+   "Indiana State",
+   "South Dakota"
+  ],
+  "token_ids": [
+   "50878142047222280241994716496762781687187920184989928994731497583411257267987",
+   "79217260650868248212913360906671601006820658824998336081587998350563341483180"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_inst_sdak",
+  "match_score": 1.0,
+  "collector_home_token": "79217260650868248212913360906671601006820658824998336081587998350563341483180",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03IWSFA": {
+  "league": "cfb",
+  "slug": "cfb-incar-sfaus-2026-10-03",
+  "condition": "0xa75d455a6fb20222dff256cd13efcc08e2c3f30d4b3f88b6db4427e96e113a1a",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Incarnate Word",
+   "Stephen F. Austin"
+  ],
+  "token_ids": [
+   "110380570671651808563431990182523345400753451846997578876051822449774807298453",
+   "22465853814219902522838996911561774488631608045359995458067961248504341215195"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_iw_sfa",
+  "match_score": 1.0,
+  "collector_home_token": "22465853814219902522838996911561774488631608045359995458067961248504341215195",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03LOUNCST": {
+  "league": "cfb",
+  "slug": "cfb-lou-ncst-2026-10-03",
+  "condition": "0xd675334620f6900930fabbdd9f36949c49da4c5a55b4590fa338877d51402cec",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Louisville",
+   "NC State"
+  ],
+  "token_ids": [
+   "67059719769294081355683158613387778224171745947809838310884285372733122683010",
+   "67466006741956128628178555609016120832742303181140969461974206103036961403202"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_lou_ncst",
+  "match_score": 1.0,
+  "collector_home_token": "67466006741956128628178555609016120832742303181140969461974206103036961403202",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MCNSLSU": {
+  "league": "cfb",
+  "slug": "cfb-mcnst-lsu-2026-10-03",
+  "condition": "0x954fc2b97920730f67c818cb2602d7db18805bcb75a53e1c31fce7dcac89bf3c",
+  "game_start": "2026-10-03T23:45:00+00:00",
+  "outcomes": [
+   "McNeese",
+   "LSU"
+  ],
+  "token_ids": [
+   "30928885949646113469476339055585193894051136271004740325058505009710756353559",
+   "107072625758236040408444932635557173132313993497775374933532438187420249699438"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mcns_lsu",
+  "match_score": 1.0,
+  "collector_home_token": "107072625758236040408444932635557173132313993497775374933532438187420249699438",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MDNEB": {
+  "league": "cfb",
+  "slug": "cfb-mary-nebr-2026-10-03",
+  "condition": "0x2566f02966f3beac40a243dca1e1d268bae673e9cab5af3fde7949b5993fa391",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "Maryland",
+   "Nebraska"
+  ],
+  "token_ids": [
+   "5915752238293245253203065754061903190841524376032192163810553284559298782019",
+   "78193239617421363168511034896514071414390948946725079274633676408757684033839"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_md_neb",
+  "match_score": 1.0,
+  "collector_home_token": "78193239617421363168511034896514071414390948946725079274633676408757684033839",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MEMCHAR": {
+  "league": "cfb",
+  "slug": "cfb-mphs-charlt-2026-10-03",
+  "condition": "0xd05e502cb084a1e25999fd0840934458080435b52a4e79baea9876ad139497fd",
+  "game_start": "2026-10-03T15:00:00+00:00",
+  "outcomes": [
+   "Memphis",
+   "Charlotte"
+  ],
+  "token_ids": [
+   "78690430943953590853746969996180445297480953853854852159043345105521407139631",
+   "99745058799637303657868657205231187556605886655609842770827783942339318885380"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mem_char",
+  "match_score": 1.0,
+  "collector_home_token": "99745058799637303657868657205231187556605886655609842770827783942339318885380",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MERVMI": {
+  "league": "cfb",
+  "slug": "cfb-merc-vamil-2026-10-03",
+  "condition": "0xbfb7745347ab41dee166ee8634199164323ff0f62eeb4c44cf1d7d35f7d90847",
+  "game_start": "2026-10-03T17:30:00+00:00",
+  "outcomes": [
+   "Mercer",
+   "VMI"
+  ],
+  "token_ids": [
+   "114923443267164315336891554224681255012362857968860836678153956856150508671344",
+   "53005379989714008930991287718519695095449933671724572089365545743014597952789"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mer_vmi",
+  "match_score": 1.0,
+  "collector_home_token": "53005379989714008930991287718519695095449933671724572089365545743014597952789",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MHULIU": {
+  "league": "cfb",
+  "slug": "cfb-mhud34ce7-liub-2026-10-03",
+  "condition": "0x3b33e066d7e405aba8c302515fdc73f92a2f3005f873cba3ff9f244f42367dbd",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Mercyhurst",
+   "LIU"
+  ],
+  "token_ids": [
+   "22769010328660733182980968520595257774544229727884486457871222291723851112761",
+   "49380447768286940075786830296016145730741658280320287269437326425506762671575"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mhu_liu",
+  "match_score": 1.0,
+  "collector_home_token": "49380447768286940075786830296016145730741658280320287269437326425506762671575",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MIACLEM": {
+  "league": "cfb",
+  "slug": "cfb-mia-clmsn-2026-10-03",
+  "condition": "0xdad7b6e2fc66aaa82f286362ead5812ffb86aeff3f9eabe66ea66d00662190c0",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Miami (FL)",
+   "Clemson"
+  ],
+  "token_ids": [
+   "39193810033420191440664885720252130465016742016855060257601479318872463153638",
+   "51911156385767872635054006296129849504806263737956974275232159072104854444835"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mia_clem",
+  "match_score": 1.0,
+  "collector_home_token": "51911156385767872635054006296129849504806263737956974275232159072104854444835",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MICHMINN": {
+  "league": "cfb",
+  "slug": "cfb-mich-minnst-2026-10-03",
+  "condition": "0x018ce4d27333aa610a7bf8e624de42d36b68dea8e7ea03ea7d4dd9b7ef4f331e",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Michigan",
+   "Minnesota"
+  ],
+  "token_ids": [
+   "63599459646060562585778881384498123178686641955449393712328136774603753438292",
+   "43720165715981303381304098489124993399624391885749848197340649999453800464126"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mich_minn",
+  "match_score": 1.0,
+  "collector_home_token": "43720165715981303381304098489124993399624391885749848197340649999453800464126",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MORGVILL": {
+  "league": "cfb",
+  "slug": "cfb-morgst-vill-2026-10-03",
+  "condition": "0x3cc28ca924d38a55e19e132b7a496c8ad105e2cac5664ad34ccabcc025883590",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Morgan State",
+   "Villanova"
+  ],
+  "token_ids": [
+   "67296034362731591749905767173333885481337861860037482437690668689654660533216",
+   "9082434193377414733946251949259321306418556134372401772321295315241445232889"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_morg_vill",
+  "match_score": 1.0,
+  "collector_home_token": "9082434193377414733946251949259321306418556134372401772321295315241445232889",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MRMKYALE": {
+  "league": "cfb",
+  "slug": "cfb-merri-yale-2026-10-03",
+  "condition": "0x185bcc4f265c1361f70245a3c9a6e904d0ea6a5fa10d151da3cdd05d286a178b",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Merrimack",
+   "Yale"
+  ],
+  "token_ids": [
+   "10808413833773290200434824845340706271407225564000173994106624804528911751886",
+   "109903233366252925905120319693914917324475639655255385074266846865574658022382"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mrmk_yale",
+  "match_score": 1.0,
+  "collector_home_token": "109903233366252925905120319693914917324475639655255385074266846865574658022382",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MRSHJMU": {
+  "league": "cfb",
+  "slug": "cfb-marsh-jmad-2026-10-03",
+  "condition": "0xac042a5fd27d39dfb33d00e6944a5020ac1ddf56a593938cf7b2b9c11b4f9083",
+  "game_start": "2026-10-03T19:45:00+00:00",
+  "outcomes": [
+   "Marshall",
+   "James Madison"
+  ],
+  "token_ids": [
+   "71296166583709299440799472320479758863539065503678203932952553189442890879867",
+   "50065755105265391106303146753710915113360080597992073311122052365385692458299"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mrsh_jmu",
+  "match_score": 1.0,
+  "collector_home_token": "50065755105265391106303146753710915113360080597992073311122052365385692458299",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MRSTSTET": {
+  "league": "cfb",
+  "slug": "cfb-mrst-stet-2026-10-03",
+  "condition": "0x12873ab617c9d0a34c3f656397122cc4d188ed37797a17f663f99d111063b113",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Marist",
+   "Stetson"
+  ],
+  "token_ids": [
+   "39043788079259040656160283827491635165860893247385747172596816134234779783473",
+   "35416961360178344648419172041635725013739103868173966122944306996220867560321"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mrst_stet",
+  "match_score": 1.0,
+  "collector_home_token": "35416961360178344648419172041635725013739103868173966122944306996220867560321",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MSUWIS": {
+  "league": "cfb",
+  "slug": "cfb-mst-wisc-2026-10-03",
+  "condition": "0xa5fae0e62ca5ae72a8b8afaace9967ef5e1553a9b26788b408183fce60ffadc5",
+  "game_start": "2026-10-03T16:30:00+00:00",
+  "outcomes": [
+   "Michigan State",
+   "Wisconsin"
+  ],
+  "token_ids": [
+   "83074580336646020110450081551910387217129920832118083810844664274411633188407",
+   "84068934905033895994217122239554442409506882797504492995284471238582923186054"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_msu_wis",
+  "match_score": 1.0,
+  "collector_home_token": "84068934905033895994217122239554442409506882797504492995284471238582923186054",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MTUKU": {
+  "league": "cfb",
+  "slug": "cfb-mtnst-kan-2026-10-03",
+  "condition": "0xfe177a7391a76db20fb4188448ebce7a467a415323a2126b0d67acbeff18bfdc",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Middle Tennessee",
+   "Kansas"
+  ],
+  "token_ids": [
+   "75846923509111779865883116881729100984608329279039964314677193692026879835062",
+   "59048722231583468512292208745290703413907797327023694164338198319361435033513"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_mtu_ku",
+  "match_score": 1.0,
+  "collector_home_token": "59048722231583468512292208745290703413907797327023694164338198319361435033513",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03MURRUND": {
+  "league": "cfb",
+  "slug": "cfb-murst-ndak-2026-10-03",
+  "condition": "0x2651f74af80c399e21926d0fffa088e6d6a4d5d3827d60ad86da6346a3106297",
+  "game_start": "2026-10-03T18:00:00+00:00",
+  "outcomes": [
+   "Murray State",
+   "North Dakota"
+  ],
+  "token_ids": [
+   "15950613913701431464163774030754361154648750988659002019058850539123649991672",
+   "32838127447803478992971865362742691736655912766156609030665430404517975139410"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_murr_und",
+  "match_score": 1.0,
+  "collector_home_token": "32838127447803478992971865362742691736655912766156609030665430404517975139410",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NAUIDST": {
+  "league": "cfb",
+  "slug": "cfb-narz-idhst-2026-10-03",
+  "condition": "0x0765a272bb45bd5057dd69a69e29af80ffbcab9fae7e92f73a0049ed86317179",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "Northern Arizona",
+   "Idaho State"
+  ],
+  "token_ids": [
+   "68968992808636952008800625175148874765012411461078393110688260592918961978769",
+   "74945969205369424588779027063464464674721909870911630220264273952818144429804"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_nau_idst",
+  "match_score": 1.0,
+  "collector_home_token": "74945969205369424588779027063464464674721909870911630220264273952818144429804",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NAVYAFA": {
+  "league": "cfb",
+  "slug": "cfb-navy-airf-2026-10-03",
+  "condition": "0xa41e0d4f97bce496b29f34f77116feaa982e2511a6f170e27f275be778cc0497",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Navy",
+   "Air Force"
+  ],
+  "token_ids": [
+   "63784503818751190501567513407337892912252499747734527983711044520476999068652",
+   "45033655374779327780896677533494298616485945310036031689506844496587167078122"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_navy_afa",
+  "match_score": 1.0,
+  "collector_home_token": "45033655374779327780896677533494298616485945310036031689506844496587167078122",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NCATBRY": {
+  "league": "cfb",
+  "slug": "cfb-ncat-bryant-2026-10-03",
+  "condition": "0x9422908b3cd0deb41eca84611c213b8563775de7a42b94bfd7b5c1959e4fa035",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "North Carolina A&T",
+   "Bryant"
+  ],
+  "token_ids": [
+   "22609480774892827900592124047209069267006921679337727296929117958376234186146",
+   "64405592564105798951364503367560122573133663871743405826888017033371098460489"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ncat_bry",
+  "match_score": 1.0,
+  "collector_home_token": "64405592564105798951364503367560122573133663871743405826888017033371098460489",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NDUNC": {
+  "league": "cfb",
+  "slug": "cfb-nd-ncar-2026-10-03",
+  "condition": "0xf48148722386c73d2c463ef29ee99c170cb73069396c58f0cb9f04e95592828d",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Notre Dame",
+   "North Carolina"
+  ],
+  "token_ids": [
+   "108777543233879549498549201289320438414633204629903271377086456499875354236539",
+   "82189808267867125910998006934768976489945343370686581022042667814164705707546"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_nd_unc",
+  "match_score": 1.0,
+  "collector_home_token": "82189808267867125910998006934768976489945343370686581022042667814164705707546",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NHCPEAY": {
+  "league": "cfb",
+  "slug": "cfb-nhc-ausp-2026-10-03",
+  "condition": "0x9bbd606aaf333ce837d6fd5be31f1bb2503db7df87f0f522049ee3f86dabf7cc",
+  "game_start": "2026-10-03T21:00:00+00:00",
+  "outcomes": [
+   "New Haven",
+   "Austin Peay"
+  ],
+  "token_ids": [
+   "42788567119800834691873881245553787250664662593569296060121852871106120692690",
+   "82524437699247463105612168730414171243261808970557605522193955042867236475653"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_nhc_peay",
+  "match_score": 1.0,
+  "collector_home_token": "82524437699247463105612168730414171243261808970557605522193955042867236475653",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NICHHCU": {
+  "league": "cfb",
+  "slug": "cfb-nichls-houbap-2026-10-03",
+  "condition": "0xfbd4f72dccba584d9610e3b6401c2fd23154d2243ffd3e259b0f9d93189971cd",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Nicholls State",
+   "Houston Christian"
+  ],
+  "token_ids": [
+   "87942216348048343663259948041105994445034995866275412466949139562680996252275",
+   "99552931113022635265412702250346288225908033695376899850956093511252112105798"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_nich_hcu",
+  "match_score": 1.0,
+  "collector_home_token": "99552931113022635265412702250346288225908033695376899850956093511252112105798",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NORFRMU": {
+  "league": "cfb",
+  "slug": "cfb-norfst-robms-2026-10-03",
+  "condition": "0xa54105ad2a31a76626e69063122bad5c5322c241aa4877b320bd279111c0aae3",
+  "game_start": "2026-10-03T18:00:00+00:00",
+  "outcomes": [
+   "Norfolk State",
+   "Robert Morris"
+  ],
+  "token_ids": [
+   "48026882285216403864819463511036035953011810790100613570419925396208829617273",
+   "25612707199608695283358965247863215932603617760171119185245412976772616728954"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_norf_rmu",
+  "match_score": 1.0,
+  "collector_home_token": "25612707199608695283358965247863215932603617760171119185245412976772616728954",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03NWSTLAM": {
+  "league": "cfb",
+  "slug": "cfb-nwst-lamar-2026-10-03",
+  "condition": "0xb22d8b9767dfbea25ffdfe30c8890f73f6c87e0c80968e14d9c7e120b9ba4023",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Northwestern State",
+   "Lamar"
+  ],
+  "token_ids": [
+   "107427418885370904531597983199020286238613864646050961868403100082399986853806",
+   "81207397418430663851020974500080304239278960144818573108833815104683023537890"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_nwst_lam",
+  "match_score": 1.0,
+  "collector_home_token": "81207397418430663851020974500080304239278960144818573108833815104683023537890",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ODUGAST": {
+  "league": "cfb",
+  "slug": "cfb-old-gast-2026-10-03",
+  "condition": "0xcdf8fcd1dd6a59736f171b946a31e07c4068c1f5fbaeb63db8e659e553275074",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Old Dominion",
+   "Georgia State"
+  ],
+  "token_ids": [
+   "11707917391126913980496282188133988861109003488182116556685492083961944604155",
+   "72402147329753909804564870426052474332906637380403298092333964516568444545098"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_odu_gast",
+  "match_score": 1.0,
+  "collector_home_token": "72402147329753909804564870426052474332906637380403298092333964516568444545098",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03OHIOKENT": {
+  "league": "cfb",
+  "slug": "cfb-ohio-kentst-2026-10-03",
+  "condition": "0x057cfc9e2e058b92008966a6612eb9196c5dad1c420f23a05eea3046c58be901",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Ohio",
+   "Kent State"
+  ],
+  "token_ids": [
+   "105661685824041457320165804511285352038429310842087935453358218570208041221826",
+   "5667857686877373589606835571864886206162568375402062432870871754415740801854"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ohio_kent",
+  "match_score": 1.0,
+  "collector_home_token": "5667857686877373589606835571864886206162568375402062432870871754415740801854",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ORSTCSU": {
+  "league": "cfb",
+  "slug": "cfb-oregst-colst-2026-10-03",
+  "condition": "0x743c8ebbb3fde30c328c8ea7daece01bd7b4ee8b9bd18fea194de56e94fedd30",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Oregon State",
+   "Colorado State"
+  ],
+  "token_ids": [
+   "93244125008640958180014119026424161999486322074216858622122879874941929012146",
+   "50070042404179655687227173756818593029794556096908351208291736000879693218684"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_orst_csu",
+  "match_score": 1.0,
+  "collector_home_token": "50070042404179655687227173756818593029794556096908351208291736000879693218684",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03OSUIOWA": {
+  "league": "cfb",
+  "slug": "cfb-ohiost-iowa-2026-10-03",
+  "condition": "0x219ad7b8c4fff8763ca9de04ac17fc451b72f75134b2e7e7ae862a466c5681e4",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Ohio State",
+   "Iowa"
+  ],
+  "token_ids": [
+   "65041091724929380357332036325555249415071729832651230176934050798576056842168",
+   "11860464710158583424041385159943125631358781463636334443779541788243791945569"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_osu_iowa",
+  "match_score": 1.0,
+  "collector_home_token": "11860464710158583424041385159943125631358781463636334443779541788243791945569",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03PENNDART": {
+  "league": "cfb",
+  "slug": "cfb-penn-dart-2026-10-03",
+  "condition": "0x262a762eb0ea2433b29a756ab92da1d76108fbc70c04684d4d37d3db9b2db097",
+  "game_start": "2026-10-03T17:30:00+00:00",
+  "outcomes": [
+   "Penn",
+   "Dartmouth"
+  ],
+  "token_ids": [
+   "96722045039623158228465685150800834745889060845893982907349647651113776067245",
+   "16148540916835681353304893508590080571491133798220885443398950320146860161121"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_penn_dart",
+  "match_score": 1.0,
+  "collector_home_token": "16148540916835681353304893508590080571491133798220885443398950320146860161121",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03PRINCLMB": {
+  "league": "cfb",
+  "slug": "cfb-prnce-clmb-2026-10-03",
+  "condition": "0x27fdc2dc9671df1ac3a295288a209b69425b43628a406e195c047b572ddfae16",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Princeton",
+   "Columbia"
+  ],
+  "token_ids": [
+   "84957776706266681420646067080065707759126430942857070460252822800442017450749",
+   "26605582478393386276586906233899395609211569638016804256563175606764802326251"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_prin_clmb",
+  "match_score": 1.0,
+  "collector_home_token": "26605582478393386276586906233899395609211569638016804256563175606764802326251",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03PURILL": {
+  "league": "cfb",
+  "slug": "cfb-pur-ill-2026-10-03",
+  "condition": "0x82e6e97952a52b2cbdf44a5040c421067680e25b7ea11e85b85f3f3d8dcf7588",
+  "game_start": "2026-10-03T20:15:00+00:00",
+  "outcomes": [
+   "Purdue",
+   "Illinois"
+  ],
+  "token_ids": [
+   "114078339928404794880041999038104503209329542616293846532511070122518864387960",
+   "16995377968602695017073789405863684193704991183246183789156702008488268863621"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_pur_ill",
+  "match_score": 1.0,
+  "collector_home_token": "16995377968602695017073789405863684193704991183246183789156702008488268863621",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03PVMVSU": {
+  "league": "cfb",
+  "slug": "cfb-pvam-msvlst-2026-10-03",
+  "condition": "0x7deffcb9f648b304475f0b5eca0c9002c6528befd1f254ea035055413962f455",
+  "game_start": "2026-10-03T19:00:00+00:00",
+  "outcomes": [
+   "Prairie View A&M",
+   "Mississippi Valley State"
+  ],
+  "token_ids": [
+   "90029368712191553880219558114479334585589961410624489755816374709493576693500",
+   "36121351033517856970410695855688438334587792468827629871089048588325356545535"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_pv_mvsu",
+  "match_score": 1.0,
+  "collector_home_token": "36121351033517856970410695855688438334587792468827629871089048588325356545535",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03RICHLAF": {
+  "league": "cfb",
+  "slug": "cfb-rich-lafay-2026-10-03",
+  "condition": "0x759c26cf51f2b34523f9fef523347adf14178b8318167e4be942b6c6bc83aa7e",
+  "game_start": "2026-10-03T16:30:00+00:00",
+  "outcomes": [
+   "Richmond",
+   "Lafayette"
+  ],
+  "token_ids": [
+   "13731737064596179659074519483996571716212108132381010157037309447824996338133",
+   "89489407405985354847731135580824049159255395046827829991098017340274111607148"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_rich_laf",
+  "match_score": 1.0,
+  "collector_home_token": "89489407405985354847731135580824049159255395046827829991098017340274111607148",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03SAMUAB": {
+  "league": "cfb",
+  "slug": "cfb-samf-uab-2026-10-03",
+  "condition": "0xb2ce8535bef5063d1f472395516359eab686c4aacef586d2caa1a6a27b616ffd",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Samford",
+   "UAB"
+  ],
+  "token_ids": [
+   "28702612754981848999338032951896723547473976171443868446475469731286887044525",
+   "37244073540489153439627827504879615430842646517866784791013811265805044227295"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_sam_uab",
+  "match_score": 1.0,
+  "collector_home_token": "37244073540489153439627827504879615430842646517866784791013811265805044227295",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03SDSTILST": {
+  "league": "cfb",
+  "slug": "cfb-sdkst-illst-2026-10-03",
+  "condition": "0x81a658fb81bab9f64a32840604675cb708cd4b0bc3ed22d34e75e0b752c658ce",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "South Dakota State",
+   "Illinois State"
+  ],
+  "token_ids": [
+   "108596871099783872807067309125264267316266172370667137260367434420286564303474",
+   "43124464670773154367079433786249917442533661331315349378489736142632218162880"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_sdst_ilst",
+  "match_score": 1.0,
+  "collector_home_token": "43124464670773154367079433786249917442533661331315349378489736142632218162880",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03SHUME": {
+  "league": "cfb",
+  "slug": "cfb-sacred-maine-2026-10-03",
+  "condition": "0x024e0bd3e956e69b0e20808ca0138ecf91f4ef913e9ad5941d2297cdc5b5b50a",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Sacred Heart",
+   "Maine"
+  ],
+  "token_ids": [
+   "72449341705854785473703173478952148178524673568661437364736687731527526093319",
+   "5939839785019996434142060974833057823533412643488137356895433423129483121498"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_shu_me",
+  "match_score": 1.0,
+  "collector_home_token": "5939839785019996434142060974833057823533412643488137356895433423129483121498",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03STANWAKE": {
+  "league": "cfb",
+  "slug": "cfb-stan-wake-2026-10-03",
+  "condition": "0xe13acee674cc622542d67ee2339a38718e9205c908e840ebdc02869491da5326",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Stanford",
+   "Wake Forest"
+  ],
+  "token_ids": [
+   "29565335933893887977848426095873057563929459067244837591075409950691698232632",
+   "35799902315237549114315188656241876043410828815610030656223158980731918117252"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_stan_wake",
+  "match_score": 1.0,
+  "collector_home_token": "35799902315237549114315188656241876043410828815610030656223158980731918117252",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03SUUUTU": {
+  "league": "cfb",
+  "slug": "cfb-sutah-dxst-2026-10-03",
+  "condition": "0x676551143960ecf4417cb48b9ded776b56ff7d2d103f1cf1d80e1be7f962e0aa",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "Southern Utah",
+   "Utah Tech"
+  ],
+  "token_ids": [
+   "114404100679244787545721927589540424876708106225899441756123466461263159324892",
+   "73009078630565258004952968094235863115333556195429685421375505091447977042627"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_suu_utu",
+  "match_score": 1.0,
+  "collector_home_token": "73009078630565258004952968094235863115333556195429685421375505091447977042627",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03SYRCONN": {
+  "league": "cfb",
+  "slug": "cfb-syra-uconn-2026-10-03",
+  "condition": "0x055dc7501b81abba89c09f99eba52963dbe02d2576816d4957906182d5eba588",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Syracuse",
+   "UConn"
+  ],
+  "token_ids": [
+   "7965076190134975249066001964745732400117813288044287047670577928135125656291",
+   "92685827822420387128176446286721384958585251960729706476649248215369266041066"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_syr_conn",
+  "match_score": 1.0,
+  "collector_home_token": "92685827822420387128176446286721384958585251960729706476649248215369266041066",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TEMUSF": {
+  "league": "cfb",
+  "slug": "cfb-templ-sfl-2026-10-03",
+  "condition": "0x97d50e3c6722c6a97a3b2c0c0ab62f2aad3a477289448f3e86aef9f09299dd3b",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Temple",
+   "South Florida"
+  ],
+  "token_ids": [
+   "17605635832471468037808796613785871280094390690843986166157019460720360903471",
+   "3487505973608671675621059619847540978691291846323398912142713823813890772320"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_tem_usf",
+  "match_score": 1.0,
+  "collector_home_token": "3487505973608671675621059619847540978691291846323398912142713823813890772320",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TNSTWIU": {
+  "league": "cfb",
+  "slug": "cfb-tenst-will-2026-10-03",
+  "condition": "0x00a75b6d4297b500806b9304307273082bda83857fee2805eceb48c4b6153519",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "Tennessee State",
+   "Western Illinois"
+  ],
+  "token_ids": [
+   "103479610602088929131096800347194737435489492751669130075006552489080378891610",
+   "102130146808719000049257036481325785956347358047399946711581479106025261647817"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_tnst_wiu",
+  "match_score": 1.0,
+  "collector_home_token": "102130146808719000049257036481325785956347358047399946711581479106025261647817",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TNTCWCU": {
+  "league": "cfb",
+  "slug": "cfb-tentch-wcar-2026-10-03",
+  "condition": "0x5e200a42ddde7c01bc96d093df55f66e76e9563b7cfd7c16f3cc1909c940d3fd",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Tennessee Tech",
+   "Western Carolina"
+  ],
+  "token_ids": [
+   "94733417893965408250600561367395180666706425516749757046789460622311013282718",
+   "61496320227749917642028781893604432823570475836941892889320777013205789715580"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_tntc_wcu",
+  "match_score": 1.0,
+  "collector_home_token": "61496320227749917642028781893604432823570475836941892889320777013205789715580",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TOLBALL": {
+  "league": "cfb",
+  "slug": "cfb-toledo-ballst-2026-10-03",
+  "condition": "0xdbcc8e2fe141280303d8a1996abfa2a883705d3f10e029d3476029a94b2df8cc",
+  "game_start": "2026-10-03T18:00:00+00:00",
+  "outcomes": [
+   "Toledo",
+   "Ball State"
+  ],
+  "token_ids": [
+   "82181696642819764576343043350625623674366932445791240059454831052232783359681",
+   "96787368692764015030103895174806625909979787381545870517751559153441478066749"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_tol_ball",
+  "match_score": 1.0,
+  "collector_home_token": "96787368692764015030103895174806625909979787381545870517751559153441478066749",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TOWSMONM": {
+  "league": "cfb",
+  "slug": "cfb-tows-monm-2026-10-03",
+  "condition": "0x69867f06f43277e99c0ecd8c8bd4463c59fdcb563657fc1ca755fb2d417de734",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Towson",
+   "Monmouth"
+  ],
+  "token_ids": [
+   "76184082721998653487075914397589255825393818797604577033206309322622083283096",
+   "26169097911147001454606382970269048516192883090521410477275010999190018696686"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_tows_monm",
+  "match_score": 1.0,
+  "collector_home_token": "26169097911147001454606382970269048516192883090521410477275010999190018696686",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TTUCOLO": {
+  "league": "cfb",
+  "slug": "cfb-txtech-col-2026-10-03",
+  "condition": "0x6b6ac476253e1a1bf065cb3a2bfa3831cf916ec03f9828146e9a42b4938ab2af",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Texas Tech",
+   "Colorado"
+  ],
+  "token_ids": [
+   "29792312997137292019334406171449514956461544715232856766647201426490469540615",
+   "105434246222695645481814689561840765384679411011961600582866979346582954494322"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ttu_colo",
+  "match_score": 1.0,
+  "collector_home_token": "105434246222695645481814689561840765384679411011961600582866979346582954494322",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TXSOFAU": {
+  "league": "cfb",
+  "slug": "cfb-txs-flatl-2026-10-03",
+  "condition": "0x48a7df90effde6aa1823117cbe147324ac38add27202086dec571c5e223f7260",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Texas Southern",
+   "Florida Atlantic"
+  ],
+  "token_ids": [
+   "46891893050737532746403791301511281610443835957733367757504661453163845868834",
+   "90873718320438187339195603034946038303342434099627153558087787709970055649544"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_txso_fau",
+  "match_score": 1.0,
+  "collector_home_token": "90873718320438187339195603034946038303342434099627153558087787709970055649544",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03TXSTSDSU": {
+  "league": "cfb",
+  "slug": "cfb-txst-sdst-2026-10-03",
+  "condition": "0xda82ad709947279c1faa14521e9a4fcc80526410d2f859cacf9899227d871100",
+  "game_start": "2026-10-04T02:30:00+00:00",
+  "outcomes": [
+   "Texas State",
+   "San Diego State"
+  ],
+  "token_ids": [
+   "12133075509622370401983965280075068267742069155559498596058257938512419288897",
+   "97997323565749995573830818095880419866326499711865944476555952145196497380556"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_txst_sdsu",
+  "match_score": 1.0,
+  "collector_home_token": "97997323565749995573830818095880419866326499711865944476555952145196497380556",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UCFHOU": {
+  "league": "cfb",
+  "slug": "cfb-ucf-hou-2026-10-03",
+  "condition": "0xcfe0579e85269f979cf0933e68522f53fe95a02a178d401bfd99a2a8b6b07391",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "UCF",
+   "Houston"
+  ],
+  "token_ids": [
+   "31679724613631436236143774017494223780743512843311852301334344326271487092260",
+   "66771157091957380060009318946046322238593674504042656820300207736818716786683"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ucf_hou",
+  "match_score": 1.0,
+  "collector_home_token": "66771157091957380060009318946046322238593674504042656820300207736818716786683",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UKSCAR": {
+  "league": "cfb",
+  "slug": "cfb-uk-sc-2026-10-03",
+  "condition": "0xc661649ad36c630c421618de0d109939e099b2e086d9d555ef3b7bbde45e3567",
+  "game_start": "2026-10-03T20:15:00+00:00",
+  "outcomes": [
+   "Kentucky",
+   "South Carolina"
+  ],
+  "token_ids": [
+   "35264106815603035779327803654720476446875085697971297730572880926264527682118",
+   "100696423378027136052373281565572336626336183531133430894364434684479362412970"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_uk_scar",
+  "match_score": 1.0,
+  "collector_home_token": "100696423378027136052373281565572336626336183531133430894364434684479362412970",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03ULMUSA": {
+  "league": "cfb",
+  "slug": "cfb-lamon-sala-2026-10-03",
+  "condition": "0x98f2173b4b68fb8d52cd159f3b71305e05558fa7226ed2051d482dbc074574be",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "Louisiana-Monroe",
+   "South Alabama"
+  ],
+  "token_ids": [
+   "45947772791307124603134838549860670097540544345656076412053328534623222868692",
+   "100269598638469445738735175345290018381746583443607284556089520934780030937017"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ulm_usa",
+  "match_score": 1.0,
+  "collector_home_token": "100269598638469445738735175345290018381746583443607284556089520934780030937017",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UNAEKY": {
+  "league": "cfb",
+  "slug": "cfb-nal-ekent-2026-10-03",
+  "condition": "0xb30bfc2d7447c6639fd427fb8b293b6765f0c5619864fc8345cf232ff1b442cf",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "North Alabama",
+   "Eastern Kentucky"
+  ],
+  "token_ids": [
+   "13910085941936001796458725400689993528969880494130015181197184528490921959373",
+   "18226008570992713315454296667470795856655719667247229941509038269177601256456"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_una_eky",
+  "match_score": 1.0,
+  "collector_home_token": "18226008570992713315454296667470795856655719667247229941509038269177601256456",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UNCOMONT": {
+  "league": "cfb",
+  "slug": "cfb-ncol-mont-2026-10-03",
+  "condition": "0x7e80d21789912216e269cf53d0770317df0eed2f5e8ffa9fb2befec2f92d75d1",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "Northern Colorado",
+   "Montana"
+  ],
+  "token_ids": [
+   "97560900507728102781672551064650025590836550974886968446530944862521956237330",
+   "103889109215283901812207849412318811542690068530345567592275127476962913323324"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_unco_mont",
+  "match_score": 1.0,
+  "collector_home_token": "103889109215283901812207849412318811542690068530345567592275127476962913323324",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03USTPRE": {
+  "league": "cfb",
+  "slug": "cfb-stmn-presb-2026-10-03",
+  "condition": "0x769cbc4e1cf93f0d68434377ccfb48be072144a1b8554c47ebee2a7ec386608c",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "St. Thomas",
+   "Presbyterian"
+  ],
+  "token_ids": [
+   "59244873597538681618034558883756785328574573946941614748190396473854470505240",
+   "23678166219449388943933449909962648159860072090234919642049699370808800983896"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ust_pre",
+  "match_score": 1.0,
+  "collector_home_token": "23678166219449388943933449909962648159860072090234919642049699370808800983896",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03USUBSU": {
+  "league": "cfb",
+  "slug": "cfb-utahst-boise-2026-10-03",
+  "condition": "0xd92b4b11de129a4282b2a20c17888ceeb14fc634407e11289c9a5ed77f8039f9",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Utah State",
+   "Boise State"
+  ],
+  "token_ids": [
+   "33120579535684335040586825125542614727790491513139885798464344500167258912341",
+   "9665165910218514733030283175892498006494257560967638066940695956642654891709"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_usu_bsu",
+  "match_score": 1.0,
+  "collector_home_token": "9665165910218514733030283175892498006494257560967638066940695956642654891709",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UTEPUNM": {
+  "league": "cfb",
+  "slug": "cfb-utep-nmx-2026-10-03",
+  "condition": "0x9d3bd6d938dd08000ed5654b94d4b01eec7dfb69c91cd2ab888077fdea22ca1d",
+  "game_start": "2026-10-03T20:00:00+00:00",
+  "outcomes": [
+   "UTEP",
+   "New Mexico"
+  ],
+  "token_ids": [
+   "24277776073858808842516538908980702552386739258680072922816671646461307170804",
+   "69436194255705312269849439339140373001067123443887008453111737157431297040777"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_utep_unm",
+  "match_score": 1.0,
+  "collector_home_token": "69436194255705312269849439339140373001067123443887008453111737157431297040777",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UTRGVETAM": {
+  "league": "cfb",
+  "slug": "cfb-utrgv-txamc-2026-10-03",
+  "condition": "0xc65c14990fffc61a3de4e53ac99654b8db1cf47867b86133de77b55ab5d8aced",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "UT Rio Grande Valley",
+   "East Texas A&M"
+  ],
+  "token_ids": [
+   "109575191993250083354680089428027295669693910962649105601587396635813315866927",
+   "3584434182275136009831094804984022052691848190423217404333969925007464689922"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_utrgv_etam",
+  "match_score": 1.0,
+  "collector_home_token": "3584434182275136009831094804984022052691848190423217404333969925007464689922",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UTSARICE": {
+  "league": "cfb",
+  "slug": "cfb-utsa-rice-2026-10-03",
+  "condition": "0xdef2ba5a19b49d833e813bdec6755843bc5f46d660e88b08e6797ea581132785",
+  "game_start": "2026-10-03T23:00:00+00:00",
+  "outcomes": [
+   "UTSA",
+   "Rice"
+  ],
+  "token_ids": [
+   "2344252594575733637787500355854287918157556473535399040517724189103717823448",
+   "112105954184266380932536668515754023872284555022937644075918151742487925723151"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_utsa_rice",
+  "match_score": 1.0,
+  "collector_home_token": "112105954184266380932536668515754023872284555022937644075918151742487925723151",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UVAFSU": {
+  "league": "cfb",
+  "slug": "cfb-vir-flst-2026-10-03",
+  "condition": "0xb74a1d328625fb830bfcfe037d62e843a8c2f51bf3cfda35245bde4600b791ed",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Virginia",
+   "Florida State"
+  ],
+  "token_ids": [
+   "52455669720140030667227416147699670977567031968977311554531682800863309747823",
+   "57828446245247799446170139705230322689054096097431022776104814633293741537790"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_uva_fsu",
+  "match_score": 1.0,
+  "collector_home_token": "57828446245247799446170139705230322689054096097431022776104814633293741537790",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03UWFLAC": {
+  "league": "cfb",
+  "slug": "cfb-uwfl-abchr-2026-10-03",
+  "condition": "0xbbf8b2bea83e4181d35b3053bf5209650ce9a1b7d44ca54664d35cddca3dda31",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "West Florida",
+   "Abilene Christian"
+  ],
+  "token_ids": [
+   "65471989397396625439812229176169485151599114783178516595170845484875506132322",
+   "48246151094263225486005986752513143674136139042480665292993362871275777225247"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_uwfl_ac",
+  "match_score": 1.0,
+  "collector_home_token": "48246151094263225486005986752513143674136139042480665292993362871275777225247",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03VALPMORE": {
+  "league": "cfb",
+  "slug": "cfb-valp-more-2026-10-03",
+  "condition": "0xc16e00616272efb73fa355175ac2189799b089d995ae80160027b2518f817669",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Valparaiso",
+   "Morehead State"
+  ],
+  "token_ids": [
+   "29967291324868939919683292195629180625588419460120961624688752767453166058124",
+   "44647377769034507584998284783805582393341570083588257920327987162149597521252"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_valp_more",
+  "match_score": 1.0,
+  "collector_home_token": "44647377769034507584998284783805582393341570083588257920327987162149597521252",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03VANUGA": {
+  "league": "cfb",
+  "slug": "cfb-vand-ga-2026-10-03",
+  "condition": "0x2b8d7bce7cfe1100825c30b524f522fc082192dc75484c5bb1f8f183f62a5cfe",
+  "game_start": "2026-10-03T16:45:00+00:00",
+  "outcomes": [
+   "Vanderbilt",
+   "Georgia"
+  ],
+  "token_ids": [
+   "32797891971095802023580921402942066871127956298611098499739793259499032970245",
+   "39072246042355965489351872933604741637267970024807277832414870161495847660337"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_van_uga",
+  "match_score": 1.0,
+  "collector_home_token": "39072246042355965489351872933604741637267970024807277832414870161495847660337",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WAGCCSU": {
+  "league": "cfb",
+  "slug": "cfb-wag-cencon-2026-10-03",
+  "condition": "0xf53d0f8fb4588505218be0fb55a3cbeaeee7a766e06cdfd76eba8d08712377d5",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "Wagner",
+   "Central Connecticut State"
+  ],
+  "token_ids": [
+   "18914434571827330220976377720819298753740607323400364500565081529273262206201",
+   "6284787879050813431089404237492353210978833297064336456059616579958432159018"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wag_ccsu",
+  "match_score": 1.0,
+  "collector_home_token": "6284787879050813431089404237492353210978833297064336456059616579958432159018",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WASHUSC": {
+  "league": "cfb",
+  "slug": "cfb-wash-usc-2026-10-03",
+  "condition": "0xea33be22543767de5acf367da99381ae355b1b91b7e4f4a9a5cf133883161b37",
+  "game_start": "2026-10-03T23:30:00+00:00",
+  "outcomes": [
+   "Washington",
+   "USC"
+  ],
+  "token_ids": [
+   "34238315277169980781282849550206687867594591419491433122857192487029024821938",
+   "17749959694725746818701739813749715796863490851162041346236242861988046546965"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wash_usc",
+  "match_score": 1.0,
+  "collector_home_token": "17749959694725746818701739813749715796863490851162041346236242861988046546965",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WEBBCHSO": {
+  "league": "cfb",
+  "slug": "cfb-gardwb-chsou-2026-10-03",
+  "condition": "0x1356771cf683192ab1cbb906c46a74a39433316c6d91c8b6df17fc6674de61f6",
+  "game_start": "2026-10-03T22:00:00+00:00",
+  "outcomes": [
+   "Gardner-Webb",
+   "Charleston Southern"
+  ],
+  "token_ids": [
+   "85060843650993470408292047161720559550269883244240250587892657634381193909257",
+   "113106836985525997223982039694514050087471022672187256464185113654789660793056"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_webb_chso",
+  "match_score": 1.0,
+  "collector_home_token": "113106836985525997223982039694514050087471022672187256464185113654789660793056",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WEBCP": {
+  "league": "cfb",
+  "slug": "cfb-webst-calpol-2026-10-03",
+  "condition": "0xa557be70da3f3271e454a5b229502ed24fb1f4c0fc5e8fc966188748ceada51f",
+  "game_start": "2026-10-04T00:00:00+00:00",
+  "outcomes": [
+   "Weber State",
+   "Cal Poly"
+  ],
+  "token_ids": [
+   "8652455656388895502978043313638013583796083773073407113238854123941523030974",
+   "83340114208060403857463848378438101991917936541684098224458824645030912935356"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_web_cp",
+  "match_score": 1.0,
+  "collector_home_token": "83340114208060403857463848378438101991917936541684098224458824645030912935356",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WMUBUFF": {
+  "league": "cfb",
+  "slug": "cfb-wmich-buf-2026-10-03",
+  "condition": "0x7e77e373c73c86d5920c823cbdaf20b2d521257370f2826238644f94da2e0ddf",
+  "game_start": "2026-10-03T17:00:00+00:00",
+  "outcomes": [
+   "Western Michigan",
+   "Buffalo"
+  ],
+  "token_ids": [
+   "54959837780459437510803947029771365986105234740288163654842487359210705827943",
+   "10043949213985167109325357209026261754809094477475606314661535757801411030345"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wmu_buff",
+  "match_score": 1.0,
+  "collector_home_token": "10043949213985167109325357209026261754809094477475606314661535757801411030345",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WOFFUR": {
+  "league": "cfb",
+  "slug": "cfb-woff-furman-2026-10-03",
+  "condition": "0x5456305e95d75c50ad95c467fcc7ea1550fb43e2b28238f22ec18eff7fab7d7f",
+  "game_start": "2026-10-03T18:00:00+00:00",
+  "outcomes": [
+   "Wofford",
+   "Furman"
+  ],
+  "token_ids": [
+   "23540365239536155233215869738054960852941369921836625953953856595458659683507",
+   "70266123780842961419956402675759754430235584093681680620080357368224200389451"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wof_fur",
+  "match_score": 1.0,
+  "collector_home_token": "70266123780842961419956402675759754430235584093681680620080357368224200389451",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WVUISU": {
+  "league": "cfb",
+  "slug": "cfb-wvir-iowast-2026-10-03",
+  "condition": "0x0a3ca21beba1f4ef4e5f2177c2828c2bba0ed3548e67ab47dd4f491d43ae4a52",
+  "game_start": "2026-10-03T16:00:00+00:00",
+  "outcomes": [
+   "West Virginia",
+   "Iowa State"
+  ],
+  "token_ids": [
+   "17248180272649662687485398472470743448402698562983065392276125008726481806256",
+   "17482482857846317617131486839620763222724280368095509437739292602231974168628"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wvu_isu",
+  "match_score": 1.0,
+  "collector_home_token": "17482482857846317617131486839620763222724280368095509437739292602231974168628",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03WYONDSU": {
+  "league": "cfb",
+  "slug": "cfb-wyom-ndkst-2026-10-03",
+  "condition": "0xe935b721cec4bfefa399ea3884d1877b418ba58e378ae8c3be001aa13b5e6817",
+  "game_start": "2026-10-03T19:30:00+00:00",
+  "outcomes": [
+   "Wyoming",
+   "North Dakota State"
+  ],
+  "token_ids": [
+   "48352437872840672856365384887785236367834619251149228420828633096556608623279",
+   "5449097380339826514831400140349033230447307896443858833681215816245779714460"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_wyo_ndsu",
+  "match_score": 1.0,
+  "collector_home_token": "5449097380339826514831400140349033230447307896443858833681215816245779714460",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT03YSUSIU": {
+  "league": "cfb",
+  "slug": "cfb-yngst-sill-2026-10-03",
+  "condition": "0xe6e377569eb962565bf2b0d749225e4439ba657c7e40b68e106ff4fced90f7ad",
+  "game_start": "2026-10-03T21:00:00+00:00",
+  "outcomes": [
+   "Youngstown State",
+   "Southern Illinois"
+  ],
+  "token_ids": [
+   "64018510939088543816190840988280683664868351183777745493464931676743830614034",
+   "48442106976584821262896140624784876823245937263941637140939224172184153444415"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261003_ysu_siu",
+  "match_score": 1.0,
+  "collector_home_token": "48442106976584821262896140624784876823245937263941637140939224172184153444415",
+  "orientation": "ok"
+ },
+ "KXNCAAFGAME-26OCT04SJSUHAW": {
+  "league": "cfb",
+  "slug": "cfb-sjst-hawaii-2026-10-04",
+  "condition": "0x50bc39b1930b2c8c30cbb7134648d2d2b79926d5b016e603664cf804d85721cd",
+  "game_start": "2026-10-04T04:00:00+00:00",
+  "outcomes": [
+   "San Jose State",
+   "Hawai'i"
+  ],
+  "token_ids": [
+   "43634311406031809621273755510322280235326240776158222073877604041274026786810",
+   "11165959200810933265354630802567425901023253517277746128085146298236333222720"
+  ],
+  "closed": false,
+  "game_id": "cfb_20261004_sjsu_haw",
+  "match_score": 1.0,
+  "collector_home_token": "11165959200810933265354630802567425901023253517277746128085146298236333222720",
+  "orientation": "ok"
+ }
+}

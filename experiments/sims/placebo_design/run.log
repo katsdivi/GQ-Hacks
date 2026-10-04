@@ -1,0 +1,29 @@
+polymarket.com: M 3000, placebo lag median +0.0, corr(pl1, pl2) same Kalshi +0.000, real lead median +5.0, real zero median +0.0 (209 s)
+Polymarket US: M 3000, placebo lag median +0.0, corr(pl1, pl2) same Kalshi -0.011, real lead median +5.0, real zero median +0.0 (451 s)
+                                   reps  n_placebo  kalshi_leads  reverse
+venue          scenario n  design                                        
+Polymarket US  lead     30 D1       500       29.0         0.620      0.0
+                           D2       500      135.0         0.892      0.0
+                        40 D1       500       39.0         0.720      0.0
+                           D2       500      185.0         0.958      0.0
+                        60 D1       500       59.0         0.838      0.0
+                           D2       500      285.0         1.000      0.0
+               zero     30 D1       500       29.0         0.000      0.0
+                           D2       500      135.0         0.000      0.0
+                        40 D1       500       39.0         0.000      0.0
+                           D2       500      185.0         0.000      0.0
+                        60 D1       500       59.0         0.000      0.0
+                           D2       500      285.0         0.000      0.0
+polymarket.com lead     30 D1       500       29.0         0.616      0.0
+                           D2       500      135.0         0.928      0.0
+                        40 D1       500       39.0         0.736      0.0
+                           D2       500      185.0         0.992      0.0
+                        60 D1       500       59.0         0.852      0.0
+                           D2       500      285.0         1.000      0.0
+               zero     30 D1       500       29.0         0.000      0.0
+                           D2       500      135.0         0.000      0.0
+                        40 D1       500       39.0         0.000      0.0
+                           D2       500      185.0         0.000      0.0
+                        60 D1       500       59.0         0.000      0.0
+                           D2       500      285.0         0.000      0.0
+total 453 s; seed 20261003; M 3000; reps 500

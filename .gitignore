@@ -17,6 +17,7 @@ out/*
 __pycache__/
 *.pyc
 .venv/
+.venv-exec/
 .ipynb_checkpoints/
 .DS_Store
 
@@ -25,3 +26,7 @@ __pycache__/
 
 # Local key files (Kalshi private key, key ID). Never committed.
 secrets/
+
+# final_test_run.py dry-run outputs (synthetic fixtures)
+results/dryrun/
+results/dryrun_gatefail/

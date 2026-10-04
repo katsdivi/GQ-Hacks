@@ -3,18 +3,36 @@
 Updated by Claude Code at the end of every task. Divi pastes the block below into his planning chat.
 
 ```
-STATUS  (last update: Sat Oct 3, 10:22 AM ET)
-Current task: two recorders live (Mac + Vultr) for Saturday's games; Amendment 2 DRAFT awaiting Alden, NOT committed
-Done: Vultr deployed (Atlanta, systemd, chrony offset ~0.6 ms, local parquet only, own log out/GAPS_vultr.md);
-  heartbeats + auto outage logging on every feed (both machines); one-machine-per-game rule in the draft
-Verified numbers:
-  Vultr 10 min (14:11:28-14:21:23 UTC): kalshi ask 8,678 / bid 8,880 / trade 2,335; polymarket ask 2,280 / bid 2,280 / trade 47;
-    polymarket_us ask 228 / bid 1,698; 0 of 11 minutes empty; outages: none except two logged restarts (systemctl restart test passed)
-  Kalshi websocket on one key from two machines: no conflict seen on either side (Mac and Vultr both subscribed)
-  Mac: outages again 14:13-14:15 UTC (kalshi_ws 116 s, polymarket 112 s, polymarket_us 78 s) and 09:06-09:49 ET (sleep on battery)
-Blockers: Mac sleeps on battery / lid closed -> Vultr is the primary recorder per the draft rule
-Next: Alden reviews HYPOTHESIS_v2_amendment2_DRAFT.md; commit after approval; after Saturday's last game run the book-mid test once
-Decisions pending: Amendment 2, t9-costs (3 commits, rule 7 review), Florida in-app check, Tiger single-writer choice, B (Webull, deferred)
+STATUS  (last update: Sat Oct 3, 8:43 PM ET)
+Current task: holdout download running (save only); final-run script + dry run done on t15-final.
+Done:
+  1 v2 Amendment 4 on main: f6aa3b5, 20:25:33 ET, pushed (merge only), before 21:30. Runner applies it on the
+    holdout run (holdout_mid.amendment4, a132047): 106 of 112 kept (tested against the real candidates file).
+  2 Holdout download (ingest/holdout_download.py, --holdout-download required, writes only data/holdout_raw/,
+    gitignored; counts and ids only). Kalshi 779 game events Aug 1..Oct 3 (98 NFL, 681 CFB); ESPN kickoff for
+    772, 7 not found (FCS, 6 involve Albany; dropped and listed per v3). polymarket.com events Aug 1..Oct 3:
+    804 moneylines. Throttle Kalshi 4 req/s (half of the 20/s basic limit would be 10; collector shares the IP),
+    PM/ESPN 2/s, nice 19, 1 process; collector check every 10 min, pause on kalshi_ws outage or new 429.
+    At 20:41: 79/772 Kalshi games, 0 failures. ETA: Kalshi ~21:40 ET, polymarket.com ~21:50 ET.
+    Seal checks in strategy_a / strategy_b unchanged (final_test=True required).
+  3 Regression: kept numpy OLS + Newey-West; tests/test_ols_nw.py matches a hand-computed example (exact
+    fractions) to 1e-8. requirements unchanged.
+  4 report_book: B per contract (-4.86 c Webull, -3.67 c direct; x2 -9.86 / -7.47) and Sharpe only; B return
+    levels and regression coefficient levels dropped (t-stats, R2 kept); total-21 DSR note says B dominates.
+  5 Branch t15-final = t13 + merge of t14-laggard (e117058, pushed; nothing merged to main). 201 tests pass.
+    scripts/final_test_run.py: --i-am-the-one-run (refuses if results/holdout/ exists; lock created only after
+    the checklist passes) or --dry-run. Checklist: per-machine file counts per feed (needs data/vultr/ rsync copy
+    + GAPS_vultr.md), seconds_delay hash, map hashes, Amendment 4 count, gap parsing. Then lead test (Holm),
+    laggard (per-market delay, breaks, curve, capacity), A theta 0.80, B (5c, 10 s, 300 s) + placebo + x2,
+    combined book via report_book.build (training bases + trial Sharpes; OOS French "not available": factors
+    end 2026-08-31), RUN_LOG.md with git sha and ET start/end.
+    Dry run (synthetic fixtures, results/dryrun/, gitignored): completes in 14.7 s; all 20 output files and
+    15 required numbers.json keys present (110 keys); exercises the 3 s missing-delay fallback (1 market).
+    report_book refactor reproduces every training number exactly (only note texts + 1 new key differ).
+Not done: Vultr rsync to data/vultr/ (not touched, per rules); PM US dedup fix NOT deployed (read-time dedup).
+  The real run must be launched from a checkout of t15-final with data present (staleline/).
+FLAG: Mac on battery since ~7:45 PM.
+Decisions pending: when to rsync Vultr and launch the one run; merges after B review
 ```
 
 ## Log
