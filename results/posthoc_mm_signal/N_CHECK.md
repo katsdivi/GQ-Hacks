@@ -31,3 +31,23 @@ Reading: on one day the plain maker's +60 s P&L CI excludes zero, but the result
 top 5 it is about zero), fewer than half of all games were positive, and the settlement P&L CI includes zero. Not
 pre-registered, one day, top of book only, queue position unknown (strict trade-through is a lower bound on fills),
 and polymarket.com is not available to US persons.
+
+## Reading rule applied (rule written 07:41 ET after these results were seen; see LEDGER 8e2871b)
+
+Values from n_check.json (863eb69); no new computation.
+
+| Condition | Value | Result |
+|---|---|---|
+| (1) game-bootstrap 95% CI of P&L per contract at +60 s above zero | [+0.17, +2.12] c | PASS |
+| (2) point estimate above zero excluding the top 5 games | +0.15 c | PASS |
+| (3) at least 55% of games positive, reading A: the 59 games with fills | 57.6% | PASS |
+| (3) at least 55% of games positive, reading B: all 88 games in the run | 38.6% | FAIL |
+| (4) break-even maker fee at least 0.5 c per contract | 1.09 c | PASS |
+
+Verdict depends on the reading of (3):
+- Reading A (59 games with fills): all four hold: "Plain maker N on polymarket.com is reported as a lead worth testing live".
+- Reading B (all 88 games): (3) fails: "Otherwise: not distinguishable from noise on one day."
+
+Caveats: the rule was written after the results were seen. Condition (2) passes with a point estimate of +0.15 c whose
+CI is [-0.48, +0.77]. One day, top of book only, queue position unknown, maker fee 0 per the cached Gamma metadata,
+and polymarket.com is not available to US persons.
