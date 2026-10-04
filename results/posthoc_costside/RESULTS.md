@@ -403,3 +403,58 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 299 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 10
+
+Run 2026-10-04 05:54 ET.
+
+- Elo strength from past outcomes disagrees with Kalshi mostly on underdogs (mean fill about 0.26 to 0.30) and
+  loses on every line: taker -0.067 / -0.070, maker -0.039 / -0.041, win rate below break-even in all four. Kalshi
+  pre-game prices already contain everything a results-only rating knows.
+
+## Search status after Round 10 (2026-10-04 05:55 ET): new mechanisms exhausted on the available data
+
+The Round 5 "Search stopped" section above was superseded when Divi resumed the search; this section replaces it.
+
+10 rounds, 156 own trials; cumulative 303 trials (own 156 + broad search 54 + maker helper 36 + patterns helper
+57). No trial meets the stop condition. Reality Check p for the best of all 303 (patterns P3-08) = 0.38; Holm
+survivors: none; DSR of the best: 3.6e-29 (project convention), 2.0e-09 (normal returns).
+
+Every mechanism in the brief's list has been tested here or in another branch, except those the data cannot
+support. Further rounds would be finer grids or re-filtered subsets of the same fills (which the scoreboard
+penalises and which would not be independent evidence). To go further, these data would be needed:
+
+1. **CME event-contract trades/quotes for the training games** (only 1 of 32 training CME games maps to Kalshi
+   ticks): needed for CME-leads-Kalshi, the project's original hypothesis, on training data.
+2. **Full Kalshi order-book depth (not trades only) for training games**: queue position and resting size are
+   required to model maker fills honestly; the trade-through rule cannot separate queue luck from adverse selection,
+   which is what kills every maker strategy here.
+3. **Kalshi markets from listing, not from kickoff - 2 h**: the first-hour-after-open and long-horizon pre-game
+   drift tests need the early life of each market.
+4. **Timestamped news and injury reports (and line-move timestamps from a sportsbook feed)**: the only information
+   source plausibly faster than Kalshi pre-game; nflverse lines carry no timestamps (Idea 13).
+5. **Clean in-game event timestamps** (official play-by-play with reliable wallclocks): 549 of 1,024 test-week
+   games fail the ESPN defect rule, so in-game state tests run on half the sample.
+6. **Kalshi's first-party maker fee schedule and any volume rebates**: the maker lines here bracket it (0 and
+   0.0175 x C x P(1-P)); a rebate would change the passive-pair economics (pairs alone make +1.8 c per pair).
+
+### All Round 10 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R10.ELO.e0.05.maker | 436 | -0.039 | -0.17 | 0.0986 | -1.142 | -0.0262 | -0.7569 | -91.94 | -1.207 | 1 |
+| R10.ELO.e0.1.maker | 341 | -0.0412 | -0.1993 | 0.1312 | -1.065 | -0.0276 | -0.7038 | -78.49 | -1.041 | 1 |
+| R10.ELO.e0.05.taker | 691 | -0.0668 | -0.1743 | 0.0387 | -2.003 | -0.0668 | -2.003 | -182.8 | -2.497 | 1 |
+| R10.ELO.e0.1.taker | 544 | -0.0703 | -0.1966 | 0.0601 | -1.855 | -0.0703 | -1.855 | -145.2 | -2.405 | 1 |
+
+### Cumulative correction after Round 10
+
+Trials: own 156 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 303. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.382. DSR of that best: 3.62e-29 (project convention;
+normal-returns version 1.99e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 303 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.

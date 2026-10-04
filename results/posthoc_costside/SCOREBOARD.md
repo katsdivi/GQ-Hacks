@@ -49,4 +49,8 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 
 | 9 | Filter combinations on the near-miss and the prior signal (5 trials) | +10 | new combinations requested in the brief (item 5); scored once |
 
-**Total after Round 9: +195.** Stop condition (+100): not met.
+| 10 | ELO: strength from past outcomes vs Kalshi | +10 | new |
+| 10 | Pre-game "fair value" models ruled out (Elo here; sportsbook line in Idea 13; past Kalshi errors in Round 8) | +5 | ruled out |
+
+**Total after Round 10: +210.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
+three repeats/finer grids already listed; no lookahead, holdout/live data, unlogged trial or undisclosed rerun.
