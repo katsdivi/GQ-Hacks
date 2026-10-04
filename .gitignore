@@ -34,3 +34,10 @@ results/dryrun_gatefail/
 results/holdout/inputs_a_meta.csv
 results/holdout_diag/h2_tns_trades_39_games.csv
 results/holdout_diag/h3_trade_delays.csv
+
+# posthoc-llm
+.venv-mlx/
+data/llm_cache/
+results/posthoc_llm/adapters/
+results/posthoc_llm/pred_*.parquet
+results/posthoc_llm/trades_*.csv
