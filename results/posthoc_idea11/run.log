@@ -1,0 +1,141 @@
+POST-HOC, EXPLORATORY (formed after the holdout was seen)
+qualifying vultr polymarket.com windows: 88
+1/88 cfb_20261003_mtu_ku ops=291
+2/88 cfb_20261003_navy_afa ops=23
+3/88 cfb_20261003_nd_unc ops=4
+4/88 cfb_20261003_wvu_isu ops=141
+5/88 cfb_20261003_prin_clmb ops=6
+6/88 cfb_20261003_for_leh ops=0
+7/88 cfb_20261003_syr_conn ops=3
+8/88 cfb_20261003_brwn_uri ops=3
+9/88 cfb_20261003_mhu_liu ops=14
+10/88 cfb_20261003_mich_minn ops=53
+11/88 cfb_20261003_mrmk_yale ops=18
+12/88 cfb_20261003_ucf_hou ops=13
+13/88 cfb_20261003_ust_pre ops=44
+14/88 cfb_20261003_ala_msst ops=5
+15/88 cfb_20261003_bc_smu ops=8
+16/88 cfb_20261003_msu_wis ops=1
+17/88 cfb_20261003_cor_gtwn ops=6
+18/88 cfb_20261003_rich_laf ops=151
+19/88 cfb_20261003_wmu_buff ops=100
+20/88 cfb_20261003_day_drke ops=3
+21/88 cfb_20261003_valp_more ops=2
+22/88 cfb_20261003_elon_unh ops=50
+23/88 cfb_20261003_mrst_stet ops=0
+24/88 cfb_20261003_morg_vill ops=141
+25/88 cfb_20261003_tows_monm ops=6
+26/88 cfb_20261003_penn_dart ops=15
+27/88 cfb_20261003_mer_vmi ops=4
+28/88 cfb_20261003_tol_ball ops=22
+29/88 cfb_20261003_norf_rmu ops=17
+30/88 cfb_20261003_wof_fur ops=7
+31/88 cfb_20261003_cit_scst ops=32
+32/88 cfb_20261003_pv_mvsu ops=2
+33/88 cfb_20261003_inst_sdak ops=5
+34/88 cfb_20261003_alcn_gram ops=59
+35/88 cfb_20261003_how_hamp ops=2
+36/88 cfb_20261003_shu_me ops=3
+37/88 cfb_20261003_chat_etsu ops=0
+38/88 cfb_20261003_cal_unlv ops=85
+39/88 cfb_20261003_osu_iowa ops=11
+40/88 cfb_20261003_ohio_kent ops=74
+41/88 cfb_20261003_odu_gast ops=1
+42/88 cfb_20261003_bgsu_moh ops=97
+43/88 cfb_20261003_aub_tenn ops=59
+44/88 cfb_20261003_lou_ncst ops=98
+45/88 cfb_20261003_wyo_ndsu ops=52
+46/88 cfb_20261003_akr_cmu ops=12
+47/88 cfb_20261003_hc_wm ops=3
+48/88 cfb_20261003_dsu_alby ops=1
+49/88 cfb_20261003_emu_mass ops=38
+50/88 cfb_20261003_fla_mizz ops=17
+51/88 cfb_20261003_uva_fsu ops=20
+52/88 cfb_20261003_mrsh_jmu ops=5
+53/88 cfb_20261003_md_neb ops=44
+54/88 cfb_20261003_alst_cook ops=81
+55/88 cfb_20261003_unco_mont ops=7
+56/88 cfb_20261003_tnst_wiu ops=33
+57/88 cfb_20261003_uk_scar ops=226
+58/88 cfb_20261003_pur_ill ops=24
+59/88 cfb_20261003_aamu_jkst ops=31
+60/88 cfb_20261003_ysu_siu ops=4
+61/88 cfb_20261003_camp_nccu ops=12
+62/88 cfb_20261003_iw_sfa ops=18
+63/88 cfb_20261003_webb_chso ops=3
+64/88 cfb_20261003_orst_csu ops=11
+65/88 cfb_20261003_tntc_wcu ops=4
+66/88 cfb_20261003_ncat_bry ops=9
+67/88 cfb_20261003_una_eky ops=42
+68/88 cfb_20261003_gaso_ccar ops=20
+69/88 cfb_20261003_ark_txam ops=10
+70/88 cfb_20261003_utsa_rice ops=26
+71/88 cfb_20261003_utrgv_etam ops=7
+72/88 cfb_20261003_sdst_ilst ops=1
+73/88 cfb_20261003_colg_harv ops=76
+74/88 cfb_20261003_arpb_sou ops=4
+75/88 cfb_20261003_nich_hcu ops=1
+76/88 cfb_20261003_ulm_usa ops=13
+77/88 cfb_20261003_byu_tcu ops=18
+78/88 cfb_20261003_tem_usf ops=28
+79/88 cfb_20261003_usu_bsu ops=0
+80/88 cfb_20261003_ttu_colo ops=34
+81/88 cfb_20261003_mia_clem ops=15
+82/88 cfb_20261003_army_lt ops=11
+83/88 cfb_20261003_wash_usc ops=77
+84/88 cfb_20261004_web_cp ops=162
+85/88 cfb_20261004_uwfl_ac ops=4
+86/88 cfb_20261004_nau_idst ops=7
+87/88 cfb_20261004_suu_utu ops=114
+88/88 cfb_20261004_arst_ull ops=35
+# Idea 11 results. POST-HOC, EXPLORATORY (formed after the holdout was seen)
+
+Windows: 88 (feadc99, polymarket.com rows, qualifying, no exclusion flags, vultr). Spec: SPEC.md (277769a).
+
+Residue levels removed (0 < size < 0.01): Kalshi 133078 of 18135721 book rows; polymarket.com 0 of 6479794 (loaded rows, incl. placebo loads).
+
+## (a) Lag diagnostics (descriptive, not variants). + = Kalshi first
+
+### a1_receipt
+
+| n | n_nan | median_s | share_pos | sd_s | iqr_s | placebo_n | placebo_median_s | placebo_iqr_s | mannwhitney_p |
+|---|---|---|---|---|---|---|---|---|---|
+| 88 | 0 | 0.09 | 0.9886 | 0.1354 | 0.0225 | 83 | 0.08 | 1.285 | 0.6443 |
+
+Real per-game lags, 10 ms bins (s: games): -0.18: 1, +0.06: 1, +0.08: 8, +0.09: 50, +0.10: 4, +0.11: 2, +0.12: 6, +0.13: 1, +0.17: 1, +0.18: 2, +0.22: 1, +0.24: 1, +0.26: 1, +0.27: 1, +0.29: 1, +0.30: 2, +0.31: 1, +0.59: 1, +0.63: 1, +0.64: 1, +0.83: 1
+
+### a2_venue
+
+| n | n_nan | median_s | share_pos | sd_s | iqr_s | placebo_n | placebo_median_s | placebo_iqr_s | mannwhitney_p |
+|---|---|---|---|---|---|---|---|---|---|
+| 88 | 0 | 0.07 | 0.9659 | 0.2043 | 0 | 83 | -0.16 | 1.08 | 0.02374 |
+
+Real per-game lags, 10 ms bins (s: games): -0.93: 1, -0.65: 1, -0.21: 1, +0.03: 1, +0.05: 1, +0.06: 16, +0.07: 51, +0.08: 3, +0.10: 2, +0.13: 1, +0.14: 1, +0.25: 1, +0.26: 1, +0.29: 1, +0.30: 1, +0.33: 1, +0.61: 1, +0.65: 1, +0.81: 1, +0.87: 1
+
+### a3. Offset signature and pre-fixed reading
+
+a1 per-game lag SD 135.4 ms, IQR 22.5 ms; a2 SD 204.3 ms, IQR 0.0 ms.
+
+Rule (fixed in SPEC before the run): if a2 per-game lags have IQR <= 10 ms and a1 per-game lags do not show the same positive median, the venue-time result is read as a timestamp offset; if a1 median lag >= +30 ms with share > 0 >= 0.6, it is read as a receipt-side lead of that size; otherwise inconclusive.
+
+Reading: venue-time result read as a TIMESTAMP OFFSET (a2 IQR <= 10 ms and a1 does not show the same positive median).
+
+### a4. Receipt minus venue time (ms), book snapshots in windows, cut excluded
+
+| venue | n | median | p10 | p90 |
+|---|---|---|---|---|
+| kalshi | 8334238 | 29.6 | 27.6 | 34.6 |
+| polymarket | 1667925 | 52.2 | 50.2 | 222.5 |
+
+## (b) Cross-venue arbitrage: market-efficiency measurement; polymarket.com is not available to US persons; not a strategy available to the authors
+
+Opportunities: 3039 in 84 games (home leg 1600, away leg 1439). Duration median 0.051 s, p90 1.343 s. Share lasting >= 0.25 / 0.5 / 1.0 / 2.0 s: 0.320 / 0.231 / 0.129 / 0.078. Median executable size at t: 7.25.
+
+| L (s) | attempts | executed | missed | no book / side empty | games executed | contracts | total P&L $ | 95% CI | per contract $ | 95% CI | ex top 5 total $ | ex top 5 per contract $ |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0.25 | 3039 | 517 | 2488 | 34 | 61 | 3841.78 | 0.00 | [0.00, 0.00] | 0.0000 | [0.0000, 0.0000] | 0.00 | 0.0000 |
+| 0.5 | 3039 | 543 | 2464 | 32 | 59 | 3797.77 | 0.00 | [0.00, 0.00] | 0.0000 | [0.0000, 0.0000] | 0.00 | 0.0000 |
+| 1.0 | 3039 | 453 | 2554 | 32 | 57 | 3272.75 | 0.00 | [0.00, 0.00] | 0.0000 | [0.0000, 0.0000] | 0.00 | 0.0000 |
+
+Settlement check (games with an executed opportunity at any L: 63): disagreements 63: ['cfb_20261003_aamu_jkst', 'cfb_20261003_akr_cmu', 'cfb_20261003_alcn_gram', 'cfb_20261003_alst_cook', 'cfb_20261003_ark_txam', 'cfb_20261003_army_lt', 'cfb_20261003_arpb_sou', 'cfb_20261003_aub_tenn', 'cfb_20261003_bc_smu', 'cfb_20261003_bgsu_moh', 'cfb_20261003_byu_tcu', 'cfb_20261003_cal_unlv', 'cfb_20261003_cit_scst', 'cfb_20261003_colg_harv', 'cfb_20261003_cor_gtwn', 'cfb_20261003_day_drke', 'cfb_20261003_elon_unh', 'cfb_20261003_emu_mass', 'cfb_20261003_fla_mizz', 'cfb_20261003_gaso_ccar', 'cfb_20261003_inst_sdak', 'cfb_20261003_iw_sfa', 'cfb_20261003_lou_ncst', 'cfb_20261003_md_neb', 'cfb_20261003_mer_vmi', 'cfb_20261003_mhu_liu', 'cfb_20261003_mia_clem', 'cfb_20261003_mich_minn', 'cfb_20261003_morg_vill', 'cfb_20261003_msu_wis', 'cfb_20261003_mtu_ku', 'cfb_20261003_navy_afa', 'cfb_20261003_ncat_bry', 'cfb_20261003_nd_unc', 'cfb_20261003_norf_rmu', 'cfb_20261003_ohio_kent', 'cfb_20261003_orst_csu', 'cfb_20261003_osu_iowa', 'cfb_20261003_penn_dart', 'cfb_20261003_pur_ill', 'cfb_20261003_rich_laf', 'cfb_20261003_syr_conn', 'cfb_20261003_tem_usf', 'cfb_20261003_tnst_wiu', 'cfb_20261003_tol_ball', 'cfb_20261003_tows_monm', 'cfb_20261003_ttu_colo', 'cfb_20261003_ucf_hou', 'cfb_20261003_uk_scar', 'cfb_20261003_ulm_usa', 'cfb_20261003_una_eky', 'cfb_20261003_ust_pre', 'cfb_20261003_utsa_rice', 'cfb_20261003_uva_fsu', 'cfb_20261003_valp_more', 'cfb_20261003_wash_usc', 'cfb_20261003_wmu_buff', 'cfb_20261003_wof_fur', 'cfb_20261003_wvu_isu', 'cfb_20261003_wyo_ndsu', 'cfb_20261003_ysu_siu', 'cfb_20261004_suu_utu', 'cfb_20261004_web_cp']. Kalshi: data/holdout_raw/settlements.csv; polymarket.com: Gamma API outcomePrices (cached data/pm_resolution/).
+Taker delay defaulted to 1 s (condition missing from holdout_seconds_delay.csv): 0 games.

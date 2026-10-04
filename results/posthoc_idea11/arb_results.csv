@@ -1,0 +1,4 @@
+label,latency_L_s,attempts,executed,missed,no_book_or_empty,games,contracts,pnl_total,total_ci_lo,total_ci_hi,pnl_per_contract,pc_ci_lo,pc_ci_hi,ex_top5_total,ex_top5_pc
+market-efficiency measurement; polymarket.com is not available to US persons; not a strategy available to the authors,0.25,3039,517,2488,34,61,3841.78,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+market-efficiency measurement; polymarket.com is not available to US persons; not a strategy available to the authors,0.5,3039,543,2464,32,59,3797.7700000000004,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+market-efficiency measurement; polymarket.com is not available to US persons; not a strategy available to the authors,1.0,3039,453,2554,32,57,3272.75,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
