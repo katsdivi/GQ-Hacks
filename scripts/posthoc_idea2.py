@@ -285,6 +285,10 @@ def main() -> None:
             lag_rows.append({"kind": "placebo", "game_id": a.game_id, "game_b": b.game_id,
                              "lag_s": lag_100ms(sk, spb, lo, hi, ko) if len(sk) and len(spb) else float("nan")})
         print(f"{i + 1}/{len(q)} {a.game_id} signals={len(sig)}", flush=True)
+        # per-game flush (robustness against the hard stop; final files are rewritten below)
+        pd.DataFrame(lag_rows).to_csv(OUT / "idea2_lag_distribution.csv", index=False)
+        pd.DataFrame(trades).to_csv(OUT / "idea2_trades.csv", index=False)
+        pd.DataFrame(skips).to_csv(OUT / "idea2_skips.csv", index=False)
 
     lags = pd.DataFrame(lag_rows)
     lags.to_csv(OUT / "idea2_lag_distribution.csv", index=False)
