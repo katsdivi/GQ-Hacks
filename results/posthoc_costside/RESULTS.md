@@ -169,3 +169,36 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 253 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 4
+
+Run 2026-10-04 05:43 ET.
+
+- Calm slots make pairs WORSE: in calm markets the second leg rarely fills (h 0.02: 216 pairs vs 613 orphans), so
+  orphans dominate (ROC -0.036, CI below 0, both h).
+- Passive orphan completion lifts pairs from 5,067 to 6,437 (+$962), but the orphans that still fail are the ones
+  the market ran away from, and hedging them at the deadline costs more: orphans -$3,004 on 3,121; ROC -0.022, CI
+  below 0. With calm slots too: -0.045.
+- Lesson: the orphan is the adverse-selection signal itself; any rule that waits makes it worse, and any rule that
+  avoids moves also avoids the fills that complete pairs.
+
+### All Round 4 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R4.REQUOTE | 9558 | -0.0222 | -0.0257 | -0.0183 | -2.137 | -0.0163 | -1.559 | -2248 | -8.807 | 1 |
+| R4.PAIRCALM.h0.03 | 674 | -0.0361 | -0.0582 | -0.015 | -3.063 | -0.0323 | -2.725 | -282.7 | -8.984 | 1 |
+| R4.PAIRCALM.h0.02 | 829 | -0.0364 | -0.0578 | -0.0144 | -2.983 | -0.0325 | -2.654 | -349.8 | -8.129 | 1 |
+| R4.REQUOTECALM | 829 | -0.045 | -0.0623 | -0.028 | -3.755 | -0.0409 | -3.392 | -362.7 | -8.953 | 1 |
+
+### Cumulative correction after Round 4
+
+Trials: own 110 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 257. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.328. DSR of that best: 2.81e-32 (project convention;
+normal-returns version 2.61e-10). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 257 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
