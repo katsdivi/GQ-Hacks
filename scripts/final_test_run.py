@@ -25,6 +25,13 @@ import numpy as np
 import pandas as pd
 import pyarrow.dataset as ds
 
+# The run's numbers were validated under these versions (requirements.txt, .venv-run). pandas 3 changes the default
+# datetime unit; any mismatch aborts before anything is read.
+PINNED = {"pandas": "2.3.2", "numpy": "1.26.4"}
+_have = {"pandas": pd.__version__, "numpy": np.__version__}
+if _have != PINNED:
+    raise SystemExit(f"version mismatch: running {_have}, pinned {PINNED}; use .venv-run (requirements.txt)")
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 

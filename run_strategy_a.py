@@ -91,6 +91,11 @@ def daily(e: pd.DataFrame) -> dict:
 
 
 def main() -> None:
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--no-variants-log", action="store_true",
+                    help="reproduction of an already logged run: do not append duplicate variants.csv rows")
+    no_log = ap.parse_args().no_variants_log
     OUT.mkdir(parents=True, exist_ok=True)
     games = A.load_games(GAMES, META, ticks_dir=TICKS)
     assert all(g.kickoff < A.SEAL for g in games), "training only"
@@ -145,7 +150,8 @@ def main() -> None:
                     "notes": f"Strategy A v3+A1-A3; theta {r.theta}; {r.leg}; edge = net cents per contract (Webull); "
                              f"roc_webull {getattr(r, 'roc_webull', float('nan')):.5f}; "
                              f"roc_direct {getattr(r, 'roc_direct', float('nan')):.5f}; selected theta {sel}"})
-    pd.DataFrame(var).to_csv(VARIANTS, mode="a", header=False, index=False)
+    if not no_log:
+        pd.DataFrame(var).to_csv(VARIANTS, mode="a", header=False, index=False)
 
     pd.set_option("display.width", 250, "display.max_columns", 40)
     print(f"games loaded {len(games)}; selected theta (v3 rule) = {sel}; variants rows appended {len(var)}")

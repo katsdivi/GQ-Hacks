@@ -23,7 +23,9 @@
 # REHEARSE_DATA_FROM=<checkout with data/> when rehearsing from a checkout without data, e.g. ../wt-main).
 set -euo pipefail
 cd "$(dirname "$0")/.."
+[ -x .venv-run/bin/python ] || [ "${1:-}" = "--rehearse" ] || { echo "missing .venv-run (python3 -m venv .venv-run && .venv-run/bin/pip install -r requirements.txt)"; exit 1; }
 REH=0
+PYRUN="$(pwd)/.venv-run/bin/python"      # the pinned run env (requirements.txt); final_test_run.py asserts versions
 # rehearsal fake processes never outlive the script
 trap '[ "${REH:-0}" = 1 ] && [ -n "${T:-}" ] && pkill -f "$T/fake" 2>/dev/null; true' EXIT
 [ "${1:-}" = "--rehearse" ] && REH=1
@@ -60,6 +62,7 @@ if [ $REH = 1 ]; then
   for f in $FEEDS; do mkdir -p "data/live/$f/20261003"; echo "fake mac $f" > "data/live/$f/20261003/1_1.parquet"; done
   mkdir -p data/live/heartbeat && cp "$V/data/live/heartbeat/20261003.jsonl" data/live/heartbeat/
   cp "${REHEARSE_DATA_FROM:-$REAL}/data/live/holdout_seconds_delay.csv" data/live/holdout_seconds_delay.csv
+  PYRUN="${REHEARSE_DATA_FROM:-$REAL}/.venv-run/bin/python"
   echo "| Sun Oct 04 00:30:01 | Sun Oct 04 00:30:02 | kalshi_ws | rehearsal auto-logged row | rehearsal |" >> GAPS.md
   RUN_COMMIT=$(git rev-parse main)
   RSRC="$V"
@@ -137,7 +140,7 @@ shasum -a 256 -c --quiet results/holdout_inputs_manifest.txt && echo "frozen inp
 
 echo "== 6. checklist only"
 set +e
-python3 scripts/final_test_run.py --checklist-only
+"$PYRUN" scripts/final_test_run.py --checklist-only
 rc=$?
 set -e
 if [ $REH = 1 ]; then

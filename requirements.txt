@@ -1,15 +1,22 @@
-databento
-pandas
-pyarrow
-numpy
-requests
-websockets
-psycopg[binary]
-plotly
-streamlit
-python-dotenv
-matplotlib
-cryptography
-pytest
-scipy
-webull-openapi-python-sdk==3.0.2   # execution/webull.py; install after the last game (collector shares .venv)
+# Pinned to the environment that produced the committed numbers (Anaconda Python 3.11.7, 2026-10-03).
+# pandas 3 changes the default datetime unit to microseconds; these pins keep every number reproducible.
+# The run and the training reproduction use a venv built from this file (.venv-run, scripts/reproduce_training.sh).
+pandas==2.3.2
+numpy==1.26.4
+scipy==1.16.3
+pyarrow==14.0.2
+matplotlib==3.10.0
+requests==2.34.2
+python-dateutil==2.8.2
+pytz==2026.1.post1
+tzdata==2025.2
+pytest==9.1.1
+# collector, ingest and app only (no reported number depends on them); versions as in the collector's .venv
+websockets==17.1
+cryptography==50.0.2
+python-dotenv==1.2.4
+plotly==7.1.0
+streamlit==1.65.0
+databento==0.87.0
+psycopg[binary]==3.3.6
+# execution/webull.py (Webull SDK) has its own pinned env: requirements-exec.txt -> .venv-exec
