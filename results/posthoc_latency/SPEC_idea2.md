@@ -14,9 +14,13 @@ It does not touch the pre-registered holdout run (RUN_COMMIT 872ff43) or its out
 
 Data and games
 - Vultr recordings only: staleline/data/vultr/data/live/{kalshi,polymarket}/*/*.parquet. No Polymarket US data.
-- Games: rows of staleline/results/holdout/lead_polymarket.com_per_game.csv with qualifying == True and
-  machine == vultr (88 games). Window per game = [window_start_ns, window_end_ns) from that file, applied to
-  VENUE time (src_ts_ns). No re-qualification.
+- Games (amended 03:41 ET, before any real-data run, on Divi's instruction via the orchestrator): windows are
+  read ONLY from data/live/holdout_windows.csv (commit feadc99): rows with venue == polymarket, qualifying ==
+  True and excluded_outage, excluded_no_rows, excluded_no_instrument all False; machine as named in the row; a
+  row whose machine is not vultr is skipped and counted (currently 0; 88 usable rows, all vultr). Window per
+  game = [window_start_ns, window_end_ns) from that file, applied to VENUE time (src_ts_ns). Kickoff T =
+  kickoff_utc from data/live/holdout_candidates.csv. No re-qualification. Placebo order: games sorted by
+  kickoff with a stable sort (ties keep the windows-file row order); this may differ from run_test's tie order.
 - Instruments: holdout_mid.instruments(cand_row, maps) with data/live/holdout_candidates.csv and
   data/live/holdout_maps. Kalshi market = <ticker>-<HOME>, polymarket.com market = collector home token, so both
   prices are P(home).
@@ -83,3 +87,33 @@ Reporting per L and fee line
   per-trade Sharpe = mean / sd (ddof 1), not annualized; and the same mean and Sharpe after dropping the 5 games
   with the largest per-game sum of net c/contract.
 - Variant count: 3 trading variants (L = 0.25, 0.5, 1.0) added to the DSR total.
+
+## Disclosure: earlier read of the per-game results file
+
+Read staleline/results/holdout/lead_polymarket.com_per_game.csv at about 03:31 to 03:32 ET (before the SPEC
+commit 4ec43cc). Loaded the whole CSV with pandas. Printed: the header (all column names), value counts of
+machine and of machine among qualifying rows, and for 5 rows the columns game_id, kickoff_utc, machine,
+excl_lo_g, excl_hi_g, excl_source (excl columns shown partly). In a second step (src_ts_ns coverage check) the
+whole CSV was loaded again and qualifying, game_id, window_start_ns, window_end_ns were used for 2 games; nothing
+else was printed. Columns lag_s, n_changes_kalshi, n_changes_other, pin_start_g, reason, kalshi_rows, other_rows,
+excluded_s were loaded in memory but never printed or looked at. The lag values were not seen in this session
+(the holdout lead result itself was known to the project before this idea was formed). The script no longer
+reads that file.
+
+## Timestamp resolution, measured before the real-data run
+
+Measured by the orchestrator at 03:37 ET on Vultr Oct 3 ET books (src_ts_ns, all markets pooled):
+- Kalshi: 21,975,575 rows with venue ts; smallest nonzero gap between consecutive distinct venue timestamps
+  1.000 ms; median gap 3.0 ms; share with nonzero sub-second part 0.9985; share ending in .000 (whole second)
+  0.0015.
+- polymarket.com: 8,677,780 rows with venue ts; smallest nonzero gap 1.000 ms; median gap 10.0 ms; share with
+  nonzero sub-second part 0.9971; share ending in .000 0.0029.
+- About 75% of values have nonzero sub-millisecond digits, consistent with float64 rounding when millisecond
+  times are converted to ns (spacing about 256 ns at 1.76e18), so the effective resolution is taken as 1 ms.
+  A venue time exactly on a 100 ms boundary can therefore land one bin early; negligible.
+- Gate rule: if either venue is coarser than 100 ms, or more than 50% of its timestamps are whole seconds, the
+  lag test is reported "not testable at 100 ms" and the trade rule is not run. Gate result: passes on both
+  venues; the lag test and the trade rule run.
+- Own check (2 games, before the SPEC commit): src_ts_ns is present on every Kalshi and polymarket.com book row
+  (Kalshi nulls are trade rows only). Receipt delay recv_ns - src_ts_ns: Kalshi median about 29 ms (99th pct
+  about 0.11 s); polymarket.com median about 52 ms, 99th pct 6 to 16 s.

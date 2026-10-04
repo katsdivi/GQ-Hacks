@@ -254,11 +254,18 @@ class Loader:
 
 
 def main() -> None:
-    per = pd.read_csv(DATA / "results/holdout/lead_polymarket.com_per_game.csv")
-    q = per[per["qualifying"].fillna(False).astype(bool) & (per["machine"] == "vultr")].copy()
-    q["ko"] = pd.to_datetime(q["kickoff_utc"], utc=True)
-    q = q.sort_values("ko").reset_index(drop=True)
+    # windows ONLY from data/live/holdout_windows.csv (orchestrator instruction; no per-game results file)
+    w = pd.read_csv("data/live/holdout_windows.csv")
+    w = w[w["venue"] == "polymarket"]
+    fl = lambda c: w[c].fillna(False).astype(bool)
+    q = w[fl("qualifying") & ~fl("excluded_outage") & ~fl("excluded_no_rows") & ~fl("excluded_no_instrument")].copy()
+    n_not_vultr = int((q["machine"] != "vultr").sum())
+    q = q[q["machine"] == "vultr"]
     cands = pd.read_csv(DATA / "data/live/holdout_candidates.csv")
+    q = q.merge(cands[["game_id", "kickoff_utc"]], on="game_id", how="left")
+    q["ko"] = pd.to_datetime(q["kickoff_utc"], utc=True)
+    q = q.sort_values("ko", kind="stable").reset_index(drop=True)
+    print(f"usable rows not on vultr (skipped): {n_not_vultr}")
     maps = H.load_maps(DATA / "data/live/holdout_maps")
     ld = Loader(DATA / "data" / "vultr")
     print(f"{LABEL}\nqualifying vultr games: {len(q)}", flush=True)
