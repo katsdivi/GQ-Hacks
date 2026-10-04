@@ -235,3 +235,16 @@ Team schedule before judging: the run must finish, and be checked, in time for j
 ### Disclosure
 
 No holdout prices, plots or statistics were examined. Only the game ids and ESPN kickoff times in data/live/holdout_candidates.csv were read to count kept and dropped games (2026-10-03, about 19:55 ET). The frozen candidates file and maps are not edited; the restriction is applied by the runner at run time.
+
+## Amendment 5 (2026-10-03 21:22 ET): trade-the-laggard trading end and confidence interval
+
+Committed before the Amendment 2 holdout run and before any holdout price, plot or statistic is examined. It changes only the trade-the-laggard evaluator (Amendment 2 "Trade-the-laggard"; Amendment 3 items 16 to 16b). The lead test, its window and its decision rule are unchanged. Code: laggard.py and scripts/final_test_run.py on branch t15-final (7759b31).
+
+### Changes
+
+1. Trading end (causal). The laggard trades from the window start (ESPN kickoff - 90 min) until the earlier of ESPN kickoff + 4.5 h and pin_start + 60 s, where pin_start is the first second of the 60 s pinned run (mid >= 0.98 or <= 0.02 on either venue) that ends the lead-test window (Amendment 3 item 9). Before this amendment the laggard stopped at the lead-test window end, which is the pin START: knowing that a 60 s pinned run starts at a given second takes the next 60 s of data, so stopping there would drop trades using future data. pin_start + 60 s is the first moment the pin is observable (a grid label g is known at g + 1 s). A fill at or after the trading end is skipped and counted ("after window end"), as before. Tests (tests/test_laggard.py): a fill at pin_start + 30 s fills; a fill at pin_start + 61 s is skipped; removing every recorded row after pin_start + 60 s changes no filled trade.
+2. Confidence interval. The latency-curve CI of mean net edge per contract is a block bootstrap by game, as docs/stats_plan.md specifies ("CIs: block bootstrap by game (2000 draws, seed 20261003)"): whole games are resampled with replacement, each draw's statistic is total net edge over total trades, and the CI is the 2.5th and 97.5th percentile of 2,000 draws, seed 20261003 (the same procedure as Strategy B's run_strategy_b.boot_ci). The evaluator previously reported a normal CI over trades, which treats trades within a game as independent. That per-trade normal CI is still reported as an extra column labelled "per-trade normal (not the plan's CI)". Test: tests/test_laggard.py::test_latency_curve_ci_is_game_bootstrap (two games, hand recomputation of the bootstrap).
+
+### Disclosure
+
+No holdout prices, plots or statistics were examined. Both issues were found in Divi's rule-7 line-by-line review of laggard.py (docs/review/laggard_walkthrough.md and docs/review/holdout_mid_walkthrough.md, point 1) at about 21:15 ET on 2026-10-03. The laggard has run only on synthetic books (tests and the dry run of scripts/final_test_run.py).
