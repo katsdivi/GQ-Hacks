@@ -1,5 +1,5 @@
 {
- "own_trials": 141,
+ "own_trials": 147,
  "external": {
   "search": {
    "trials": 54,
@@ -17,15 +17,15 @@
    "with_daily": 57
   }
  },
- "cumulative_trials": 288,
- "trials_in_correction": 288,
- "rc_p_best_by_t": 0.353,
+ "cumulative_trials": 294,
+ "trials_in_correction": 294,
+ "rc_p_best_by_t": 0.3675,
  "best_by_t": "patterns:P3-08",
  "best_t": 2.4953726779022576,
- "dsr_best": 2.7492417751462223e-29,
- "dsr_best_normal_returns": 1.843040888562495e-09,
+ "dsr_best": 3.5748548781918556e-29,
+ "dsr_best_normal_returns": 1.985736383788546e-09,
  "sr_best_daily": 0.23579055479123773,
- "sr0": 0.7955752610493338,
+ "sr0": 0.7944058334497307,
  "days": 112,
  "holm_survivors_005": [],
  "stop_candidates": [],

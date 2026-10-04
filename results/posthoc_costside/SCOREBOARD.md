@@ -45,4 +45,6 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 7 | HALF: 2nd-quarter momentum into halftime | +10 | new |
 | 7 | ESPN non-scoring game state ruled out (8 trials, strict defect filter) | +5 | ruled out |
 
-**Total after Round 7: +175.** Stop condition (+100): not met.
+| 8 | PRIOR: team prior from past Kalshi closing errors (under and over) | +10 | new |
+
+**Total after Round 8: +185.** Stop condition (+100): not met.

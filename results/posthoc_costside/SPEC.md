@@ -263,3 +263,22 @@ Calendar items not testable: "first hour after a market opens" (training files s
 "games whose kickoff moved" (no schedule-change record in the data).
 
 Cumulative own trials after Round 8: 141 + 6 = 147.
+
+## Round 9 (5 trials; independent filters on the two best maker signals; written 2026-10-04 05:51 ET, before Round 9 touches data)
+
+Why: item 5 of the brief. The near-miss R2.VOL.low.maker (+0.050 [-0.008, +0.107]) and the Round 8 best
+R8.PRIOR.over.k3.maker (+0.068 [-0.024, +0.155]) are filtered by independent information from other rounds. The
+filters use only data at or before each signal's decision time t; fills are the parent trials' fills.
+
+- **R9.VOLLOW.prior**: R2.VOL.low.maker fills where the bought team's k 3 prior (Round 8) is >= 0 (not recently
+  overpriced); teams with fewer than 3 settled past games are kept.
+- **R9.VOLLOW.espncalm**: R2.VOL.low.maker fills in games passing the Round 7 ESPN defect rule, where no ESPN
+  scoring play and no non-scoring possession change (Round 7 TO results) has a wallclock in [t - 120 s, t].
+- **R9.VOLLOW.imb**: R2.VOL.low.maker fills where the trailing 60 s aggressor imbalance (Round 6 definition) does not
+  oppose the trade (I x direction >= -0.5) or total volume is < 500.
+- **R9.VOLLOW.regular**: R2.VOL.low.maker fills in the regular season only (CFB ET date before 2025-12-13, NFL
+  before 2026-01-10).
+- **R9.PRIOR.pm**: R8.PRIOR.over.k3.maker fills in B-set games where the bought team's polymarket.com price (last
+  trade within 10 min before t, venue time) is >= its Kalshi own last trade (venues agree in direction).
+
+Cumulative own trials after Round 9: 147 + 5 = 152.

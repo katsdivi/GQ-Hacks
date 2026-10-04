@@ -340,3 +340,35 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 288 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 8
+
+Run 2026-10-04 05:52 ET.
+
+- A team's recent Kalshi closing errors carry at most a weak signal: buying against a team Kalshi OVERPRICED in
+  its last 3 games, with maker entry, is +0.068 [-0.024, +0.155] on 299 trades (win 0.600 vs break-even 0.562);
+  the taker version is +0.015 and k 1 is negative. "Under" (buy the recently underpriced team) is flat to
+  negative. CIs all include 0.
+
+### All Round 8 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R8.PRIOR.over.k3.maker | 299 | 0.0675 | -0.0239 | 0.1551 | 3.797 | 0.0753 | 4.204 | 74.42 | 2.573 | 1 |
+| R8.PRIOR.under.k3.maker | 322 | 0.0248 | -0.0542 | 0.1055 | 1.414 | 0.0322 | 1.82 | 6.72 | 1.317 | 1 |
+| R8.PRIOR.over.k3.taker | 476 | 0.0153 | -0.0503 | 0.0843 | 0.8935 | 0.0153 | 0.8935 | 1.53 | 0.7229 | 1 |
+| R8.PRIOR.over.k1.taker | 618 | -0.0075 | -0.0707 | 0.0562 | -0.421 | -0.0075 | -0.421 | -69.33 | -0.3565 | 1 |
+| R8.PRIOR.under.k3.taker | 492 | -0.0158 | -0.0798 | 0.0464 | -0.9311 | -0.0158 | -0.9311 | -85.35 | -0.9928 | 1 |
+| R8.PRIOR.under.k1.taker | 637 | -0.0327 | -0.0905 | 0.0267 | -1.901 | -0.0327 | -1.901 | -160.3 | -1.739 | 1 |
+
+### Cumulative correction after Round 8
+
+Trials: own 147 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 294. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.367. DSR of that best: 3.57e-29 (project convention;
+normal-returns version 1.99e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 294 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
