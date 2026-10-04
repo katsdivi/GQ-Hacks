@@ -80,3 +80,9 @@ At Divi's request, at about 23:43 ET on 2026-10-03 (before v3 Amendment 5 was co
 ## Environment
 
 The run uses .venv-run built from the pinned requirements.txt (pandas 2.3.2, numpy 1.26.4); final_test_run.py aborts on any other version. Under pandas 3 the book report's capital base was wrong (microsecond datetimes); fixed (report_book.py, .dt.as_unit("ns")) before the run. Re-generating results/numbers.json under the pinned venv changed 17 training values by at most 1.07e-14 (floating point); a clean clone with a fresh pinned venv reproduces all 115 training keys exactly (scripts/reproduce_training.sh).
+
+## Post-hoc work
+
+- 2026-10-04: docs/posthoc/COMBO_SPEC.md (67c5350, 03:54:50 ET) was committed 40 s after Idea 4 training results were committed (6e21338, 03:54:49 ET). The committing session had not opened those files or that commit. The rule excludes Idea 4 regardless (negative training ROC).
+- 2026-10-04: Idea 1 (branch posthoc-latency, 6f13ecd, 03:51:07 ET): per-leg sizing disclosed; most trades left about 10 contracts unhedged. A matched-quantity diagnostic was added from the existing trade log (diagnostic, not a variant).
+- 2026-10-04: Idea 3 (branch posthoc-latency, 54c3c28, 03:49:57 ET): all outputs marked invalid because of lookahead (whole-window size percentile). Not rerun; its 3 variants still count.
