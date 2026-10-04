@@ -58,3 +58,10 @@ Per scenario and arm: fills, contracts, mean P&L per contract at +60 s and held 
 Seed reproduces identical games; the adapter feeds the maker without lookahead (changing the synthetic path after T
 does not change fills before T); calibration readouts on 60 base games match calibration.json within tolerance
 (spread 1 c share, trade rate, through share, informed mean move).
+
+## Amendment 1 (2026-10-04 08:06 ET, before any simulation run)
+
+The calibration-readout test failed with the original book rule (1 c spread share 41% vs calibrated 54%), because
+every forced re-centre redrew the spread and wide spreads persist longer. Fix: the spread is redrawn only at Poisson
+book updates; a forced re-centre (mid leaves [bid, ask]) keeps the current spread. No simulation result had been
+computed; only the test's calibration readout on 60 games was seen.
