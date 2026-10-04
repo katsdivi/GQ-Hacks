@@ -83,7 +83,8 @@ def lead_world(root: Path, rng) -> tuple:
     return machines, pd.DataFrame(cands), maps, delays, mf
 
 
-def a_games(root: Path, rng, n: int, start: str, prefix: str) -> tuple[pd.DataFrame, pd.DataFrame, Path]:
+def a_games(root: Path, rng, n: int, start: str, prefix: str, flip_away: bool = False
+            ) -> tuple[pd.DataFrame, pd.DataFrame, Path]:
     d = root / f"{prefix}_a_ticks"
     d.mkdir(parents=True, exist_ok=True)
     games, meta = [], []
@@ -96,6 +97,8 @@ def a_games(root: Path, rng, n: int, start: str, prefix: str) -> tuple[pd.DataFr
         rows = []
         for mk in (home, away):
             px = np.clip(np.round(p0 + rng.normal(0, 0.01, len(ts)), 2), 0.01, 0.99)
+            if flip_away and mk == away:
+                px = np.round(1 - px, 2)          # away rows NOT flipped to P(home): the gate must FAIL
             rows.append(pd.DataFrame({"ts": ts + rng.integers(0, 10 * NS, len(ts)), "venue": "kalshi",
                                       "market_id": f"{ev}-{mk}", "kind": "trade", "price": px, "size": 1.0,
                                       "side": "buy"}))
@@ -166,7 +169,7 @@ def factors() -> pd.DataFrame:
                          "hml": r.normal(0, 0.005, len(days)), "rf": 0.0002, "umd": r.normal(0, 0.007, len(days))})
 
 
-def dry_ctx(out: Path):
+def dry_ctx(out: Path, flip_away: bool = False):
     from scripts.final_test_run import Ctx
     if out.exists():
         shutil.rmtree(out)
@@ -174,6 +177,6 @@ def dry_ctx(out: Path):
     fx.mkdir(parents=True)
     rng = np.random.default_rng(SEED)
     machines, cands, maps, delays, mf = lead_world(fx / "lead", rng)
-    ag, am, ad = a_games(fx, rng, 60, "2026-09-05", "oos")
+    ag, am, ad = a_games(fx, rng, 60, "2026-09-05", "oos", flip_away)
     bg, bk, bp = b_games(fx, rng, 40, "2026-09-05", "oos")
     return Ctx(out, machines, cands, maps, delays, ag, am, ad, bg, bk, bp, training(fx, rng), factors(), True, mf)

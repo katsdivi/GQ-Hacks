@@ -172,15 +172,53 @@ def laggard(c: Ctx, res: dict, num: dict) -> None:
 
 # ---------- Strategy A and B ----------
 
-def strategy_a(c: Ctx, num: dict) -> pd.DataFrame:
+def a_games_loaded(c: Ctx) -> list:
     gp, mp = c.out / "inputs_a_games.csv", c.out / "inputs_a_meta.csv"
     c.a_games.to_csv(gp, index=False)
     c.a_meta.to_csv(mp, index=False)
-    games = A.load_games(gp, mp, ticks_dir=c.a_ticks, expect_preseason=None)
+    return A.load_games(gp, mp, ticks_dir=c.a_ticks, expect_preseason=None)
+
+
+def a_ticks(c: Ctx, g) -> pd.DataFrame:
+    f = Path(c.a_ticks) / f"{g.game_id}.parquet"
+    return pd.read_parquet(f) if f.exists() else pd.DataFrame(columns=["ts", "venue", "market_id", "kind", "price"])
+
+
+def orientation_gate(c: Ctx, games: list, num: dict) -> tuple[bool, str]:
+    """Same gate as training: for holdout A games that reach the favorite decision (ESPN kickoff, both markets
+    present, both fresh, both priced at t), home own-market price + away own-market price at t (the as-of medians
+    decide() uses). PASS = median in [0.97, 1.05] and < 2% of games outside [0.90, 1.10]. Prints only the verdict
+    and median, p5, p95, count, n outside; no single price."""
+    s = []
+    for g in games:
+        if g.kickoff_source not in A.KICKOFF_SOURCES or g.exclude:
+            continue
+        tr = a_ticks(c, g)
+        if not len(tr):
+            continue
+        d = A.decide(tr, g)
+        if d["skip"] and not d["skip"].startswith("no favorite"):
+            continue
+        t = d["t_ns"]
+        own = {x: A.own_market_trades(tr, g, x) for x in (g.home, g.away)}
+        s.append(A.asof_median(own[g.home], t) + A.asof_median(own[g.away], t))
+    x = np.array(s, float)
+    if not len(x):
+        return False, "orientation gate: no game reaches the decision"
+    out = int(((x < 0.90) | (x > 1.10)).sum())
+    ok = 0.97 <= float(np.median(x)) <= 1.05 and out / len(x) < 0.02
+    msg = (f"orientation gate {'PASS' if ok else 'FAIL'}: n {len(x)}, median {np.median(x):.4f}, "
+           f"p5 {np.percentile(x, 5):.4f}, p95 {np.percentile(x, 95):.4f}, outside [0.90, 1.10] {out}")
+    num["OOS.orientation_gate"] = {"pass": bool(ok), "n": len(x), "median": float(np.median(x)),
+                                   "p5": float(np.percentile(x, 5)), "p95": float(np.percentile(x, 95)),
+                                   "n_outside": out}
+    return ok, msg
+
+
+def strategy_a(c: Ctx, num: dict, games: list) -> pd.DataFrame:
     rows = []
     for g in games:
-        f = Path(c.a_ticks) / f"{g.game_id}.parquet"
-        tr = pd.read_parquet(f) if f.exists() else pd.DataFrame(columns=["ts", "venue", "market_id", "kind", "price"])
+        tr = a_ticks(c, g)
         for r in A.evaluate_game(tr, g, thetas=(RB.A_THETA,), final_test=True):
             r.update(kickoff=g.kickoff, date=g.kickoff.tz_convert(ET).date().isoformat())
             rows.append(r)
@@ -273,12 +311,18 @@ def run(c: Ctx) -> dict:
         raise SystemExit("checklist failed; nothing run")
     c.out.mkdir(parents=True, exist_ok=c.dry)   # the lock: a second real run fails here (FileExistsError)
     (c.out / "checklist.json").write_text(json.dumps(ck, indent=1, default=str))
+    games = a_games_loaded(c)
+    gate_ok, gate_msg = orientation_gate(c, games, num)
+    print(gate_msg)
     res = lead(c, num)
     for t in H.TESTS:
         print(f"lead test {t}: qualifying {num[f'OOS.lead.{t}.n_qualifying']}, decision {num[f'OOS.lead.{t}.decision']}")
     laggard(c, res, num)
     print(f"laggard: filled round trips {num['OOS.laggard.n_trades']}")
-    rows = strategy_a(c, num)
+    if not gate_ok:
+        print("Strategy A and B NOT run: orientation gate failed (lead test and laggard above stand)")
+        return finish(c, num, start, t0, gi, gate_msg)
+    rows = strategy_a(c, num, games)
     print(f"Strategy A: games {num['OOS.A.n_games']}, trades {num['OOS.A.n_trades']}")
     bt, b2 = strategy_b(c, num)
     print(f"Strategy B: games {num['OOS.B.n_games']}, trades {num['OOS.B.n_trades']}")
@@ -289,13 +333,19 @@ def run(c: Ctx) -> dict:
     bnum, _, _ = RB.build(rows.assign(theta=RB.A_THETA), bt, b2, SEL_B, kos, c.fac, c.out, prefix="OOS.",
                           label="Out-of-sample", bases=bases, trial_srs=trial, png="equity_oos.png")
     num.update({k: v["value"] for k, v in bnum.items()})
+    return finish(c, num, start, t0, gi, gate_msg)
+
+
+def finish(c: Ctx, num: dict, start: str, t0: float, gi: dict, gate_msg: str) -> dict:
     numbers = {k: {"value": v, "source": "scripts/final_test_run.py"} for k, v in num.items()}
     (c.out / "numbers.json").write_text(json.dumps(numbers, indent=1, default=str))
     end = now_et()
+    aborted = "FAIL" in gate_msg or "no game" in gate_msg
     (c.out / "RUN_LOG.md").write_text(
         f"# {'DRY RUN (synthetic fixtures)' if c.dry else 'THE holdout run'}\n\n- git sha: {gi['git_sha']}"
         f"{' (working tree had uncommitted changes)' if gi['dirty'] else ''}\n- start: {start}\n- end: {end}\n"
-        f"- runtime: {time.monotonic() - t0:.1f} s\n- outputs: {c.out}\n")
+        f"- runtime: {time.monotonic() - t0:.1f} s\n- outputs: {c.out}\n- {gate_msg}\n"
+        + ("- Strategy A and B ABORTED: the orientation gate failed; the lead test and laggard ran.\n" if aborted else ""))
     return numbers
 
 
@@ -333,18 +383,24 @@ def main() -> None:
     g = ap.add_mutually_exclusive_group(required=True)
     g.add_argument("--i-am-the-one-run", action="store_true")
     g.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--dry-run-flip-away", action="store_true", help=argparse.SUPPRESS)  # dry run: force a FAIL gate
     a = ap.parse_args()
     if a.dry_run:
         import scripts.final_test_fixtures as FX
-        c = FX.dry_ctx(ROOT / "results" / "dryrun")
+        c = FX.dry_ctx(ROOT / "results" / ("dryrun_gatefail" if a.dry_run_flip_away else "dryrun"),
+                       flip_away=a.dry_run_flip_away)
     else:
         if (ROOT / "results" / "holdout").exists():
             raise SystemExit("results/holdout/ exists: the one run has already happened")
         c = real_ctx()
     t = time.monotonic()
     numbers = run(c)
-    missing = [f for f in REQUIRED if not (c.out / f).exists()]
-    missing_keys = [k for k in REQUIRED_KEYS if k not in numbers]
+    gate_failed = not numbers.get("OOS.orientation_gate", {}).get("value", {}).get("pass", False)
+    req = [f for f in REQUIRED if not (gate_failed and f.startswith(("strategy_", "equity_oos")))]
+    req_keys = [k for k in REQUIRED_KEYS if not (gate_failed and k.split(".")[1] in ("A", "B", "season_first_day",
+                                                                                      "season_last_day", "combined", "corr_A_B"))]
+    missing = [f for f in req if not (c.out / f).exists()]
+    missing_keys = [k for k in req_keys + ["OOS.orientation_gate"] if k not in numbers]
     if not c.dry:
         RB.write_numbers({k: v for k, v in numbers.items() if k.startswith("OOS.")}, ROOT / "results" / "numbers.json",
                          replace_prefix="OOS.")
