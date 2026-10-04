@@ -205,3 +205,33 @@ Reviewed by Alden 11:55 ET Oct 3. No holdout prices, plots, or statistics were e
 ### Note to Amendment 3: power
 
 Appended 19:30 ET 2026-10-03; changes no rule. Simulation run (a), seed 20261003, 500 studies per cell, started 15:57 ET and finished 19:03 ET (docs/results/sim/README.md, part (a), and docs/results/sim/a/, branch t13-strategy-a at 3825678). If Kalshi truly leads by 5 s with per-game jitter N(0, 2 s), the full rule calls "Kalshi leads" in 47% to 80% of studies with 30 to 60 qualifying games at alpha 0.025 (the Holm level for the smaller p), and in 59% to 86% at alpha 0.05; with 80 games, 85% to 89% at alpha 0.025. With no link it called a lead in at most 1.2% of studies per cell (Wilson upper bound 2.6%), with zero lag in 0 of 500 per cell, and it never called the reverse direction. Power was simulated only for a true 5 s lead; it was not measured for smaller leads and will be lower for them, so an inconclusive result does not mean there is no lead. The simulated placebo has n pairs; the pre-registered Design 1 has about n - 1.
+
+## Amendment 4 (2026-10-03 20:25 ET): holdout lead test limited to kickoffs at or before 20:00 ET Oct 3
+
+Committed before the Amendment 2 holdout run and before any holdout price, plot or statistic is examined.
+
+### Change
+
+The Amendment 2 confirmatory lead test (and the Amendment 2 trade-the-laggard evaluator, which runs once with it) uses only candidate games in data/live/holdout_candidates.csv whose ESPN kickoff (column kickoff_utc, read from the ESPN summary endpoint by ingest/holdout_candidates.py) is at or before 2026-10-03 20:00 ET (2026-10-04 00:00 UTC). All other rules (Amendments 2 and 3) are unchanged. Placebo pairs are formed among the kept games only (item 12: the next qualifying game in kickoff order on the same machine, kickoff within 30 min).
+
+- Kept: 106 of 112 candidates (4 on Fri Oct 2, 102 on Sat Oct 3; kickoffs 19:00 ET Oct 2 to 20:00 ET Oct 3).
+- Dropped: 6, all Saturday late kickoffs:
+
+| game_id | ESPN kickoff (ET, Sat Oct 3) |
+|---|---|
+| cfb_20261004_fres_wsu | 21:30 |
+| cfb_20261004_bay_asu | 22:30 |
+| cfb_20261004_ewu_ucd | 22:30 |
+| cfb_20261004_txst_sdsu | 22:30 |
+| cfb_20261004_cin_ariz | 23:00 |
+| cfb_20261004_sjsu_haw | 23:59 |
+
+The last kept kickoff is 20:00 ET, so the last window ends at the latest at kickoff + 4.5 h = 00:30 ET Oct 4 (earlier if a pinned run ends it). The single run can start after 00:30 ET Oct 4 instead of after the last Saturday window (about 04:30 ET).
+
+### Reason
+
+Team schedule before judging: the run must finish, and be checked, in time for judging. The cutoff was chosen from the kickoff schedule alone, before any holdout result exists.
+
+### Disclosure
+
+No holdout prices, plots or statistics were examined. Only the game ids and ESPN kickoff times in data/live/holdout_candidates.csv were read to count kept and dropped games (2026-10-03, about 19:55 ET). The frozen candidates file and maps are not edited; the restriction is applied by the runner at run time.
