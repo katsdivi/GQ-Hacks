@@ -31,3 +31,27 @@ Spec: results/posthoc_latency/SPEC_idea1.md. One run on real data, no changes af
 | 1.0 | 1.05e-09/1.71e-09/2.33e-09/2.96e-09/1.71e-08/4.86e-08 | 0.000486/0.00378/0.00787/0.0231/0.218/7.44e+03 (0) | 0.00933/0.0843/0.58/1.28/6/12.1 | side empty at t+L: 12; sum no longer clears at t+L: 227 | 0 |
 
 Variant count: 3 (one per L) added to the DSR total. Per-trade rows (our simulated trades only): results/posthoc_latency/idea1_trades.csv.
+
+## Disclosure (added 03:51 ET, Oct 4 2026, after the run; no rerun, no new fills)
+
+Rule text said size = min(10, displayed size on each leg); implemented per leg independently, so most trades left about 10 contracts unhedged on one leg; P&L mostly measures unwind cost. Exact numbers from idea1_trades.csv: Kalshi direct, 44 of 52 trades (84.6%) left more than 5 contracts unhedged and 40 of 52 (76.9%) left 9 or more; Webull, 23 of 24 (95.8%) left more than 5 and 21 of 24 (87.5%) left 9 or more; all 76 trades, 67 (88.2%) more than 5.
+
+## Matched-quantity diagnostic (diagnostic, not a variant). POST-HOC, EXPLORATORY
+
+From the existing trade log only (scripts/posthoc_idea1_diag.py; output idea1_diagnostic_matched.csv). Per trade: q = min(q_home, q_away); P&L = q x 1 - q x (price_home + price_away) - fee(price_home, q) - fee(price_away, q), excluding the unwind. The log has no fee column, so fees on q were recomputed with the same function (costs.fee). Kalshi direct rounds each leg's fee up to the cent even for tiny q. Game bootstrap over 88 games (0 for games with no trade), 2,000 draws, seed 20261003, 95% percentile CI.
+
+| fee path | L (s) | trades | matched contracts | median matched size | matched P&L total | 95% CI | mean per trade | 95% CI |
+|---|---|---|---|---|---|---|---|---|
+| direct | 0.25 | 22 | 10.11 | 0.01 | -0.1676 | [-0.3054, -0.0194] | -0.007618 | [-0.01303, -0.001179] |
+| direct | 0.5 | 16 | 6.07 | 0.005 | -0.1086 | [-0.2181, 0.0106] | -0.006787 | [-0.0132, 0.0005343] |
+| direct | 1.0 | 14 | 12.03 | 2.566e-08 | 0.3807 | [-0.1187, 1.35] | 0.02719 | [-0.008767, 0.1067] |
+| webull | 0.25 | 8 | 6.358e-08 | 2.33e-09 | 3.865e-09 | [1.56e-10, 1.083e-08] | 4.832e-10 | [3.324e-11, 1.415e-09] |
+| webull | 0.5 | 8 | 6.358e-08 | 2.33e-09 | 3.819e-09 | [1.436e-10, 1.074e-08] | 4.774e-10 | [2.843e-11, 1.407e-09] |
+| webull | 1.0 | 8 | 6.358e-08 | 2.33e-09 | 3.819e-09 | [1.436e-10, 1.074e-08] | 4.774e-10 | [2.843e-11, 1.407e-09] |
+
+Opportunity durations. The existing outputs hold only quantiles, so the opportunity runs were recomputed with the committed signal functions (signal_table, runs) on the same data: signal only, no fills, no attempts, no P&L. The recomputed counts, medians and p90s match idea1_results.csv.
+
+| fee path | opportunities | median duration s | p90 duration s | share >= 0.25 s | share >= 0.5 s | share >= 1.0 s |
+|---|---|---|---|---|---|---|
+| direct | 1260 | 0.01087 | 0.03878 | 0.0373 (47) | 0.0294 (37) | 0.0262 (33) |
+| webull | 318 | 0.007866 | 0.2177 | 0.1006 (32) | 0.0943 (30) | 0.0881 (28) |
