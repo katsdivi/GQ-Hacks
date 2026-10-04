@@ -1,0 +1,5 @@
+book,label,trades,games,roc_mean,roc_ci_lo,roc_ci_hi,c_per_contract,pnl_total,excl_top5_roc,sharpe_daily,corr_pred_net,auc_ref
+no trade,"post-hoc, exploratory, generative-model encoder; not part of the submitted strategies",0,0,,,,,,,,,
+take all,"post-hoc, exploratory, generative-model encoder; not part of the submitted strategies",17216,1023,-0.09482571411726189,-0.10960139120770979,-0.07966839186802668,-3.2678090148698886,-5625.860000000001,-0.09772651313629023,-0.6413102824155571,,
+H1 ridge alpha 10,"post-hoc, exploratory, generative-model encoder; not part of the submitted strategies",5735,979,-0.09763788882834504,-0.12624381078160204,-0.06790681703360293,-3.48204010462075,-1996.95,-0.11082271008302455,-0.5831435781850217,-0.013440012586014698,0.50816826151913
+H2 ridge alpha 1000,"post-hoc, exploratory, generative-model encoder; not part of the submitted strategies",3066,934,-0.07815696497044043,-0.13165849749134714,-0.022323646214326174,-3.2722765818656234,-1003.2800000000002,-0.09816080449049441,-0.4182750004185575,-0.008698706541797455,0.5244554766857527
