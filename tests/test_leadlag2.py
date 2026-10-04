@@ -62,3 +62,37 @@ def test_flow_bins_past_only():
     fl = np.array([5.0, -2.0, 7.0])
     grid = np.array([0, 5 * NS, 10 * NS], np.int64)
     assert list(R.flow_bins(ts, fl, grid)) == [0.0, 5.0, -2.0]   # the 11 s trade never enters
+
+
+import leadlag2_r2 as R2
+
+MIN = 60 * NS
+
+
+def _pg(pm, k, ko=200 * MIN):
+    g = _game([a for a, _ in pm], [b for _, b in pm], [a for a, _ in k], [b for _, b in k])
+    g["kickoff_ns"] = ko
+    return g
+
+
+def test_r2_pm_lead_signal_and_no_future():
+    pm = [(0, 0.50), (100 * MIN, 0.50), (130 * MIN, 0.55)] + [(m * MIN, 0.55) for m in range(131, 190)]
+    k = [(m * MIN, 0.50) for m in range(0, 190)]
+    s = R2.signals(_pg(pm, k), 30, 0.04, "pm")
+    assert s and s[0][1] == 1 and s[0][0] >= 130 * MIN
+    k2 = k + [(195 * MIN, 0.90)]                     # a Kalshi print after the last decision changes nothing
+    assert R2.signals(_pg(pm, sorted(k2)), 30, 0.04, "pm") == s
+
+
+def test_r2_no_signal_when_kalshi_moved():
+    pm = [(m * MIN, 0.50 if m < 130 else 0.55) for m in range(0, 190)]
+    k = [(m * MIN, 0.50 if m < 131 else 0.54) for m in range(0, 190)]
+    s = R2.signals(_pg(pm, k), 30, 0.04, "pm")
+    assert all(t < 131 * MIN for t, _ in s)          # once Kalshi moved >= d/2, the pm-leads signal stops
+
+
+def test_r2_exit_not_before_kickoff_minus_5():
+    ts = np.array([10 * MIN, 194 * MIN, 196 * MIN], np.int64)
+    px = np.array([0.5, 0.6, 0.7])
+    ex = R2.exit_kickoff(ts, px, 200 * MIN)
+    assert ex[0] == 196 * MIN and abs(ex[1] - 0.69) < 1e-9
