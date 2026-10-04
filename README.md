@@ -11,7 +11,7 @@ Pre-registration: `HYPOTHESIS_v2.md` (lead test and trade-the-laggard, Amendment
 | Lead test, Kalshi vs polymarket.com | holdout | {{LEAD_OOS_POLYMARKET_COM_N_QUALIFYING}} games | {{LEAD_OOS_POLYMARKET_COM_DECISION}} | | |
 | Lead test, Kalshi vs Polymarket US | holdout | {{LEAD_OOS_POLYMARKET_US_N_QUALIFYING}} games | {{LEAD_OOS_POLYMARKET_US_DECISION}} | | |
 | Trade-the-laggard | holdout | {{LAGGARD_OOS_N_TRADES}} | see the latency curve | | |
-| Strategy A, theta 0.80 | training | {{A_TRAIN_N_TRADES}} | ROC {{A_TRAIN_ROC_WEBULL}} (TODO: not yet a numbers.json key) | | {{A_TRAIN_SHARPE}} |
+| Strategy A, theta 0.80 | training | {{A_TRAIN_N_TRADES}} | ROC {{A_TRAIN_ROC_WEBULL}} | | {{A_TRAIN_SHARPE}} |
 | Strategy A, theta 0.80 | holdout | {{A_OOS_N_TRADES}} | ROC {{A_OOS_ROC_WEBULL}} | {{A_OOS_ROC_WEBULL_CI}} | {{A_OOS_SHARPE}} |
 | Strategy A-maker, theta 0.80 | holdout | {{A_MAKER_OOS_FILLS}} fills | ROC {{A_MAKER_OOS_ROC_WEBULL}} | {{A_MAKER_OOS_ROC_WEBULL_CI}} | |
 | Strategy B (5 c, 10 s, 300 s) | training | {{B_TRAIN_N_TRADES}} | {{B_TRAIN_EDGE_WEBULL_CENTS_PER_CONTRACT}} c/contract | | {{B_TRAIN_SHARPE}} |
