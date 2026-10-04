@@ -589,3 +589,80 @@ IN-SAMPLE BEST (own trials), after 369 trials, not expected to persist: R2.CONS.
 Skilled-wallet following (Rule 6; Gomez-Cram, Guo, Kung, Jensen): the polymarket.com training trade files
 (data/ticks/<game>_polymarket.parquet) have columns ts, venue, market_id, kind, price, size, side and no wallet,
 maker or taker address. Needs data we lack; 0 trials.
+
+
+## Round 16
+
+Run 2026-10-04 06:05 ET. Source: Rule 7 (news-proxy jumps; arXiv 2606.07811 thin-book continuation and QJF 2012
+short-term reversal; both arms pre-listed).
+
+- Thin-volume jumps do not continue (follow, 5-min exit: -0.097 [-0.109, -0.085], 833 trades) and thick-volume
+  jumps do not reverse (fade, 5-min exit: -0.082 [-0.093, -0.073], 2,036 trades): both arms killed. Settlement
+  exits span 0 (-0.024, -0.082). A non-play jump on Kalshi is already the full price move.
+
+### All Round 16 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R16.JUMP.thick_fade.settle | 297 | -0.024 | -0.1292 | 0.0795 | -1.22 | -0.024 | -1.22 | -79.95 | -1.01 | 1 |
+| R16.JUMP.thin_follow.settle | 170 | -0.082 | -0.2018 | 0.0367 | -4.411 | -0.082 | -4.411 | -115.8 | -5.989 | 1 |
+| R16.JUMP.thick_fade.H300 | 2036 | -0.0824 | -0.0925 | -0.0726 | -4.146 | -0.0824 | -4.146 | -873.4 | -13.88 | 1 |
+| R16.JUMP.thin_follow.H300 | 833 | -0.097 | -0.1093 | -0.0848 | -5.117 | -0.097 | -5.117 | -438.6 | -13.49 | 1 |
+
+### Cumulative correction after Round 16
+
+Trials: own 180 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 64 (daily P&L used); regress 48 (daily P&L used)) = 439. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.450. DSR of that best: 2.34e-24 (project convention;
+normal-returns version 4.66e-08). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 439 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 17
+
+Run 2026-10-04 06:05 ET. Sources: Rule 8 (impact reversion; arXiv 2604.24366) and Rule 9 (intra-Kalshi sum;
+arXiv 2605.00864), both quick kill tests.
+
+- IMPACT: fading a large walking print loses -0.091 [-0.103, -0.079] on 1,333 trades: killed (the "reversion" is
+  bid-ask bounce, less than the round-trip cost).
+- SUM104: 940 games had a moment where the two team markets' last prints summed to >= 1.04 within 5 s, but buying
+  NO on both at the next prints loses -0.023 [-0.025, -0.022] on 857 locks: killed (the excess is stale prints;
+  by the next prints it is gone and two fees remain).
+
+## Rule 10 (descriptive only, no trial): kickoff-price calibration, first 4 training weeks vs later
+
+See rule10_calibration.csv. Weeks 5+ are calibrated within 2 c in every bin (15 to 35 c: win 0.279 vs price 0.258;
+65 to 85 c: 0.730 vs 0.750). Weeks 1 to 4 have 18 to 68 teams per bin (mostly NFL preseason), too few to say
+anything; the 13 c gaps there are within noise. Not a rule.
+
+## Search status after Round 17 (2026-10-04 06:06 ET): every literature idea tested
+
+Rounds 11 to 17 tested every idea in research/trading_ideas.md that our data can support (Rule 6 needs wallet ids
+we lack; Rule 10 is descriptive by design). 17 rounds, 180 own trials; cumulative 439 trials (own 180 + broad
+search 54 + maker helper 36 + patterns helper 57 + unsupervised 64 + regression 48; daily P&L used for all with
+trades). No trial meets the stop condition. Reality Check p for the best of all 439 (patterns P3-08) = 0.45; Holm
+survivors: none; DSR of that best 2.3e-24 (project convention), 4.7e-08 (normal returns).
+
+The research document's own power note (about 3 c needed at N about 1,000) is borne out: the best literature cells
+are +1 to +2 c per contract with CIs of +-3 to +-7 c, and every primary or kill-test cell is negative.
+
+### All Round 17 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R17.SUM104 | 857 | -0.023 | -0.0245 | -0.0215 | -2.359 | -0.023 | -2.359 | -207.8 | -13.68 | 1 |
+| R17.IMPACT | 1333 | -0.0906 | -0.1032 | -0.0788 | -4.505 | -0.0906 | -4.505 | -623.8 | -12.66 | 1 |
+
+### Cumulative correction after Round 17
+
+Trials: own 180 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 64 (daily P&L used); regress 48 (daily P&L used)) = 439. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.450. DSR of that best: 2.34e-24 (project convention;
+normal-returns version 4.66e-08). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 439 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.

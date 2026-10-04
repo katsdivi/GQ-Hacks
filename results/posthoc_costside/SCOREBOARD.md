@@ -62,5 +62,13 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 14 | Disposition effect ruled out (win rate equals break-even, both lines) | +5 | ruled out |
 | 15 | WALLET: polymarket.com training files carry no wallet/maker/taker addresses (columns ts, venue, market_id, kind, price, size, side): needs data we lack | +5 | ruled out as untestable (0 trials) |
 
-**Total after Round 15: +260.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
+| 16 | JUMP: non-play price jumps, thin follow / thick fade | +10 | new |
+| 16 | News-proxy jumps ruled out (both 5-min arms CIs below 0) | +5 | ruled out |
+| 17 | IMPACT: big-print impact reversion (kill test) | +10 | new |
+| 17 | IMPACT killed (CI below 0) | +5 | ruled out |
+| 17 | SUM104: intra-Kalshi two-team sum >= 1.04, buy NO both (kill test) | +10 | new (opposite side of R2.ARB) |
+| 17 | SUM104 killed (CI below 0) | +5 | ruled out |
+| 17 | Rule 10 descriptive calibration | 0 | descriptive, no trial |
+
+**Total after Round 17: +305.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
 three repeats/finer grids already listed; no lookahead, holdout/live data, unlogged trial or undisclosed rerun.
