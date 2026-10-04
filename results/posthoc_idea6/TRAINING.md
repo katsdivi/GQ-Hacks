@@ -1,5 +1,7 @@
 # Post-hoc Idea 6: training results
 
+**See README.md close-out: winner leg INVALID (bad ESPN end-marker wallclocks), no D selected, holdout not run. Do not quote the winner-leg numbers below.**
+
 **Label: post-hoc, exploratory; designed and selected on training only.** Spec: SPEC.md (7c78c2c; 5-min fill
 window note 9c6c4b9, before this run). Run 2026-10-04 04:12 ET, scripts/posthoc_idea6.py, 1,267 training games.
 Holdout not run (only on "run idea6 holdout").
