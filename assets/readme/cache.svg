@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" role="img" aria-label="Before v4 (not v4): the v3 Polymarket US lag came from a 30 second Cloudflare cache">
+<title>Before v4 (not v4): the v3 Polymarket US lag came from a 30 second Cloudflare cache</title>
+<defs>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M24 0H0V24" fill="none" stroke="#21262d" stroke-width="1"/>
+  </pattern>
+  <linearGradient id="edge" x1="0" x2="1">
+    <stop offset="0" stop-color="#e040fb"/><stop offset="1" stop-color="#00e5ff"/>
+  </linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<style>
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+.sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+.ink { fill: #e6edf3; } .ink2 { fill: #9da7b3; } .ink3 { fill: #6e7681; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+.pkt { animation: flow 1.2s linear infinite; }
+@keyframes flow { from { transform: translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateX(196px); opacity: 0; } }
+.age { opacity: 0; animation: ageTick 6s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .age0 { opacity: 1; } }
+@keyframes ageTick { 0% { opacity: 1; } 16.6%, 100% { opacity: 0; } }
+.ring { animation: pulse 2s ease-in-out infinite; }
+.chip { animation: fadeUp .6s ease-out both; }
+</style>
+<rect x="1" y="1" width="1198" height="398" rx="16" fill="#0d1117" stroke="#30363d"/>
+<rect x="1" y="1" width="1198" height="398" rx="16" fill="url(#grid)" opacity=".55"/>
+<rect x="24" y="1" width="1152" height="2" fill="url(#edge)" opacity=".9"/>
+<text x="40" y="44" font-size="14" class="ink2">v3 laggard on Polymarket US (not v4) · $ curl -sI gateway.polymarket.us/v1/markets?slug=… | grep -i age</text>
+<g>
+  <rect x="40" y="70" width="248" height="128" rx="12" fill="#161b22" stroke="#e040fb" stroke-width="1.5"/>
+  <text x="164" y="108" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5" fill="#e040fb">POLYMARKET US</text>
+  <text x="164" y="140" text-anchor="middle" font-size="14" class="ink">matching engine</text>
+  <text x="164" y="166" text-anchor="middle" font-size="12.5" class="ink2 sans">quotes change every trade</text>
+</g>
+<g>
+  <rect x="476" y="70" width="248" height="128" rx="12" fill="#161b22" stroke="#ffb86b" stroke-width="1.5"/>
+  <text x="600" y="108" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5" fill="#ffb86b">CLOUDFLARE EDGE</text>
+  <text x="600" y="140" text-anchor="middle" font-size="14" class="ink">public, max-age=30</text>
+  <text x="600" y="166" text-anchor="middle" font-size="12.5" class="ink2 sans">serves the same body</text>
+</g>
+<g>
+  <rect x="912" y="70" width="248" height="128" rx="12" fill="#161b22" stroke="#00e5ff" stroke-width="1.5"/>
+  <text x="1036" y="108" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5" fill="#00e5ff">v3 RECORDER</text>
+  <text x="1036" y="140" text-anchor="middle" font-size="14" class="ink">polled about every 1 s</text>
+  <text x="1036" y="166" text-anchor="middle" font-size="12.5" class="ink2 sans">stores what it was served</text>
+</g><rect class="ring" x="470" y="64" width="260" height="140" rx="15" fill="none" stroke="#ffb86b" stroke-width="1"/>
+<line x1="288" y1="134" x2="476" y2="134" stroke="#30363d" stroke-width="2"/>
+<line x1="724" y1="134" x2="912" y2="134" stroke="#30363d" stroke-width="2"/>
+<text x="382" y="122" text-anchor="middle" font-size="12" class="ink2">fresh quotes</text>
+<text x="818" y="122" text-anchor="middle" font-size="12" class="ink2">same snapshot, again</text><circle class="pkt" cx="290" cy="134" r="5" fill="#e040fb" style="animation-delay:0.0s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.0s"/><circle class="pkt" cx="290" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.2s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.2s"/><circle class="pkt" cx="290" cy="134" r="5" fill="#00e5ff" style="animation-delay:0.4s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.4s"/><circle class="pkt" cx="290" cy="134" r="5" fill="#7ee787" style="animation-delay:0.6s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.6s"/><circle class="pkt" cx="290" cy="134" r="5" fill="#e040fb" style="animation-delay:0.8s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:0.8s"/><circle class="pkt" cx="290" cy="134" r="5" fill="#ffb86b" style="animation-delay:1.0s"/><circle class="pkt" cx="726" cy="134" r="5" fill="#ffb86b" style="animation-delay:1.0s"/><text class="age age0" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:0s">Age: 4 s</text><text class="age age1" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:1s">Age: 9 s</text><text class="age age2" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:2s">Age: 14 s</text><text class="age age3" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:3s">Age: 19 s</text><text class="age age4" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:4s">Age: 24 s</text><text class="age age5" x="600" y="232" text-anchor="middle" font-size="15" font-weight="700" fill="#ffb86b" style="animation-delay:5s">Age: 29 s · EXPIRED</text>
+<g class="chip" style="animation-delay:0.4s">
+  <rect x="40" y="268" width="268" height="96" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="60" y="306" font-size="26" font-weight="800" class="ink">1 to 29 s</text>
+  <text x="60" y="332" font-size="12" class="ink2 sans">Age header on the endpoint</text>
+  <text x="60" y="349" font-size="12" class="ink2 sans">the v3 recorder polled</text>
+</g>
+<g class="chip" style="animation-delay:0.6s">
+  <rect x="324" y="268" width="268" height="96" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="344" y="306" font-size="26" font-weight="800" class="ink">19.2 s</text>
+  <text x="344" y="332" font-size="12" class="ink2 sans">v3 median receipt delay</text>
+  <text x="344" y="349" font-size="12" class="ink2 sans">vs the venue's own trade tape</text>
+</g>
+<g class="chip" style="animation-delay:0.8s">
+  <rect x="608" y="268" width="268" height="96" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="628" y="306" font-size="26" font-weight="800" class="ink">2.3%</text>
+  <text x="628" y="332" font-size="12" class="ink2 sans">of v3 paper fills matched a</text>
+  <text x="628" y="349" font-size="12" class="ink2 sans">real print on both legs</text>
+</g>
+<g class="chip" style="animation-delay:1.0s">
+  <rect x="892" y="268" width="268" height="96" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="912" y="306" font-size="26" font-weight="800" class="ink">-4.09 c</text>
+  <text x="912" y="332" font-size="12" class="ink2 sans">v3 laggard (not v4): confirmed</text>
+  <text x="912" y="349" font-size="12" class="ink2 sans">fills lost, the quotes were cached</text>
+</g>
+</svg>

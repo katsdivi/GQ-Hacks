@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" role="img" aria-label="HYPOTHESIS_v4 status: frozen, test set 1 not run, test set 2 on Oct 8 to 12">
+<title>HYPOTHESIS_v4 status: frozen, test set 1 not run, test set 2 on Oct 8 to 12</title>
+<defs>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M24 0H0V24" fill="none" stroke="#21262d" stroke-width="1"/>
+  </pattern>
+  <linearGradient id="edge" x1="0" x2="1">
+    <stop offset="0" stop-color="#e040fb"/><stop offset="1" stop-color="#00e5ff"/>
+  </linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<style>
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+.sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+.ink { fill: #e6edf3; } .ink2 { fill: #9da7b3; } .ink3 { fill: #6e7681; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+.prog { stroke-dasharray: 1; animation: draw 2.4s ease-out .3s both; }
+.ev { animation: fadeUp .6s ease-out both; }
+.next { animation: pulse 1.4s ease-in-out infinite; }
+</style>
+<rect x="1" y="1" width="1198" height="398" rx="16" fill="#0d1117" stroke="#30363d"/>
+<rect x="1" y="1" width="1198" height="398" rx="16" fill="url(#grid)" opacity=".55"/>
+<rect x="24" y="1" width="1152" height="2" fill="url(#edge)" opacity=".9"/>
+
+<text x="40" y="52" font-size="13" fill="#00e5ff">$ cat HYPOTHESIS_v4.md   # frozen on main 94aa1a0, Oct 4 07:56 ET</text>
+<text x="40" y="90" font-size="22" font-weight="800" class="ink">Passive maker on polymarket.com</text>
+<text x="40" y="116" font-size="13" class="ink2 sans">join the best bid and ask (never improve) · 10 contracts · inventory cap ±50 · strict trade-through fills · no Kalshi signal</text>
+<g class="ev" style="animation-delay:.1s">
+  <rect x="770" y="66" width="190" height="58" rx="10" fill="#161b22" stroke="#e040fb"/>
+  <text x="865" y="90" text-anchor="middle" font-size="14" font-weight="800" fill="#e040fb">ARM A</text>
+  <text x="865" y="110" text-anchor="middle" font-size="12" class="ink">always quote</text>
+</g>
+<g class="ev" style="animation-delay:.25s">
+  <rect x="972" y="66" width="190" height="58" rx="10" fill="#161b22" stroke="#ffb86b"/>
+  <text x="1067" y="90" text-anchor="middle" font-size="14" font-weight="800" fill="#ffb86b">ARM B</text>
+  <text x="1067" y="110" text-anchor="middle" font-size="12" class="ink">quote while spread ≥ 3 c</text>
+</g>
+<line x1="110" y1="200" x2="1090" y2="200" stroke="#30363d" stroke-width="3"/>
+<defs><linearGradient id="progG" gradientUnits="userSpaceOnUse" x1="110" y1="0" x2="763" y2="0"><stop offset="0" stop-color="#e040fb"/><stop offset="1" stop-color="#00e5ff"/></linearGradient></defs>
+<path class="prog" pathLength="1" d="M110,200 L763,200" stroke="url(#progG)" stroke-width="3" fill="none"/>
+
+<g class="ev" style="animation-delay:0.30s">
+  <circle cx="110" cy="200" r="9" fill="#0d1117" stroke="#e040fb" stroke-width="3"/>
+  <text x="110" y="174" text-anchor="start" font-size="13" class="ink2">Oct 3</text>
+  <text x="110" y="240" text-anchor="start" font-size="14" font-weight="800" letter-spacing="1.5" fill="#e040fb">ORIGIN</text>
+  <text x="110" y="262" text-anchor="start" font-size="12" class="ink sans">plain maker, 88 games</text>
+  <text x="110" y="280" text-anchor="start" font-size="12" class="ink2 sans">descriptive, one day</text>
+</g>
+<g class="ev" style="animation-delay:0.75s">
+  <circle cx="437" cy="200" r="9" fill="#0d1117" stroke="#00e5ff" stroke-width="3"/>
+  <text x="437" y="174" text-anchor="middle" font-size="13" class="ink2">Oct 4 07:56</text>
+  <text x="437" y="240" text-anchor="middle" font-size="14" font-weight="800" letter-spacing="1.5" fill="#00e5ff">FROZEN</text>
+  <text x="437" y="262" text-anchor="middle" font-size="12" class="ink sans">HYPOTHESIS_v4</text>
+  <text x="437" y="280" text-anchor="middle" font-size="12" class="ink2 sans">committed to main</text>
+</g>
+<g class="ev" style="animation-delay:1.20s">
+  <circle cx="763" cy="200" r="9" fill="#0d1117" stroke="#9da7b3" stroke-width="3"/>
+  <text x="763" y="174" text-anchor="middle" font-size="13" class="ink2">Oct 4 07:58</text>
+  <text x="763" y="240" text-anchor="middle" font-size="14" font-weight="800" letter-spacing="1.5" fill="#9da7b3">TEST SET 1</text>
+  <text x="763" y="262" text-anchor="middle" font-size="12" class="ink sans">0 eligible games</text>
+  <text x="763" y="280" text-anchor="middle" font-size="12" class="ink2 sans">not run</text>
+</g>
+<g class="ev" style="animation-delay:1.65s">
+  <circle class="next" cx="1090" cy="200" r="15" fill="none" stroke="#ffb86b" stroke-width="2"/><circle cx="1090" cy="200" r="9" fill="#0d1117" stroke="#ffb86b" stroke-width="3"/>
+  <text x="1090" y="174" text-anchor="end" font-size="13" class="ink2">Oct 8 to 12</text>
+  <text x="1090" y="240" text-anchor="end" font-size="14" font-weight="800" letter-spacing="1.5" fill="#ffb86b">TEST SET 2</text>
+  <text x="1090" y="262" text-anchor="end" font-size="12" class="ink sans">confirmatory, run once</text>
+  <text x="1090" y="280" text-anchor="end" font-size="12" class="ink2 sans">needs a live book recorder</text>
+</g>
+<g class="ev" style="animation-delay:1.2s">
+  <rect x="40" y="310" width="1120" height="62" rx="10" fill="#161b22" stroke="#30363d"/>
+  <text x="60" y="336" font-size="14" font-weight="800" class="ink">STATUS: live and untested.</text>
+  <text x="300" y="336" font-size="13" class="ink2 sans">The Aug to Oct 2 holdout cannot test v4: historical data has trades only, no order books.</text>
+  <text x="60" y="358" font-size="13" class="ink2 sans">Supported only if, per venue and arm (Holm): primary CI above 0, above 0 without the top 5 games, and settlement P&amp;L above 0.</text>
+</g>
+</svg>

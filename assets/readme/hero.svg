@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" role="img" aria-label="Before v4 (not v4): the v3 lead-lag question; the Polymarket US lag was a cache">
+<title>Before v4 (not v4): the v3 lead-lag question; the Polymarket US lag was a cache</title>
+<defs>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M24 0H0V24" fill="none" stroke="#21262d" stroke-width="1"/>
+  </pattern>
+  <linearGradient id="edge" x1="0" x2="1">
+    <stop offset="0" stop-color="#e040fb"/><stop offset="1" stop-color="#00e5ff"/>
+  </linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<style>
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+.sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+.ink { fill: #e6edf3; } .ink2 { fill: #9da7b3; } .ink3 { fill: #6e7681; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+.trace { fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1;
+          animation: draw 3.2s cubic-bezier(.6,.05,.3,1) .3s both; }
+.td { animation: pulse 1.6s ease-in-out 1.6s infinite both; }
+.late { animation: fadeUp .7s ease-out 1.2s both; }
+.head { animation: fadeUp .8s ease-out .1s both; }
+.cursor { animation: blink 1s steps(1) infinite; }
+</style>
+<rect x="1" y="1" width="1198" height="438" rx="16" fill="#0d1117" stroke="#30363d"/>
+<rect x="1" y="1" width="1198" height="438" rx="16" fill="url(#grid)" opacity=".55"/>
+<rect x="24" y="1" width="1152" height="2" fill="url(#edge)" opacity=".9"/>
+
+<g class="head">
+  <text x="44" y="58" font-size="15" fill="#00e5ff">$ staleline v3 --venues kalshi,polymarket.com,polymarket_us   # before v4</text>
+  <rect class="cursor" x="826" y="45" width="9" height="17" fill="#00e5ff"/>
+  <text x="44" y="88" font-size="13" class="ink3">v3 lead-lag study (not v4): P(home team wins) around one touchdown · schematic, not data</text>
+</g>
+<g font-size="13">
+  <line x1="90" y1="358" x2="1110" y2="358" stroke="#30363d"/>
+  <text x="90" y="380" class="ink3">time →</text>
+  <text x="80" y="172" text-anchor="end" class="ink3">58%</text>
+  <text x="80" y="324" text-anchor="end" class="ink3">42%</text>
+</g>
+<g class="td">
+  <line x1="520" y1="120" x2="520" y2="358" stroke="#e040fb" stroke-width="2" stroke-dasharray="4 5"/>
+  <text x="520" y="112" text-anchor="middle" font-size="14" font-weight="700" fill="#e040fb">🏈 TOUCHDOWN</text>
+</g>
+<path class="trace" pathLength="1" d="M90,315 L100,313 L110,313 L120,314 L130,315 L140,317 L150,319 L160,321 L170,322 L180,323 L190,323 L200,321 L210,319 L220,317 L230,315 L240,314 L250,313 L260,313 L270,314 L280,316 L290,318 L300,320 L310,322 L320,323 L330,323 L340,322 L350,320 L360,318 L370,316 L380,314 L390,313 L400,313 L410,314 L420,315 L430,317 L440,319 L450,321 L460,323 L470,323 L480,323 L490,321 L500,319 L510,317 L520,315 L526,178 L540,164 L560,164 L570,164 L580,165 L590,167 L600,169 L610,171 L620,172 L630,172 L640,171 L650,169 L660,167 L670,165 L680,164 L690,164 L700,165 L710,167 L720,169 L730,171 L740,172 L750,172 L760,171 L770,169 L780,167 L790,165 L800,164 L810,164 L820,165 L830,167 L840,169 L850,171 L860,172 L870,172 L880,171 L890,169 L900,167 L910,165 L920,164 L930,164 L940,165 L950,167 L960,169 L970,171 L980,172 L990,172 L1000,171 L1010,169 L1020,167 L1030,165 L1040,164 L1050,164 L1060,165 L1070,167 L1080,169 L1090,171 L1100,172 L1110,172" stroke="#e040fb" filter="url(#glow)"/>
+<path class="trace" pathLength="1" d="M90,317 L100,317 L110,317 L120,318 L130,320 L140,322 L150,323 L160,325 L170,326 L180,327 L190,327 L200,326 L210,325 L220,323 L230,322 L240,320 L250,318 L260,317 L270,317 L280,317 L290,318 L300,320 L310,322 L320,323 L330,325 L340,326 L350,327 L360,327 L370,326 L380,325 L390,323 L400,321 L410,320 L420,318 L430,317 L440,317 L450,317 L460,318 L470,320 L480,322 L490,323 L500,325 L510,326 L520,327 L529,184 L544,170 L560,172 L570,171 L580,170 L590,170 L600,171 L610,173 L620,174 L630,176 L640,177 L650,178 L660,178 L670,176 L680,175 L690,173 L700,171 L710,170 L720,170 L730,171 L740,172 L750,174 L760,176 L770,177 L780,178 L790,178 L800,177 L810,175 L820,173 L830,171 L840,170 L850,170 L860,171 L870,172 L880,174 L890,176 L900,177 L910,178 L920,178 L930,177 L940,175 L950,174 L960,172 L970,170 L980,170 L990,170 L1000,172 L1010,173 L1020,175 L1030,177 L1040,178 L1050,178 L1060,177 L1070,176 L1080,174 L1090,172 L1100,171 L1110,170" stroke="#ffb86b" style="animation-delay:.45s"/>
+<path class="trace" pathLength="1" d="M90,332 L330,332 L330,326 L650,326 L650,182 L960,182 L960,176 L1110,176" stroke="#00e5ff" style="animation-delay:.6s"/>
+<g class="late" font-size="13">
+  <path d="M520,342 L520,348 L650,348 L650,342" fill="none" stroke="#9da7b3"/>
+  <text x="585.0" y="368" text-anchor="middle" class="ink">looks like a "lag"…</text>
+  <rect x="668" y="200" width="300" height="56" rx="8" fill="#161b22" stroke="#00e5ff"/>
+  <text x="682" y="224" class="ink" font-weight="700">…but it is a 30 s CDN cache</text>
+  <text x="682" y="244" class="ink2">Cache-Control: public, max-age=30</text>
+</g>
+<g font-size="13" class="head">
+  <rect x="842" y="112" width="12" height="3" fill="#e040fb"/><text x="860" y="118" class="ink">Kalshi</text>
+  <rect x="924" y="112" width="12" height="3" fill="#ffb86b"/><text x="942" y="118" class="ink">polymarket.com</text>
+  <rect x="842" y="134" width="12" height="3" fill="#00e5ff"/><text x="860" y="140" class="ink">Polymarket US (as we polled it)</text>
+</g>
+<text x="600.0" y="414" text-anchor="middle" font-size="16" class="ink2">v3: same game · three order books · <tspan fill="#e6edf3" font-weight="700">who moves first?</tspan></text>
+
+</svg>

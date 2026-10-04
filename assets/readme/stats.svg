@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 202" width="1200" height="202" role="img" aria-label="Before v4 (not v4): v1 to v3 headline numbers">
+<title>Before v4 (not v4): v1 to v3 headline numbers</title>
+<defs>
+  <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <path d="M24 0H0V24" fill="none" stroke="#21262d" stroke-width="1"/>
+  </pattern>
+  <linearGradient id="edge" x1="0" x2="1">
+    <stop offset="0" stop-color="#e040fb"/><stop offset="1" stop-color="#00e5ff"/>
+  </linearGradient>
+  <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<style>
+text { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; }
+.sans { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
+.ink { fill: #e6edf3; } .ink2 { fill: #9da7b3; } .ink3 { fill: #6e7681; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.tile { animation: fadeUp .6s ease-out both; }</style>
+<rect x="1" y="1" width="1198" height="200" rx="16" fill="#0d1117" stroke="#30363d"/>
+<rect x="1" y="1" width="1198" height="200" rx="16" fill="url(#grid)" opacity=".55"/>
+<rect x="24" y="1" width="1152" height="2" fill="url(#edge)" opacity=".9"/>
+
+<g class="tile" style="animation-delay:0.10s">
+  <rect x="26" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="42" y="26" width="150" height="3" rx="1.5" fill="#e040fb"/>
+  <text x="117.0" y="94" text-anchor="middle" font-size="38" font-weight="800" class="ink">3</text>
+  <text x="117.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#e040fb">VENUES</text>
+  <text x="117.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">v3 study, recorded live</text>
+</g>
+<g class="tile" style="animation-delay:0.28s">
+  <rect x="218" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="234" y="26" width="150" height="3" rx="1.5" fill="#ffb86b"/>
+  <text x="309.0" y="94" text-anchor="middle" font-size="38" font-weight="800" class="ink">0.0 s</text>
+  <text x="309.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#ffb86b">V3 MEDIAN LAG</text>
+  <text x="309.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">Kalshi vs polymarket.com</text>
+</g>
+<g class="tile" style="animation-delay:0.46s">
+  <rect x="410" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="426" y="26" width="150" height="3" rx="1.5" fill="#00e5ff"/>
+  <text x="501.0" y="94" text-anchor="middle" font-size="38" font-weight="800" class="ink">30 s</text>
+  <text x="501.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#00e5ff">CDN CACHE</text>
+  <text x="501.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">behind the v3 7.5 s 'lead'</text>
+</g>
+<g class="tile" style="animation-delay:0.64s">
+  <rect x="602" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="618" y="26" width="150" height="3" rx="1.5" fill="#e040fb"/>
+  <text x="693.0" y="94" text-anchor="middle" font-size="38" font-weight="800" class="ink">566</text>
+  <text x="693.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#e040fb">TRIALS</text>
+  <text x="693.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">v1 to v3 + post-hoc</text>
+</g>
+<g class="tile" style="animation-delay:0.82s">
+  <rect x="794" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="810" y="26" width="150" height="3" rx="1.5" fill="#ffb86b"/>
+  <text x="885.0" y="94" text-anchor="middle" font-size="38" font-weight="800" class="ink">0</text>
+  <text x="885.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#ffb86b">V3 EDGES</text>
+  <text x="885.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">that survived costs</text>
+</g>
+<g class="tile" style="animation-delay:1.00s">
+  <rect x="986" y="26" width="182" height="150" rx="12" fill="#161b22" stroke="#30363d"/>
+  <rect x="1002" y="26" width="150" height="3" rx="1.5" fill="#00e5ff"/>
+  <text x="1077.0" y="94" text-anchor="middle" font-size="27" font-weight="800" class="ink">-$1,231.50</text>
+  <text x="1077.0" y="124" text-anchor="middle" font-size="14" font-weight="700" letter-spacing="2" fill="#00e5ff">V3 HOLDOUT P&amp;L</text>
+  <text x="1077.0" y="150" text-anchor="middle" font-size="11.5" class="ink2 sans">v3 strategies, paper</text>
+</g>
+</svg>
