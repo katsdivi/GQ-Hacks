@@ -158,93 +158,140 @@ def deflated_sharpe(r: np.ndarray, trial_srs: list[float], n_trials: int) -> flo
     return float(norm.cdf((sr - sr0) * np.sqrt(len(r) - 1) / den))
 
 
-def main() -> None:
-    RES.mkdir(exist_ok=True)
-    rows = pd.read_parquet("out/strategy_a/rows.parquet")
-    bt = pd.read_parquet("out/strategy_b/trades.parquet")
-    bs = pd.read_csv("out/strategy_b/summary.csv")
+def build(rows: pd.DataFrame, bt: pd.DataFrame, b2: pd.DataFrame, sel, game_kickoffs: pd.Series, fac: pd.DataFrame,
+          res_dir: Path, prefix: str = "", label: str = "Training", bases: dict | None = None,
+          trial_srs: dict | None = None, png: str = "equity_training.png") -> tuple[dict, dict, dict]:
+    """All book numbers for one sample. prefix "" = training keys, "OOS." = test keys. bases: the training
+    capital bases (v3 A1: fixed from training and reused on the test); None = compute here (training).
+    trial_srs: {"A": [...], "B": [...], "all": [...]} training trial Sharpes for the deflated Sharpe; None =
+    compute here (training). Returns (numbers, bases, trial_srs)."""
     import strategy_b as B
-    sel = B.select_setting(bs)
+    res_dir.mkdir(parents=True, exist_ok=True)
     A = a_trades(rows, A_THETA)
     Bk = b_trades(bt, sel)
-    # season days: first to last ET game day over all training games of A and B (not only traded days)
-    kos = pd.concat([pd.to_datetime(rows["kickoff"], utc=True),
-                     pd.to_datetime(pd.read_csv("out/strategy_b/b_games_espn.csv")["espn_kickoff"], utc=True)])
-    gd = kos.dt.tz_convert(ET).dt.date
-    first = min(gd.min(), A["day"].min(), Bk["day"].min())
-    last = max(gd.max(), A["day"].max(), Bk["day"].max())
+    gd = pd.to_datetime(game_kickoffs, utc=True).dt.tz_convert(ET).dt.date
+    first = min([gd.min()] + ([A["day"].min()] if len(A) else []) + ([Bk["day"].min()] if len(Bk) else []))
+    last = max([gd.max()] + ([A["day"].max()] if len(A) else []) + ([Bk["day"].max()] if len(Bk) else []))
     days = pd.date_range(first, last, freq="D")
     a_p, b_p = daily(A, days), daily(Bk, days)
     c_p = a_p + b_p
     C = pd.concat([A[["open_ns", "close_ns", "capital", "contracts", "notional"]],
                    Bk[["open_ns", "close_ns", "capital", "contracts", "notional"]]])
-    bases = {"A": max_capital(A), "B": max_capital(Bk), "combined": max_capital(A, Bk)}
-    fac = pd.read_csv("data/raw/french/factors_daily.csv", parse_dates=["date"])
+    if bases is None:
+        bases = {"A": max_capital(A), "B": max_capital(Bk), "combined": max_capital(A, Bk)}
     num: dict = {}
 
     def put(key, val):
-        num[key] = {"value": val, "source": SRC}
+        num[prefix + key] = {"value": val, "source": SRC}
 
-    put("training.season_first_day", str(first))
-    put("training.season_last_day", str(last))
+    put("season_first_day", str(first))
+    put("season_last_day", str(last))
     put("A.theta", A_THETA)
     put("B.selected_setting", {"k": sel[0], "m": sel[1], "T": sel[2]})
+    put("capital_bases_from_training", bases)
     B_DROP = {"capital_base", "ann_return", "ann_vol", "max_drawdown_of_base"}   # meaningless under B's $43 base
+    fac_last = pd.Timestamp(fac["date"].max()).date()
     for name, p, bk in (("A", a_p, A), ("B", b_p, Bk), ("combined", c_p, C)):
+        if len(bk) == 0 or p.std(ddof=1) == 0:
+            put(f"{name}.n_trades", len(bk))
+            continue
         for k, v in metrics(p, bases[name], bk).items():
             if name == "B" and k in B_DROP:
                 continue
             put(f"{name}.{k}", v)
+        if last > fac_last:      # v3 A1: not estimated on partial factor data
+            put(f"{name}.french", f"not available (French files end {fac_last}, sample ends {last})")
+            continue
         for k, v in french(p, bases[name], fac).items():
             if name == "B" and k in ("alpha_daily", "beta_mkt_rf", "beta_hml", "beta_umd"):
                 continue                       # levels scale with B's $43 base; t-stats and R^2 do not
             put(f"{name}.french.{k}", v)
     for line in ("webull", "direct"):
-        put(f"B.edge_{line}_cents_per_contract", float(Bk[f"pnl_{line}"].sum() / (QTY * len(Bk)) * 100))
+        if len(Bk):
+            put(f"B.edge_{line}_cents_per_contract", float(Bk[f"pnl_{line}"].sum() / (QTY * len(Bk)) * 100))
     put("B.note", "B is reported per contract (cents/contract) and by Sharpe only: under the PROPOSED capital base "
-                  "(max capital committed at once, $43 for B) its return levels are meaningless")
+                  "(max capital committed at once, $43 for B on training) its return levels are meaningless")
     # costs x2
-    A2 = RA.costs_x2(A).assign(day=A["day"])
-    b2 = pd.read_parquet("out/strategy_b/trades_costs_x2.parquet")
+    A2 = RA.costs_x2(A).assign(day=A["day"]) if len(A) else A
     B2 = b_trades(b2, sel)
     for name, p, bk in (("A", daily(A2, days), A), ("B", daily(B2, days), Bk),
                         ("combined", daily(A2, days) + daily(B2, days), C)):
+        if len(bk) == 0 or p.std(ddof=1) == 0:
+            continue
         m2 = metrics(p, bases[name], bk)
         keys = ("pnl_total", "sharpe", "sharpe_nw5", "max_drawdown_dollars") if name == "B" else \
             ("pnl_total", "ann_return", "ann_vol", "sharpe", "sharpe_nw5", "max_drawdown_dollars")
         for k in keys:
             put(f"{name}.costs_x2.{k}", m2[k])
     for line in ("webull", "direct"):
-        put(f"B.costs_x2.edge_{line}_cents_per_contract", float(B2[f"pnl_{line}"].sum() / (QTY * len(B2)) * 100))
+        if len(B2):
+            put(f"B.costs_x2.edge_{line}_cents_per_contract", float(B2[f"pnl_{line}"].sum() / (QTY * len(B2)) * 100))
     # A vs B correlation on days where at least one traded
     traded = pd.Series(days.date).isin(set(A["day"]) | set(Bk["day"])).to_numpy()
     put("corr_A_B.days_either_traded", int(traded.sum()))
-    put("corr_A_B.pearson", float(np.corrcoef(a_p.to_numpy()[traded], b_p.to_numpy()[traded])[0, 1]))
-    # deflated Sharpe: trial Sharpes of A's 3 thetas, B's 8 settings, the combined book
+    if traded.sum() > 2 and a_p[traded].std() > 0 and b_p[traded].std() > 0:
+        put("corr_A_B.pearson", float(np.corrcoef(a_p.to_numpy()[traded], b_p.to_numpy()[traded])[0, 1]))
+    # deflated Sharpe: trial Sharpes of A's 3 thetas, B's 8 settings, the combined book (training trials)
     sr = lambda p: float(p.mean() / p.std(ddof=1)) if p.std(ddof=1) > 0 else 0.0
-    a_srs = [sr(daily(a_trades(rows, th), days)) for th in (0.70, 0.80, 0.90)]
-    b_srs = [sr(daily(b_trades(bt, s), days)) for s in B.SETTINGS]
-    all_srs = a_srs + b_srs + [sr(c_p)]
-    for name, p, own, n_own in (("A", a_p, a_srs, 3), ("B", b_p, b_srs, 8), ("combined", c_p, [sr(c_p)], 1)):
+    if trial_srs is None:
+        a_srs = [sr(daily(a_trades(rows, th), days)) for th in (0.70, 0.80, 0.90)]
+        b_srs = [sr(daily(b_trades(bt, s), days)) for s in B.SETTINGS]
+        trial_srs = {"A": a_srs, "B": b_srs, "all": a_srs + b_srs + [sr(c_p)]}
+    for name, p, own, n_own in (("A", a_p, trial_srs["A"], 3), ("B", b_p, trial_srs["B"], 8),
+                                ("combined", c_p, [0.0], 1)):
+        if p.std(ddof=1) == 0:
+            continue
         r = (p / bases[name]).to_numpy()
         put(f"{name}.sharpe_daily", sr(p))
         put(f"{name}.deflated_sharpe_own_grid", deflated_sharpe(r, own, n_own))
-        put(f"{name}.deflated_sharpe_total_21", deflated_sharpe(r, all_srs, 21))
-    put("deflated_sharpe.note", "total-21 deflated Sharpe: trial-Sharpe variance from the 12 trials with daily series "
-                                "(A 3, B 8, combined 1; the other 9 of the 21 have no daily series); B's 8 trials, "
-                                "all strongly negative, dominate that variance, which drives every total-21 value to ~0")
+        put(f"{name}.deflated_sharpe_total_21", deflated_sharpe(r, trial_srs["all"], 21))
+    put("deflated_sharpe.note", "total-21 deflated Sharpe: trial-Sharpe variance from the 12 TRAINING trials with "
+                                "daily series (A 3, B 8, combined 1; the other 9 of the 21 have no daily series); "
+                                "B's 8 trials, all strongly negative, dominate that variance")
     # equity curve
     fig, ax = plt.subplots(figsize=(9, 4.5))
     for name, p in (("A (theta 0.80)", a_p), (f"B {sel}", b_p), ("combined", c_p)):
         ax.plot(pd.to_datetime(pd.Series(p.index)), p.cumsum().to_numpy(), label=name)
     ax.axhline(0, color="grey", lw=0.8)
-    ax.set_title("Training equity curves, 10 contracts per trade, Webull costs (training only)")
+    ax.set_title(f"{label} equity curves, 10 contracts per trade, Webull costs")
     ax.set_ylabel("cumulative P&L ($)")
     ax.legend()
     fig.tight_layout()
-    fig.savefig(RES / "equity_training.png", dpi=130)
-    put("equity_curve_png", str(RES / "equity_training.png"))
-    (RES / "numbers.json").write_text(json.dumps(num, indent=1, default=str))
+    fig.savefig(res_dir / png, dpi=130)
+    put("equity_curve_png", str(res_dir / png))
+    return num, bases, trial_srs
+
+
+def write_numbers(num: dict, path: Path = RES / "numbers.json", replace_prefix: str | None = None) -> None:
+    """Merge into numbers.json; replace_prefix drops existing keys that start with it (or all non-OOS keys if "")."""
+    old = json.loads(path.read_text()) if path.exists() else {}
+    if replace_prefix == "":
+        old = {k: v for k, v in old.items() if k.startswith("OOS.")}
+    elif replace_prefix:
+        old = {k: v for k, v in old.items() if not k.startswith(replace_prefix)}
+    old.update(num)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(old, indent=1, default=str))
+
+
+def training_inputs():
+    import strategy_b as B
+    rows = pd.read_parquet("out/strategy_a/rows.parquet")
+    bt = pd.read_parquet("out/strategy_b/trades.parquet")
+    b2 = pd.read_parquet("out/strategy_b/trades_costs_x2.parquet")
+    sel = B.select_setting(pd.read_csv("out/strategy_b/summary.csv"))
+    kos = pd.concat([pd.Series(pd.to_datetime(rows["kickoff"], utc=True)),
+                     pd.to_datetime(pd.read_csv("out/strategy_b/b_games_espn.csv")["espn_kickoff"], utc=True)],
+                    ignore_index=True)
+    return rows, bt, b2, sel, kos
+
+
+def main() -> None:
+    rows, bt, b2, sel, kos = training_inputs()
+    fac = pd.read_csv("data/raw/french/factors_daily.csv", parse_dates=["date"])
+    num, _, _ = build(rows, bt, b2, sel, kos, fac, RES)
+    num = {("training." + k if k.startswith("season_") else k): v for k, v in num.items()}
+    write_numbers(num, replace_prefix="")
     for k, v in num.items():
         print(f"{k}: {v['value']}")
 
