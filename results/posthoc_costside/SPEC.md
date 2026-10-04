@@ -135,3 +135,30 @@ weighting. Round 2 therefore tries four mechanisms none of those cover:
   (sell at that trade - 1 c, taker fee); if none within 60 min of the fill, hold to settlement. tp in {0.03, 0.06}.
 
 Cumulative after Round 2: own 79 + 16 = 95, plus external trials.
+
+## Round 3 (11 trials; written 2026-10-04 05:40 ET, before Round 3 touches data)
+
+What Round 2 taught: the only near-miss is maker entry in CALM Kalshi markets (VOL low maker +0.050, CI just
+spans 0); arbitrage on last trades is an artifact; take-profit exits hurt. The maker helper reports that passive
+both-side pairs make money when both legs fill (+$51.93 on 1,034 pairs, mean pair cost 0.981) but orphan legs
+lose more; the patterns helper's best is favourites 0.80 to 0.90 at kickoff - 5 min (+0.032, CI spans 0). Round 3:
+
+- **R3.PAIR, passive pairs with orphan handling (3 trials), A set, in-game.** Decision slots t every 15 min from
+  kickoff + 20 min to kickoff + 4 h. At each slot post maker bids on BOTH teams' YES at (own last trade - 0.02),
+  valid in (t + 1 s, t + 900 s], filled on a strict trade-through. Both filled: pair held to settlement. One
+  filled (orphan): (a) HEDGENOW: taker buy of the other team's YES at its first trade at or after the orphan's fill
+  + 1 s, + 1 c; (b) HEDGEDL: the same taker hedge at the first trade at or after t + 900 s; (c) CUT: sell the orphan
+  at its first trade at or after t + 900 s, trade - 1 c, taker fee. A hedge or cut with no trade within 60 s: hold
+  the orphan to settlement. Maker legs maker175 (alt maker0), taker legs taker fee. One row per slot (sum of legs).
+  Orphan adverse selection reported (orphan win rate vs its fill).
+- **R3.FEE, order-size fee rounding (3 trials).** Same fills as R2.VOL.low.maker, R1.A.A.A1.W300 and
+  R1.C1.d0.05.s15.maker.settle, but each order is 100 contracts (fee rounded up per 100-contract order), P&L scaled
+  to 10 contracts. Capacity (displayed or traded size) is NOT checked; stated as a limitation.
+- **R3.FAV, favourites 0.80 to 0.90 at kickoff - 5 min with maker entry (1 trial).** Team whose own last trade
+  (within 10 min before t) is in [0.80, 0.90) at t = kickoff - 5 min; maker limit = that last trade, W 300 s; hold to
+  settlement.
+- **R3.VOLX, the calm-market filter on other maker signals (4 trials).** I12 maker A1 W300 and I9 maker A2 W300
+  (Round 1 definitions), split by the Round 2 volatility statistic with a walk-forward median of that signal's own
+  values in earlier weeks: {low, high} x 2 signals.
+
+Cumulative own trials after Round 3: 95 + 11 = 106.
