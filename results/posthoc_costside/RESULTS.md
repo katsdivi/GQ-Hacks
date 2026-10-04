@@ -126,3 +126,46 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 242 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 3
+
+Run 2026-10-04 05:41 ET.
+
+- PAIR: of 9,558 slots with a fill, 5,067 filled both legs (pairs) and 4,491 only one (orphans). Pairs made
+  +$891.96 (about +1.8 c per contract-pair after maker175 fees); orphans lost -$1,694.06 even with an immediate
+  taker hedge. Orphan adverse selection: orphans win 0.393 vs mean fill 0.461 (a one-sided fill means the price
+  moved against it). All three orphan treatments are negative with CIs below 0 (HEDGENOW -0.009, HEDGEDL -0.033,
+  CUT -0.040). This confirms the maker helper's lead: the pair economics are positive, the orphans destroy them.
+- FEE: 100-contract orders barely change anything (VOL low maker +0.050 to +0.051); fee rounding is not the
+  constraint.
+- FAV: favourites 0.80 to 0.90 with maker entry +0.031 [-0.056, +0.111] on 87 trades (below 100).
+- VOLX: the calm filter does NOT generalise: I12 is worse in calm markets (-0.012) than in volatile ones (+0.017);
+  I9 calm +0.092 on 118 trades with a wide CI.
+
+### All Round 3 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R3.VOLX.I9.low | 118 | 0.0916 | -0.1033 | 0.2849 | 3.769 | 0.1021 | 4.161 | 1.8 | 3.752 | 1 |
+| R3.FEE.R2.VOL.low.maker | 687 | 0.0514 | -0.0074 | 0.108 | 2.84 | 0.0577 | 3.17 | 150.5 | 3.574 | 1 |
+| R3.FEE.R1.A.A.A1.W300 | 124 | 0.0321 | -0.03 | 0.0843 | 2.807 | 0.0344 | 3 | 24.94 | 2.813 | 1 |
+| R3.FAV | 87 | 0.031 | -0.0563 | 0.1112 | 2.629 | 0.0343 | 2.897 | 13.02 | 1.861 | 1 |
+| R3.FEE.R1.C1.d0.05.s15.maker.settle | 764 | 0.0195 | -0.0355 | 0.0768 | 1.072 | 0.0258 | 1.412 | 36.15 | 1.158 | 1 |
+| R3.VOLX.I12.high | 382 | 0.017 | -0.079 | 0.1114 | 0.8387 | 0.0259 | 1.264 | -9.92 | 0.7014 | 1 |
+| R3.VOLX.I9.high | 360 | -0.0009 | -0.1143 | 0.1206 | -0.0369 | 0.0097 | 0.3889 | -43.89 | -0.0303 | 1 |
+| R3.PAIR.HEDGENOW | 9558 | -0.0087 | -0.012 | -0.0053 | -0.8392 | -0.0032 | -0.303 | -1020 | -5.687 | 1 |
+| R3.VOLX.I12.low | 307 | -0.0115 | -0.107 | 0.0916 | -0.5326 | -0.0038 | -0.1759 | -60.44 | -0.5006 | 1 |
+| R3.PAIR.HEDGEDL | 9558 | -0.0327 | -0.0363 | -0.0287 | -3.14 | -0.0273 | -2.604 | -3224 | -9.964 | 1 |
+| R3.PAIR.CUT | 9558 | -0.0403 | -0.0435 | -0.037 | -2.975 | -0.0332 | -2.439 | -2901 | -11.04 | 1 |
+
+### Cumulative correction after Round 3
+
+Trials: own 106 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 253. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.327. DSR of that best: 1.15e-32 (project convention;
+normal-returns version 2.03e-10). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 253 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
