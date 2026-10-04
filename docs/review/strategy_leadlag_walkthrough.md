@@ -2,7 +2,7 @@
 
 The run (scripts/final_test_run.py) reaches these files only through laggard.py: strategy.decision_time_ns, strategy.signals, leadlag.detect_jumps. Nothing else in either file feeds a reported number (leadlag.xcorr_lag feeds only the exploratory trade-based lag; tests/test_legacy_not_imported.py checks the run never imports legacy.backtest).
 
-File: strategy.py at 4ee5ff2 (branch t15-final), 52 lines. Only the two functions the run imports (through laggard.py): decision_time_ns and signals.
+File: strategy.py at e2c38e8 (branch t15-final), 52 lines. Only the two functions the run imports (through laggard.py): decision_time_ns and signals.
 
 Tags at line end: **[TIME]** touches decision time, fill time, windows, outages or timestamps. **[MONEY]** touches price, fee, spread, threshold or P&L. Tests per block: every test that calls a function defined in the block.
 
@@ -19,7 +19,7 @@ decision_time_ns: a decision taken from grid label g (which covers [g, g + 1)) i
 
 Tests: `test_leadlag.py::test_decisions_are_stamped_after_their_grid_label (via signals)`
 
-## Lines 25 to 51
+## Lines 25 to 52
 
 signals: one position at a time. For each detected leader jump (in label order), skip it while a position is open; enter if the gap A - B in the jump direction at the jump label is >= the entry gap; exit at the first later label whose gap is below the exit gap, else at jump + timeout (or the last label); decisions stamped by decision_time_ns.
 
@@ -51,10 +51,10 @@ signals: one position at a time. For each detected leader jump (in label order),
  49                       "gap_at_entry_cents": round(gaps.loc[g] * d * 100, 2)})                                   [MONEY]
  50          busy_until = h                                                                                         [TIME]
  51      return pd.DataFrame(rows, columns=["entry_g", "exit_g", "direction", "qty", "exit_reason",
+ 52                                         "entry_decision_ns", "exit_decision_ns", "gap_at_entry_cents"])
 ```
 
 Tests: `test_leadlag.py::test_decisions_are_stamped_after_their_grid_label`
-
 
 File: leadlag.py at 4ee5ff2 (branch t15-final), 105 lines. Only detect_jumps, which the run imports through laggard.py. xcorr_lag is NOT used by the run: the confirmatory lag is xcorr_lead.game_lag_mid; xcorr_lag feeds only the exploratory trade-based game_lag.
 
