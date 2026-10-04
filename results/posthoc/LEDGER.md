@@ -24,3 +24,4 @@ experiments/variants.csv. Commit hashes are on the named branches (not merged to
 | 2026-10-04 06:37 | data-cme-train | none | 0 | data only, Databento spend $0.8788 | n/a | n/a | 6b484c6 (results/data_cme/SPEND.md) | mbp-10 $0.0367, mbp-1 $0.0281, definition $0.8140 |
 | 2026-10-04 06:17 | data-fullhist | none | 0 | data only, $0 | n/a | n/a | dceb31b | full-history fetcher for training games |
 | 2026-10-04 (local only) | data-news | none | 0 | data only; local branch at a7b59cc (no unique commits, not on origin) | n/a | n/a | a7b59cc | nothing committed beyond main at the time of writing |
+| 2026-10-04 07:58 | posthoc-mm-v4 | HYPOTHESIS_v4 test set 1 (descriptive) | 0 | not run: 0 eligible games (6 Oct 3 games after 20:00 ET, all recordings end 00:34 ET before game end) | n/a | n/a | 1d3d68a (results/posthoc_mm_v4/LEDGER.md) | spec main 94aa1a0; Arm B parameter committed for test set 2 |
