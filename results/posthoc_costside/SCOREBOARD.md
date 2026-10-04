@@ -41,4 +41,8 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 6 | GAP: moves after no-trade gaps | +10 | new |
 | 6 | In-game Kalshi microstructure ruled out (16 trials, none with CI above 0, every win rate below break-even) | +5 | ruled out |
 
-**Total after Round 6: +150.** Stop condition (+100): not met.
+| 7 | TO: Kalshi reaction to non-scoring possession changes (ESPN) | +10 | new |
+| 7 | HALF: 2nd-quarter momentum into halftime | +10 | new |
+| 7 | ESPN non-scoring game state ruled out (8 trials, strict defect filter) | +5 | ruled out |
+
+**Total after Round 7: +175.** Stop condition (+100): not met.

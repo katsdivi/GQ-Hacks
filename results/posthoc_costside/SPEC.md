@@ -245,3 +245,21 @@ settlement; first qualifying event per game per trial.
   or fade. {follow, fade} x {taker, maker}.
 
 Cumulative own trials after Round 7: 133 + 8 = 141.
+
+## Round 8 (6 trials; team prior from past Kalshi closing errors; written 2026-10-04 05:50 ET, before Round 8 touches data)
+
+Why: every in-game and microstructure source is ruled out; a cross-game prior is untried (not in any branch).
+A set. For each team (league, Kalshi code), its Kalshi closing error in a past game = Kalshi settlement payout
+minus its own-market last trade at or before kickoff (within 10 min). Prior at decision t = kickoff - 5 min of the
+current game = mean error over the team's last k games whose kickoff + 6 h < t (settled before t). Entry at t:
+taker (5-min window, as Strategy A / Idea 4) or maker (limit = own last trade, W 300 s). Hold to settlement.
+
+- **R8.PRIOR.under (k in {1, 3}, taker; k 3 maker): 3 trials.** Buy the team if its prior >= +0.10 (Kalshi
+  underpriced it recently). If both teams qualify, the larger prior.
+- **R8.PRIOR.over (same 3 configurations): 3 trials.** Buy the OPPONENT of a team whose prior <= -0.10
+  (overpriced recently).
+
+Calendar items not testable: "first hour after a market opens" (training files start about kickoff - 2 h);
+"games whose kickoff moved" (no schedule-change record in the data).
+
+Cumulative own trials after Round 8: 141 + 6 = 147.

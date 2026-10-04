@@ -303,3 +303,40 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 280 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 7
+
+Run 2026-10-04 05:51 ET. Strict ESPN defect rule dropped 549 of 1,024 test-week games (any play outside
+[kickoff, kickoff + 6 h] or more than 5 min out of order); 475 games used; 0 mapping failures.
+
+- TO (INT, fumble, turnover on downs, missed FG): fading a >= 3 c Kalshi reaction loses (taker -0.128, CI below
+  0); buying the gaining team after a small reaction is flat to negative (-0.024 [-0.094, +0.044], win 0.608 vs
+  break-even 0.623). Kalshi prices possession changes correctly within a minute.
+- HALF (>= 10 c 2nd-quarter swing): following loses (-0.087 / -0.124); fading is +0.065 [-0.222, +0.350] on 95
+  trades taker, but the maker version is negative and the sample is small. No edge.
+- ESPN non-scoring game state is ruled out as a signal at a 60 s known-time delay.
+
+### All Round 7 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R7.HALF.fade.taker | 95 | 0.0645 | -0.2223 | 0.3502 | 1.849 | 0.0645 | 1.849 | -25.2 | 1.439 | 1 |
+| R7.TO.follow.taker | 301 | -0.0238 | -0.0938 | 0.0441 | -1.483 | -0.0238 | -1.483 | -85.25 | -1.228 | 1 |
+| R7.TO.follow.maker | 204 | -0.0374 | -0.1351 | 0.0546 | -2.283 | -0.0323 | -1.961 | -86.93 | -1.739 | 1 |
+| R7.HALF.follow.taker | 90 | -0.0866 | -0.2018 | 0.0241 | -6.428 | -0.0866 | -6.428 | -86.32 | -4.787 | 1 |
+| R7.TO.fade.maker | 278 | -0.0913 | -0.2167 | 0.0297 | -3.595 | -0.0829 | -3.234 | -143.3 | -3.327 | 1 |
+| R7.HALF.fade.maker | 56 | -0.0948 | -0.4554 | 0.2508 | -2.618 | -0.0838 | -2.286 | -51.06 | -2.027 | 1 |
+| R7.HALF.follow.maker | 73 | -0.1236 | -0.2592 | 0.0085 | -8.89 | -0.1194 | -8.548 | -90.85 | -6.165 | 1 |
+| R7.TO.fade.taker | 332 | -0.1284 | -0.2354 | -0.0203 | -5.212 | -0.1284 | -5.212 | -215.6 | -5.125 | 1 |
+
+### Cumulative correction after Round 7
+
+Trials: own 141 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 288. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.353. DSR of that best: 2.75e-29 (project convention;
+normal-returns version 1.84e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 288 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
