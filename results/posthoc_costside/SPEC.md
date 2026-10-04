@@ -223,3 +223,25 @@ trade per game (first qualifying signal).
   last pre-gap trade by >= 0.03; follow the move. g in {120, 300} x {taker, maker}.
 
 Cumulative own trials after Round 6: 117 + 16 = 133.
+
+## Round 7 (8 trials; ESPN in-game game state; written 2026-10-04 05:49 ET, before Round 7 touches data)
+
+Why: Round 6 ruled out Kalshi's own microstructure; Idea 9 (ESPN win probability) and Idea 10 (scoring plays) used
+ESPN, but not non-scoring possession changes or halftime. A set, ESPN summaries from ../wt-idea6/data/espn_raw/
+(read-only), ids from ids_training.csv, orientation by Idea 6's name-score rule (posthoc-idea6 0f57732, orient()).
+**Defect rule (strict, Idea 9/10):** drop the whole game if any play wallclock is missing-free but outside
+[kickoff, kickoff + 6 h], or any play is earlier than the previous play by more than 5 min. Known time of an
+event = its wallclock + 60 s (t). Kalshi prices: own-market last trade at or before the event wallclock (pre,
+within 120 s) and at or before t (post, within 30 s). In-game window kickoff + 20 min to kickoff + 4 h. Hold to
+settlement; first qualifying event per game per trial.
+
+- **R7.TO (4 trials): non-scoring possession changes.** Drives whose result is INT, FUMBLE, DOWNS or MISSED FG;
+  event wallclock = that drive's last play. Gaining team = the other team. Move m = gaining team's post - pre.
+  Fade (buy the team that lost the ball) if m >= 0.03; follow (buy the gaining team) if 0 <= m < 0.03
+  (under-reaction). {fade, follow} x {taker, maker}.
+- **R7.HALF (4 trials): second-quarter momentum into halftime.** Event = first play with text "End of 2nd Quarter"
+  (case-insensitive, trailing period ignored). Second-quarter change c = home own price at t minus home own price
+  at the "End of 1st Quarter" wallclock + 60 s (both within 120 s). If |c| >= 0.10: follow (buy the team that rose)
+  or fade. {follow, fade} x {taker, maker}.
+
+Cumulative own trials after Round 7: 133 + 8 = 141.
