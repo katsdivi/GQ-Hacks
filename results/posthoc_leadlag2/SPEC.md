@@ -83,3 +83,49 @@ Rule: decision grid every 60 s from the first time both venues have traded to ki
 - Grid: direction {pm-leads, Kalshi-leads} x W {30, 120} min x d {0.02, 0.04} x execution {taker, maker} x exit
   {kickoff - 5 min, settlement} = 32 trials. Walk-forward: no parameter is chosen; every grid point is a trial,
   scored on the 19 test weeks only.
+
+## Round 3 (committed before any new CME training data is read): CME leads Kalshi in-game
+
+Data: training games newly mapped to CME by branch data-cme-train (results/data_cme/ there; data under
+data/raw/cme_train_v2 or as its README says), used only after that branch commits its map. CME price = mid of the
+CME top of book (bid and ask both present, 1 s grid, backward as-of), oriented to P(home) by the mapping file.
+Kalshi = last trade P(home). Window [kickoff + 20 min, kickoff + 4 h].
+
+Coverage first: count mapped games in the test weeks with >= 50 CME mid changes in the window. If fewer than 30
+games, Round 3 is descriptive only (no trading trials).
+
+Descriptive: per game, 1 s grid cross-correlation of CME mid changes vs Kalshi price changes at lags -15..+15 s
+(argmax lag, positive = CME leads); leadlag.detect_jumps on CME (3 c, 10 s) and the Kalshi response time to cover
+80% of each jump within 60 s (leadlag.py PROVISIONAL defaults); VECM information share of CME on a 1 s grid as in R1.
+
+Trading (only if >= 30 games): at each CME jump (leadlag.detect_jumps, jump J within a trailing 10 s), if the gap
+CME mid - Kalshi last P(home), in the jump direction, is >= 3 c at the jump second t (both last updates within 30 s),
+buy Kalshi YES in the jump direction: taker, first own trade at or after t + L, + 1 c, cap 0.99; one open position
+at a time; exit by taker sell at the first own trade at or after fill + 60 s (- 1 c), or hold to settlement.
+- Grid: J {3, 4} c x L {1, 5} s x exit {60 s, settlement} = 8 trials.
+- Placebo: the same events traded in the opposite direction, exit 60 s: J x L = 4 trials.
+
+## Round 4 (committed before any news or line-move data is read): news and sportsbook line moves
+
+Data: timestamped news items (branch data-news, data/raw/news/) and sportsbook moneyline snapshots with timestamps
+(branch data-lines, data/raw/lines/), training games only, used only after each branch commits its README. An event's
+time is the source's publication or snapshot time; if a source's time resolution is coarser than 1 min, the event is
+treated as known at the end of its resolution interval.
+
+Events:
+- Line move: a no-vig moneyline probability change for a team of >= 2 pp between consecutive snapshots of the same
+  book, before kickoff; event time = the later snapshot's time.
+- News: items that name a team in a training game and are classified (by keywords fixed here: "out", "inactive",
+  "ruled out", "will not play", "doubtful", "injured reserve", "suspended", "questionable") as negative availability
+  news for that team, published before kickoff.
+
+Event study (descriptive): for each event, Kalshi and polymarket.com P(team) from event - 30 min to event + 60 min;
+the time each venue first moves >= 1 c in the event direction (line move direction; for negative news, against the
+named team); which venue moves first; the mean price path.
+
+Trading (only for an event type with >= 100 events in the test weeks): at t = event time + delta, if Kalshi's P(team)
+move since the event time is < half of the event's implied move (line moves: half the no-vig change; news: < 1 c),
+buy Kalshi YES in the event direction (line move: the team the line moved toward; negative news: the opponent).
+Taker, first own trade at or after t + 1 s within 60 s, + 1 c; first eligible event per game; exit by taker at
+kickoff - 5 min or hold to settlement.
+- Grid per event type: delta {60, 300} s x exit {kickoff - 5 min, settlement} = 4 trials (lines) + 4 trials (news).
