@@ -1,0 +1,361 @@
+{
+ "status": "exploratory, post-run",
+ "diag_commit": "5c24dbe",
+ "numbers": {
+  "pmus_cache_max_age_s": {
+   "value": 30,
+   "source": "git show 5c24dbe:results/holdout_diag/h1_poll.csv",
+   "column": "h_cache-control (max-age)"
+  },
+  "pmus_age_header_min_s": {
+   "value": 1,
+   "source": "git show 5c24dbe:results/holdout_diag/h1_poll.csv",
+   "column": "h_age"
+  },
+  "pmus_age_header_max_s": {
+   "value": 29,
+   "source": "git show 5c24dbe:results/holdout_diag/h1_poll.csv",
+   "column": "h_age"
+  },
+  "pmus_live_poll_requests": {
+   "value": 60,
+   "source": "git show 5c24dbe:results/holdout_diag/h1_poll.csv",
+   "column": "rows"
+  },
+  "pmus_live_poll_body_changes": {
+   "value": 0,
+   "source": "git show 5c24dbe:results/holdout_diag/h1_poll.csv",
+   "column": "body_changed"
+  },
+  "pmus_quote_change_interval_median_of_game_medians_s": {
+   "value": 31.57617628,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_snapshot_gaps_per_game.csv",
+   "column": "gap_median_s (median over games)"
+  },
+  "pmus_quote_change_interval_n_games": {
+   "value": 76,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_snapshot_gaps_per_game.csv",
+   "column": "rows"
+  },
+  "pmus_laggard_1s_entry_snapshot_age_median_s": {
+   "value": 17.2784385585,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_fill_snapshot_ages.csv",
+   "column": "entry_snapshot_age_s"
+  },
+  "pmus_laggard_1s_exit_snapshot_age_median_s": {
+   "value": 1.7299659410000001,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_fill_snapshot_ages.csv",
+   "column": "exit_snapshot_age_s"
+  },
+  "pmus_laggard_1s_share_entries_snapshot_older_5s": {
+   "value": 0.8736654804270463,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_fill_snapshot_ages.csv",
+   "column": "entry_snapshot_age_s > 5"
+  },
+  "pmus_laggard_1s_n_fills": {
+   "value": 1686,
+   "source": "git show 5c24dbe:results/holdout_diag/h0_fill_snapshot_ages.csv",
+   "column": "rows"
+  },
+  "pmus_receipt_minus_venue_delay_median_s": {
+   "value": 19.227186402,
+   "source": "git show 5c24dbe:results/holdout_diag/h3_summary.csv",
+   "column": "delay_median_s"
+  },
+  "pmus_receipt_minus_venue_delay_p10_s": {
+   "value": 5.290451534,
+   "source": "git show 5c24dbe:results/holdout_diag/h3_summary.csv",
+   "column": "delay_p10_s"
+  },
+  "pmus_receipt_minus_venue_delay_p90_s": {
+   "value": 28.192414553,
+   "source": "git show 5c24dbe:results/holdout_diag/h3_summary.csv",
+   "column": "delay_p90_s"
+  },
+  "pmus_receipt_minus_venue_n_matched": {
+   "value": 30181,
+   "source": "git show 5c24dbe:results/holdout_diag/h3_summary.csv",
+   "column": "n_matched"
+  },
+  "pmus_receipt_minus_venue_n_ambiguous": {
+   "value": 122511,
+   "source": "git show 5c24dbe:results/holdout_diag/h3_summary.csv",
+   "column": "n_ambiguous"
+  },
+  "pmus_laggard_run_1s_mean_c": {
+   "value": 1.4803677342823252,
+   "source": "git show 5c24dbe:results/holdout_diag/g_latency_curves.csv",
+   "column": "edge_cents_mean (venue polymarket_us, latency_s 1.0)"
+  },
+  "pmus_laggard_run_1s_ci_lo": {
+   "value": 0.924048738842622,
+   "source": "git show 5c24dbe:results/holdout_diag/g_latency_curves.csv",
+   "column": "edge_ci_low (venue polymarket_us, latency_s 1.0)"
+  },
+  "pmus_laggard_run_1s_ci_hi": {
+   "value": 1.997610467795829,
+   "source": "git show 5c24dbe:results/holdout_diag/g_latency_curves.csv",
+   "column": "edge_ci_high (venue polymarket_us, latency_s 1.0)"
+  },
+  "pmus_laggard_run_1s_n_trades": {
+   "value": 1686,
+   "source": "git show 5c24dbe:results/holdout_diag/g_latency_curves.csv",
+   "column": "n_trades (venue polymarket_us, latency_s 1.0)"
+  },
+  "pmus_partial_run_1p0s_all_mean_c": {
+   "value": 2.2397350993377487,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_all_ci_lo": {
+   "value": 1.584876412862525,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_low (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_all_ci_hi": {
+   "value": 2.7422080634233397,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_high (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_all_n_fills": {
+   "value": 604,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_fills (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_all_n_games": {
+   "value": 39,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_games (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_all_share_games_pos": {
+   "value": 0.8205128205128205,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 1.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_1p0s_confirmed_mean_c": {
+   "value": -4.092857142857143,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_confirmed_ci_lo": {
+   "value": -5.465,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_low (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_confirmed_ci_hi": {
+   "value": -2.369916666666667,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_high (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_confirmed_n_fills": {
+   "value": 14,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_fills (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_confirmed_n_games": {
+   "value": 10,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_games (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_confirmed_share_games_pos": {
+   "value": 0.2,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 1.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_1p0s_share_both_confirmed": {
+   "value": 0.0231788079470198,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_both_confirmed (latency_s 1.0)"
+  },
+  "pmus_partial_run_2p0s_all_mean_c": {
+   "value": 2.0171900826446283,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_all_ci_lo": {
+   "value": 1.3841687234015578,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_low (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_all_ci_hi": {
+   "value": 2.5173891095428913,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_high (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_all_n_fills": {
+   "value": 605,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_fills (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_all_n_games": {
+   "value": 39,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_games (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_all_share_games_pos": {
+   "value": 0.8205128205128205,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 2.0, set 'all subset fills')"
+  },
+  "pmus_partial_run_2p0s_confirmed_mean_c": {
+   "value": -3.9545454545454546,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_confirmed_ci_lo": {
+   "value": -5.344444444444445,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_low (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_confirmed_ci_hi": {
+   "value": -3.12,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "ci95_high (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_confirmed_n_fills": {
+   "value": 11,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_fills (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_confirmed_n_games": {
+   "value": 6,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "n_games (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_confirmed_share_games_pos": {
+   "value": 0.0,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 2.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_run_2p0s_share_both_confirmed": {
+   "value": 0.0181818181818181,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_run_summary.csv",
+   "column": "share_both_confirmed (latency_s 2.0)"
+  },
+  "pmus_partial_delay19s_10p0s_all_mean_c": {
+   "value": 0.7932676518883415,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_all_ci_lo": {
+   "value": 0.1349482709750566,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "ci95_low (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_all_ci_hi": {
+   "value": 1.3538366529263794,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "ci95_high (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_all_n_fills": {
+   "value": 609,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "n_fills (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_all_n_games": {
+   "value": 39,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "n_games (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_all_share_games_pos": {
+   "value": 0.4615384615384615,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 10.0, set 'all subset fills')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_mean_c": {
+   "value": -3.3000000000000003,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "mean_net_c_per_contract (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_ci_lo": {
+   "value": -4.197732558139535,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "ci95_low (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_ci_hi": {
+   "value": -2.2438166666666675,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "ci95_high (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_n_fills": {
+   "value": 35,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "n_fills (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_n_games": {
+   "value": 15,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "n_games (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_confirmed_share_games_pos": {
+   "value": 0.0666666666666666,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "share_games_pnl_pos (latency_s 10.0, set 'both legs confirmed')"
+  },
+  "pmus_partial_delay19s_10p0s_share_both_confirmed": {
+   "value": 0.057471264367816,
+   "source": "git show 5c24dbe:results/holdout_diag/h4_delay_adjusted_summary.csv",
+   "column": "share_both_confirmed (latency_s 10.0)"
+  },
+  "receipt_delay_kalshi_median_s": {
+   "value": 0.02954285,
+   "source": "results/holdout/receipt_diagnostic.csv",
+   "column": "median_s (vultr, kalshi)"
+  },
+  "receipt_delay_kalshi_p90_s": {
+   "value": 0.0344077958,
+   "source": "results/holdout/receipt_diagnostic.csv",
+   "column": "p90_s (vultr, kalshi)"
+  },
+  "receipt_delay_polymarket_median_s": {
+   "value": 0.05221409,
+   "source": "results/holdout/receipt_diagnostic.csv",
+   "column": "median_s (vultr, polymarket)"
+  },
+  "receipt_delay_polymarket_p90_s": {
+   "value": 0.2175299462999997,
+   "source": "results/holdout/receipt_diagnostic.csv",
+   "column": "p90_s (vultr, polymarket)"
+  },
+  "b_big_diff_n_games": {
+   "value": 25,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_big_diff_games.csv",
+   "column": "rows"
+  },
+  "b_big_diff_n_mismatch": {
+   "value": 0,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_big_diff_games.csv",
+   "column": "class"
+  },
+  "b_big_diff_n_stale_venue": {
+   "value": 12,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_big_diff_games.csv",
+   "column": "class"
+  },
+  "b_big_diff_n_real_disagreement": {
+   "value": 13,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_big_diff_games.csv",
+   "column": "class"
+  },
+  "b_excl_big_diff_webull_mean_c": {
+   "value": -4.623355263157895,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_excluding.csv",
+   "column": "edge_webull_cents (sample excluding)"
+  },
+  "b_excl_big_diff_webull_ci_lo": {
+   "value": -4.928284366140935,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_excluding.csv",
+   "column": "edge_webull_ci_lo (sample excluding)"
+  },
+  "b_excl_big_diff_webull_ci_hi": {
+   "value": -4.306454403788219,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_excluding.csv",
+   "column": "edge_webull_ci_hi (sample excluding)"
+  },
+  "b_excl_big_diff_webull_n_trades": {
+   "value": 2432,
+   "source": "git show 5c24dbe:results/holdout_diag/d_b_excluding.csv",
+   "column": "n_trades (sample excluding)"
+  }
+ }
+}
