@@ -108,6 +108,35 @@ def checklist(c: Ctx) -> dict:
         out["checks"][f"{m.name} gaps parsed"] = {"value": int(len(g)), "ok": True}
     if not c.dry:
         out["checks"].update(manifest_checks(c.machines))
+        out["checks"].update(holdout_files_complete(ROOT / "data" / "holdout_raw"))
+    return out
+
+
+AB_CUTOFF = pd.Timestamp("2026-10-03 20:00", tz="America/New_York")   # v3 Amendment 4 (= v2 Amendment 4 cutoff)
+WINDOW_END = pd.Timedelta(hours=5)       # download window end, kickoff + 5 h (B's kickoff + 4.5 h is inside it)
+
+
+def holdout_files_complete(hr: Path) -> dict:
+    """v3 Amendment 4: every A and B holdout file of a kept game must have been written at or after its game's
+    window end (file modification time >= ESPN kickoff + 5 h). Reads file times and ids only, never the files."""
+    out = {}
+    ev = pd.read_csv(hr / "events.csv") if (hr / "events.csv").exists() else pd.DataFrame(columns=["game_id", "espn_kickoff"])
+    ko = pd.to_datetime(ev["espn_kickoff"], utc=True)
+    kept = ev[ko.notna() & (ko <= AB_CUTOFF)].assign(ko=ko)
+    pm = pd.read_csv(hr / "pm_map.csv") if (hr / "pm_map.csv").exists() else pd.DataFrame(columns=["game_id"])
+    for venue, ids in (("kalshi", kept["game_id"]), ("polymarket", kept[kept["game_id"].isin(pm["game_id"])]["game_id"])):
+        k = kept.set_index("game_id")["ko"]
+        missing, early = [], []
+        for g in ids:
+            f = hr / venue / f"{g}.parquet"
+            if not f.exists():
+                missing.append(g)
+            elif pd.Timestamp(f.stat().st_mtime, unit="s", tz="UTC") < k[g] + WINDOW_END:
+                early.append(g)
+        out[f"holdout {venue} files written after window end"] = {
+            "value": f"{len(ids)} kept games; missing {len(missing)}; written before window end {len(early)}"
+                     + (f" ({early[:5]}{'...' if len(early) > 5 else ''})" if early else ""),
+            "ok": len(ids) > 0 and not missing and not early}
     return out
 
 
