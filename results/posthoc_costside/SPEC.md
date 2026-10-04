@@ -91,3 +91,20 @@ games.
 - **Candidate edge** only if the best trial's ROC CI lower bound > 0 AND Reality Check p < 0.05. Then recommend a
   single holdout test on "run costside holdout"; never run it here.
 - The best trial by ROC is also shown labeled "IN-SAMPLE BEST, after 79 trials, not expected to persist".
+
+## Implementation notes (2026-10-04 05:42 ET, before any real-data run)
+
+- Rounds: Divi changed the brief before the first run. The search runs in ROUNDS; this spec above is **Round 1**
+  (79 trials). Each later round is appended here as "Round k" (methods, trial count, why) and committed before it
+  touches data. `results/posthoc_costside/trials_log.csv` holds every trial ever tried; the correction (Reality
+  Check, DSR at the cumulative count, Holm) is recomputed over ALL trials after every round.
+- Evaluation window for every trial (fixed-rule and walk-forward alike): the walk-forward test weeks, i.e. games
+  whose ET kickoff week is the 7th training week or later (first 6 weeks = history only), so all trials share
+  one window.
+- Each maker trial is one trial; maker175 is the primary line, maker0 reported alongside. B1 taker entry uses the
+  5-minute window of the source ideas; C blocks use 60 s.
+- Signals for block A: Strategy A rows with a favorite >= 0.80 (entered or "no post-decision trade"); Ideas 7,
+  12, 13 rows with a signal (team and t present); Ideas 8 and 9 files list entered signals only, so their
+  never-filled signals are missing (small, stated).
+- Stop condition (Divi): walk-forward ROC CI lower bound > 0 on the primary line, Reality Check p < 0.05 over the
+  cumulative trials, >= 100 trades, excluding the top 5 games still > 0.
