@@ -1,0 +1,9 @@
+leg,sample,line,n,roc_mean,ci_lo,ci_hi
+favorite,primary,webull,9,-0.14994360367841353,-0.496390549022128,0.11069504292514538
+favorite,primary,"direct (taker formula, upper bound)",9,-0.13771211991168728,-0.489879468089556,0.1259461480543291
+favorite,costs x2,webull,9,-0.17707408814956452,-0.5129910930953351,0.07472536396311094
+favorite,costs x2,"direct (taker formula, upper bound)",9,-0.15253760982169762,-0.49995761282089557,0.10502852455977474
+placebo (underdog),primary,webull,11,0.13636363636363621,-1.0,2.4090909090909083
+placebo (underdog),primary,"direct (taker formula, upper bound)",11,0.4204545454545453,-1.0,3.261363636363636
+placebo (underdog),costs x2,webull,11,-0.17355371900826455,-1.0,1.4793388429752063
+placebo (underdog),costs x2,"direct (taker formula, upper bound)",11,0.13636363636363652,-1.0,2.4090909090909096

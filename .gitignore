@@ -31,3 +31,4 @@ secrets/
 results/dryrun/
 results/dryrun_gatefail/
 .venv-run/
+results/holdout/inputs_a_meta.csv

@@ -1,0 +1,76 @@
+{
+ "feeds": {
+  "vultr": {
+   "kalshi": 10264,
+   "polymarket": 10239,
+   "polymarket_us": 10110
+  },
+  "mac": {
+   "kalshi": 13959,
+   "polymarket": 12849,
+   "polymarket_us": 11181
+  }
+ },
+ "checks": {
+  "holdout_seconds_delay.csv sha256": {
+   "value": "24a5d41af0ba7f34",
+   "expected": "24a5d41af0ba7f34",
+   "ok": true
+  },
+  "polymarket_com_map.json sha256": {
+   "value": "202f819d1bd885dd",
+   "expected": "202f819d1bd885dd",
+   "ok": true
+  },
+  "polymarket_us_map.json sha256": {
+   "value": "4225d018acb3024e",
+   "expected": "4225d018acb3024e",
+   "ok": true
+  },
+  "Amendment 4 games kept": {
+   "value": 106,
+   "expected": 106,
+   "ok": true
+  },
+  "Vultr copy present": {
+   "value": {
+    "kalshi": 10264,
+    "polymarket": 10239,
+    "polymarket_us": 10110
+   },
+   "ok": true
+  },
+  "vultr gaps parsed": {
+   "value": 127,
+   "ok": true
+  },
+  "mac gaps parsed": {
+   "value": 194,
+   "ok": true
+  },
+  "vultr frozen inputs match manifest": {
+   "value": "3 files read (2 heartbeat logs); mismatched []; listed but missing []",
+   "ok": true
+  },
+  "vultr does not read tracked GAPS.md": {
+   "value": "data/vultr/GAPS_vultr.md",
+   "ok": true
+  },
+  "mac frozen inputs match manifest": {
+   "value": "3 files read (2 heartbeat logs); mismatched []; listed but missing []",
+   "ok": true
+  },
+  "mac does not read tracked GAPS.md": {
+   "value": "data/mac/GAPS_mac.md",
+   "ok": true
+  },
+  "holdout kalshi files written after window end": {
+   "value": "768 kept games; missing 0; written before window end 0",
+   "ok": true
+  },
+  "holdout polymarket files written after window end": {
+   "value": "760 kept games; missing 0; written before window end 0",
+   "ok": true
+  }
+ }
+}

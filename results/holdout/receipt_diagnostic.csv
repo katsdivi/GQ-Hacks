@@ -1,0 +1,4 @@
+machine,venue,n_rows,median_s,p90_s
+vultr,kalshi,9175867,0.02954285,0.0344077958
+vultr,polymarket,3690972,0.05221409,0.21752994629999972
+vultr,polymarket_us,0,,

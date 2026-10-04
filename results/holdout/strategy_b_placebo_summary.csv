@@ -1,0 +1,2 @@
+k,m,T,games,signals,n_trades,skip_no_entry_fill,skip_no_exit_fill,exit_converged,exit_timeout,exit_window_end,edge_webull_cents,edge_webull_ci_lo,edge_webull_ci_hi,pnl_webull_total,edge_direct_cents,edge_direct_ci_lo,edge_direct_ci_hi,pnl_direct_total
+0.05,10,300,719,11710,9814,1206,690,449,9364,1,-4.994905237415937,-5.12192119067914,-4.866923851533349,-4902.0,-3.1264723863867943,-3.264876147768524,-2.988848225142324,-3068.32

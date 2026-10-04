@@ -1,0 +1,26 @@
+{
+ "polymarket.com": {
+  "n_qualifying": 88,
+  "n_placebo": 83,
+  "median_corrected_lag_s": 0.0,
+  "mann_whitney_p": 0.7085767522882203,
+  "share_positive": 0.125,
+  "share_negative": 0.0,
+  "placebo_median_s": -1.0,
+  "alpha": 0.05,
+  "result": "neither venue leads consistently",
+  "holm_level": 0.05
+ },
+ "Polymarket US": {
+  "n_qualifying": 76,
+  "n_placebo": 71,
+  "median_corrected_lag_s": 7.5,
+  "mann_whitney_p": 3.240689110006159e-08,
+  "share_positive": 0.9210526315789473,
+  "share_negative": 0.06578947368421052,
+  "placebo_median_s": 0.0,
+  "alpha": 0.025,
+  "result": "kalshi leads",
+  "holm_level": 0.025
+ }
+}
