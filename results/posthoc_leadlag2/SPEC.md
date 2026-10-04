@@ -129,3 +129,10 @@ buy Kalshi YES in the event direction (line move: the team the line moved toward
 Taker, first own trade at or after t + 1 s within 60 s, + 1 c; first eligible event per game; exit by taker at
 kickoff - 5 min or hold to settlement.
 - Grid per event type: delta {60, 300} s x exit {kickoff - 5 min, settlement} = 4 trials (lines) + 4 trials (news).
+
+### Round 2 amendment (committed before any Round 2 data is read)
+
+The coordinator moved this agent's hard stop to 08:00 ET, and the data-fullhist marker (fullhist_ready) did not exist
+at 07:18 ET. So the spec's fallback is applied now instead of at 08:30: Round 2 runs on the existing files
+(data/raw/kalshi_only and data/ticks/*_polymarket, about 2 h before kickoff) with W = 30 min only: 16 trials
+(direction x d x execution x exit). No full-history data is read in this round. Nothing else changes.
