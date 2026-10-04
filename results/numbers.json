@@ -19,6 +19,14 @@
   },
   "source": "report_book.py"
  },
+ "capital_bases_from_training": {
+  "value": {
+   "A": 136.59999999999994,
+   "B": 43.35,
+   "combined": 169.45000000000002
+  },
+  "source": "report_book.py"
+ },
  "A.days": {
   "value": 179,
   "source": "report_book.py"
@@ -36,11 +44,11 @@
   "source": "report_book.py"
  },
  "A.ann_vol": {
-  "value": 0.5311047521943615,
+  "value": 0.531104752194362,
   "source": "report_book.py"
  },
  "A.sharpe": {
-  "value": -0.6014821176471171,
+  "value": -0.6014821176471165,
   "source": "report_book.py"
  },
  "A.sharpe_nw5": {
@@ -228,11 +236,11 @@
   "source": "report_book.py"
  },
  "combined.ann_vol": {
-  "value": 6.276509620833688,
+  "value": 6.276509620833691,
   "source": "report_book.py"
  },
  "combined.sharpe": {
-  "value": -8.660052746724114,
+  "value": -8.660052746724112,
   "source": "report_book.py"
  },
  "combined.sharpe_nw5": {
@@ -332,7 +340,7 @@
   "source": "report_book.py"
  },
  "B.note": {
-  "value": "B is reported per contract (cents/contract) and by Sharpe only: under the PROPOSED capital base (max capital committed at once, $43 for B) its return levels are meaningless",
+  "value": "B is reported per contract (cents/contract) and by Sharpe only: under the PROPOSED capital base (max capital committed at once, $43 for B on training) its return levels are meaningless",
   "source": "report_book.py"
  },
  "A.costs_x2.pnl_total": {
@@ -344,11 +352,11 @@
   "source": "report_book.py"
  },
  "A.costs_x2.ann_vol": {
-  "value": 0.5511218197044712,
+  "value": 0.5511218197044718,
   "source": "report_book.py"
  },
  "A.costs_x2.sharpe": {
-  "value": -2.9469340974006153,
+  "value": -2.946934097400611,
   "source": "report_book.py"
  },
  "A.costs_x2.sharpe_nw5": {
@@ -364,7 +372,7 @@
   "source": "report_book.py"
  },
  "B.costs_x2.sharpe": {
-  "value": -8.654239146154792,
+  "value": -8.654239146154788,
   "source": "report_book.py"
  },
  "B.costs_x2.sharpe_nw5": {
@@ -384,11 +392,11 @@
   "source": "report_book.py"
  },
  "combined.costs_x2.ann_vol": {
-  "value": 12.746620937392944,
+  "value": 12.746620937392933,
   "source": "report_book.py"
  },
  "combined.costs_x2.sharpe": {
-  "value": -8.709308763230851,
+  "value": -8.709308763230858,
   "source": "report_book.py"
  },
  "combined.costs_x2.sharpe_nw5": {
@@ -416,31 +424,31 @@
   "source": "report_book.py"
  },
  "A.sharpe_daily": {
-  "value": -0.03148301293867225,
+  "value": -0.031483012938672214,
   "source": "report_book.py"
  },
  "A.deflated_sharpe_own_grid": {
-  "value": 0.13882409393821515,
+  "value": 0.13882409393821532,
   "source": "report_book.py"
  },
  "A.deflated_sharpe_total_21": {
-  "value": 2.086751754511282e-06,
+  "value": 2.086751754511263e-06,
   "source": "report_book.py"
  },
  "B.sharpe_daily": {
-  "value": -0.4494464135449232,
+  "value": -0.44944641354492365,
   "source": "report_book.py"
  },
  "B.deflated_sharpe_own_grid": {
-  "value": 2.6130826540500476e-58,
+  "value": 2.6130826540502704e-58,
   "source": "report_book.py"
  },
  "B.deflated_sharpe_total_21": {
-  "value": 8.936813256644745e-117,
+  "value": 8.936813256643727e-117,
   "source": "report_book.py"
  },
  "combined.sharpe_daily": {
-  "value": -0.45328787785284874,
+  "value": -0.45328787785284896,
   "source": "report_book.py"
  },
  "combined.deflated_sharpe_own_grid": {
@@ -448,11 +456,11 @@
   "source": "report_book.py"
  },
  "combined.deflated_sharpe_total_21": {
-  "value": 2.5308058026409415e-115,
+  "value": 2.530805802640652e-115,
   "source": "report_book.py"
  },
  "deflated_sharpe.note": {
-  "value": "total-21 deflated Sharpe: trial-Sharpe variance from the 12 trials with daily series (A 3, B 8, combined 1; the other 9 of the 21 have no daily series); B's 8 trials, all strongly negative, dominate that variance, which drives every total-21 value to ~0",
+  "value": "total-21 deflated Sharpe: trial-Sharpe variance from the 12 TRAINING trials with daily series (A 3, B 8, combined 1; the other 9 of the 21 have no daily series); B's 8 trials, all strongly negative, dominate that variance",
   "source": "report_book.py"
  },
  "equity_curve_png": {
