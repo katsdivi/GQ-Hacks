@@ -253,8 +253,16 @@ def simulate_game(h, a, lo, hi, ko_ns, L, schedule):
 # ---------------------------------------------------------------- real data
 
 def load_games():
-    w = pd.read_csv("data/live/holdout_windows.csv")          # windows only (8415faf); polymarket row per game
-    pg = w[w["venue"] == "polymarket"].drop_duplicates("game_id").copy()
+    w = pd.read_csv("data/live/holdout_windows.csv")          # windows only (feadc99)
+    ok = (w["qualifying"] == True) & ~w["excluded_outage"].astype(bool) & \
+        ~w["excluded_no_rows"].astype(bool) & ~w["excluded_no_instrument"].astype(bool)
+    w = w[ok].copy()
+    nonv = w[w["machine"] != "vultr"]
+    print(f"usable rows: {len(w)}; skipped (machine not vultr): {len(nonv)} rows, "
+          f"{nonv['game_id'].nunique()} games", flush=True)
+    w = w[w["machine"] == "vultr"]
+    w["pref"] = (w["venue"] != "polymarket").astype(int)      # dedupe by game_id: polymarket row first
+    pg = w.sort_values(["game_id", "pref"]).drop_duplicates("game_id").copy()
     cands = pd.read_csv(SRC / "data/live/holdout_candidates.csv").set_index("game_id")
     pg["kickoff_utc"] = cands.loc[pg["game_id"], "kickoff_utc"].to_numpy()
     ev = json.loads((SRC / "data/vultr/data/live/kalshi_events.json").read_text())
@@ -262,6 +270,9 @@ def load_games():
     games = []
     for r in pg.itertuples():
         tk = cands.loc[r.game_id, "kalshi_ticker"]
+        if tk not in ev:               # mechanical fix after crash (KeyError): event never seen by the Vultr collector
+            print(f"skip {r.game_id}: {tk} not in Vultr kalshi_events.json (no Vultr Kalshi data)", flush=True)
+            continue
         away, home, _ = ev[tk]
         assert home == r.game_id.split("_")[-1].upper(), r.game_id
         s = st[(st.game_id == r.game_id) & (st.status == "finalized")]

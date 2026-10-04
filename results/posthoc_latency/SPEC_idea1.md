@@ -24,6 +24,20 @@ Data and games
   team markets have book rows in the Vultr recordings in the loaded range; the count used is reported. The
   windows file has no machine column; the Vultr-data condition above replaces it. ESPN kickoff T comes from
   `kickoff_utc` in `data/live/holdout_candidates.csv`.
+- Games, final rule (03:41 ET, before any result was produced, on Divi's instruction relayed by the
+  orchestrator): `data/live/holdout_windows.csv` was rebuilt at commit feadc99 (03:38:57 ET) with columns
+  game_id, venue, machine, window_start_ns, window_end_ns, qualifying, excluded_outage, excluded_no_rows,
+  excluded_no_instrument, not_qualifying_mid_changes. Use only rows with qualifying == True and
+  excluded_outage, excluded_no_rows, excluded_no_instrument all False, on the machine named in the row; rows
+  whose machine is not vultr are skipped and counted (currently none). Usable: 88 polymarket rows and 76
+  polymarket_us rows, all vultr; the 76 games are a subset of the 88. Dedupe by game_id: the polymarket row
+  is used (polymarket_us row only if no polymarket row), giving 88 games. This supersedes the 101-game rule
+  above.
+- Disclosure of two crashed attempts (03:39 ET): the script, committed at a4a208b, was started twice on real
+  data and crashed both times inside load_games before reading any book row or printing any result. Run 1:
+  KeyError on a game with no Vultr Kalshi event (the rebuilt windows file now lists all 106 games); the
+  mechanical fix skips games absent from the Vultr kalshi_events.json. Run 2: ValueError (NaN window of an
+  excluded game). Neither produced output beyond the skip lines. The game rule above was then adopted.
 - Disclosure (03:38 ET): before the windows file existed, I read `results/holdout/lead_polymarket.com_per_game.csv`
   and `results/holdout/lead_Polymarket US_per_game.csv` at about 03:31 to 03:33 ET. Loaded: whole files into
   pandas (all columns in memory). Printed: the header line and the first 2 data rows of the polymarket.com file
