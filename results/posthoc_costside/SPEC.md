@@ -180,3 +180,22 @@ orphan cost, both new mechanisms (orphan management), pre-listed:
 - **R4.REQUOTECALM (1 trial).** R4.REQUOTE restricted to calm slots (R4.PAIRCALM rule, h 0.02).
 
 Cumulative own trials after Round 4: 106 + 4 = 110.
+
+## Round 5 (7 trials; written 2026-10-04 05:42 ET, before Round 5 touches data)
+
+What Round 4 taught: in-game, the orphan leg is itself the adverse-selection signal; calm filters and passive
+completion both make it worse. Round 5 tries three mechanisms not yet covered (by me, the helpers or the broad
+search), pre-listed:
+
+- **R5.PAIRPRE, pre-game passive pairs (2 trials).** As R3.PAIR HEDGENOW but slots every 15 min from kickoff - 2 h
+  (the training files start about then) to kickoff - 15 min, valid 900 s; h in {0.01, 0.02}. Pre-game information
+  flow is slow, so orphans should be less adversely selected.
+- **R5.SL, stop-loss exits (4 trials).** Entries: R2.VOL.low.maker and R1.A.I12.A1.W300 fills (same fills). Exit:
+  sell at the first own-market trade after the fill whose price is <= entry - sl (trade - 1 c, taker fee); else
+  hold to settlement. sl in {0.10, 0.20}.
+- **R5.ANCHOR, polymarket.com-anchored one-sided maker quote (1 trial), B set, in-game.** Slots every 5 min from
+  kickoff + 20 min to kickoff + 4 h. For each team: polymarket.com implied price for that team (P(home) or 1 - it,
+  last trade within 60 s before t, venue time) >= Kalshi own last trade + 0.03: post a maker bid at the Kalshi
+  own last trade, valid 300 s, trade-through fill, hold to settlement. First fill per game only.
+
+Cumulative own trials after Round 5: 110 + 7 = 117.
