@@ -6,7 +6,8 @@ frozen in docs/stats_plan.md). Alden to confirm.
 
 Inputs are per-second grid series (align.py). A decision taken from grid label g only uses
 values at labels <= g and is stamped at g + 1 s, the first instant those values are all known.
-Fills (backtest.py) then happen at that stamp + latency.
+Fills then happen at that stamp + latency, in strategy_a.py, strategy_b.py and laggard.py (legacy/backtest.py
+is the v2 trade-based simulator, not used for any reported number).
 """
 from __future__ import annotations
 
