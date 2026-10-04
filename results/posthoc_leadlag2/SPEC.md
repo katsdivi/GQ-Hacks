@@ -57,3 +57,29 @@ Each round gets its own section here, committed and pushed before that round's d
 lead-lag on full-history trades (when data-fullhist is ready), R3 CME leads Kalshi on newly mapped training games
 (when data-cme-train is ready; descriptive only if < 30 games), R4 news and sportsbook line-move event studies (when
 data-news / data-lines are ready; trading trials only with >= 100 events).
+
+## Round 2 (committed before any full-history data is read): multi-hour pre-game lead-lag
+
+Motivation, disclosed: Round 1's descriptive pre-game result (polymarket.com information share 0.668 in the last 2 h)
+was seen before this section was written. That is why the pre-game window is tested; nothing else from R1 is tuned.
+
+Data: full-history Kalshi and polymarket.com training trades from market listing (data/raw/fullhist/, produced by
+branch data-fullhist; used only after its marker file fullhist_ready exists), same games and orientation as the
+Strategy B training set (B set minus EXCLUDED_A1), prices in P(home). If the full-history data is not ready by 08:30
+ET, Round 2 runs on the existing files (data/raw/kalshi_only and data/ticks/*_polymarket, which start about 2 h before
+kickoff) with the 30 min lookback only (16 trials instead of 32), and the results say so.
+
+Rule: decision grid every 60 s from the first time both venues have traded to kickoff - 10 min.
+- Leader move: polymarket.com last P(home) minus its value W minutes earlier (both backward as-of); Kalshi move over
+  the same W. Both venues' last trades within 10 min of t.
+- pm-leads signal: |pm move| >= d and |Kalshi move| < d / 2: buy Kalshi YES in the polymarket.com direction.
+- Placebo / alternative (Kalshi leads): |Kalshi move| >= d and |pm move| < d / 2: buy Kalshi YES in Kalshi's own
+  direction.
+- First signal only, one position per game.
+- Execution: taker (first own trade at or after t + 1 s within 60 s, + 1 c) or maker (limit = last own trade at t,
+  trade-through within 300 s, pre-game being thinner).
+- Exit: taker sell at the first own trade at or after kickoff - 5 min (price - 1 c, within 10 min, else held), or
+  hold to settlement.
+- Grid: direction {pm-leads, Kalshi-leads} x W {30, 120} min x d {0.02, 0.04} x execution {taker, maker} x exit
+  {kickoff - 5 min, settlement} = 32 trials. Walk-forward: no parameter is chosen; every grid point is a trial,
+  scored on the 19 test weeks only.
