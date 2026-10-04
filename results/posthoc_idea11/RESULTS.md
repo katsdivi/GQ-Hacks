@@ -61,3 +61,9 @@ Taker delay defaulted to 1 s (condition missing from holdout_seconds_delay.csv):
   it in that order. Note also that the a1 placebo median is +80 ms and Mann-Whitney real vs placebo p = 0.64 on
   the receipt clock (p = 0.024 on venue time), so the receipt-clock lag is not distinguishable from unrelated-game
   pairs.
+
+## Lag reading note (2026-10-04 04:33 ET)
+
+Venue-time lag is a constant offset (IQR 0 ms). Receipt-time lag (+90 ms) matches the unrelated-game placebo (+80 ms, p = 0.64). No evidence of a lead in either direction.
+
+The a3 rule text and every computed value above are unchanged.
