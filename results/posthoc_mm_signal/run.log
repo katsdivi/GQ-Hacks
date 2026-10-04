@@ -1,0 +1,123 @@
+/Users/divyamkataria/GQ HACKS/staleline/.venv-run/lib/python3.11/site-packages/pyarrow/pandas_compat.py:722: DeprecationWarning: DatetimeTZBlock is deprecated and will be removed in a future version. Use public APIs instead.
+  klass=_int.DatetimeTZBlock,
+cme cfb_20260119_mia_ind sig=213
+cme nfl_20260110_la_car sig=241
+cme nfl_20260111_buf_jac sig=277
+cme nfl_20260111_gb_chi sig=337
+cme nfl_20260111_sf_phi sig=288
+cme nfl_20260112_lac_ne sig=296
+cme nfl_20260113_hou_pit sig=201
+cme nfl_20260117_buf_den sig=407
+cme nfl_20260118_hou_ne sig=194
+cme nfl_20260118_la_chi sig=353
+cme nfl_20260118_sf_sea sig=72
+cme nfl_20260125_la_sea sig=251
+cme nfl_20260125_ne_den sig=251
+cme nfl_20260208_sea_ne sig=279
+pm 1/88 cfb_20261003_mtu_ku sig=2 trades=71
+pm 2/88 cfb_20261003_navy_afa sig=86 trades=500
+pm 3/88 cfb_20261003_nd_unc sig=0 trades=41
+pm 4/88 cfb_20261003_wvu_isu sig=189 trades=690
+pm 5/88 cfb_20261003_prin_clmb sig=44 trades=24
+pm 6/88 cfb_20261003_for_leh sig=0 trades=9
+pm 7/88 cfb_20261003_syr_conn sig=35 trades=41
+pm 8/88 cfb_20261003_brwn_uri sig=96 trades=18
+pm 9/88 cfb_20261003_mhu_liu sig=100 trades=26
+pm 10/88 cfb_20261003_mich_minn sig=84 trades=453
+pm 11/88 cfb_20261003_mrmk_yale sig=71 trades=86
+pm 12/88 cfb_20261003_ucf_hou sig=103 trades=469
+pm 13/88 cfb_20261003_ust_pre sig=151 trades=27
+pm 14/88 cfb_20261003_ala_msst sig=22 trades=340
+pm 15/88 cfb_20261003_bc_smu sig=33 trades=250
+pm 16/88 cfb_20261003_msu_wis sig=0 trades=167
+pm 17/88 cfb_20261003_cor_gtwn sig=36 trades=11
+pm 18/88 cfb_20261003_rich_laf sig=157 trades=12
+pm 19/88 cfb_20261003_wmu_buff sig=152 trades=255
+pm 20/88 cfb_20261003_day_drke sig=124 trades=18
+pm 21/88 cfb_20261003_valp_more sig=25 trades=0
+pm 22/88 cfb_20261003_elon_unh sig=158 trades=41
+pm 23/88 cfb_20261003_mrst_stet sig=33 trades=4
+pm 24/88 cfb_20261003_morg_vill sig=264 trades=84
+pm 25/88 cfb_20261003_tows_monm sig=136 trades=11
+pm 26/88 cfb_20261003_penn_dart sig=95 trades=17
+pm 27/88 cfb_20261003_mer_vmi sig=0 trades=2
+pm 28/88 cfb_20261003_tol_ball sig=53 trades=34
+pm 29/88 cfb_20261003_norf_rmu sig=176 trades=67
+pm 30/88 cfb_20261003_wof_fur sig=67 trades=12
+pm 31/88 cfb_20261003_cit_scst sig=197 trades=51
+pm 32/88 cfb_20261003_pv_mvsu sig=11 trades=5
+pm 33/88 cfb_20261003_inst_sdak sig=12 trades=16
+pm 34/88 cfb_20261003_alcn_gram sig=159 trades=64
+pm 35/88 cfb_20261003_how_hamp sig=66 trades=2
+pm 36/88 cfb_20261003_shu_me sig=63 trades=3
+pm 37/88 cfb_20261003_chat_etsu sig=65 trades=6
+pm 38/88 cfb_20261003_cal_unlv sig=151 trades=626
+pm 39/88 cfb_20261003_osu_iowa sig=8 trades=159
+pm 40/88 cfb_20261003_ohio_kent sig=134 trades=142
+pm 41/88 cfb_20261003_odu_gast sig=47 trades=136
+pm 42/88 cfb_20261003_bgsu_moh sig=150 trades=344
+pm 43/88 cfb_20261003_aub_tenn sig=109 trades=788
+pm 44/88 cfb_20261003_lou_ncst sig=195 trades=437
+pm 45/88 cfb_20261003_wyo_ndsu sig=9 trades=80
+pm 46/88 cfb_20261003_akr_cmu sig=30 trades=187
+pm 47/88 cfb_20261003_hc_wm sig=28 trades=2
+pm 48/88 cfb_20261003_dsu_alby sig=56 trades=3
+pm 49/88 cfb_20261003_emu_mass sig=104 trades=149
+pm 50/88 cfb_20261003_fla_mizz sig=67 trades=436
+pm 51/88 cfb_20261003_uva_fsu sig=66 trades=179
+pm 52/88 cfb_20261003_mrsh_jmu sig=22 trades=127
+pm 53/88 cfb_20261003_md_neb sig=99 trades=490
+pm 54/88 cfb_20261003_alst_cook sig=187 trades=132
+pm 55/88 cfb_20261003_unco_mont sig=12 trades=10
+pm 56/88 cfb_20261003_tnst_wiu sig=214 trades=17
+pm 57/88 cfb_20261003_uk_scar sig=165 trades=1077
+pm 58/88 cfb_20261003_pur_ill sig=86 trades=302
+pm 59/88 cfb_20261003_aamu_jkst sig=237 trades=43
+pm 60/88 cfb_20261003_ysu_siu sig=77 trades=6
+pm 61/88 cfb_20261003_camp_nccu sig=202 trades=10
+pm 62/88 cfb_20261003_iw_sfa sig=301 trades=30
+pm 63/88 cfb_20261003_webb_chso sig=126 trades=7
+pm 64/88 cfb_20261003_orst_csu sig=36 trades=55
+pm 65/88 cfb_20261003_tntc_wcu sig=279 trades=15
+pm 66/88 cfb_20261003_ncat_bry sig=212 trades=12
+pm 67/88 cfb_20261003_una_eky sig=124 trades=57
+pm 68/88 cfb_20261003_gaso_ccar sig=68 trades=81
+pm 69/88 cfb_20261003_ark_txam sig=17 trades=99
+pm 70/88 cfb_20261003_utsa_rice sig=107 trades=62
+pm 71/88 cfb_20261003_utrgv_etam sig=372 trades=56
+pm 72/88 cfb_20261003_sdst_ilst sig=138 trades=2
+pm 73/88 cfb_20261003_colg_harv sig=203 trades=120
+pm 74/88 cfb_20261003_arpb_sou sig=118 trades=6
+pm 75/88 cfb_20261003_nich_hcu sig=58 trades=3
+pm 76/88 cfb_20261003_ulm_usa sig=28 trades=36
+pm 77/88 cfb_20261003_byu_tcu sig=93 trades=290
+pm 78/88 cfb_20261003_tem_usf sig=109 trades=271
+pm 79/88 cfb_20261003_usu_bsu sig=0 trades=71
+pm 80/88 cfb_20261003_ttu_colo sig=166 trades=265
+pm 81/88 cfb_20261003_mia_clem sig=18 trades=103
+pm 82/88 cfb_20261003_army_lt sig=129 trades=273
+pm 83/88 cfb_20261003_wash_usc sig=159 trades=1091
+pm 84/88 cfb_20261004_web_cp sig=619 trades=53
+pm 85/88 cfb_20261004_uwfl_ac sig=42 trades=16
+pm 86/88 cfb_20261004_nau_idst sig=234 trades=3
+pm 87/88 cfb_20261004_suu_utu sig=202 trades=4
+pm 88/88 cfb_20261004_arst_ull sig=122 trades=323
+# Kalshi-signal market making on the slow venue: results (post-hoc, exploratory; historical local files only)
+
+Spec 6098d5c. One run, unedited. P&L in dollars (10-contract quotes); pnl60 = marked to slow-venue mid at fill + 60 s (primary), pnlset = held to settlement. S minus N = sum over games, game-bootstrap 95% CI (2,000, seed 20261004). Adverse selection as10/as60 = mean side x mid move after fill (negative = against us).
+
+Notes: {"cme_games": 14, "cme_signals": 3660, "pm_games": 88, "pm_signals": 9600, "pm_settle_fallback": 4}
+
+| venue | rule | L | N_fills | N_contracts | N_pnl60 | N_pnlset | N_pnl60_pc | N_pnlset_pc | N_as10 | N_as60 | S_fills | S_contracts | S_pnl60 | S_pnlset | S_pnl60_pc | S_pnlset_pc | S_as10 | S_as60 | SminusN_pnl60 | SminusN_pnl60_lo | SminusN_pnl60_hi | SminusN_pnlset | SminusN_pnlset_lo | SminusN_pnlset_hi |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CME | F2 | 0.25 | 23 | 214 | -0.75 | 1.4 | -0.003505 | 0.006542 | -0.001053 | -0.01194 | 16 | 144 | 0.95 | -11.1 | 0.006597 | -0.07708 | 1.281e-17 | 0.001818 | 1.7 | 0.2 | 3.45 | -12.5 | -33.91 | 9.105 |
+| CME | F2 | 1 | 23 | 214 | -0.75 | 1.4 | -0.003505 | 0.006542 | -0.001053 | -0.01194 | 16 | 144 | 0.95 | -11.1 | 0.006597 | -0.07708 | 1.281e-17 | 0.001818 | 1.7 | 0.2 | 3.45 | -12.5 | -33.91 | 9.105 |
+| polymarket.com | F1 | 0.25 | 428 | 4280 | 46.53 | 114 | 0.01087 | 0.02664 | -0.003455 | -0.004032 | 293 | 2930 | 30.83 | 24.19 | 0.01052 | 0.008256 | -0.005197 | -0.002554 | -15.7 | -55.61 | 16.48 | -89.84 | -208.4 | 19.04 |
+| polymarket.com | F1 | 1 | 428 | 4280 | 46.53 | 114 | 0.01087 | 0.02664 | -0.003455 | -0.004032 | 320 | 3200 | 35.52 | 25.06 | 0.0111 | 0.007831 | -0.006066 | -0.002404 | -11.01 | -51.85 | 20.04 | -88.97 | -201.3 | 12.23 |
+
+## Verdicts (pre-fixed reading rule, primary +60 s mark; settlement shown for reference)
+
+- polymarket.com, L 0.25 s: does not make sense on this data (settlement mark: does not make sense on this data)
+- polymarket.com, L 1.0 s: does not make sense on this data (settlement mark: does not make sense on this data)
+- CME, L 0.25 s: does not make sense on this data (no F1 result) (settlement mark: does not make sense on this data (no F1 result))
+- CME, L 1.0 s: does not make sense on this data (no F1 result) (settlement mark: does not make sense on this data (no F1 result))
