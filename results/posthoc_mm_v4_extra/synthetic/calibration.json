@@ -1,0 +1,58 @@
+{
+  "label": "SYNTHETIC SIMULATION inputs, calibrated to one day of observed data (88 polymarket.com games, Oct 3)",
+  "source": "Vultr data/vultr/data/live/polymarket; windows feadc99 holdout_windows.csv; maker code 1d3d68a",
+  "games_used": 88,
+  "spread_c_values": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "spread_c_probs": [
+    0.5366675094139582,
+    0.137820169571316,
+    0.06309443386000887,
+    0.03562506467202076,
+    0.03149072884485536,
+    0.04144571697434936,
+    0.0414407984193585,
+    0.03517970277777547,
+    0.025317773402433675,
+    0.05191810206392538
+  ],
+  "quote_updates_per_min_median": 17.901925392333418,
+  "trades_per_min_median": 0.2046268086507523,
+  "trades_per_min_mean": 0.5131628785407197,
+  "trade_size_quantiles": {
+    "0.1": 2.469136,
+    "0.25": 5.072464,
+    "0.5": 20.215042,
+    "0.75": 97.76,
+    "0.9": 325.42142859999973,
+    "0.99": 9534.293699999975
+  },
+  "through_share": 0.040882430184715046,
+  "vol10s_c": {
+    "pre": 0.04351933564015076,
+    "h1": 1.0702682649256707,
+    "h2": 1.2111366793667675
+  },
+  "jumps_per_hour_mean": 0.8371282669945636,
+  "jump_size_c_quantiles": {
+    "0.25": 11.5,
+    "0.5": 13.0,
+    "0.75": 17.000000000000004,
+    "0.9": 22.000000000000007
+  },
+  "mean_signed_move_60s_c": 0.4368385468313351,
+  "d_inf_c": 1.0,
+  "informed_share": 0.4368385468313351,
+  "observed_N_maker_pnl60_c_per_contract": 1.09,
+  "observed_N_maker_as60_c": -0.4
+}
