@@ -32,3 +32,5 @@ results/dryrun/
 results/dryrun_gatefail/
 .venv-run/
 results/holdout/inputs_a_meta.csv
+results/posthoc_idea6/training_trades.csv
+results/posthoc_idea6/training_games.csv
