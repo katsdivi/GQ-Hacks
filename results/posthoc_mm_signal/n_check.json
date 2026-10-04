@@ -1,0 +1,42 @@
+{
+ "label": "descriptive, post-hoc, not pre-registered, one day",
+ "source": "posthoc-mm-signal b346230, data/mm_cache/fills.parquet (verified: 428 fills, +60 s $46.53)",
+ "fills": 428,
+ "contracts": 4280.0,
+ "games_with_fills": 59,
+ "games_in_run": 88,
+ "fills_with_nan_mark": 40,
+ "pnl60_c_per_contract": [
+  1.087,
+  0.168,
+  2.116
+ ],
+ "pnl60_excl_top5_c_per_contract": [
+  0.153,
+  -0.477,
+  0.769
+ ],
+ "pnl60_share_games_positive": 0.576,
+ "pnl60_share_games_positive_of_88": 0.386,
+ "pnl60_breakeven_maker_fee_c_per_contract": 1.087,
+ "pnlset_c_per_contract": [
+  2.664,
+  -0.618,
+  6.06
+ ],
+ "pnlset_excl_top5_c_per_contract": [
+  -0.008,
+  -3.359,
+  2.999
+ ],
+ "pnlset_share_games_positive": 0.525,
+ "pnlset_share_games_positive_of_88": 0.352,
+ "pnlset_breakeven_maker_fee_c_per_contract": 2.664,
+ "split_note": "split uses fills with both a mid just before the fill and a mid at +60 s; 38 fills have no +60 s mid (excluded from the +60 s P&L in the committed run too) and 2 more have no pre-fill mid (their +60 s P&L, -$1.00, is in the $46.53 but not in the split)",
+ "split_fills": 388,
+ "spread_captured_usd": 63.18,
+ "spread_captured_c_per_contract": 1.628,
+ "mark_to_mid_60s_usd": -15.65,
+ "mark_to_mid_60s_c_per_contract": -0.403,
+ "maker_fee": "0, no rebate: Gamma market metadata cached by posthoc-idea11 (wt-idea11/data/pm_resolution/<condition>.json, 84 of 84 markets) has feeType zero_fees, feeSchedule rate 0, rebateRate 0, takerOnly true. The same files also carry makerBaseFee 1000 and takerBaseFee 1000, whose meaning is not documented in the repo; under feeType zero_fees they are read as inactive."
+}

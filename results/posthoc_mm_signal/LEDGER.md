@@ -8,3 +8,5 @@
 | 07:35 | note: CME F1 had 0 fills (why rows are missing); no rerun | this commit |
 
 Variants: 4 (polymarket.com S at L 0.25 and 1.0; CME S at L 0.25 and 1.0), plus N baselines. Verdict for all 4: "does not make sense on this data".
+| 07:40 | N-maker descriptive check (N_CHECK.md, n_check.json): descriptive, post-hoc, not pre-registered, one day; per-fill rows verified against results.csv (428 fills, $46.53), no rerun; not a variant | this commit |
+| 2026-10-04 07:40 ET | Data disclosure: the polymarket.com leg of this test (run b346230 and this check) used holdout-period data, the Oct 3 and Oct 4 Vultr feed for 88 games, on Divi's explicit instruction in his message launching this test. No committed file recorded this before; added at the independent verifier's request. | this commit |
