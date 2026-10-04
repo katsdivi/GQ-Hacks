@@ -1,0 +1,736 @@
+{
+ "phantom": [
+  [
+   "phantom_commit",
+   "ec2c401",
+   "git rev-parse origin/check-phantom"
+  ],
+  [
+   "phantom_games",
+   "88",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: games"
+  ],
+  [
+   "phantom_kalshi_rows",
+   "9{,}120{,}086",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi rows"
+  ],
+  [
+   "phantom_kalshi_residue_rows",
+   "58{,}213",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi residue_rows"
+  ],
+  [
+   "phantom_kalshi_residue_share",
+   "0.64\\%",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi share_residue_rows"
+  ],
+  [
+   "phantom_kalshi_grid_share",
+   "1.21\\%",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi share_grid_mid_differ"
+  ],
+  [
+   "phantom_kalshi_mid_value_changed",
+   "0",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi mid_differ_both_defined"
+  ],
+  [
+   "phantom_kalshi_games_over_threshold",
+   "48",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi games_share_mid_differ_gt_0.1pct"
+  ],
+  [
+   "phantom_kalshi_max_game_share",
+   "50.8\\%",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: kalshi max_game_share_mid_differ"
+  ],
+  [
+   "phantom_pm_residue_rows",
+   "0",
+   "git show ec2c401:results/robustness_phantom/item2_summary.csv: polymarket residue_rows"
+  ],
+  [
+   "phantom_pmcom_pre_result",
+   "neither venue leads consistently",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: polymarket.com pre_result"
+  ],
+  [
+   "phantom_pmcom_robust_result",
+   "neither venue leads consistently",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: polymarket.com robust_result"
+  ],
+  [
+   "phantom_pmcom_robust_n",
+   "86",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: polymarket.com robust_n_qualifying"
+  ],
+  [
+   "phantom_pmcom_robust_median_lag_s",
+   "0.0",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: polymarket.com robust_median_corrected_lag_s"
+  ],
+  [
+   "phantom_pmcom_robust_mw_p",
+   "0.785",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: polymarket.com robust_mann_whitney_p"
+  ],
+  [
+   "phantom_pmus_pre_result",
+   "kalshi leads",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: Polymarket US pre_result"
+  ],
+  [
+   "phantom_pmus_robust_result",
+   "kalshi leads",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: Polymarket US robust_result"
+  ],
+  [
+   "phantom_pmus_robust_n",
+   "75",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: Polymarket US robust_n_qualifying"
+  ],
+  [
+   "phantom_pmus_robust_median_lag_s",
+   "7.0",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: Polymarket US robust_median_corrected_lag_s"
+  ],
+  [
+   "phantom_pmus_robust_mw_p",
+   "$4.00\\times 10^{-7}$",
+   "git show ec2c401:results/robustness_phantom/lead_comparison.csv: Polymarket US robust_mann_whitney_p"
+  ]
+ ],
+ "extra": [
+  [
+   "spec_main_commit",
+   "f4f095e",
+   "git rev-parse HEAD (staleline main)"
+  ],
+  [
+   "spec_seal_date",
+   "2026-08-01",
+   "strategy_a.py: SEAL"
+  ],
+  [
+   "spec_qty",
+   "10",
+   "strategy_a.py: QTY"
+  ],
+  [
+   "spec_webull_fee",
+   "0.02",
+   "strategy_a.py: WEBULL_PER_CONTRACT"
+  ],
+  [
+   "spec_kalshi_rate",
+   "0.07",
+   "strategy_a.py: KALSHI_DIRECT_RATE"
+  ],
+  [
+   "spec_latency_s",
+   "1",
+   "strategy_a.py: LATENCY_S"
+  ],
+  [
+   "spec_A_entry_min",
+   "5",
+   "strategy_a.py: ENTRY_BEFORE_KICKOFF_S / 60"
+  ],
+  [
+   "spec_A_half_spread_c",
+   "1",
+   "strategy_a.py: HALF_SPREAD x 100"
+  ],
+  [
+   "spec_A_thetas",
+   "0.70, 0.80, 0.90",
+   "strategy_a.py: THETAS"
+  ],
+  [
+   "spec_B_k_grid_c",
+   "3, 5",
+   "strategy_b.py: K_GRID x 100"
+  ],
+  [
+   "spec_B_m_grid_s",
+   "10, 30",
+   "strategy_b.py: M_GRID"
+  ],
+  [
+   "spec_B_T_grid_s",
+   "60, 300",
+   "strategy_b.py: T_GRID"
+  ],
+  [
+   "spec_B_n_settings",
+   "8",
+   "strategy_b.py: len(K_GRID) x len(M_GRID) x len(T_GRID)"
+  ],
+  [
+   "spec_B_half_spread_c",
+   "0.5",
+   "strategy_b.py: HALF_SPREAD x 100"
+  ],
+  [
+   "spec_B_stale_s",
+   "60",
+   "strategy_b.py: STALE_S"
+  ],
+  [
+   "run_sha",
+   "872ff43",
+   "results/holdout/RUN_LOG.md: git sha"
+  ],
+  [
+   "run_start",
+   "2026-10-04 02:00:23 ET",
+   "results/holdout/RUN_LOG.md: start"
+  ],
+  [
+   "run_end",
+   "02:32:24 ET",
+   "results/holdout/RUN_LOG.md: end"
+  ],
+  [
+   "laggard_pmcom_1s_n",
+   "521",
+   "results/holdout/laggard_latency_curve.csv: n_trades (polymarket, 1.0 s)"
+  ],
+  [
+   "laggard_pmcom_1s_edge_c",
+   "-3.60",
+   "results/holdout/laggard_latency_curve.csv: edge_cents_mean (polymarket, 1.0 s)"
+  ],
+  [
+   "laggard_pmcom_1s_ci",
+   "[-4.72, -2.58]",
+   "results/holdout/laggard_latency_curve.csv: edge_ci_low, edge_ci_high (polymarket, 1.0 s)"
+  ],
+  [
+   "laggard_pmus_0s_n",
+   "1{,}688",
+   "results/holdout/laggard_latency_curve.csv: n_trades (polymarket_us, 0.0 s)"
+  ],
+  [
+   "laggard_pmus_0s_edge_c",
+   "1.55",
+   "results/holdout/laggard_latency_curve.csv: edge_cents_mean (polymarket_us, 0.0 s)"
+  ],
+  [
+   "laggard_pmus_0s_ci",
+   "[0.99, 2.07]",
+   "results/holdout/laggard_latency_curve.csv: edge_ci_low, edge_ci_high (polymarket_us, 0.0 s)"
+  ],
+  [
+   "laggard_pmus_1s_n",
+   "1{,}686",
+   "results/holdout/laggard_latency_curve.csv: n_trades (polymarket_us, 1.0 s)"
+  ],
+  [
+   "laggard_pmus_1s_edge_c",
+   "1.48",
+   "results/holdout/laggard_latency_curve.csv: edge_cents_mean (polymarket_us, 1.0 s)"
+  ],
+  [
+   "laggard_pmus_1s_ci",
+   "[0.92, 2.00]",
+   "results/holdout/laggard_latency_curve.csv: edge_ci_low, edge_ci_high (polymarket_us, 1.0 s)"
+  ],
+  [
+   "laggard_pmus_5s_n",
+   "1{,}697",
+   "results/holdout/laggard_latency_curve.csv: n_trades (polymarket_us, 5.0 s)"
+  ],
+  [
+   "laggard_pmus_5s_edge_c",
+   "0.93",
+   "results/holdout/laggard_latency_curve.csv: edge_cents_mean (polymarket_us, 5.0 s)"
+  ],
+  [
+   "laggard_pmus_5s_ci",
+   "[0.36, 1.43]",
+   "results/holdout/laggard_latency_curve.csv: edge_ci_low, edge_ci_high (polymarket_us, 5.0 s)"
+  ],
+  [
+   "laggard_pmus_10s_n",
+   "1{,}710",
+   "results/holdout/laggard_latency_curve.csv: n_trades (polymarket_us, 10.0 s)"
+  ],
+  [
+   "laggard_pmus_10s_edge_c",
+   "0.08",
+   "results/holdout/laggard_latency_curve.csv: edge_cents_mean (polymarket_us, 10.0 s)"
+  ],
+  [
+   "laggard_pmus_10s_ci",
+   "[-0.45, 0.56]",
+   "results/holdout/laggard_latency_curve.csv: edge_ci_low, edge_ci_high (polymarket_us, 10.0 s)"
+  ],
+  [
+   "lead_pmcom_mw_p",
+   "0.709",
+   "results/holdout/lead_decisions.json: polymarket.com.mann_whitney_p"
+  ],
+  [
+   "lead_pmus_mw_p",
+   "$3.24\\times 10^{-8}$",
+   "results/holdout/lead_decisions.json: Polymarket US.mann_whitney_p"
+  ],
+  [
+   "A_placebo_roc_webull",
+   "-0.463",
+   "results/holdout/strategy_a_summary.csv: roc_webull (placebo (underdog), primary)"
+  ],
+  [
+   "A_placebo_trades",
+   "302",
+   "results/holdout/strategy_a_summary.csv: entered (placebo (underdog), primary)"
+  ],
+  [
+   "count_trials_prereg",
+   "22",
+   "results/posthoc/dsr_posthoc.json: stored_total_22 key suffix"
+  ],
+  [
+   "count_trials_final",
+   "77",
+   "results/posthoc/dsr_posthoc.json: n_trials"
+  ],
+  [
+   "dsr_A_prereg",
+   "$1.27\\times 10^{-9}$",
+   "results/posthoc/dsr_posthoc.json: stored_total_22.OOS.A.deflated_sharpe_total_22"
+  ],
+  [
+   "dsr_A_final",
+   "$2.91\\times 10^{-12}$",
+   "results/posthoc/dsr_posthoc.json: values.OOS.A.deflated_sharpe_total_77"
+  ],
+  [
+   "dsr_B_prereg",
+   "$9.57\\times 10^{-38}$",
+   "results/posthoc/dsr_posthoc.json: stored_total_22.OOS.B.deflated_sharpe_total_22"
+  ],
+  [
+   "dsr_B_final",
+   "$4.49\\times 10^{-46}$",
+   "results/posthoc/dsr_posthoc.json: values.OOS.B.deflated_sharpe_total_77"
+  ],
+  [
+   "dsr_combined_prereg",
+   "$1.18\\times 10^{-34}$",
+   "results/posthoc/dsr_posthoc.json: stored_total_22.OOS.combined.deflated_sharpe_total_22"
+  ],
+  [
+   "dsr_combined_final",
+   "$2.98\\times 10^{-42}$",
+   "results/posthoc/dsr_posthoc.json: values.OOS.combined.deflated_sharpe_total_77"
+  ],
+  [
+   "count_posthoc_ideas",
+   "12",
+   "results/posthoc/SUMMARY.md: numbered idea rows"
+  ],
+  [
+   "count_posthoc_rows",
+   "13",
+   "results/posthoc/SUMMARY.md: idea rows incl. T&S laggard"
+  ],
+  [
+   "count_variants_rows",
+   "77",
+   "experiments/variants.csv: data rows"
+  ],
+  [
+   "plateau_A_roc_webull_070",
+   "-0.03094",
+   "experiments/variants.csv: notes roc_webull (strategy_a training, theta 0.7, favorite)"
+  ],
+  [
+   "plateau_A_roc_webull_090",
+   "-0.02609",
+   "experiments/variants.csv: notes roc_webull (strategy_a training, theta 0.9, favorite)"
+  ],
+  [
+   "cap_A_all_n",
+   "302",
+   "docs/results/a_capacity.csv: rows (all)"
+  ],
+  [
+   "cap_A_all_median",
+   "4{,}600",
+   "docs/results/a_capacity.csv: median contracts_at_or_better (all)"
+  ],
+  [
+   "cap_A_all_p25",
+   "520",
+   "docs/results/a_capacity.csv: 25th pct contracts_at_or_better (all)"
+  ],
+  [
+   "cap_A_all_p75",
+   "27{,}746",
+   "docs/results/a_capacity.csv: 75th pct contracts_at_or_better (all)"
+  ],
+  [
+   "cap_A_all_share_below10",
+   "5.3\\%",
+   "docs/results/a_capacity.csv: share contracts_at_or_better < 10 (all)"
+  ],
+  [
+   "cap_A_cfb_n",
+   "258",
+   "docs/results/a_capacity.csv: rows (cfb)"
+  ],
+  [
+   "cap_A_cfb_median",
+   "2{,}638",
+   "docs/results/a_capacity.csv: median contracts_at_or_better (cfb)"
+  ],
+  [
+   "cap_A_cfb_p25",
+   "227",
+   "docs/results/a_capacity.csv: 25th pct contracts_at_or_better (cfb)"
+  ],
+  [
+   "cap_A_cfb_p75",
+   "14{,}242",
+   "docs/results/a_capacity.csv: 75th pct contracts_at_or_better (cfb)"
+  ],
+  [
+   "cap_A_cfb_share_below10",
+   "6.2\\%",
+   "docs/results/a_capacity.csv: share contracts_at_or_better < 10 (cfb)"
+  ],
+  [
+   "cap_A_nfl_n",
+   "44",
+   "docs/results/a_capacity.csv: rows (nfl)"
+  ],
+  [
+   "cap_A_nfl_median",
+   "76{,}810",
+   "docs/results/a_capacity.csv: median contracts_at_or_better (nfl)"
+  ],
+  [
+   "cap_A_nfl_p25",
+   "32{,}219",
+   "docs/results/a_capacity.csv: 25th pct contracts_at_or_better (nfl)"
+  ],
+  [
+   "cap_A_nfl_p75",
+   "137{,}098",
+   "docs/results/a_capacity.csv: 75th pct contracts_at_or_better (nfl)"
+  ],
+  [
+   "cap_A_nfl_share_below10",
+   "0.0\\%",
+   "docs/results/a_capacity.csv: share contracts_at_or_better < 10 (nfl)"
+  ],
+  [
+   "posthoc_meta_m1_trades",
+   "2{,}463",
+   "git show 07738c9:results/posthoc_meta/results.csv: M1 logistic trades"
+  ],
+  [
+   "posthoc_meta_m1_roc",
+   "-0.121",
+   "git show 07738c9:results/posthoc_meta/results.csv: M1 logistic roc_mean"
+  ],
+  [
+   "posthoc_meta_m1_roc_ci",
+   "[-0.222, -0.019]",
+   "git show 07738c9:results/posthoc_meta/results.csv: M1 logistic roc_ci_lo, roc_ci_hi"
+  ],
+  [
+   "posthoc_meta_m2_trades",
+   "2{,}751",
+   "git show 07738c9:results/posthoc_meta/results.csv: M2 tree depth 3 trades"
+  ],
+  [
+   "posthoc_meta_m2_roc",
+   "-0.154",
+   "git show 07738c9:results/posthoc_meta/results.csv: M2 tree depth 3 roc_mean"
+  ],
+  [
+   "posthoc_meta_m2_roc_ci",
+   "[-0.225, -0.077]",
+   "git show 07738c9:results/posthoc_meta/results.csv: M2 tree depth 3 roc_ci_lo, roc_ci_hi"
+  ],
+  [
+   "posthoc_meta_commit",
+   "07738c9",
+   "git rev-parse origin/posthoc-meta"
+  ],
+  [
+   "posthoc_ctx_n20_trades",
+   "974",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=20 trades"
+  ],
+  [
+   "posthoc_ctx_n20_roc",
+   "-0.148",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=20 roc_mean"
+  ],
+  [
+   "posthoc_ctx_n20_roc_ci",
+   "[-0.223, -0.065]",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=20 roc_ci_lo, roc_ci_hi"
+  ],
+  [
+   "posthoc_ctx_n50_trades",
+   "646",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=50 trades"
+  ],
+  [
+   "posthoc_ctx_n50_roc",
+   "-0.167",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=50 roc_mean"
+  ],
+  [
+   "posthoc_ctx_n50_roc_ci",
+   "[-0.265, -0.060]",
+   "git show e3da0d5:results/posthoc_ctxmap/walkforward_results.csv: context map N=50 roc_ci_lo, roc_ci_hi"
+  ],
+  [
+   "posthoc_ctx_commit",
+   "e3da0d5",
+   "git rev-parse origin/posthoc-ctxmap"
+  ],
+  [
+   "posthoc_meta_auc_m1",
+   "0.77",
+   "results/posthoc_meta/RESULTS.md (origin/posthoc-meta): out-of-sample AUC, M1"
+  ],
+  [
+   "posthoc_meta_ridge_corr",
+   "0.015",
+   "results/posthoc_meta/RESULTS.md (origin/posthoc-meta): ridge out-of-sample correlation"
+  ],
+  [
+   "posthoc_search_commit",
+   "1e12415",
+   "git rev-parse origin/posthoc-search"
+  ],
+  [
+   "posthoc_costside_commit",
+   "8fb0a15",
+   "git rev-parse origin/posthoc-costside"
+  ],
+  [
+   "led_search_trials",
+   "54",
+   "results/posthoc/LEDGER.md: posthoc-search trials evaluated"
+  ],
+  [
+   "led_costside_trials",
+   "180",
+   "results/posthoc/LEDGER.md: posthoc-costside trials evaluated"
+  ],
+  [
+   "led_costside_maker_trials",
+   "36",
+   "results/posthoc/LEDGER.md: posthoc-costside-maker trials evaluated"
+  ],
+  [
+   "led_costside_patterns_trials",
+   "57",
+   "results/posthoc/LEDGER.md: posthoc-costside-patterns trials evaluated"
+  ],
+  [
+   "led_unsup_trials",
+   "64",
+   "results/posthoc/LEDGER.md: posthoc-unsup trials evaluated"
+  ],
+  [
+   "led_regress_trials",
+   "48",
+   "results/posthoc/LEDGER.md: posthoc-regress trials evaluated"
+  ],
+  [
+   "led_leadlag2_trials",
+   "40",
+   "results/posthoc/LEDGER.md: posthoc-leadlag2 trials evaluated"
+  ],
+  [
+   "led_laya_trials",
+   "2",
+   "results/posthoc/LEDGER.md: posthoc-laya trials evaluated"
+  ],
+  [
+   "led_mm_trials",
+   "4",
+   "git show 8cb29f7:results/posthoc_mm_signal/LEDGER.md: Variants"
+  ],
+  [
+   "mm_pm_sminusn",
+   "-11",
+   "git show 8cb29f7:results/posthoc_mm_signal/results.csv: polymarket.com F1 L 1.0 SminusN_pnl60"
+  ],
+  [
+   "mm_pm_sminusn_ci",
+   "[-52, 20]",
+   "git show 8cb29f7:results/posthoc_mm_signal/results.csv: polymarket.com F1 L 1.0 SminusN_pnl60_lo, _hi"
+  ],
+  [
+   "mm_commit",
+   "8cb29f7",
+   "git rev-parse origin/posthoc-mm-signal"
+  ],
+  [
+   "mmN_pnl60_c",
+   "1.09",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: pnl60_c_per_contract[0]"
+  ],
+  [
+   "mmN_pnl60_ci",
+   "[0.17, 2.12]",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: pnl60_c_per_contract[1:]"
+  ],
+  [
+   "mmN_pnl60_excl5_c",
+   "0.15",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: pnl60_excl_top5_c_per_contract[0]"
+  ],
+  [
+   "mmN_set_ci",
+   "[-0.62, 6.06]",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: pnlset_c_per_contract[1:]"
+  ],
+  [
+   "mmN_top5_usd",
+   "41.75",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_detail_games.csv: sum of the 5 largest pnl60"
+  ],
+  [
+   "mmN_all_usd",
+   "46.53",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_detail_games.csv: sum of pnl60"
+  ],
+  [
+   "mmN_rt_c",
+   "0.52",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_detail_games.csv: 100 x sum rt_pnl / sum rt_contracts"
+  ],
+  [
+   "mmN_spread_c",
+   "1.63",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: spread_captured_c_per_contract"
+  ],
+  [
+   "mmN_adverse_c",
+   "0.40",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_check.json: minus mark_to_mid_60s_c_per_contract"
+  ],
+  [
+   "v4_ts1_n",
+   "6",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4 status"
+  ],
+  [
+   "v4_ts1_end",
+   "00:34",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4 status"
+  ],
+  [
+   "v4x_a_fills",
+   "34",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4-extra"
+  ],
+  [
+   "v4x_a_usd",
+   "2.76",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4-extra"
+  ],
+  [
+   "v4x_b_fills",
+   "7",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4-extra"
+  ],
+  [
+   "v4x_b_usd",
+   "2.45",
+   "results/posthoc/LEDGER.md: posthoc-mm-v4-extra"
+  ],
+  [
+   "v4_commit",
+   "94aa1a0",
+   "git log -1 -- HYPOTHESIS_v4.md"
+  ],
+  [
+   "mmN_1c_c",
+   "-0.62",
+   "git show 8cb29f7:results/posthoc_mm_signal/n_detail_spread.csv: 1c pnl60_c_per_contract"
+  ],
+  [
+   "led_new_trials",
+   "485",
+   "results/posthoc/LEDGER.md: sum of trials evaluated over posthoc-search, posthoc-costside, posthoc-costside-maker, posthoc-costside-patterns, posthoc-unsup, posthoc-regress, posthoc-leadlag2, posthoc-laya; plus posthoc-mm-signal"
+  ],
+  [
+   "led_grand_total",
+   "566",
+   "variants.csv rows + 4 (meta, ctxmap) + led_new_trials"
+  ],
+  [
+   "led_llm_planned",
+   "3",
+   "results/posthoc/LEDGER.md: posthoc-llm trials planned"
+  ],
+  [
+   "led_llm_evaluated",
+   "0",
+   "results/posthoc/LEDGER.md: posthoc-llm trials evaluated"
+  ],
+  [
+   "led_databento_usd",
+   "0.88",
+   "results/posthoc/LEDGER.md: data-cme-train Databento spend"
+  ],
+  [
+   "rc_search_spa_p",
+   "0.621",
+   "results/posthoc/LEDGER.md: posthoc-search SPA p"
+  ],
+  [
+   "rc_all_trials",
+   "479",
+   "git show b254559:results/posthoc_leadlag2/correction.json: trials_in_correction"
+  ],
+  [
+   "rc_all_p",
+   "0.47",
+   "git show b254559:results/posthoc_leadlag2/correction.json: rc_p_best_by_t"
+  ],
+  [
+   "rc_all_best_t",
+   "2.50",
+   "git show b254559:results/posthoc_leadlag2/correction.json: best_t"
+  ],
+  [
+   "rc_min_p",
+   "0.42",
+   "min Reality Check p over posthoc-regress, -unsup, -costside, -leadlag2 correction.json"
+  ],
+  [
+   "cme_cells_worst_c",
+   "-6.6",
+   "results/posthoc/LEDGER.md: posthoc-kalshi-cme Stage 1 cell range (worst)"
+  ],
+  [
+   "cme_cells_best_c",
+   "-1.5",
+   "results/posthoc/LEDGER.md: posthoc-kalshi-cme Stage 1 cell range (best)"
+  ],
+  [
+   "cme_n_cells",
+   "18",
+   "results/posthoc/LEDGER.md: posthoc-kalshi-cme Stage 1 cells"
+  ],
+  [
+   "count_extra_trials_unlogged",
+   "4",
+   "posthoc-meta RESULTS.md (Variants: 2) + posthoc-ctxmap walkforward (N=20, N=50): rows not yet in variants.csv"
+  ]
+ ]
+}

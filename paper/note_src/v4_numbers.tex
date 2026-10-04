@@ -1,0 +1,31 @@
+\providecommand{\defval}[2]{\expandafter\def\csname val@#1\endcsname{#2}}
+% HYPOTHESIS_v4 numbers for the v4-led note. Descriptive, one day (Oct 3, 2026), post-hoc, not pre-registered,
+% simulated on recorded polymarket.com top of book, maker fee 0, queue position unknown.
+% Sources: posthoc-mm-signal 8cb29f7 (n_check.json from 863eb69, n_detail_games.csv, n_detail_spread.csv),
+% main 94aa1a0 HYPOTHESIS_v4.md, main results/holdout/numbers.json (recomputed from strategy_a_rows.parquet and
+% strategy_b_trades.parquet at main f4f3e28; matches to 3 decimals).
+\defval{v4_frozen_et}{07:56 ET, Oct 4, 2026}  % git log -1 --format=%ci 94aa1a0
+\defval{v4_games}{88}  % n_check.json games_in_run
+\defval{v4_games_with_fills}{59}  % n_check.json games_with_fills
+\defval{v4_fills}{428}  % n_check.json fills
+\defval{v4_pnl60_usd}{46.53}  % n_detail_games.csv sum pnl60
+\defval{v4_pnlset_usd}{114.03}  % n_detail_games.csv sum pnlset
+\defval{v4_excl5_ci}{[-0.48, 0.77]}  % n_check.json pnl60_excl_top5_c_per_contract[1:]
+\defval{v4_share_pos_88}{38.6\%}  % n_check.json pnl60_share_games_positive_of_88
+\defval{v4_share_pos_59}{57.6\%}  % n_check.json pnl60_share_games_positive (59 games with fills), posthoc-mm-signal 863eb69 N_CHECK.md
+\defval{v4_spread_usd}{63.18}  % n_check.json spread_captured_usd
+\defval{v4_adverse_usd}{15.65}  % n_check.json minus mark_to_mid_60s_usd
+\defval{v4_set_c}{2.66}  % n_check.json pnlset_c_per_contract[0]
+\defval{v4_3c_c}{2.73}  % n_detail_spread.csv 3c+ pnl60_c_per_contract
+\defval{v4_sr_game_60}{0.22}  % mean/sd of n_detail_games.csv pnl60 over 88 games
+\defval{v4_sr_game_60_ci}{[0.06, 0.35]}  % same, game bootstrap 2,000, seed 20261004
+\defval{v4_sr_game_set}{0.16}  % mean/sd of n_detail_games.csv pnlset over 88 games
+\defval{v4_sr_game_set_ci}{[-0.04, 0.35]}  % same, game bootstrap 2,000, seed 20261004
+\defval{v4_seed}{20261011}  % HYPOTHESIS_v4.md
+\defval{v4_cap}{50}  % HYPOTHESIS_v4.md inventory cap
+\defval{v4_armb_c}{3}  % HYPOTHESIS_v4.md Arm B minimum spread (cents)
+\defval{v4_reps}{2,000}  % HYPOTHESIS_v4.md bootstrap reps
+\defval{v4_rc_min_p}{0.42}  % posthoc-regress 2aed1cf correction.json rc_p 0.4175 over 363
+\defval{v4_rc_min_n}{363}  % posthoc-regress 2aed1cf correction.json cumulative_trials
+\defval{sr_oos_A_recomp}{-3.81}  % results/holdout/numbers.json OOS.A.sharpe (x sqrt 365), recomputed
+\defval{sr_oos_B_recomp}{-7.76}  % results/holdout/numbers.json OOS.B.sharpe (x sqrt 365), recomputed

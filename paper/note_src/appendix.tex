@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[hidelinks]{hyperref}
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{0.8em}{0.3em}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+
+% Numbers. Every number in the text comes from a generated key file; a missing key prints as a red box.
+% f_ keys are display-rounded copies written by make_fmt.py from the same key files.
+\input{numbers.tex}
+\input{extra.tex}
+\input{phantom.tex}
+\input{fmt.tex}
+\makeatletter
+\newcommand{\val}[1]{\@ifundefined{val@#1}{\fcolorbox{red}{white}{\textcolor{red}{\ttfamily\detokenize{#1}}}}{\@nameuse{val@#1}}}
+\makeatother
+\newcommand{\ci}[2]{[\val{#1}, \val{#2}]}
+
+\title{StaleLine: appendix to the quant note (HYPOTHESIS\_v4 edition)}
+\author{Divyam Kataria, Alden, Andrew, Olmer}
+\date{}
+\begin{document}
+\maketitle
+\appendix
+
+
+\section{Earlier pre-registered study (v3)}\label{app:v3}
+
+The v3 study (economic hypothesis, data, methodology and results, with the lag figure, the results table and the equity curve) is in the main note, section ``Before the plot twist: the pre-registered v3 study (not v4)''. Nothing in it is v4; v4 has no result yet. This appendix keeps only the v3 detail that is not in the main note: the pre-registration commit list (Appendix~\ref{app:disclosure}), the post-hoc record (Appendix~\ref{app:posthoc}) and the Sharpe method (Appendix~\ref{app:sharpe}).
+
+\section{Disclosure (v3 holdout run, not v4)}\label{app:disclosure}
+
+v3 pre-registration commits on \texttt{main}, in order (ET). The holdout was evaluated once, from \texttt{\val{run_sha}}, \val{run_start} to \val{run_end}. Data exclusions and fixes, recorder incidents and a stop-script failure handled by hand before the run are listed in \texttt{docs/holdout\_run\_disclosure.md}, together with every post-hoc disclosure (Idea 3 invalid, lookahead; Idea 6 winner leg invalid, ESPN end timestamps; Idea 11 original execution model invalid, conditioned on the future).
+
+\textbf{The next table lists v3 pre-registration commits; none of it is v4.}
+\input{prereg_table.tex}
+
+\section{Post-hoc work on the v3 data (not v4)}\label{app:posthoc}
+
+After the holdout run we tried \val{count_posthoc_ideas} further numbered ideas, a Polymarket US time-and-sales test and a training-positive book, each with a specification committed before any real-data code ran. All are labeled post-hoc and exploratory and none changes a pre-registered result. Ideas run on holdout-period recordings have no separate holdout. In total \val{count_variants_rows} variants are logged in \texttt{experiments/variants.csv} and used in the deflated Sharpe. Later work, all post-hoc and on training data unless stated, is logged in \texttt{results/posthoc/LEDGER.md} on \texttt{main}: a walk-forward meta-model (2 variants, \texttt{\val{posthoc_meta_commit}}) and a context map (2, \texttt{\val{posthoc_ctx_commit}}); a broad search (\val{led_search_trials} trials, Reality Check $p$ 0.99, SPA $p$ \val{rc_search_spa_p}); cost-side rounds (\val{led_costside_trials}), maker (\val{led_costside_maker_trials}) and pattern (\val{led_costside_patterns_trials}) searches; unsupervised regimes (\val{led_unsup_trials}); residual regression (\val{led_regress_trials}); lead-lag rounds (\val{led_leadlag2_trials}); a frozen Laya encoder with a ridge head (\val{led_laya_trials}); a Kalshi-signal market-making test on the slow venue (\val{led_mm_trials} variants, \texttt{\val{mm_commit}}; verdict ``does not make sense on this data''); a Llama LoRA test stopped with \val{led_llm_evaluated} of \val{led_llm_planned} trials evaluated. That is \val{led_new_trials} further trials, \val{led_grand_total} in total. White's Reality Check over the largest combined set (\val{rc_all_trials} trials) gives $p$ = \val{rc_all_p}; no subset is below \val{rc_min_p}. The plain maker that never pulls quotes (the baseline of that test) earned \val{mmN_pnl60_c} cents per contract at +60 s \val{mmN_pnl60_ci} on polymarket.com, but \$\val{mmN_top5_usd} of its \$\val{mmN_all_usd} came from five volatile games, it is \val{mmN_pnl60_excl5_c} cents without them, matched round trips earned \val{mmN_rt_c} cents per contract, quoting at a 1-cent spread lost \val{mmN_1c_c} cents, and its settlement result spans zero \val{mmN_set_ci}; under a reading rule written after these results were seen, all four conditions pass on the 59 games with fills, so we treat it as a lead that needs more testing on live games (over all 88 games the game-share condition fails). HYPOTHESIS\_v4 (\texttt{\val{v4_commit}}) was committed before its test data was opened; its test set 1 could not run, because all \val{v4_ts1_n} late Oct 3 games have recordings that end at \val{v4_ts1_end} ET, before the games ended. On those truncated recordings, outside the v4 rule and not evidence either way, arm A made \$\val{v4x_a_usd} on \val{v4x_a_fills} fills and arm B \$\val{v4x_b_usd} on \val{v4x_b_fills} fills at +60 s. The confirmatory test is the Oct 8 to 12 games. Descriptive only (no trials): Kalshi versus CME on 14 playoff games with CME book data (v3-era, not v4: \val{cme_n_cells} taker settings, all negative after CME's spread; a resting-order variant, also negative), a broker and venue survey, and news and sportsbook-line collection (no usable intraday timing). Databento spend for this work: \$\val{led_databento_usd}. Trade-based lead-lag measures in these rounds are not used as findings, because trade-based lead-lag is biased toward the busier venue (main note, v3 section, lag figure).
+
+\textbf{Every number in the next table is v3-era post-hoc work, not v4.}
+\input{posthoc_table.tex}
+
+\section{HYPOTHESIS\_v4: the live hypothesis}\label{app:v4}
+
+HYPOTHESIS\_v4 is the project's live hypothesis. It is untested: no confirmatory result exists yet. It was committed to \texttt{main} as \texttt{HYPOTHESIS\_v4.md} in \texttt{94aa1a0} at 07:56:29 ET on 2026-10-04, before any of its test data was examined. Its Arms A and B are two settings of one passive maker; they are unrelated to the v3 strategies A and B (main note, section ``Before the plot twist''). The frozen text, verbatim:
+
+\begin{quote}\small
+HYPOTHESIS\_v4 (post-hoc origin, frozen before test data is examined).\\
+Origin: posthoc-mm-signal N maker, polymarket.com, Oct 3 games kicking off by 20:00 ET (863eb69, f535256): +1.09 c per contract at +60 s [0.17, 2.12], concentrated in 5 games, matched round trips +0.52 c.\\
+Rule: passive maker quoting both sides at the best bid and ask (join, never improve), 10 contracts, inventory cap +/- 50, no Kalshi signal. Arm A: always quote. Arm B: quote only while the spread is >= 3 c.\\
+Venues: polymarket.com (recorded books and trades); Polymarket US (authenticated order-book websocket with venue timestamps, recorded live; test set 2 only).\\
+Fills: strict trade-through only. Maker fee: each venue's published schedule at the time (cite). Kickoff cut [T - 2 min, T + 20 min].\\
+Primary metric: P\&L per contract marked to mid at +60 s, game-bootstrap 95\% CI (2,000 reps, seed 20261011). Secondary: matched round-trip P\&L; held to settlement; excluding the top 5 games.\\
+Test set 1 (run once now, descriptive only, small n): Oct 3 games kicking off after 20:00 ET with complete polymarket.com books and trades on disk, never used by posthoc-mm-signal.\\
+Test set 2 (confirmatory): all college and NFL games from 2026-10-08 00:00 ET to 2026-10-13 00:00 ET, run once after the window closes.\\
+Decision (test set 2, per venue and arm, Holm across venues): supported only if (1) primary CI above zero, (2) point estimate above zero excluding the top 5 games, (3) settlement P\&L point estimate above zero. Otherwise not supported. Report either way.
+\end{quote}
+
+\textbf{Status.} Test set 1 was not run: 0 eligible games, because every late Oct 3 recording ends at 00:34 ET, before those games ended (\texttt{posthoc-mm-v4} \texttt{1d3d68a}). Test set 2 (Oct 8 to 13) needs live recording of polymarket.com books and trades and the Polymarket US order book with venue timestamps; that recorder is not yet running. The sealed Aug to Oct 2 holdout cannot test v4: for that period the repository holds only polymarket.com taker trades at 1 s resolution and no order books, so the join and trade-through fill rule cannot be simulated.
+
+\textbf{Where v4 came from (descriptive, one day, not pre-registered).} A simulation on recorded Oct 3 polymarket.com top-of-book data (88 games, 428 fills, maker fee 0, queue position unknown) earned \$46.53 marked to mid at +60 s and \$114.03 held to settlement (\texttt{posthoc-mm-signal} \texttt{b346230}, \texttt{863eb69}). Excluding the top 5 games it is +0.15 c per contract [$-0.48$, +0.77], and 57.6\% of the 59 games with fills were positive (38.6\% of all 88). Spread captured was +\$63.18 against $-\$15.65$ of adverse selection. Under the reading rule applied to the 59 games with fills, all four conditions pass, so the team reads it as a lead worth testing live (\texttt{863eb69}); the rule was written after these numbers were seen, and read over all 88 games (38.6\% positive) its game-share condition fails, which is why the live test decides. The 88 games are holdout-period games (Oct 3 and 4); no committed file records an authorization to use them, and we disclose it here.
+
+
+\section{Sharpe ratios: method}\label{app:sharpe}
+
+For the v3 strategies, \texttt{report\_book.py} sums net P\&L per ET calendar day over the 60 holdout days (2026-08-06 to 2026-10-04), keeping zero days, divides by a fixed capital base (which does not change the Sharpe), and reports mean over standard deviation times $\sqrt{365}$, with a risk-free rate of 0; the NW5 version uses a Newey-West 5-lag standard deviation. We recomputed these from the committed trade files (\texttt{results/holdout/}, \texttt{main} \texttt{f4f3e28}) and they match \texttt{numbers.json}. 95\% intervals from a 5-day block bootstrap (10,000 draws), v3 strategies only (not v4): v3 Strategy A $-3.81$ [$-6.05$, $-0.50$], v3 Strategy B $-7.76$ [$-9.95$, $-6.07$], v3 combined $-7.78$ [$-10.13$, $-5.97$]. Daily skew is about $-3.2$ to $-3.7$, so the bootstrap intervals are the ones to quote. For v4's origin, only one day exists, so no daily or annualized Sharpe is possible; the per-game Sharpe (mean over standard deviation of game P\&L, 88 games, game bootstrap) is +0.22 [+0.06, +0.35] at +60 s and +0.16 [$-0.04$, +0.35] held to settlement.
+
+
+
+
+
+\end{document}

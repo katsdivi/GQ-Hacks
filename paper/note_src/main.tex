@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{booktabs,tabularx,array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multicol}
+\usepackage[hidelinks]{hyperref}
+\usepackage[compact]{titlesec}
+\titlespacing*{\section}{0pt}{0.8em}{0.3em}
+\captionsetup{font=small,labelfont=bf}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+
+% Numbers. Every number in the text comes from a generated key file; a missing key prints as a red box.
+% f_ keys are display-rounded copies written by make_fmt.py from the same key files.
+\input{numbers.tex}
+\input{extra.tex}
+\input{phantom.tex}
+\input{fmt.tex}
+\input{v4_numbers.tex}
+\makeatletter
+\newcommand{\val}[1]{\@ifundefined{val@#1}{\fcolorbox{red}{white}{\textcolor{red}{\ttfamily\detokenize{#1}}}}{\@nameuse{val@#1}}}
+\makeatother
+\newcommand{\ci}[2]{[\val{#1}, \val{#2}]}
+
+\title{\vspace{-2.5em}StaleLine: A Passive Maker on polymarket.com Football (HYPOTHESIS\_v4)\\[0.3em]
+\large Our live hypothesis: high risk, high reward, untested so far}
+\author{Divyam Kataria, Alden, Andrew, Olmer\\[0.1em]
+\small Gator Quant Hacks 2026, Systematic Trading track. Code: \url{https://github.com/katsdivi/GQ-Hacks}}
+\date{\vspace{-2.2em}}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent \textbf{HYPOTHESIS\_v4 is our live hypothesis: high risk, high reward, and not yet tested.} A passive maker on polymarket.com football joins the best bid and ask (Arm A always; Arm B only while the spread is at least \val{v4_armb_c} cents), frozen at \val{v4_frozen_et} (\texttt{\val{v4_commit}}) before any test data. Its origin is one simulated day on recorded top of book (Oct 3, \val{v4_games} games, maker fee 0): +\$\val{v4_pnl60_usd} at +60 s, \val{mmN_pnl60_c} cents per contract \val{mmN_pnl60_ci}, excluding the five largest games the estimate stays positive at +\val{mmN_pnl60_excl5_c} cents per contract \val{v4_excl5_ci} (condition (2) of v4's own decision rule), and \val{v4_share_pos_59} of the \val{v4_games_with_fills} games with fills were positive (\val{v4_share_pos_88} of all \val{v4_games}). Under our reading rule (games with fills) all four conditions pass: the +60 s interval excludes zero, so we treat it as a real lead that needs more testing on live games. The confirmatory test runs once on Oct 8 to 12 games. v4 grew out of an earlier pre-registered Kalshi study (the v3 strategies, not v4) that did not survive its single holdout test, after which \val{led_grand_total} disclosed trials found no other edge. Taking liquidity does not pay after costs, so v4 crosses into largely uncharted territory: is a patient maker paid for supplying liquidity to recreational sports flow? The reward is an edge that grows with the spread; the risk is one day of evidence.
+\end{abstract}
+
+\section{The live hypothesis: HYPOTHESIS\_v4 (high risk, high reward)}
+
+\textbf{Rule (frozen, \texttt{\val{v4_commit}}).} On polymarket.com (and, for the confirmatory test, Polymarket US through its authenticated order-book websocket), quote both sides at the best bid and ask, joining and never improving, \val{spec_qty} contracts, inventory cap $\pm$\val{v4_cap}, no Kalshi signal. Arm A always quotes; Arm B quotes only while the spread is at least \val{v4_armb_c} cents. Fills only on strict trade-through; published maker fees; kickoff window cut. Primary metric: P\&L per contract marked to mid at +60 s, game-bootstrap 95\% CI (seed \val{v4_seed}). \textbf{Economic logic:} our earlier lead-lag test (Section~\ref{sec:v3}) found no quote-level lag between Kalshi and polymarket.com, so a resting quote is rarely stale when hit; a maker is paid the spread for providing liquidity to recreational flow, and the edge persists if spread capture exceeds adverse selection \cite{burgi2025}.
+
+\textbf{Origin evidence (descriptive, one day, not pre-registered, simulated on recorded top of book, maker fee 0, queue position unknown).} The plain maker on Oct 3 (\val{v4_games} games, \val{v4_games_with_fills} with fills, \val{v4_fills} fills) made +\$\val{v4_pnl60_usd} at +60 s and +\$\val{v4_pnlset_usd} held to settlement; \val{mmN_pnl60_c} cents per contract \val{mmN_pnl60_ci} at +60 s and \val{v4_set_c} cents \val{mmN_set_ci} at settlement. It captured \$\val{v4_spread_usd} of spread (\val{mmN_spread_c} cents per contract) and lost \$\val{v4_adverse_usd} (\val{mmN_adverse_c} cents) to adverse selection. It loses at 1 cent spreads (\val{mmN_1c_c} cents) and wins at 3 cents or more (+\val{v4_3c_c}), hence Arm B. Per-game Sharpe (mean over standard deviation of game P\&L, not annualized) is \val{v4_sr_game_60} \val{v4_sr_game_60_ci} at +60 s and \val{v4_sr_game_set} \val{v4_sr_game_set_ci} at settlement; one day supports no annualized figure. Five games carry \$\val{mmN_top5_usd} of the \$\val{mmN_all_usd} (Figure~\ref{fig:v4}); excluding the five largest games, the estimate stays positive at +\val{mmN_pnl60_excl5_c} c per contract \val{v4_excl5_ci}; this is condition (2) of v4's own decision rule. \val{v4_share_pos_59} of the \val{v4_games_with_fills} games with fills were positive (\val{v4_share_pos_88} of all \val{v4_games}). Our ruling: under the reading rule applied to the \val{v4_games_with_fills} games with fills, all four conditions pass (interval above zero, positive without the top five games, a majority of games positive, break-even maker fee above 0.5 cents), so this is a lead worth testing live. The rule was written after these numbers were seen; read over all 88 games (38.6\% positive) its game-share condition fails, which is why the live test decides. \textbf{Disclosure:} the origin run used Oct 3 and 4 games, inside the holdout period, with no committed authorization; it can motivate v4, never test it.
+
+\begin{figure}[t]
+\centering
+\IfFileExists{figs/v4_per_game.png}{\includegraphics[width=0.62\textwidth]{figs/v4_per_game.png}\\[-0.3em]}{}
+\IfFileExists{figs/v4_spread.png}{\includegraphics[width=0.34\textwidth]{figs/v4_spread.png}}{}\hfill
+\IfFileExists{figs/v4_decomp.png}{\includegraphics[width=0.34\textwidth]{figs/v4_decomp.png}}{}
+\caption{Origin of HYPOTHESIS\_v4, plain polymarket.com maker on Oct 3. Top: P\&L per game at +60 s, sorted; the top five games carry \$\val{mmN_top5_usd} of \$\val{mmN_all_usd}. Bottom left: P\&L per contract by quoted spread (1 cent loses, 3 cents or more wins). Bottom right: spread captured versus adverse selection. Descriptive, one day, not pre-registered, simulated on recorded top of book, maker fee 0, queue position unknown. Full captions and the frozen v4 text: appendix, HYPOTHESIS\_v4 section.}
+\label{fig:v4}
+\end{figure}
+
+\textbf{Why v4 is not checked on the earlier holdout.} For Aug to Oct 2 we hold only polymarket.com taker trades at 1 s resolution, no order books, so the join and trade-through rule cannot be simulated faithfully. \textbf{Test plan.} Test set 1 had 0 eligible games (recordings ended before the late Oct 3 games finished). Test set 2 (confirmatory) is every college and NFL game from Oct 8 00:00 ET to Oct 13 00:00 ET, run once after the window closes. Decision, per venue and arm with Holm across venues: supported only if (1) the primary CI is above zero, (2) the point estimate excluding the top five games is above zero, and (3) the settlement P\&L point estimate is above zero; otherwise not supported, reported either way.
+
+\section{Before the plot twist: the pre-registered v3 study (not v4)}\label{sec:v3}
+
+\textbf{Nothing in this part is v4; v4 has no result yet.} This is the earlier pre-registered study that led to v4. Its strategies (the v3 strategies) did not survive their single holdout test, and \val{led_grand_total} disclosed post-hoc trials found no other edge (lowest Reality Check $p$ \val{v4_rc_min_p} over \val{v4_rc_min_n}). The passive maker is the one idea that survived a reading, and it was frozen as v4 before any test data.
+
+\subsection{Economic hypothesis}
+
+A first CME versus Kalshi hypothesis was retired before any backtest (no CME NFL game in the holdout window). Before v4, we pre-registered two hypotheses and three Kalshi strategies (the v3 strategies A, A-maker and B; unrelated to v4's Arms A and B). \textbf{H1, lead-lag:} one venue's book reprices before another's over 1 to 15 s because participants and order handling differ (polymarket.com applies a taker delay and cancels resting sports orders at game start) \cite{hasbrouck1995,wolfers2004}. \textbf{H2, favorite-longshot bias:} bettors overpay for longshots \cite{thaler1988,snowberg2010,burgi2025}. Strategy \textbf{A} buys the pregame favorite as a taker, \textbf{A-maker} rests the same order, and \textbf{B} trades Kalshi toward polymarket.com when the two disagree for several seconds. Every amendment is a dated commit before the single holdout run (\texttt{\val{run_sha}}).
+
+\subsection{Data and universe}
+
+\textbf{Kalshi:} historical trades for every KXNFLGAME and KXNCAAFGAME market (training \val{training_season_first_day} to \val{training_season_last_day}) and live websocket books for the holdout; Webull routes retail orders to it, and its fee is our primary cost. \textbf{polymarket.com:} trades for training, live books for the holdout (US persons cannot trade it; we only read its data). \textbf{Polymarket US:} polled quotes and time-and-sales, holdout only. ESPN kickoffs; two recorders never spliced within a game; every listed game kept, voids excluded and listed, ties settle at 0.5. An orientation gate checked that each game's two Kalshi team markets sum to about one (n \val{OOS_orientation_gate_n}, \val{OOS_orientation_gate_n_outside} outside the band).
+
+\subsection{Methodology}
+
+\textbf{No lookahead.} A decision at $t$ uses only rows at or before $t$ (as-of joins); fills happen at $t$ plus \val{spec_latency_s} s, never at $t$. \textbf{Sealed holdout.} Games with kickoff on or after \val{spec_seal_date} were never loaded before the run; the run script refuses them otherwise. \textbf{Costs.} Webull \$\val{spec_webull_fee} per contract per fill (primary) and Kalshi direct fees, plus a half-spread; every result is also shown at costs $\times 2$; \val{spec_qty} contracts per order, never optimized. \textbf{Lead test.} Per game, the lag maximizing the cross-correlation of 1 s book-midpoint changes, compared with unrelated-game placebo pairs (Mann-Whitney, Holm), kickoff window cut. \textbf{Strategies.} A: \val{spec_A_entry_min} min before kickoff, buy the favorite if its price is at least $\theta \in \{\val{spec_A_thetas}\}$, hold to settlement. B: enter when the venue gap $|d| \geq k$ for $m$ seconds, exit when $|d|<$ one cent or after $T$ seconds, $k\in\{\val{spec_B_k_grid_c}\}$ cents, $m\in\{\val{spec_B_m_grid_s}\}$ s, $T\in\{\val{spec_B_T_grid_s}\}$ s. Selection on training only; confidence intervals are game-level bootstraps; Sharpe is mean over standard deviation of daily P\&L (as a share of the capital base), $\times\sqrt{365}$, over every calendar day of the season with zero days kept. \textbf{Multiple testing.} Every setting tried, pre-registered or not, is a row in \texttt{experiments/variants.csv} (\val{count_variants_rows} rows), and the deflated Sharpe ratio \cite{bailey2014} is reported at the pre-registered and the final trial counts.
+
+\subsection{Results of the pre-registered study}\label{sec:results}
+
+\textbf{Lead test.} Kalshi vs polymarket.com: \val{OOS_lead_polymarket_com_n_qualifying} qualifying games, median lag \val{f_OOS_lead_polymarket_com_detail_median_corrected_lag_s} s, \val{f_OOS_lead_polymarket_com_detail_share_positive} of games positive, placebo median \val{f_OOS_lead_polymarket_com_detail_placebo_median_s} s, $p=$ \val{lead_pmcom_mw_p}: ``\val{f_OOS_lead_polymarket_com_decision}'' (Figure~\ref{fig:lag}). Kalshi vs Polymarket US: \val{OOS_lead_Polymarket_US_n_qualifying} games, median lag \val{f_OOS_lead_Polymarket_US_detail_median_corrected_lag_s} s, \val{f_OOS_lead_Polymarket_US_detail_share_positive} positive, $p=$ \val{lead_pmus_mw_p} against a Holm level of \val{f_OOS_lead_Polymarket_US_detail_holm_level}: ``\val{f_OOS_lead_Polymarket_US_decision}''. We report that outcome unchanged and explain below why we do not interpret it.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.36\textwidth]{figs/lag_distribution.png}
+\caption{Pre-registered v3 lead test on the holdout (not v4): per-game lag of book midpoints, real games vs unrelated-game placebo pairs. Positive lag means Kalshi moves first.}
+\label{fig:lag}
+\end{figure}
+
+\textbf{Traps.} Trade-price lead-lag on training showed a Kalshi lead that unrelated-game placebos matched; in simulation with no true lead, thin trade prints fake leads while book midpoints do not \cite{lomackinlay1990,hoffmann2013}. The v3 laggard strategy on Polymarket US (not v4) saw a lead only because the quote endpoint was cached (\texttt{max-age} \val{diag_pmus_cache_max_age_s} s): its fills on polled quotes look profitable (\val{laggard_pmus_1s_edge_c} cents), but its fills confirmed by real trades lost \val{f_diag_pmus_partial_run_1p0s_confirmed_mean_c} cents per contract (n \val{diag_pmus_partial_run_1p0s_confirmed_n_fills}). The v3 laggard against polymarket.com (not v4) loses \val{laggard_pmcom_1s_edge_c} cents.
+
+\textbf{v3 Strategy A (favorite-longshot, taker; not v4).} Selected $\theta=\val{f_A_theta}$ on training (return on capital \val{f_A_roc_webull}, \val{A_n_trades} trades; flat plateau). v3 holdout: \val{OOS_A_n_trades} trades in \val{OOS_A_n_games} games, return on capital \val{f_OOS_A_roc_webull} \ci{f_OOS_A_roc_webull_ci_0}{f_OOS_A_roc_webull_ci_1}; all three pre-registered fail conditions trigger. The bias is real in direction (the underdog at the same moment returns \val{f_A_placebo_roc_webull}) but smaller than taker costs. \textbf{v3 A-maker (not v4):} \val{OOS_A_maker_fills} fills in \val{OOS_A_maker_attempts} attempts, return on capital \val{f_OOS_A_maker_roc_webull}: fills came when the market moved against the order (adverse selection), the risk v4 must overcome.
+
+\textbf{v3 Strategy B (cross-venue disagreement; not v4).} Selected $k=\val{f_B_selected_setting_k}$ cents, $m=\val{B_selected_setting_m}$ s, $T=\val{B_selected_setting_T}$ s on training (already negative). v3 holdout: \val{OOS_B_n_trades} trades, \val{f_OOS_B_edge_webull_cents} cents per contract \ci{f_OOS_B_edge_webull_ci_0}{f_OOS_B_edge_webull_ci_1}; gross edge is near zero and B pays a near-fixed round-trip cost on every trade, hence its very negative Sharpe.
+
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+ & \multicolumn{2}{c}{A (taker, $\theta$ \val{f_A_theta})} & \multicolumn{2}{c}{B} & \multicolumn{2}{c}{Combined} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & Train & Holdout & Train & Holdout & Train & Holdout \\
+\midrule
+Trades & \val{A_n_trades} & \val{OOS_A_n_trades} & \val{B_n_trades} & \val{OOS_B_n_trades} & \val{combined_n_trades} & \val{OOS_combined_n_trades} \\
+Net P\&L (\$) & \val{f_A_pnl_total} & \val{f_OOS_A_pnl_total} & \val{f_B_pnl_total} & \val{f_OOS_B_pnl_total} & \val{f_combined_pnl_total} & \val{f_OOS_combined_pnl_total} \\
+Ann.\ return (of capital) & \val{f_A_ann_return} & \val{f_OOS_A_ann_return} & n/a & n/a & \val{f_combined_ann_return} & \val{f_OOS_combined_ann_return} \\
+Ann.\ volatility & \val{f_A_ann_vol} & \val{f_OOS_A_ann_vol} & n/a & n/a & \val{f_combined_ann_vol} & \val{f_OOS_combined_ann_vol} \\
+Sharpe (ann.) & \val{f_A_sharpe} & \val{f_OOS_A_sharpe} & \val{f_B_sharpe} & \val{f_OOS_B_sharpe} & \val{f_combined_sharpe} & \val{f_OOS_combined_sharpe} \\
+Sharpe, costs $\times 2$ & \val{f_A_costs_x2_sharpe} & \val{f_OOS_A_costs_x2_sharpe} & \val{f_B_costs_x2_sharpe} & \val{f_OOS_B_costs_x2_sharpe} & \val{f_combined_costs_x2_sharpe} & \val{f_OOS_combined_costs_x2_sharpe} \\
+Max drawdown (\$) & \val{f_A_max_drawdown_dollars} & \val{f_OOS_A_max_drawdown_dollars} & \val{f_B_max_drawdown_dollars} & \val{f_OOS_B_max_drawdown_dollars} & \val{f_combined_max_drawdown_dollars} & \val{f_OOS_combined_max_drawdown_dollars} \\
+Turnover (contracts/day) & \val{f_A_turnover_contracts_per_day} & \val{f_OOS_A_turnover_contracts_per_day} & \val{f_B_turnover_contracts_per_day} & \val{f_OOS_B_turnover_contracts_per_day} & \val{f_combined_turnover_contracts_per_day} & \val{f_OOS_combined_turnover_contracts_per_day} \\
+Daily skew & \val{f_A_skew_daily} & \val{f_OOS_A_skew_daily} & \val{f_B_skew_daily} & \val{f_OOS_B_skew_daily} & \val{f_combined_skew_daily} & \val{f_OOS_combined_skew_daily} \\
+Worst month (\$) & \val{f_A_worst_month_pnl} & \val{f_OOS_A_worst_month_pnl} & \val{f_B_worst_month_pnl} & \val{f_OOS_B_worst_month_pnl} & \val{f_combined_worst_month_pnl} & \val{f_OOS_combined_worst_month_pnl} \\
+\bottomrule
+\end{tabular}
+\caption{Pre-registered v3 strategies (not v4), net of Webull costs, 10 contracts per trade. Capital base = maximum capital committed at once on training (A \$\val{f_A_capital_base}, combined \$\val{f_combined_capital_base}); B's base is too small for return levels to mean anything, so B is reported per contract and by Sharpe. Training \val{training_season_first_day} to \val{training_season_last_day}; holdout \val{OOS_season_first_day} to \val{OOS_season_last_day}.}
+\label{tab:results}
+\end{table}
+
+\textbf{v3 combined book (not v4).} The combined v3 holdout P\&L was \$\val{f_OOS_combined_pnl_total} (Table~\ref{tab:results}, Figure~\ref{fig:equity}). A's training P\&L has no factor exposure (alpha $t$ = \val{f_A_french_t_alpha_daily} on Mkt-RF, HML, UMD \cite{french}). The deflated Sharpe ratio \cite{bailey2014} is \val{dsr_A_prereg} for A and \val{dsr_combined_prereg} combined at \val{count_trials_prereg} pre-registered trials; counting all \val{led_grand_total} disclosed trials can only lower it.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.3\textwidth]{figs/equity_oos.png}
+\caption{Holdout equity curve of the v3 strategies (not v4), \val{spec_qty} contracts per trade, Webull costs (training curve in the repository).}
+\label{fig:equity}
+\end{figure}
+
+\textbf{v3-era post-hoc work (after the holdout run; not v4).} We tested \val{count_posthoc_ideas} further ideas, a Polymarket US time-and-sales test and a book of every training-positive cell, each specified in a commit before its run and counted in the deflated Sharpe (appendix, Post-hoc work). None had an edge; the training-positive book returns \val{f_posthoc_posbook_roc_mean} \ci{f_posthoc_posbook_roc_ci_0}{f_posthoc_posbook_roc_ci_1} on the holdout. Descriptively, Kalshi beat ESPN's win probability on calibration in all \val{posthoc_idea9_kalshi_brier_lower_rows} variants. Walk-forward meta-models predict winners (AUC \val{posthoc_meta_auc_m1}) yet lose (return on capital \val{posthoc_meta_m1_roc}): predicting who wins is easy, predicting who beats the price is not. Later training-only searches added \val{led_new_trials} trials; White's Reality Check over the largest set (\val{rc_all_trials}, best $t$ = \val{rc_all_best_t}) gives $p$ = \val{rc_all_p}. \textbf{Trap 3:} a v3-era Kalshi versus polymarket.com arbitrage (not v4) showed \val{f_posthoc_idea11_L1_original_c_per_contract} cents per contract only because it assumed the second leg always cleared; with one-legged fills counted it is \val{f_posthoc_idea11_L1_corrected_hold_c_per_contract}.
+
+\textbf{Robustness.} Removing float residue levels from the recorded Kalshi books changes no midpoint and leaves both lead-test decisions unchanged (\texttt{\val{phantom_commit}}).
+
+\section{Risk management}
+
+v4 quotes \val{spec_qty} contracts per side with an inventory cap of $\pm$\val{v4_cap} contracts per game. Arm B quotes only while the spread is at least \val{v4_armb_c} cents, where the reward per fill was largest on the origin day. Fills count only on strict trade-through, a conservative rule. Settlement and regulatory risk apply (an early-settled and reversed Kalshi market; Nevada enforcement against Kalshi and Polymarket US). Before live trading we would add a daily loss limit, a per-venue exposure cap, a kill switch on feed outages over 60 s and fill reconciliation. All trading is simulated.
+
+\section{Liquidity and capacity}
+
+For a maker the binding constraint is queue position, not size. Queue position on the origin day is unknown, and strict trade-through makes the fill count a lower bound. Deep NFL books with 1 cent spreads may rarely reach a joining quote; thinner college books with wider spreads are where Arm B operates.
+
+\section{Limitations and next steps}
+
+The origin is one day of mostly college games, top of book only. The maker fee was 0 on Oct 3 and may change; test set 2 applies each venue's published schedule at the time. polymarket.com is not available to US persons, so a tradable version needs Polymarket US, whose authenticated order book we have never recorded; the test set 2 recorder still has to be built and running before Oct 8.
+
+\section{Conclusion}
+
+HYPOTHESIS\_v4 is a bet on the other side of the trade, in largely uncharted territory: that a patient maker is paid for supplying liquidity to recreational football flow. On one recorded day it captured \val{mmN_spread_c} cents of spread per contract and lost \val{mmN_adverse_c} cents to adverse selection, net \val{mmN_pnl60_c} \val{mmN_pnl60_ci} cents, concentrated in five games. High risk, high reward: a reason to test, not yet a result. v4 is frozen (\texttt{\val{v4_commit}}) and will be tested once on Oct 8 to 12, and we will report the answer either way.
+
+\label{endofbody}
+\begin{multicols}{2}\footnotesize
+\begin{thebibliography}{99}
+\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}
+\bibitem{bailey2014} Bailey, D.\ H.\ and M.\ L\'opez de Prado (2014). The deflated Sharpe ratio. \emph{J.\ Portfolio Management} 40(5).
+\bibitem{burgi2025} B\"urgi, C., W.\ Deng and K.\ Whelan (2025). Makers and takers: The economics of the Kalshi prediction market. CESifo WP 12122.
+\bibitem{french} French, K.\ R. Data Library, Fama/French and momentum factors.
+\bibitem{hasbrouck1995} Hasbrouck, J.\ (1995). One security, many markets. \emph{J.\ Finance} 50(4).
+\bibitem{hoffmann2013} Hoffmann, M., M.\ Rosenbaum and N.\ Yoshida (2013). Lead-lag parameter from non-synchronous data. \emph{Bernoulli} 19(2).
+\bibitem{lomackinlay1990} Lo, A.\ W.\ and A.\ C.\ MacKinlay (1990). When are contrarian profits due to overreaction? \emph{Rev.\ Financial Studies} 3(2).
+\bibitem{snowberg2010} Snowberg, E.\ and J.\ Wolfers (2010). Explaining the favorite-long shot bias. \emph{J.\ Political Economy} 118(4).
+\bibitem{thaler1988} Thaler, R.\ H.\ and W.\ T.\ Ziemba (1988). Parimutuel betting markets. \emph{J.\ Economic Perspectives} 2(2).
+\bibitem{wolfers2004} Wolfers, J.\ and E.\ Zitzewitz (2004). Prediction markets. \emph{J.\ Economic Perspectives} 18(2).
+\end{thebibliography}
+\end{multicols}
+
+\end{document}
