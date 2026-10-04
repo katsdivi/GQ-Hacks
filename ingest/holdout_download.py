@@ -15,7 +15,7 @@ Steps (resumable; a game whose files exist is skipped):
      (download_all.match_games) -> pm_map.csv; taker trades in the same window -> polymarket/<game_id>.parquet.
 Throttle: Kalshi 4 requests/s (basic read limit 20/s; the backup collector shares this IP), polymarket.com and
 ESPN 2/s. Every 10 min the collector is checked: a Kalshi feed outage (kalshi_ws not connected, or no delivered
-message for > 60 s) or a new "429" line in out/collector.log pauses the download for 5 min, then rechecks.
+message for > 60 s) or a new "HTTP 429" line in out/collector.log pauses the download for 5 min, then rechecks.
 Late games with no settlement yet stay unsettled (excluded by the existing rules); re-run later for settlements.
 
 Usage: nice -n 19 python -m ingest.holdout_download --holdout-download
@@ -82,7 +82,7 @@ def collector_ok() -> tuple[bool, str]:
     now = pd.Timestamp.now(tz="UTC")
     k = last.get("kalshi_ws", {})
     ok_age = (now - pd.Timestamp(k["last_ok_utc"])).total_seconds() if k.get("last_ok_utc") else 1e9
-    n429 = sum(1 for line in open(COLLECTOR_LOG) if "429" in line) if COLLECTOR_LOG.exists() else 0
+    n429 = sum(1 for line in open(COLLECTOR_LOG) if "HTTP 429" in line) if COLLECTOR_LOG.exists() else 0
     new429 = 0 if _state["n429"] is None else n429 - _state["n429"]
     _state["n429"] = n429
     if not k.get("connected") or ok_age > 60:
