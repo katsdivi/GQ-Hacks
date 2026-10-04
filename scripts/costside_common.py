@@ -254,3 +254,14 @@ def multiple_testing(series: dict[str, pd.Series], seed: int = SEED, nboot: int 
     return {"dsr_best_normal_returns": dsr_norm, "days": T, "trials": K, "best_by_t": names[best], "best_t": float(tstat[best]), "rc_p": rc_p,
             "dsr_best": dsr, "sr_best_daily": float(srb), "sr0": float(sr0),
             "holm": dict(zip(names, holm.tolist())), "raw_p": dict(zip(names, pv.tolist()))}
+
+
+def md(df: pd.DataFrame, index: bool = False) -> str:
+    """Markdown table without the tabulate dependency."""
+    d = df.reset_index() if index else df
+    cols = [str(c) for c in d.columns]
+    lines = ["| " + " | ".join(cols) + " |", "|" + "---|" * len(cols)]
+    for r in d.itertuples(index=False):
+        lines.append("| " + " | ".join("" if (isinstance(v, float) and v != v) else
+                                       (f"{v:.4g}" if isinstance(v, float) else str(v)) for v in r) + " |")
+    return "\n".join(lines)
