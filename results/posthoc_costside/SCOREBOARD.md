@@ -57,5 +57,10 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 | 12 | UNDERREACT: change-vs-change underreaction family (arXiv 2606.07811) | +10 | new |
 | 12 | Underreaction family ruled out (primary and all 6-min cells CIs below 0) | +5 | ruled out |
 
-**Total after Round 12: +235.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
+| 13 | UDOG: surprise-lead underdog (Angelini et al.) | +10 | new |
+| 14 | LEADER: disposition-effect lead state | +10 | new |
+| 14 | Disposition effect ruled out (win rate equals break-even, both lines) | +5 | ruled out |
+| 15 | WALLET: polymarket.com training files carry no wallet/maker/taker addresses (columns ts, venue, market_id, kind, price, size, side): needs data we lack | +5 | ruled out as untestable (0 trials) |
+
+**Total after Round 15: +260.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
 three repeats/finer grids already listed; no lookahead, holdout/live data, unlogged trial or undisclosed rerun.

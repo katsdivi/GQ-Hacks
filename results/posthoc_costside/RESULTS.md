@@ -524,3 +524,68 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 315 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 13
+
+Run 2026-10-04 06:04 ET. Source: Rule 4 (Angelini, De Angelis, Singleton, IJF 2022).
+
+- Underdog (kickoff P <= 0.30) taking its first lead in Q3/Q4: taker +0.036 [-0.179, +0.236] on 78 trades (win
+  0.532 vs break-even 0.514); maker -0.026; Q1/Q2 negative. Small samples (57 to 110 trades), every CI wide and
+  spanning 0; below the 100-trade bar for the primary cell.
+- Deviation from the spec, disclosed: the descriptive walk-forward cell-baseline control was not computed (no trial
+  passes the P&L screen, so the control cannot change the verdict).
+
+### All Round 13 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R13.UDOG.Q34.taker | 78 | 0.0361 | -0.1786 | 0.2364 | 1.855 | 0.0361 | 1.855 | -19.89 | 1.025 | 1 |
+| R13.UDOG.Q34.maker | 57 | -0.026 | -0.2811 | 0.2411 | -1.242 | -0.0167 | -0.7895 | -42.29 | -0.608 | 1 |
+| R13.UDOG.Q12.taker | 110 | -0.0624 | -0.2995 | 0.189 | -2.149 | -0.0624 | -2.149 | -60.36 | -1.569 | 1 |
+| R13.UDOG.Q12.maker | 84 | -0.1005 | -0.3769 | 0.2049 | -3.125 | -0.0884 | -2.714 | -63.25 | -2.074 | 1 |
+
+### Cumulative correction after Round 13
+
+Trials: own 174 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 0 (not found yet); regress 48 (daily P&L used)) = 369. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.430. DSR of that best: 9.61e-26 (project convention;
+normal-returns version 1.87e-08). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 369 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 14
+
+Run 2026-10-04 06:04 ET. Source: Rule 5 (Efficiency and the Disposition Effect in NFL Prediction Markets, QJF 2012).
+
+- Buying a 3 to 14 point leader priced >= 3 c below the walk-forward cell win rate: taker -0.017 [-0.099, +0.066]
+  (299 trades), maker -0.002 [-0.091, +0.092] (281). Win rate equals break-even within 1 point. The 2000s
+  Tradesports disposition effect is not present in Kalshi 2025 football.
+
+### All Round 14 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R14.LEADER.maker | 281 | -0.0018 | -0.091 | 0.0917 | -0.1096 | 0.0053 | 0.3167 | -38.98 | -0.08 | 1 |
+| R14.LEADER.taker | 299 | -0.0174 | -0.0994 | 0.0659 | -1.089 | -0.0174 | -1.089 | -67.62 | -0.8455 | 1 |
+
+### Cumulative correction after Round 14
+
+Trials: own 174 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 0 (not found yet); regress 48 (daily P&L used)) = 369. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.430. DSR of that best: 9.61e-26 (project convention;
+normal-returns version 1.87e-08). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 369 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 15
+
+Skilled-wallet following (Rule 6; Gomez-Cram, Guo, Kung, Jensen): the polymarket.com training trade files
+(data/ticks/<game>_polymarket.parquet) have columns ts, venue, market_id, kind, price, size, side and no wallet,
+maker or taker address. Needs data we lack; 0 trials.
