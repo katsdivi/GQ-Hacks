@@ -1,5 +1,5 @@
 {
- "own_trials": 24,
+ "own_trials": 40,
  "external": {
   "costside": {
    "trials": 180,
@@ -32,24 +32,24 @@
    "with_daily": 48
   }
  },
- "cumulative_trials": 463,
- "trials_in_correction": 463,
- "rc_p_best_by_t": 0.4585,
+ "cumulative_trials": 479,
+ "trials_in_correction": 479,
+ "rc_p_best_by_t": 0.468,
  "best_by_t": "patterns:P3-08",
  "best_t": 2.4953726779022576,
- "dsr_best": 1.5445625116275015e-26,
- "dsr_best_normal_returns": 1.1144828344100831e-08,
+ "dsr_best": 1.5339175293930712e-27,
+ "dsr_best_normal_returns": 5.7783462482668854e-09,
  "sr_best_daily": 0.23579055479123773,
- "sr0": 0.7666755028497101,
+ "sr0": 0.7773933995669334,
  "days": 112,
  "holm_survivors_005": [],
  "stop_candidates": [],
  "stop_condition_met": false,
  "in_sample_best_by_roc": {
-  "trial": "LL2.R1.P.g4.maker.settle",
-  "roc": -0.012459217412249018,
-  "roc_lo": -0.08548989949477263,
-  "roc_hi": 0.06777789172260014,
-  "trades": 441
+  "trial": "LL2.R2.pm.W30.d4.maker.settle",
+  "roc": 0.6093341380004025,
+  "roc_lo": -0.04269576871529773,
+  "roc_hi": 1.2686054001775995,
+  "trades": 11
  }
 }

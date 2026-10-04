@@ -85,3 +85,43 @@ Reading: on the training games where both exist, Kalshi leads CME, not the rever
 many price changes, about 97% of the information share, and responds to CME jumps within about a second, while CME
 takes about 6.5 s to follow Kalshi's. One game (SF at SEA) leans the other way (CME IS 0.48, lag +9 s). The
 pre-registered hypothesis direction (CME leads Kalshi) is not supported on training, with the caveat of 10 games.
+
+
+## Round 2 (spec 5a02d77, fallback amendment dd7ab60, code f2d3b69): pre-game lead-lag, existing files
+
+Run 07:18 ET on the existing files (the data-fullhist marker never appeared before this agent's 08:00 stop), so
+W = 30 min only, 16 trials, test weeks only. 962 B training games; both venues trade over a median 2.0 h before
+kickoff (p10 1.6 h).
+
+| trial | trades | games | roc | roc_lo | roc_hi | c_per_contract | alt_roc | excl5_roc | holm_p |
+|---|---|---|---|---|---|---|---|---|---|
+| LL2.R2.pm.W30.d4.maker.settle | 11 | 11 | 0.6093 | -0.0427 | 1.269 | 27.54 | 0.626 | -0.0161 | 1 |
+| LL2.R2.pm.W30.d4.taker.settle | 22 | 22 | 0.0868 | -0.3163 | 0.5463 | 4.354 | 0.0868 | -0.236 | 1 |
+| LL2.R2.k.W30.d2.maker.settle | 498 | 498 | 0.0174 | -0.0582 | 0.0953 | 0.8759 | 0.0258 | 0.0001 | 1 |
+| LL2.R2.pm.W30.d2.maker.settle | 387 | 387 | -0.0264 | -0.1142 | 0.0577 | -1.315 | -0.0182 | -0.0476 | 1 |
+| LL2.R2.k.W30.d2.taker.settle | 574 | 574 | -0.0268 | -0.0956 | 0.039 | -1.429 | -0.0268 | -0.0409 | 1 |
+| LL2.R2.pm.W30.d4.maker.ko | 11 | 11 | -0.0473 | -0.065 | -0.0294 | -2.136 | -0.0374 | -0.0665 | 1 |
+| LL2.R2.pm.W30.d2.maker.ko | 387 | 387 | -0.0536 | -0.0567 | -0.0504 | -2.674 | -0.0457 | -0.0549 | 1 |
+| LL2.R2.k.W30.d4.maker.ko | 18 | 18 | -0.0567 | -0.0715 | -0.0424 | -3.139 | -0.0485 | -0.0714 | 1 |
+| LL2.R2.k.W30.d2.maker.ko | 498 | 498 | -0.0609 | -0.0646 | -0.0573 | -3.06 | -0.0532 | -0.0625 | 1 |
+| LL2.R2.pm.W30.d2.taker.settle | 490 | 490 | -0.0692 | -0.1474 | 0.0045 | -3.61 | -0.0692 | -0.085 | 1 |
+| LL2.R2.pm.W30.d2.taker.ko | 490 | 490 | -0.0877 | -0.0917 | -0.084 | -4.577 | -0.0877 | -0.0886 | 1 |
+| LL2.R2.pm.W30.d4.taker.ko | 22 | 22 | -0.0892 | -0.1034 | -0.0766 | -4.477 | -0.0892 | -0.1017 | 1 |
+| LL2.R2.k.W30.d4.taker.ko | 25 | 25 | -0.0913 | -0.1037 | -0.08 | -5.352 | -0.0913 | -0.1009 | 1 |
+| LL2.R2.k.W30.d2.taker.ko | 574 | 574 | -0.0929 | -0.0965 | -0.0893 | -4.945 | -0.0929 | -0.0937 | 1 |
+| LL2.R2.k.W30.d4.maker.settle | 18 | 18 | -0.3973 | -0.7863 | -0.0093 | -21.98 | -0.3921 | -0.8568 | 1 |
+| LL2.R2.k.W30.d4.taker.settle | 25 | 25 | -0.4542 | -0.7329 | -0.1484 | -26.63 | -0.4542 | -0.7436 | 1 |
+
+- pm-leads (polymarket.com moved >= d over 30 min while Kalshi moved < d/2): at d = 2 c, 387 to 490 trades, all four
+  cells negative (-1.3 to -4.6 c per contract); at d = 4 c only 11 to 22 trades (pre-game, the two venues rarely
+  disagree by 4 c), point estimates +0.09 and +0.61 ROC held to settlement with CIs from -0.32 and -0.04.
+- The Kalshi-leads placebo is no worse at d = 2 c (maker, settle +0.017). Exits at kickoff - 5 min lose 2 to 5 c per
+  contract in every cell (spread and fees on a round trip in a slowly drifting pre-game market).
+
+Cumulative correction (correction.json): 479 trials (439 + 24 R1 + 16 R2), Reality Check p =
+0.468 (best by t: patterns:P3-08), DSR 1.53e-27 (normal 5.78e-09),
+Holm survivors: none. Stop condition: not met.
+
+Rounds not run: the full-history version of R2 (W 120 min, 32 trials) did not run, and Round 4 was cancelled by
+Divi (no news/line data purchase). Round 3 stayed descriptive (10 to 14 games < 30), and the Kalshi-leads-CME test
+moved to branch posthoc-kalshi-cme.
