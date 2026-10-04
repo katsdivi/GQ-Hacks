@@ -199,3 +199,27 @@ search), pre-listed:
   own last trade, valid 300 s, trade-through fill, hold to settlement. First fill per game only.
 
 Cumulative own trials after Round 5: 110 + 7 = 117.
+
+## Resumed (2026-10-04 05:48 ET): search continues until an edge is found or 12:00 ET
+
+Divi asked to resume after the Round 5 stop note. Same protocol; a scoreboard (SCOREBOARD.md) is kept with his
+points scheme. The Round 5 "stopped" section is superseded.
+
+## Round 6 (16 trials; Kalshi microstructure; written 2026-10-04 05:48 ET, before Round 6 touches data)
+
+Why: no earlier round, helper or the broad search used trade SIZE or AGGRESSOR side in-game, or no-trade gaps.
+A set (kalshi_only files, which carry size and aggressor side in P(home) terms), in-game window kickoff + 20 min
+to kickoff + 4 h, decisions at Kalshi trade times, all at or before t. Entry taker (first own trade at or after
+t + 1 s within 60 s, + 1 c) or maker (limit = own last trade, W 60 s, trade-through). Hold to settlement, one
+trade per game (first qualifying signal).
+
+- **R6.BIG (4 trials).** A single print whose size is > the 99th percentile of that game's earlier in-window
+  prints (at least 200 earlier prints) and >= 1,000 contracts. Direction = its aggressor side in P(home) (buy =
+  home up). {follow, fade} x {taker, maker}.
+- **R6.IMB (8 trials).** Aggressor imbalance I = (buy - sell contracts) / total over the trailing w seconds, both
+  markets, P(home) terms; signal when |I| >= 0.8 and total >= 500 contracts. Follow (buy the team I points to):
+  w in {10, 60, 120} x {taker, maker} = 6; fade at w 60 x {taker, maker} = 2.
+- **R6.GAP (4 trials).** A trade after a no-trade gap >= g seconds (both markets) whose P(home) differs from the
+  last pre-gap trade by >= 0.03; follow the move. g in {120, 300} x {taker, maker}.
+
+Cumulative own trials after Round 6: 117 + 16 = 133.
