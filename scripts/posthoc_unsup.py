@@ -518,5 +518,35 @@ def write_results(log, corr, at, rk, stats, df) -> None:
     (C.OUT / "RESULTS.md").write_text("\n".join(L))
 
 
+def ranks() -> None:
+    """Added after the run (not in SPEC): the SPEC reference trial (k-means k 8, margin 0, n_min 100, taker,
+    primary) made 0 trades, so its rank table is empty. Descriptive supplement: all trades of all 64 trials,
+    de-duplicated on (game, team, decision time, execution line), grouped by the past rank (1 to 5) of the
+    trade's cluster in that week. Not a trial; overlapping trials make it a pooled view only."""
+    t = pd.read_parquet(C.CACHE / "trades.parquet")
+    t["line"] = t["trial"].str.split(".").str[5]
+    t["method"] = t["trial"].str.split(".").str[1]
+    out = []
+    for (line, method), g in t.groupby(["line", "method"]):
+        g = g.drop_duplicates(["game_id", "team", "t_ns"])
+        for r in range(1, 6):
+            d = g[g["cl_rank"] == r]
+            m = C.metrics(d) if len(d) else {"trades": 0}
+            out.append({"execution": line, "clusterer": method, "past_rank": r,
+                        **{k: m.get(k) for k in ("trades", "games", "roc", "roc_lo", "roc_hi", "c_per_contract",
+                                                 "win_rate", "breakeven", "excl5_roc")}})
+    rk = pd.DataFrame(out)
+    rk.to_csv(C.OUT / "rank_performance_pooled.csv", index=False)
+    txt = (C.OUT / "RESULTS.md").read_text()
+    marker = "## Cluster atlas"
+    add = ("## Pooled walk-forward performance by past cluster rank (added after the run; descriptive only)\n\n"
+           "The SPEC reference trial made 0 trades (no k-means k 8 cluster ever cleared the taker cost on past "
+           "weeks), so the table above is empty. This supplement pools all trades of all 64 trials, de-duplicated "
+           "on (game, team, decision time, execution), by the past rank of the trade's cluster. Overlapping trials; "
+           "not a trial and not counted in the correction.\n\n" + C.md(rk) + "\n\n")
+    (C.OUT / "RESULTS.md").write_text(txt.replace(marker, add + marker, 1))
+    print(rk.round(4).to_string(index=False))
+
+
 if __name__ == "__main__":
-    {"build": build, "run": run}[sys.argv[1]]()
+    {"build": build, "run": run, "ranks": ranks}[sys.argv[1]]()

@@ -1,0 +1,40 @@
+{
+ "own_trials": 64,
+ "prior": {
+  "costside_own": 174,
+  "search": {
+   "trials": 54,
+   "status": "daily P&L used",
+   "with_daily": 50
+  },
+  "maker": {
+   "trials": 36,
+   "status": "daily P&L used",
+   "with_daily": 36
+  },
+  "patterns": {
+   "trials": 57,
+   "status": "daily P&L used",
+   "with_daily": 57
+  },
+  "unsup": {
+   "trials": 0,
+   "status": "not found yet"
+  },
+  "regress": {
+   "trials": 48,
+   "status": "daily P&L used",
+   "with_daily": 48
+  }
+ },
+ "cumulative_trials": 433,
+ "rc_p_best_by_t": 0.4475,
+ "best_by_t": "patterns:P3-08",
+ "best_t": 2.4953726779022576,
+ "dsr_best": 6.691871112367474e-24,
+ "dsr_best_normal_returns": 6.282335168619991e-08,
+ "days": 112,
+ "holm_survivors_005": [],
+ "stop_candidates": [],
+ "stop_condition_met": false
+}
