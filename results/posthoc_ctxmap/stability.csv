@@ -1,0 +1,3 @@
+book,choice_changes,consecutive_pairs,contexts_ever_traded,label
+N=20,13,151,16,"post-hoc, exploratory; context map over strategies already seen; walk-forward on training only; holdout not run"
+N=50,5,82,15,"post-hoc, exploratory; context map over strategies already seen; walk-forward on training only; holdout not run"

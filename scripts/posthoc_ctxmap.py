@@ -47,8 +47,9 @@ def add_context(c: pd.DataFrame) -> pd.DataFrame:
     c = c.copy()
     c["ctx"] = c["league"].astype(str) + "|" + phase(c["min_from_ko"]) + "|" + band(c["fill"])
     c["cpc"] = c["pnl"] / 10 * 100                       # net cents per contract
-    # one position per game per idea-leg: keep the earliest decision
-    c = c.sort_values(["t_ns", "cell", "game_id"], kind="stable").drop_duplicates(["cell", "game_id"], keep="first")
+    # Base strategies already enforce their own position rule (B and Idea 10 trade sequentially, one position at a
+    # time, so several candidates per game are legitimate). Only exact duplicates (same cell, game, t) are dropped.
+    c = c.sort_values(["t_ns", "cell", "game_id"], kind="stable").drop_duplicates(["cell", "game_id", "t_ns"])
     return c.reset_index(drop=True)
 
 
