@@ -1,3 +1,4 @@
+# NOT USED FOR ANY REPORTED NUMBER (moved to legacy/ 2026-10-03; scripts/final_test_run.py does not import it).
 """Fill simulation for strategy.signals on the follower venue B, with costs always charged.
 
 Fill rule: decided at decision_ns (strategy.decision_time_ns), filled at decision_ns + latency.

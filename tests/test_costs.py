@@ -78,7 +78,7 @@ def test_label_has_no_placeholder():
 
 def test_backtest_kalshi_route_switch():
     import pandas as pd
-    import backtest
+    from legacy import backtest
     sig = pd.DataFrame([{"entry_g": 0, "exit_g": 5, "direction": 1, "qty": 10, "exit_reason": "gap_closed",
                          "entry_decision_ns": 1_000_000_000, "exit_decision_ns": 6_000_000_000,
                          "gap_at_entry_cents": 3.0}])

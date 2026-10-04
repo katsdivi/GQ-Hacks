@@ -33,7 +33,7 @@ from pathlib import Path
 import pandas as pd
 
 import align
-import backtest
+from legacy import backtest
 import costs
 import leadlag
 import strategy

@@ -2,7 +2,7 @@
 import pandas as pd
 
 import align
-import backtest
+from legacy import backtest
 import leadlag
 import strategy
 from make_sample import LAG_S, build

@@ -39,7 +39,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-import backtest
+from legacy import backtest
 import costs
 import leadlag
 import make_sample
