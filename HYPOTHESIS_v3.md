@@ -211,3 +211,31 @@ A game's holdout file must be written after its window has ended: kickoff + 5 h 
 ### Disclosure
 
 No holdout prices, plots or statistics were examined. The issue was found by the downloader's completeness check at 22:48 ET on 2026-10-03: 38 games of 2026-10-03 had been downloaded while their [kickoff - 2 h, kickoff + 5 h] window was still open (row counts and file timestamps only). The counts above come from game ids, ESPN kickoff times and file listings only.
+
+## Amendment 5 (2026-10-03 23:45 ET): Strategy A-maker, one new pre-registered variant
+
+Committed before the holdout run of any strategy and before any holdout price, plot or statistic is examined.
+
+### Rule
+
+Strategy A-maker uses Strategy A's decision unchanged (v3 with Amendments 1 to 4): t = ESPN kickoff - 5 min; each team's own-market price is the trailing 3 s median of trades as-of t; both markets must have traded in (t - 10 min, t]; the favorite is the higher price; enter iff the favorite's price >= theta, with theta = 0.80 fixed (no grid). Same seal, ESPN-kickoff, missing-market and exclusion rules.
+
+- Order: a limit buy of 10 contracts on the favorite's own market at L = (the as-of price at t) - 0.01, rounded to the market's tick.
+- Fill (conservative, queue-agnostic): filled at L only if a trade on that market prints at or below L - 0.01 in (t + 1 s, kickoff]. Otherwise the order is unfilled: no trade, counted ("unfilled").
+- Hold to settlement, settled as Strategy A (Kalshi's recorded result; ties and scalar settlements at Kalshi's value).
+- Costs: Webull $0.02 per contract, entry only (primary). Comparison line: Kalshi's maker fee was not confirmed first-party (kalshi.com/docs/kalshi-fee-schedule.pdf returned HTTP 429 on 2026-10-03; secondary sources state 0.0175 x C x P x (1 - P) rounded up, charged on some markets only; docs/research/fees.md has no Kalshi maker entry), so the comparison line uses the taker formula 0.07 x C x P x (1 - P) rounded up to the cent as an upper bound, labelled as such.
+- Costs x2: fees x2 and the fill 1 cent worse (the maker analog of the taker's doubled half-spread), same fill set.
+- Placebo: the underdog's own market with the same maker rule (L = the underdog's as-of price - 0.01), whenever the favorite passes theta.
+- Reported, training and test: attempts, fills, fill rate, unfilled count, skips by reason, mean fill, win rate minus fill price, return on capital on both lines with a game-level bootstrap 95% CI (2,000 resamples, seed 20261003), total P&L, costs x2, and the placebo.
+- Code: strategy_a_maker.py (fake-game tests: fill only on a trade-through, no fill from a trade at or before t + 1 s or after kickoff, unfilled counted), run_strategy_a_maker.py, walkthrough docs/review/strategy_a_maker_walkthrough.md.
+
+### Multiple testing
+
+One more trading variant (favorite leg; the underdog leg is its placebo): 21 -> 22. The deflated Sharpe "total" count becomes 22.
+
+### Disclosure
+
+Designed on training after seeing taker-A training results (v3 Strategy A, theta 0.80: win rate 0.911 vs mean fill 0.898; the $0.02 Webull fee more than cancels the gap); the holdout was not examined. The rule above was set by Divi at about 23:20 ET on 2026-10-03, before any A-maker number existed, and was then run once on training (no parameter changed afterwards): favorite 25 fills of 357 attempts (7.0%), mean fill 0.856, win rate 0.920, ROC Webull +0.048 [-0.087, 0.151]; underdog placebo 23 fills of 351, every one a loss. These two training rows are in experiments/variants.csv.
+
+## Orientation mismatches vs ESPN (decided before any holdout result)
+Pre-run orientation check found 4 holdout A/B games where a venue's home/away label differs from ESPN's nominal home team: Alabama A&M vs Howard (2026-08-29), Southern vs Alabama St (2026-08-29), Grambling vs Prairie View (2026-09-26, State Fair Classic), all neutral-site; and Dallas at Seattle (2026-08-15, NFL preseason), where polymarket.com lists the teams in reverse order and the matcher set flipped = True. In all 4, Kalshi and polymarket.com refer to the same team for each price. Strategy A and A-maker trade each team's own Kalshi market and settle on it; Strategy B compares the same team across venues; ESPN supplies kickoff time only, which matched. Decision: all 4 games kept, listed in the run disclosure. None is in the lead-test holdout.
