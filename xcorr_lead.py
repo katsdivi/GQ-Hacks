@@ -1,15 +1,18 @@
-"""Cross-correlation lead test (HYPOTHESIS_v2.md Amendment 2 draft, Parts A and B).
+"""Lead-test statistics for HYPOTHESIS_v2.md (Amendments 2 to 4).
 
-Per game: both venues' trailing 3 s median trade prices on the common 1 s grid (align.py), then the
-lag (s) maximising corr(Kalshi return at g, other-venue return at g + lag), max lag 15 s
-(leadlag.xcorr_lag). Positive = Kalshi first. Corrected lag = lag - D (median match-to-block delay
-for polymarket.com, 0 for Polymarket US).
+Confirmatory test (book midpoints, run by holdout_mid.py): per venue, the Amendment 2 mid rule (mid_snapshots /
+mid_grid: a mid only when both sides of the recorded book exist, carried forward on the 1 s grid and never across
+an empty side); per game, game_lag_mid = the lag (-15..15 s) maximising the correlation of Kalshi's 1 s mid change
+with the other venue's (positive = Kalshi first), with excluded intervals (book-wipe rule) dropped for both venues.
+Timestamps are the recorder's receipt times on both venues, so no block-time correction applies (d_s = 0). A game
+qualifies with >= 50 mid changes on each venue outside the exclusion (holdout_mid.MIN_CHANGES).
+Decision (decide): >= 30 qualifying games, else "inconclusive"; a venue leads iff median lag >= its minimum lead
+(1.0 s polymarket.com, 1.5 s Polymarket US) AND two-sided Mann-Whitney (real vs unrelated-game placebo lags)
+p < its Holm level AND >= 60% of qualifying games on that side. decide_holm: the smaller p judged at 0.025, the
+larger at 0.05 only if the first passes (v2 Amendment 3 item 3).
 
-Decision (drafted rule): on the qualifying games (>= 50 trades on each venue in kickoff - 2 h to
-+ 5 h), with the unrelated-games placebo built the same way as the null:
-  Kalshi leads iff median corrected lag >= 1 s AND two-sided Mann-Whitney real vs placebo p < 0.05
-  AND >= 60% of qualifying games have corrected lag > 0; symmetric for the other venue;
-  fewer than 30 qualifying games -> "inconclusive".
+Exploratory only, never confirmatory: game_lag (trailing 3 s median TRADE prices, leadlag.xcorr_lag) and the
+trade-based table; mann_whitney_p_custom is a cross-check of scipy kept for tests.
 
 No prices are printed; this module returns lags and decisions only.
 """

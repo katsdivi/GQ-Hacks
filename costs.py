@@ -15,8 +15,10 @@ played before the schedules took effect.
 C = contracts in the order, P = fill price in dollars. Kalshi direct rounding up per order is the
 conservative reading; Kalshi's exact rounding is unconfirmed (open question in fees.md).
 
-Spread: trades-only history has no book, so fills are trade price plus or minus HALF_SPREAD
-(PROVISIONAL, pre-spec; Alden to confirm).
+Spread: trades-only history has no book, so fills are trade price plus or minus HALF_SPREAD, 0.5 cent: the
+v3 training fill model (HYPOTHESIS_v3.md, "Fill"; Strategy B uses the same value, strategy_b.HALF_SPREAD).
+The laggard fills at recorded quotes and
+does not use it.
 """
 from __future__ import annotations
 
@@ -32,7 +34,7 @@ KALSHI_DIRECT_RATE = 0.07        # schedule effective 2026-07-07
 POLYMARKET_RATE = 0.05           # polymarket.com (international) sports taker rate
 POLYMARKET_US_RATE = 0.0695      # Polymarket US taker theta
 POLYMARKET_US_EFFECTIVE = pd.Timestamp("2026-10-01 14:00", tz="UTC")   # 10:00 ET (EDT, UTC-4)
-HALF_SPREAD = 0.005              # dollars. PROVISIONAL (pre-spec), used only when no book exists.
+HALF_SPREAD = 0.005              # dollars: the v3 training fill model (trade +/- 0.5 cent); = strategy_b.HALF_SPREAD
 
 FEE_LABEL = ("costs as if traded today: Kalshi via Webull $0.02/contract/fill "
              "(Kalshi direct 0.07*C*P*(1-P) rounded up as comparison); polymarket.com 0.05*C*P*(1-P) "
