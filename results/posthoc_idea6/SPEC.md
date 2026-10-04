@@ -90,3 +90,8 @@ function at P = 0.95, 0.98, 0.99; a game with a play after an "End of 4th Quarte
 ## Records
 
 No `experiments/variants.csv` rows (post-hoc; outputs under `results/posthoc_idea6/` instead, as Idea 4).
+
+## Implementation notes
+
+- 2026-10-04 04:11 ET (before the training run): Skip if no Kalshi trade on that market within 5 min after t + 1.0 s (same as Ideas 4 and 7). Skip reason "no post-decision trade" (Idea 4's FILL_WINDOW_S = 300). This replaces "no upper time bound inside the trade file" in "Decision, fill, payout".
+- ESPN scoringPlays carry no wallclock, so "no scoring play after the marker" is checked as: every scoring play is in the play list at or before the marker, and the last scoring play's score and ESPN's final score both equal the score at the marker.

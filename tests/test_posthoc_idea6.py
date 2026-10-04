@@ -138,3 +138,14 @@ def test_sealed_game_refused():
     g = A.Game("cfb_20260905_x_y", "CFB", "HOM", "AWY", "EV", pd.Timestamp("2026-09-05", tz="UTC"), "espn", 1.0)
     with pytest.raises(ValueError):
         P.evaluate_game(trades([]), g, {"skip": "x"}, None)
+
+
+def test_fill_window_5_min_after_t_plus_1s():
+    g = game()
+    t = E.value + 60 * NS
+    lo = t + NS
+    late = pd.Timestamp(lo + 300 * NS + 1, unit="ns", tz="UTC")
+    r = P.leg(trades([(late, "HOM", 0.50)]), g, "HOM", t)
+    assert not r["entered"] and r["skip"] == "no post-decision trade"
+    edge = pd.Timestamp(lo + 300 * NS, unit="ns", tz="UTC")
+    assert P.leg(trades([(edge, "HOM", 0.50)]), g, "HOM", t)["entered"]

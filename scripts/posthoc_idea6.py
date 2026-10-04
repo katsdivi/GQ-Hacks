@@ -34,6 +34,7 @@ NS = 1_000_000_000
 DS = (60, 180, 600)
 QTY = 10
 LATENCY_S = 1.0
+FILL_WINDOW_S = 5 * 60   # SPEC Implementation notes: window measured from t + 1.0 s
 HALF = Decimal("0.01")
 CAP = Decimal("0.99")
 WEBULL = Decimal("0.02")
@@ -129,12 +130,15 @@ def team_series(trades: pd.DataFrame, g: A.Game, team: str) -> tuple[np.ndarray,
 
 
 def leg(trades: pd.DataFrame, g: A.Game, team: str, t_ns: int) -> dict:
-    """10 YES of team: first trade at or after t + 1 s, + 1 cent, cap 0.99, skip at 0.99. Money in Decimal."""
+    """10 YES of team: first trade in [t + 1 s, t + 1 s + 5 min], + 1 cent, cap 0.99, skip at 0.99. Decimal money.
+    capacity = contracts traded on the market at or after t + 1 s (whole file)."""
     ts, px, size = team_series(trades, g, team)
-    idx = np.flatnonzero(ts >= t_ns + int(LATENCY_S * NS))
-    cap_contracts = float(size[idx].sum()) if len(idx) else 0.0
+    lo = t_ns + int(LATENCY_S * NS)
+    after = np.flatnonzero(ts >= lo)
+    cap_contracts = float(size[after].sum()) if len(after) else 0.0
+    idx = np.flatnonzero((ts >= lo) & (ts <= lo + FILL_WINDOW_S * NS))
     if len(idx) == 0:
-        return {"team": team, "entered": False, "skip": "no post-decision trade", "capacity": 0.0}
+        return {"team": team, "entered": False, "skip": "no post-decision trade", "capacity": cap_contracts}
     fill_ts, trade_px = int(ts[idx[0]]), D(px[idx[0]])
     fill = min(trade_px + HALF, CAP)
     if fill >= CAP:
