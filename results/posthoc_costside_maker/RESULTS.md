@@ -7,8 +7,8 @@ Maker fee lines: m0 = 0, m175 = 0.0175*C*P*(1-P) rounded up per order (not first
 ROC and the ranking use m175. Exits are taker (0.07 fee). Fill rule: strict trade-through only, fill at the limit.
 
 ## Headline
-- **No trial has a 95% CI wholly above zero.** Of 36 trials, 11 have a CI wholly below zero (all in-game two-sided
-  quoting M2/M4_in, plus the exit variants); the rest straddle zero with wide CIs on tiny fill counts.
+- **No trial has a 95% CI wholly above zero.** Of 36 trials, 20 have a CI wholly below zero (the in-game two-sided
+  quoting M2/M4_in and the exit variants); the rest straddle zero with wide CIs on tiny fill counts.
 - **Adverse selection kills spread capture.** Strict trade-through fills occur when price moves against the resting bid:
   filled contracts win about 1.3 to 1.5 cents less than their fill price in-game (M2: win rate 0.48-0.49 vs fill
   price 0.50-0.51). The 1 to 3 cent spread you capture on paper is more than offset, before fees. With maker fee 0 the
@@ -74,7 +74,7 @@ ROC and the ranking use m175. Exits are taker (0.07 fee). Fill rule: strict trad
 
 ROC m175 = net P&L / (entry cost + entry fee), ratio of sums; bootstrap over games, 2,000 reps, seed 20261004.
 Sharpe = daily mean/std * sqrt(365) over game days, m175 line. maxDD in dollars on the cumulative daily P&L.
-The ROC all-weeks diagnostic is in trials_log_full.csv (gitignored).
+The ROC all-weeks diagnostic is in trials_log.csv (roc_m175_allweeks).
 
 ## Files
 - results/posthoc_costside_maker/trials_log.csv (one row per trial, extra columns for both fee lines, fill rate,
