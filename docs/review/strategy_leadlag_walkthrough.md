@@ -56,7 +56,7 @@ signals: one position at a time. For each detected leader jump (in label order),
 
 Tests: `test_leadlag.py::test_decisions_are_stamped_after_their_grid_label`
 
-File: leadlag.py at 4ee5ff2 (branch t15-final), 105 lines. Only detect_jumps, which the run imports through laggard.py. xcorr_lag is NOT used by the run: the confirmatory lag is xcorr_lead.game_lag_mid; xcorr_lag feeds only the exploratory trade-based game_lag.
+File: leadlag.py at ad8d3d1 (branch t15-final), 105 lines. Only detect_jumps, which the run imports through laggard.py. xcorr_lag is NOT used by the run: the confirmatory lag is xcorr_lead.game_lag_mid; xcorr_lag feeds only the exploratory trade-based game_lag.
 
 Tags at line end: **[TIME]** touches decision time, fill time, windows, outages or timestamps. **[MONEY]** touches price, fee, spread, threshold or P&L. Tests per block: every test that calls a function defined in the block.
 
@@ -73,24 +73,24 @@ detect_jumps: at each label g, compare p[g] with the min and max over the traili
  27      """
  28      x = p.to_numpy()                                                                                     [MONEY]
  29      idx = p.index.to_numpy()                                                                             [TIME]
- 30      J = jump_cents / 100.0                                                                               [TIME]
+ 30      J = jump_cents / 100.0                                                                               [MONEY]
  31      out, g, n = [], 0, len(x)                                                                            [TIME]
  32      while g < n:                                                                                         [TIME]
  33          lo = max(0, g - window_s)                                                                        [TIME]
- 34          w = x[lo:g + 1]
+ 34          w = x[lo:g + 1]                                                                                  [TIME]
  35          if np.isnan(x[g]) or np.all(np.isnan(w)):
- 36              g += 1                                                                                       [TIME] [MONEY]
- 37              continue                                                                                     [MONEY]
+ 36              g += 1                                                                                       [TIME]
+ 37              continue
  38          i_min, i_max = lo + int(np.nanargmin(w)), lo + int(np.nanargmax(w))                              [MONEY]
  39          up, dn = x[g] - x[i_min], x[i_max] - x[g]                                                        [MONEY]
- 40          if up >= J - EPS or dn >= J - EPS:
+ 40          if up >= J - EPS or dn >= J - EPS:                                                               [MONEY]
  41              d = 1 if up >= dn else -1
  42              start = i_min if d == 1 else i_max                                                           [TIME]
  43              out.append({"jump_g": int(idx[g]), "start_g": int(idx[start]), "direction": d,               [TIME] [MONEY]
- 44                          "jump_cents": round(abs(x[g] - x[start]) * 100, 2), "level_before": x[start]})
+ 44                          "jump_cents": round(abs(x[g] - x[start]) * 100, 2), "level_before": x[start]})   [MONEY]
  45              g += window_s + 1                                                                            [TIME]
- 46          else:                                                                                            [TIME]
- 47              g += 1
+ 46          else:
+ 47              g += 1                                                                                       [TIME]
  48      return pd.DataFrame(out, columns=["jump_g", "start_g", "direction", "jump_cents", "level_before"])
  49
 ```
