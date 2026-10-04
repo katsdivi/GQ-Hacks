@@ -250,6 +250,7 @@ def multiple_testing(series: dict[str, pd.Series], seed: int = SEED, nboot: int 
     sk, ku = stats.skew(xb), stats.kurtosis(xb, fisher=False)
     den = np.sqrt(max(1 - sk * srb + (ku - 1) / 4 * srb ** 2, 1e-12))
     dsr = float(stats.norm.cdf((srb - sr0) * np.sqrt(T - 1) / den))
-    return {"days": T, "trials": K, "best_by_t": names[best], "best_t": float(tstat[best]), "rc_p": rc_p,
+    dsr_norm = float(stats.norm.cdf((srb - sr0) * np.sqrt(T - 1)))
+    return {"dsr_best_normal_returns": dsr_norm, "days": T, "trials": K, "best_by_t": names[best], "best_t": float(tstat[best]), "rc_p": rc_p,
             "dsr_best": dsr, "sr_best_daily": float(srb), "sr0": float(sr0),
             "holm": dict(zip(names, holm.tolist())), "raw_p": dict(zip(names, pv.tolist()))}

@@ -35,7 +35,12 @@ def load_signals() -> pd.DataFrame:
         d = flt(pd.read_csv(f))
         d = d[d.team.notna() & d.t_ns.notna()]
         out.append(pd.DataFrame({"sig": name, "game_id": d.game_id, "team": d.team, "t_ns": d.t_ns.astype("int64")}))
-    return pd.concat(out, ignore_index=True)
+    s = pd.concat(out, ignore_index=True)
+    # Ideas 7 and 12 store team as "home"/"away": map to Kalshi codes (fix after the first round-1 run, disclosed)
+    ko = pd.read_csv(C.DATA / "raw" / "kalshi_only_games.csv").set_index("game_id")
+    ha = s.team.isin(["home", "away"])
+    s.loc[ha, "team"] = [ko.loc[g, t] if g in ko.index else None for g, t in zip(s.game_id[ha], s.team[ha])]
+    return s[s.team.notna()]
 
 
 def row(trial, g, team, t, entry, fee_e, fee_e0, payout, exit_px=None, extra=None):

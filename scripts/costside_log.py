@@ -16,6 +16,38 @@ import pandas as pd
 import costside_common as C
 
 
+EXT = {"search": ("../wt-search/results/posthoc_search/trials.csv", "../wt-search/results/posthoc_search/trades.csv"),
+       "maker": ("../wt-costside-maker/results/posthoc_costside_maker/trials_log.csv",
+                 "../wt-costside-maker/results/posthoc_costside_maker/daily_pnl.csv"),
+       "patterns": ("../wt-costside-patterns/results/posthoc_costside_patterns/trials_log.csv",
+                    "../wt-costside-patterns/results/posthoc_costside_patterns/daily_pnl.csv")}
+
+
+def external() -> tuple[dict, dict]:
+    """Other branches' trials (read-only). Daily P&L if available; trials without one count as all-zero series."""
+    ser, info = {}, {}
+    for name, (tl, dp) in EXT.items():
+        try:
+            t = pd.read_csv(tl)
+        except FileNotFoundError:
+            info[name] = {"trials": 0, "status": "not found yet"}
+            continue
+        ids = t["trial"] if "trial" in t else t["trial_id"]
+        try:
+            d = pd.read_csv(dp)
+            if name == "search":
+                d = d.rename(columns={"trial": "trial_id", "date": "et_date"})
+            daily = {k: v.groupby("et_date")["pnl"].sum() for k, v in d.groupby("trial_id")}
+            status = "daily P&L used"
+        except FileNotFoundError:
+            daily, status = {}, "trial count only (no daily P&L file)"
+        for i in ids:
+            ser[f"{name}:{i}"] = daily.get(i, pd.Series(dtype=float))
+        info[name] = {"trials": int(len(ids)), "status": status,
+                      "with_daily": int(sum(1 for i in ids if i in daily))}
+    return ser, info
+
+
 def main() -> None:
     reg = pd.concat([pd.read_csv(f) for f in sorted(glob.glob(str(C.CACHE / "registry_round*.csv")))],
                     ignore_index=True)
@@ -33,7 +65,12 @@ def main() -> None:
                      "alt_c_per_contract": ma.get("c_per_contract")})
         series[r.trial] = d.groupby("day")["pnl"].sum() if len(d) else pd.Series(dtype=float)
     log = pd.DataFrame(rows)
-    mt = C.multiple_testing({k: v for k, v in series.items()})
+    own_daily = pd.concat([v.rename("pnl").rename_axis("et_date").reset_index().assign(trial_id=k)
+                           for k, v in series.items() if len(v)], ignore_index=True)
+    own_daily[["trial_id", "et_date", "pnl"]].to_csv(C.OUT / "daily_pnl.csv", index=False)
+    ext_series, ext_info = external()
+    allser = {**series, **ext_series}
+    mt = C.multiple_testing(allser)
     log["holm_p"] = log.trial.map(mt.get("holm", {}))
     log["raw_p"] = log.trial.map(mt.get("raw_p", {}))
     log["label"] = "post-hoc, exploratory; training only; walk-forward test weeks"
@@ -42,8 +79,10 @@ def main() -> None:
     log = log.sort_values(["round", "roc"], ascending=[True, False])
     log.to_csv(C.OUT / "trials_log.csv", index=False)
     best_is = log.sort_values("roc", ascending=False).iloc[0]
-    out = {"cumulative_trials": int(len(reg)), "rc_p_best_by_t": mt.get("rc_p"), "best_by_t": mt.get("best_by_t"),
-           "best_t": mt.get("best_t"), "dsr_best": mt.get("dsr_best"), "days": mt.get("days"),
+    out = {"own_trials": int(len(reg)), "external": ext_info,
+           "cumulative_trials": int(len(reg)) + sum(v["trials"] for v in ext_info.values()),
+           "trials_in_correction": len(allser), "rc_p_best_by_t": mt.get("rc_p"), "best_by_t": mt.get("best_by_t"),
+           "best_t": mt.get("best_t"), "dsr_best": mt.get("dsr_best"), "dsr_best_normal_returns": mt.get("dsr_best_normal_returns"), "sr_best_daily": mt.get("sr_best_daily"), "sr0": mt.get("sr0"), "days": mt.get("days"),
            "holm_survivors_005": [k for k, v in mt.get("holm", {}).items() if v < 0.05],
            "stop_candidates": stop.trial.tolist(), "stop_condition_met": bool(stop_ok),
            "in_sample_best_by_roc": {"trial": best_is.trial, "roc": best_is.roc, "roc_lo": best_is.roc_lo,
