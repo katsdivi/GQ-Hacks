@@ -1,0 +1,140 @@
+cfb_20261003_mtu_ku fills=0
+cfb_20261003_navy_afa fills=6
+cfb_20261003_nd_unc fills=1
+cfb_20261003_wvu_isu fills=23
+cfb_20261003_prin_clmb fills=0
+cfb_20261003_for_leh fills=0
+cfb_20261003_syr_conn fills=0
+cfb_20261003_brwn_uri fills=2
+cfb_20261003_mhu_liu fills=1
+cfb_20261003_mich_minn fills=18
+cfb_20261003_mrmk_yale fills=4
+cfb_20261003_ucf_hou fills=7
+cfb_20261003_ust_pre fills=0
+cfb_20261003_ala_msst fills=4
+cfb_20261003_bc_smu fills=1
+cfb_20261003_msu_wis fills=1
+cfb_20261003_cor_gtwn fills=0
+cfb_20261003_rich_laf fills=0
+cfb_20261003_wmu_buff fills=27
+cfb_20261003_day_drke fills=1
+cfb_20261003_valp_more fills=0
+cfb_20261003_elon_unh fills=4
+cfb_20261003_mrst_stet fills=0
+cfb_20261003_morg_vill fills=4
+cfb_20261003_tows_monm fills=2
+/Users/divyamkataria/GQ HACKS/wt-mm/scripts/posthoc_mm_signal_n_detail.py:143: RuntimeWarning: All-NaN slice encountered
+  "median_spread_c": float(np.nanmedian(spread_rows[-1]["spread_c"])) if len(g) else np.nan,
+cfb_20261003_penn_dart fills=2
+cfb_20261003_mer_vmi fills=1
+cfb_20261003_tol_ball fills=0
+cfb_20261003_norf_rmu fills=11
+cfb_20261003_wof_fur fills=0
+cfb_20261003_cit_scst fills=3
+cfb_20261003_pv_mvsu fills=0
+cfb_20261003_inst_sdak fills=0
+cfb_20261003_alcn_gram fills=2
+cfb_20261003_how_hamp fills=0
+cfb_20261003_shu_me fills=0
+cfb_20261003_chat_etsu fills=0
+cfb_20261003_cal_unlv fills=55
+cfb_20261003_osu_iowa fills=3
+cfb_20261003_ohio_kent fills=9
+cfb_20261003_odu_gast fills=1
+cfb_20261003_bgsu_moh fills=9
+cfb_20261003_aub_tenn fills=13
+cfb_20261003_lou_ncst fills=13
+cfb_20261003_wyo_ndsu fills=1
+cfb_20261003_akr_cmu fills=0
+cfb_20261003_hc_wm fills=0
+cfb_20261003_dsu_alby fills=0
+cfb_20261003_emu_mass fills=1
+cfb_20261003_fla_mizz fills=10
+cfb_20261003_uva_fsu fills=5
+cfb_20261003_mrsh_jmu fills=2
+cfb_20261003_md_neb fills=11
+cfb_20261003_alst_cook fills=7
+cfb_20261003_unco_mont fills=0
+/Users/divyamkataria/GQ HACKS/wt-mm/scripts/posthoc_mm_signal_n_detail.py:143: RuntimeWarning: All-NaN slice encountered
+  "median_spread_c": float(np.nanmedian(spread_rows[-1]["spread_c"])) if len(g) else np.nan,
+cfb_20261003_tnst_wiu fills=1
+cfb_20261003_uk_scar fills=41
+cfb_20261003_pur_ill fills=9
+cfb_20261003_aamu_jkst fills=3
+cfb_20261003_ysu_siu fills=0
+cfb_20261003_camp_nccu fills=2
+cfb_20261003_iw_sfa fills=1
+cfb_20261003_webb_chso fills=0
+cfb_20261003_orst_csu fills=1
+cfb_20261003_tntc_wcu fills=0
+cfb_20261003_ncat_bry fills=1
+cfb_20261003_una_eky fills=3
+cfb_20261003_gaso_ccar fills=3
+cfb_20261003_ark_txam fills=3
+cfb_20261003_utsa_rice fills=3
+cfb_20261003_utrgv_etam fills=7
+cfb_20261003_sdst_ilst fills=0
+cfb_20261003_colg_harv fills=11
+cfb_20261003_arpb_sou fills=1
+cfb_20261003_nich_hcu fills=0
+cfb_20261003_ulm_usa fills=1
+cfb_20261003_byu_tcu fills=9
+cfb_20261003_tem_usf fills=6
+cfb_20261003_usu_bsu fills=0
+cfb_20261003_ttu_colo fills=3
+cfb_20261003_mia_clem fills=5
+cfb_20261003_army_lt fills=3
+cfb_20261003_wash_usc fills=27
+cfb_20261004_web_cp fills=6
+cfb_20261004_uwfl_ac fills=0
+cfb_20261004_nau_idst fills=0
+cfb_20261004_suu_utu fills=0
+cfb_20261004_arst_ull fills=13
+# N maker on polymarket.com: inventory, round trips, spread and phase, top games
+
+**Label: descriptive, post-hoc, not pre-registered, one day.** From the cached N fills of b346230 (verified 428 fills, +60 s $46.53). Books re-read from the same local Vultr files with the committed loader.
+Phase split: ESPN halftime is not available in local holdout data, so the game window (kickoff + 20 min to the game's last Kalshi home-market trade in the window) is split at its midpoint; fills before kickoff are 'pre-game'. Quoted spread = polymarket.com ask minus bid just before the fill. Time at cap is time-weighted over the quoting window, excluding the kickoff cut.
+
+## (1) Inventory
+
+- games with fills: 59 of 88
+- max absolute inventory per game: median 20, max 50 contracts
+- games that ever reached the +/- 50 cap: 14
+- time-weighted share of the quoting window at the cap: median 0.000, mean 0.030, max 0.427
+
+## (2) FIFO round trips
+
+- matched round-trip contracts: 1530, realized P&L $7.99 (0.52 c per matched contract)
+- unmatched inventory at the end: net +620 contracts summed over games (gross 1220), settlement P&L $106.04
+- check: round trips + unmatched at settlement = $114.03 vs held-to-settlement P&L $114.03
+
+## (3) P&L per contract by quoted spread and by phase
+
+| bucket | fills | contracts | pnl60 | pnlset | pnl60_c_per_contract | pnlset_c_per_contract |
+|---|---|---|---|---|---|---|
+| 1c | 154 | 1540 | -9.49 | 38.46 | -0.6162 | 2.497 |
+| 2c | 68 | 680 | 3.78 | 46.71 | 0.5559 | 6.869 |
+| 3c+ | 195 | 1950 | 53.24 | 27.94 | 2.73 | 1.433 |
+| unknown | 11 | 110 | -1 | 0.92 | -0.9091 | 0.8364 |
+
+| phase | fills | contracts | pnl60 | pnlset | pnl60_c_per_contract | pnlset_c_per_contract |
+|---|---|---|---|---|---|---|
+| first half | 113 | 1130 | 13.81 | 9.48 | 1.222 | 0.8389 |
+| pre-game | 1 | 10 | 0.045 | -0.23 | 0.45 | -2.3 |
+| second half | 314 | 3140 | 32.67 | 104.8 | 1.041 | 3.337 |
+
+## (4) Top 5 games by +60 s P&L
+
+| game | fills | contracts | median_spread_c | max_abs_inv | share_time_at_cap | pnl60 | pnlset | pre_game_home_mid | home_payout | largest_late_10min_move_c | final_score |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| cfb_20261003_colg_harv | 11 | 110 | 7 | 50 | 0.2082 | 14.75 | 17 | 0.635 | 1 | 87 | Harvard Crimson 7 - Colgate Raiders 7 (STATUS_IN_PROGRESS) |
+| cfb_20261003_wmu_buff | 27 | 270 | 2 | 50 | 0.03405 | 9.35 | -13.9 | 0.175 | 0 | 72.4 | Buffalo Bulls 17 - Western Michigan Broncos 20 (STATUS_FINAL) |
+| cfb_20261003_uk_scar | 41 | 410 | 2 | 50 | 0.1708 | 8.9 | 26.1 | 0.555 | 0 | 60.5 | South Carolina Gamecocks 34 - Kentucky Wildcats 35 (STATUS_FINAL) |
+| cfb_20261003_aub_tenn | 13 | 130 | 2 | 40 | 0 | 5.25 | -2.1 | 0.675 | 1 | 21 | Tennessee Volunteers 24 - Auburn Tigers 14 (STATUS_FINAL) |
+| cfb_20261003_wvu_isu | 23 | 230 | 3 | 50 | 0.2033 | 3.5 | 6.6 | 0.585 | 1 | 32.5 | Iowa State Cyclones 45 - West Virginia Mountaineers 42 (STATUS_FINAL) |
+
+- cfb_20261003_colg_harv: pre-game home mid 0.64, home settled 1; late swing (87 c in 10 min in the second half); score: Harvard Crimson 7 - Colgate Raiders 7 (STATUS_IN_PROGRESS).
+- cfb_20261003_wmu_buff: pre-game home mid 0.17, home settled 0; late swing (72 c in 10 min in the second half); score: Buffalo Bulls 17 - Western Michigan Broncos 20 (STATUS_FINAL).
+- cfb_20261003_uk_scar: pre-game home mid 0.56, home settled 0; upset (pre-game favourite lost); late swing (60 c in 10 min in the second half); score: South Carolina Gamecocks 34 - Kentucky Wildcats 35 (STATUS_FINAL).
+- cfb_20261003_aub_tenn: pre-game home mid 0.68, home settled 1; late swing (21 c in 10 min in the second half); score: Tennessee Volunteers 24 - Auburn Tigers 14 (STATUS_FINAL).
+- cfb_20261003_wvu_isu: pre-game home mid 0.58, home settled 1; late swing (32 c in 10 min in the second half); score: Iowa State Cyclones 45 - West Virginia Mountaineers 42 (STATUS_FINAL).
