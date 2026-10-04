@@ -33,6 +33,9 @@ if [ $REH = 1 ]; then
   T=$(mktemp -d "${TMPDIR:-/tmp}/stop_and_sync_rehearse.XXXXXX")
   echo "== rehearsal in $T (nothing real is touched)"
   git clone -q --no-hardlinks "$REAL" "$T/repo"
+  # rehearse the code that will become main: the clone's main = this checkout's HEAD
+  SRC_HEAD=$(git -C "$REAL" rev-parse HEAD)
+  git -C "$T/repo" checkout -q --detach "$SRC_HEAD" && git -C "$T/repo" branch -f main "$SRC_HEAD"
   # fake Vultr host tree (/opt/gqh)
   V="$T/vultr"
   for f in $FEEDS; do mkdir -p "$V/data/live/$f/20261003"; for i in 1 2 3; do echo "fake $f $i" > "$V/data/live/$f/20261003/${i}_1.parquet"; done; done
