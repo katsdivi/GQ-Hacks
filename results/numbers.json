@@ -135,20 +135,8 @@
   "value": 179,
   "source": "report_book.py"
  },
- "B.capital_base": {
-  "value": 43.35,
-  "source": "report_book.py"
- },
  "B.pnl_total": {
   "value": -4495.5,
-  "source": "report_book.py"
- },
- "B.ann_return": {
-  "value": -211.46024627399427,
-  "source": "report_book.py"
- },
- "B.ann_vol": {
-  "value": 24.626595794509228,
   "source": "report_book.py"
  },
  "B.sharpe": {
@@ -161,10 +149,6 @@
  },
  "B.max_drawdown_dollars": {
   "value": 4495.500000000003,
-  "source": "report_book.py"
- },
- "B.max_drawdown_of_base": {
-  "value": 103.70242214532878,
   "source": "report_book.py"
  },
  "B.turnover_contracts_per_day": {
@@ -197,22 +181,6 @@
  },
  "B.pnl_2026": {
   "value": -52.4,
-  "source": "report_book.py"
- },
- "B.french.alpha_daily": {
-  "value": -0.8238797750571887,
-  "source": "report_book.py"
- },
- "B.french.beta_mkt_rf": {
-  "value": -45.47172827150909,
-  "source": "report_book.py"
- },
- "B.french.beta_hml": {
-  "value": 41.54777808100759,
-  "source": "report_book.py"
- },
- "B.french.beta_umd": {
-  "value": -30.249799773787235,
   "source": "report_book.py"
  },
  "B.french.t_alpha_daily": {
@@ -355,6 +323,18 @@
   "value": "2026-08-31",
   "source": "report_book.py"
  },
+ "B.edge_webull_cents_per_contract": {
+  "value": -4.864206881627354,
+  "source": "report_book.py"
+ },
+ "B.edge_direct_cents_per_contract": {
+  "value": -3.6720515040034623,
+  "source": "report_book.py"
+ },
+ "B.note": {
+  "value": "B is reported per contract (cents/contract) and by Sharpe only: under the PROPOSED capital base (max capital committed at once, $43 for B) its return levels are meaningless",
+  "source": "report_book.py"
+ },
  "A.costs_x2.pnl_total": {
   "value": -108.8,
   "source": "report_book.py"
@@ -381,14 +361,6 @@
  },
  "B.costs_x2.pnl_total": {
   "value": -9116.5,
-  "source": "report_book.py"
- },
- "B.costs_x2.ann_return": {
-  "value": -428.8237871553485,
-  "source": "report_book.py"
- },
- "B.costs_x2.ann_vol": {
-  "value": 49.55072074081536,
   "source": "report_book.py"
  },
  "B.costs_x2.sharpe": {
@@ -425,6 +397,14 @@
  },
  "combined.costs_x2.max_drawdown_dollars": {
   "value": 9227.599999999997,
+  "source": "report_book.py"
+ },
+ "B.costs_x2.edge_webull_cents_per_contract": {
+  "value": -9.864206881627354,
+  "source": "report_book.py"
+ },
+ "B.costs_x2.edge_direct_cents_per_contract": {
+  "value": -7.469833369400564,
   "source": "report_book.py"
  },
  "corr_A_B.days_either_traded": {
@@ -472,7 +452,7 @@
   "source": "report_book.py"
  },
  "deflated_sharpe.note": {
-  "value": "trial-Sharpe variance from the 12 trials with daily series (A 3, B 8, combined 1); the other 9 of the 21 have no daily series",
+  "value": "total-21 deflated Sharpe: trial-Sharpe variance from the 12 trials with daily series (A 3, B 8, combined 1; the other 9 of the 21 have no daily series); B's 8 trials, all strongly negative, dominate that variance, which drives every total-21 value to ~0",
   "source": "report_book.py"
  },
  "equity_curve_png": {

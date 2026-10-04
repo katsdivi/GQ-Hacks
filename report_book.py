@@ -189,11 +189,20 @@ def main() -> None:
     put("training.season_last_day", str(last))
     put("A.theta", A_THETA)
     put("B.selected_setting", {"k": sel[0], "m": sel[1], "T": sel[2]})
+    B_DROP = {"capital_base", "ann_return", "ann_vol", "max_drawdown_of_base"}   # meaningless under B's $43 base
     for name, p, bk in (("A", a_p, A), ("B", b_p, Bk), ("combined", c_p, C)):
         for k, v in metrics(p, bases[name], bk).items():
+            if name == "B" and k in B_DROP:
+                continue
             put(f"{name}.{k}", v)
         for k, v in french(p, bases[name], fac).items():
+            if name == "B" and k in ("alpha_daily", "beta_mkt_rf", "beta_hml", "beta_umd"):
+                continue                       # levels scale with B's $43 base; t-stats and R^2 do not
             put(f"{name}.french.{k}", v)
+    for line in ("webull", "direct"):
+        put(f"B.edge_{line}_cents_per_contract", float(Bk[f"pnl_{line}"].sum() / (QTY * len(Bk)) * 100))
+    put("B.note", "B is reported per contract (cents/contract) and by Sharpe only: under the PROPOSED capital base "
+                  "(max capital committed at once, $43 for B) its return levels are meaningless")
     # costs x2
     A2 = RA.costs_x2(A).assign(day=A["day"])
     b2 = pd.read_parquet("out/strategy_b/trades_costs_x2.parquet")
@@ -201,8 +210,12 @@ def main() -> None:
     for name, p, bk in (("A", daily(A2, days), A), ("B", daily(B2, days), Bk),
                         ("combined", daily(A2, days) + daily(B2, days), C)):
         m2 = metrics(p, bases[name], bk)
-        for k in ("pnl_total", "ann_return", "ann_vol", "sharpe", "sharpe_nw5", "max_drawdown_dollars"):
+        keys = ("pnl_total", "sharpe", "sharpe_nw5", "max_drawdown_dollars") if name == "B" else \
+            ("pnl_total", "ann_return", "ann_vol", "sharpe", "sharpe_nw5", "max_drawdown_dollars")
+        for k in keys:
             put(f"{name}.costs_x2.{k}", m2[k])
+    for line in ("webull", "direct"):
+        put(f"B.costs_x2.edge_{line}_cents_per_contract", float(B2[f"pnl_{line}"].sum() / (QTY * len(B2)) * 100))
     # A vs B correlation on days where at least one traded
     traded = pd.Series(days.date).isin(set(A["day"]) | set(Bk["day"])).to_numpy()
     put("corr_A_B.days_either_traded", int(traded.sum()))
@@ -217,8 +230,9 @@ def main() -> None:
         put(f"{name}.sharpe_daily", sr(p))
         put(f"{name}.deflated_sharpe_own_grid", deflated_sharpe(r, own, n_own))
         put(f"{name}.deflated_sharpe_total_21", deflated_sharpe(r, all_srs, 21))
-    put("deflated_sharpe.note", "trial-Sharpe variance from the 12 trials with daily series (A 3, B 8, combined 1); "
-                                "the other 9 of the 21 have no daily series")
+    put("deflated_sharpe.note", "total-21 deflated Sharpe: trial-Sharpe variance from the 12 trials with daily series "
+                                "(A 3, B 8, combined 1; the other 9 of the 21 have no daily series); B's 8 trials, "
+                                "all strongly negative, dominate that variance, which drives every total-21 value to ~0")
     # equity curve
     fig, ax = plt.subplots(figsize=(9, 4.5))
     for name, p in (("A (theta 0.80)", a_p), (f"B {sel}", b_p), ("combined", c_p)):
