@@ -258,7 +258,9 @@ def game_on_machine(m: Machine, c, inst: dict, other: str) -> dict:
     gx, gy = X.mid_grid(X.mid_snapshots(tk, "kalshi")), X.mid_grid(X.mid_snapshots(to, other))
     end_g = pinned_end(gx, gy, lo // NS, hi // NS - 1)
     end = (end_g + 1) * NS if end_g < hi // NS - 1 else hi
-    out.update(window_start_ns=lo, window_end_ns=end)
+    # pin_start_g: first second of the 60 s pinned run that ends the lead-test window (None if none). Reported so
+    # the laggard can stop causally at pin_start + 60 s (v2 Amendment 5 draft); the lead-test window is unchanged.
+    out.update(window_start_ns=lo, window_end_ns=end, pin_start_g=end_g if end_g < hi // NS - 1 else None)
     r = outage_reason(m, ("kalshi", other), lo, end)
     if r:
         out["reason"] = r

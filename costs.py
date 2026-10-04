@@ -17,8 +17,7 @@ conservative reading; Kalshi's exact rounding is unconfirmed (open question in f
 
 Spread: trades-only history has no book, so fills are trade price plus or minus HALF_SPREAD, 0.5 cent: the
 v3 training fill model (HYPOTHESIS_v3.md, "Fill"; Strategy B uses the same value, strategy_b.HALF_SPREAD).
-The laggard fills at recorded quotes and
-does not use it.
+The laggard fills at recorded quotes and does not use it.
 """
 from __future__ import annotations
 

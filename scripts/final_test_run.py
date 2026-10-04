@@ -144,7 +144,9 @@ def laggard(c: Ctx, res: dict, num: dict) -> None:
         for r in q.itertuples():
             m = by[r.machine]
             inst = H.instruments(cand.loc[[r.game_id]].reset_index().iloc[0], c.maps)
-            lo, hi = int(r.window_start_ns), int(r.window_end_ns)
+            lo = int(r.window_start_ns)
+            # causal trading end (v2 Amendment 5 draft): min(kickoff + 4.5 h, pin_start + 60 s), not the pin start
+            hi = L.trading_end_ns(pd.Timestamp(r.kickoff_utc).value, getattr(r, "pin_start_g", None))
             kt = rows_with_size(m, "kalshi", inst["kalshi"], lo - 3600 * NS, hi + 120 * NS)
             ot = rows_with_size(m, other, inst[other], lo - 3600 * NS, hi + 120 * NS)
             gaps = m.gaps()

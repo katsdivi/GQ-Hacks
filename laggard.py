@@ -54,8 +54,20 @@ VENUE_DELAY_S = {"polymarket": 3.0, "polymarket_us": 0.0}  # polymarket.com 3.0:
 #   holdout_seconds_delay.csv (0 of 112); every holdout market uses its own value (all 1 s, read 16:22 ET)
 SECONDS_DELAY_CSV = Path("data/live/holdout_seconds_delay.csv")
 LATENCIES_S = (0.0, 0.25, 0.5, 1.0, 2.0, 5.0, 10.0)     # added to the venue delay
+TRADE_POST_S = int(4.5 * 3600)   # laggard trading ends at the latest at kickoff + 4.5 h (the lead-test window end)
+PIN_S = 60                       # a pinned run is 60 s long (holdout_mid.PIN_S)
 LABELS = {"polymarket": "paper only; polymarket.com not available to US residents",
           "polymarket_us": "US-executable version (Polymarket US); state eligibility as in HYPOTHESIS_v2.md"}
+
+
+def trading_end_ns(kickoff_ns: int, pin_start_g: int | None) -> int:
+    """Causal end of laggard trading (v2 Amendment 5 draft): the earlier of kickoff + 4.5 h and the first moment
+    the 60 s pinned run is observable, (pin_start + PIN_S) s, since label g is known at (g + 1) s. Uses no data
+    after that moment (the lead-test window ends at the pin START, which needs the next 60 s)."""
+    end = int(kickoff_ns) + TRADE_POST_S * NS
+    if pin_start_g is not None and pin_start_g == pin_start_g:
+        end = min(end, (int(pin_start_g) + PIN_S) * NS)
+    return end
 
 
 def load_seconds_delay(path: Path = SECONDS_DELAY_CSV) -> dict:
@@ -212,19 +224,43 @@ def capacity(trades: pd.DataFrame) -> pd.DataFrame:
              .reset_index())
 
 
+BOOT_N, BOOT_SEED = 2000, 20261003      # docs/stats_plan.md: block bootstrap by game, 2,000 draws, seed 20261003
+
+
+def game_bootstrap_ci(per_game_sum: np.ndarray, per_game_n: np.ndarray) -> tuple[float, float]:
+    """Block bootstrap by game (as run_strategy_b.boot_ci): resample whole games with replacement; each draw's
+    statistic is total edge / total trades. NaN with fewer than 2 games or fewer than 2 trades."""
+    p, n = np.asarray(per_game_sum, float), np.asarray(per_game_n, float)
+    if len(p) < 2 or n.sum() < 2:
+        return float("nan"), float("nan")
+    idx = np.random.default_rng(BOOT_SEED).integers(0, len(p), size=(BOOT_N, len(p)))
+    m = p[idx].sum(axis=1) / np.maximum(n[idx].sum(axis=1), 1)
+    return float(np.percentile(m, 2.5)), float(np.percentile(m, 97.5))
+
+
 def latency_curve(trades: pd.DataFrame) -> pd.DataFrame:
-    """out/latency_curve.csv contract: latency_s, n_trades, edge_cents_mean (net, per contract), 95% normal CI,
-    pnl_total (dollars). Also skip counts (no quote, break, after window end). Filled round trips only.
-    Group by latency_s = total decision-to-fill time, so mix markets only when they share a delay."""
+    """out/latency_curve.csv contract: latency_s, n_trades, edge_cents_mean (net, per contract), edge_ci_low /
+    edge_ci_high = 95% block bootstrap by game (docs/stats_plan.md, v2 Amendment 5 draft), pnl_total (dollars).
+    Also n_games, the per-trade normal CI as extra columns labelled "per-trade normal (not the plan's CI)", and skip
+    counts (no quote, break, after window end). Filled round trips only. Group by latency_s = total
+    decision-to-fill time, so mix markets only when they share a delay."""
     rows = []
     for lat, d in trades.groupby("latency_s"):
         f = d[d["filled"].astype(bool)]
         e = f["edge_cents_per_contract"].to_numpy(float) if len(f) else np.array([])
         m = float(e.mean()) if len(e) else float("nan")
         se = float(e.std(ddof=1) / np.sqrt(len(e))) if len(e) > 1 else float("nan")
-        rows.append({"latency_s": lat, "n_trades": len(e), "edge_cents_mean": m,
-                     "edge_ci_low": m - 1.96 * se, "edge_ci_high": m + 1.96 * se,
+        if len(f) and "game_id" in f:
+            pg = f.groupby("game_id")["edge_cents_per_contract"]
+            lo, hi = game_bootstrap_ci(pg.sum().to_numpy(), pg.size().to_numpy())
+            n_games = int(pg.ngroups)
+        else:
+            lo, hi, n_games = float("nan"), float("nan"), 0
+        rows.append({"latency_s": lat, "n_trades": len(e), "n_games": n_games, "edge_cents_mean": m,
+                     "edge_ci_low": lo, "edge_ci_high": hi, "ci_method": "block bootstrap by game, 2000, seed 20261003",
                      "pnl_total": float(f["pnl_cents"].sum()) / 100 if len(f) else 0.0,
+                     "per_trade_normal_ci_low (not the plan's CI)": m - 1.96 * se,
+                     "per_trade_normal_ci_high (not the plan's CI)": m + 1.96 * se,
                      "n_skipped_no_quote": int((d["skip"].astype(str).str.startswith("no quote")).sum()),
                      "n_skipped_break": int((d["skip"].astype(str).str.startswith("break")).sum()),
                      "n_skipped_after_end": int((d["skip"].astype(str).str.startswith("after window end")).sum())})

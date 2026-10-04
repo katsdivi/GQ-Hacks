@@ -217,3 +217,57 @@ def test_capacity_is_best_level_size_at_fill():
     us = L.evaluate_game("syn", KO, books(step(100), "kalshi", "K"), books(step(108), "polymarket_us", "P"),
                          "polymarket_us", T0, T0 + W * NS, latencies=(0.0,), holdout_run=True)
     assert np.isnan(us.iloc[0].cap_contracts) and np.isnan(L.capacity(us).cap_contracts_total.item())
+
+
+# --- v2 Amendment 5 draft: causal trading end = min(kickoff + 4.5 h, pin_start + 60 s) ----------------------
+
+def test_trading_end_is_causal():
+    ko = KO.value
+    assert L.trading_end_ns(ko, None) == ko + int(4.5 * 3600) * NS
+    assert L.trading_end_ns(ko, float("nan")) == ko + int(4.5 * 3600) * NS
+    pin = T0 // NS + 200
+    assert L.trading_end_ns(ko, pin) == (pin + 60) * NS                   # the pin is observable at pin + 60 s
+    assert L.trading_end_ns(ko, ko // NS + 5 * 3600) == ko + int(4.5 * 3600) * NS   # a late pin: 4.5 h wins
+
+
+def _run_until(end_ns, cut_ns=None):
+    k, o = books(step(100), "kalshi", "K"), books(step(108), "polymarket", "P")
+    if cut_ns is not None:
+        k, o = k[k.ts <= cut_ns], o[o.ts <= cut_ns]
+    return L.evaluate_game("syn", KO, k, o, "polymarket", T0, end_ns, latencies=(0.0,), holdout_run=True, **D1)
+
+
+def test_fill_before_pin_plus_60_fills_after_is_skipped():
+    # 1 s market: entry fill at 102 s, exit fill at 110 s (test_signal_and_exact_pnl_at_1s_market_delay)
+    pin = T0 // NS + 80                                   # exit fill at 110 s = pin + 30 s: inside, fills
+    r = _run_until(L.trading_end_ns(KO.value, pin)).iloc[0]
+    assert r.filled and r.exit_fill_ns == (pin + 30) * NS
+    pin = T0 // NS + 49                                   # exit fill at 110 s = pin + 61 s: after the end, skipped
+    r = _run_until(L.trading_end_ns(KO.value, pin)).iloc[0]
+    assert not r.filled and r.skip == "after window end at exit"
+
+
+def test_rows_after_pin_plus_60_change_no_filled_trade():
+    pin = T0 // NS + 80
+    end = L.trading_end_ns(KO.value, pin)
+    full = _run_until(end)
+    cut = _run_until(end, cut_ns=(pin + 60) * NS)
+    f, c = full[full.filled.astype(bool)], cut[cut.filled.astype(bool)]
+    cols = ["entry_fill_ns", "exit_fill_ns", "entry_px", "exit_px", "pnl_cents"]
+    assert len(f) and f[cols].reset_index(drop=True).equals(c[cols].reset_index(drop=True))
+
+
+def test_latency_curve_ci_is_game_bootstrap():
+    """Two games, one trade each, edges 10 and 20 cents: the bootstrap resamples games, so the CI lies within
+    [10, 20] and equals a hand recomputation; the per-trade normal CI is kept only as labelled extra columns."""
+    t = pd.DataFrame({"game_id": ["g1", "g2", "g2"], "latency_s": 1.0, "filled": [True, True, False],
+                      "skip": ["", "", "no quote at entry"], "edge_cents_per_contract": [10.0, 20.0, np.nan],
+                      "pnl_cents": [100.0, 200.0, np.nan]})
+    c = L.latency_curve(t).iloc[0]
+    rng = np.random.default_rng(20261003)
+    idx = rng.integers(0, 2, size=(2000, 2))
+    m = np.array([10.0, 20.0])[idx].sum(axis=1) / 2
+    assert c.n_games == 2 and c.n_trades == 2 and c.n_skipped_no_quote == 1
+    assert (c.edge_ci_low, c.edge_ci_high) == (np.percentile(m, 2.5), np.percentile(m, 97.5))
+    assert 10 <= c.edge_ci_low <= c.edge_ci_high <= 20
+    assert "per_trade_normal_ci_low (not the plan's CI)" in c.index
