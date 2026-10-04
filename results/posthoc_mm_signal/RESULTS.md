@@ -17,3 +17,18 @@ Notes: {"cme_games": 14, "cme_signals": 3660, "pm_games": 88, "pm_signals": 9600
 - polymarket.com, L 1.0 s: does not make sense on this data (settlement mark: does not make sense on this data)
 - CME, L 0.25 s: does not make sense on this data (no F1 result) (settlement mark: does not make sense on this data (no F1 result))
 - CME, L 1.0 s: does not make sense on this data (no F1 result) (settlement mark: does not make sense on this data (no F1 result))
+
+## Note added after the run (07:35 ET, no rerun, no number changed)
+
+- CME F1 rows are absent from the table above because the strict trade-through rule produced 0 fills for every CME
+  maker (N, S 0.25, S 1.0): data/mm_cache/fills.parquet has no CME F1 rows. Our quote always joins the best price,
+  behind a displayed top size of thousands of contracts, and no CME trade ever printed strictly through the best
+  price in the windows. So CME F1: N 0 fills, S 0 fills, S minus N = 0. The summary dropped empty frames, which is why
+  the verdict line says "no F1 result"; the verdict itself is unchanged ("does not make sense on this data": S minus N
+  is not positive under F1).
+- CME F2 rows are identical for L 0.25 and 1.0: the pulls that differ between the two latencies did not change any
+  of the 16 fills.
+- Descriptive, not part of the reading rule: the N maker on polymarket.com earned +$46.53 marked at +60 s (1.09 c per
+  contract over 428 fills, 4,280 contracts, 88 games) and +$114 held to settlement, under the strict F1 rule with a
+  maker fee assumed 0 (no fee data in the repo) and top-of-book data only. No CI or placebo was pre-registered for N
+  alone. polymarket.com is not available to US persons.
