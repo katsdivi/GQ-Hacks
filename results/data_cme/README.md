@@ -56,6 +56,67 @@ Ten games is a small sample. A lead-lag test there is descriptive, with wide int
 
 Regenerate (cwd = this worktree): `nice -n 19 ../staleline/.venv-run/bin/python scripts/cme_train_map.py --data ../staleline/data`
 
+
+## Update 2026-10-04 ~06:35 ET (Divi approved spend; cap $60; ledger in SPEND.md)
+
+**Purchased:** $0.8788 in total, itemised in SPEND.md.
+- mbp-10 (10-level depth) and mbp-1 (every top-of-book change) for all 64 game-contract legs, Jan 8 to Feb 10. Together $0.0648.
+- One day of all GLBX definitions, Dec 22, 2025: $0.8140.
+
+**December finding:**
+- No football event contracts appear in the Dec 22, 2025 definitions (988,721 rows).
+- No FG or CG game contracts, and no NFLG, CFBG or 0E groups. The only CG rows are unrelated futures (CG9, CGB).
+- FS season-championship symbols do exist, but they are other products.
+
+So no December 2025 game contracts are in GLBX.MDP3 under any symbol format. Combined with symbology resolving only
+from 2026-01-11, the CME football game-contract data on Databento starts on Jan 11, 2026. Step 2 was skipped: no
+December definitions range pull and no December trade pulls.
+
+**Kalshi for the 4 extra games:** these were fetched free from Kalshi's public API by scripts/cme_train_kalshi_extra.py, into
+data/raw/cme_train_v2/kalshi/ (gitignored). The games are:
+- CFP final, Jan 19;
+- AFC and NFC championships, Jan 25;
+- Super Bowl, Feb 8.
+
+Kalshi's game-winner series is empty for these games, so the script uses Kalshi's championship series instead:
+- KXNFLGAME-26JAN25LASEA has 0 volume;
+- KXNCAAFGAME-26JAN19MIAIND has 18 contracts;
+- there is no KXNFLGAME event for NE at DEN or for the Super Bowl;
+- the series used are KXNCAAF-26, KXNFLAFCCHAMP-25, KXNFLNFCCHAMP-25 and KXSB-26.
+
+For a single deciding game these pay exactly like a game-winner contract. Same tick contract (P(ESPN home)) and
+window (kickoff - 2 h to + 5 h). Settlements are read from Kalshi. data/raw/kalshi_only and kalshi_only_games.csv
+are untouched.
+
+### Final coverage (both venues trade in [kickoff - 2 h, kickoff + 5 h])
+
+| league | month | games |
+|---|---|---|
+| NFL | 2026-01 | 12 |
+| NFL | 2026-02 | 1 (Super Bowl) |
+| CFB | 2026-01 | 1 (CFP final) |
+| total | | **14 games, 28 "win" contracts** |
+
+Depth: every one of the 28 contracts has mbp-10 rows in its window (825 to 17,322 rows per contract).
+The CFP semifinals (Jan 8, 9) map but have no CME data in their windows.
+
+### Paths (all gitignored, under ../staleline/data/raw/cme_train_v2/)
+
+- map.csv: per contract. Columns: symbol, game_id, kickoff, cme_trades_in_window, cme_bbo_rows_in_window,
+  cme_mbp10_rows_in_window, kalshi_trades_in_window, kalshi_dir.
+- jan_mbp10.dbn.zst and jan_mbp1.dbn.zst: Databento DBN, read with databento.DBNStore.from_file.
+- defs_20251222.dbn.zst.
+- kalshi/<game_id>.parquet and kalshi_games.csv: the 4 extra games.
+- Existing CME trades and bbo-1s: ../staleline/data/raw/fg_cg_train_trades.parquet and fg_cg_train_bbo-1s.parquet.
+- Kalshi for the other 10 games: ../staleline/data/raw/kalshi_only/<game_id>.parquet.
+
+CME prices are per the C0001 "team wins" contract. Kalshi files are P(home), so orient CME to the home team (home
+C0001 price, or 1 - away C0001) before comparing.
+
+Regenerate (worktree root):
+- `PYTHONPATH=. nice -n 19 ../staleline/.venv-run/bin/python scripts/cme_train_kalshi_extra.py --data ../staleline/data`
+- `nice -n 19 ../staleline/.venv-run/bin/python scripts/cme_train_map.py --data ../staleline/data`
+
 ## Free sources
 
 Researched 2026-10-04 by web search only. No sign-ups, no spending.

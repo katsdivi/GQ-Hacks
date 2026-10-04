@@ -48,8 +48,18 @@ def main() -> None:
     defs = pd.read_parquet(raw / "fg_cg_defs.parquet", columns=["raw_symbol", "expiration"])
     syms = pd.DataFrame([{"symbol": s, **p} for s in defs.raw_symbol.unique() if (p := parse(s))])
     syms = syms[(syms.cp == "C") & (pd.to_datetime(syms.date) < SEAL.tz_localize(None))]
-    k = pd.read_csv(raw / "kalshi_only_games.csv")
+    k = pd.read_csv(raw / "kalshi_only_games.csv").assign(kalshi_dir="kalshi_only")
+    extra = raw / "cme_train_v2" / "kalshi_games.csv"
+    if extra.exists():   # championship-series games fetched by scripts/cme_train_kalshi_extra.py
+        k = pd.concat([k, pd.read_csv(extra).assign(kalshi_dir="cme_train_v2/kalshi")], ignore_index=True)
     k["ko"] = pd.to_datetime(k.kickoff_utc_espn, utc=True)
+    import databento as db
+    depth = {}
+    f10 = raw / "cme_train_v2" / "jan_mbp10.dbn.zst"
+    if f10.exists():
+        d10 = db.DBNStore.from_file(str(f10)).to_df()
+        d10 = d10.assign(ts=d10.index)
+        depth = {s: g for s, g in d10.groupby("symbol")}
     rows = []
     for s in syms.itertuples():
         et = k.ko.dt.tz_convert("America/New_York").dt.date
@@ -62,7 +72,10 @@ def main() -> None:
             lo, hi = ko - PRE, ko + POST
             st = tr[(tr.symbol == s.symbol) & (tr.ts_event >= lo) & (tr.ts_event <= hi)]
             sb = bbo[(bbo.symbol == s.symbol) & (bbo.ts_event >= lo) & (bbo.ts_event <= hi)]
-            kf = raw / "kalshi_only" / f"{r['game_id']}.parquet"
+            kf = raw / c.kalshi_dir.iloc[0] / f"{r['game_id']}.parquet"
+            dg = depth.get(s.symbol)
+            r["cme_mbp10_rows_in_window"] = 0 if dg is None else int(((dg.ts >= lo) & (dg.ts <= hi)).sum())
+            r["kalshi_dir"] = c.kalshi_dir.iloc[0]
             kt = pd.read_parquet(kf, columns=["ts", "kind"]) if kf.exists() else pd.DataFrame(columns=["ts", "kind"])
             kt = kt[kt.kind == "trade"]
             r.update(kickoff=ko, cme_trades_in_window=len(st), cme_bbo_rows_in_window=len(sb),
