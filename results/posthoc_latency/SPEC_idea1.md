@@ -16,10 +16,24 @@ holdout results were seen. It is not part of the pre-registered plan and is not 
 Data and games
 - Data: Vultr recordings only, `staleline/data/vultr/data/live/kalshi/*/*.parquet`, rows with kind in {bid, ask}.
   Trade rows are ignored. No Polymarket or Polymarket US data is used.
-- Games: every row of `results/holdout/lead_polymarket.com_per_game.csv` with machine == vultr: 101 games
-  (qualifying and non-qualifying for the lead test alike; every one has a window). The Polymarket US per-game
-  file has 95 vultr games, all a subset of these 101, with the same window_start_ns but window_end_ns equal in
-  only 45% of them, so the polymarket.com file's window [window_start_ns, window_end_ns) is used for all 101.
+- Games (superseded at 03:38 ET, before any code ran on real data, on Divi's instruction relayed by the
+  orchestrator): windows are read ONLY from `data/live/holdout_windows.csv` (commit 8415faf; columns game_id,
+  venue, window_start_ns, window_end_ns). It has 101 polymarket rows and 95 polymarket_us rows; the 95 are a
+  subset of the 101 game_ids with identical window_start_ns. Dedupe by game_id: the venue == polymarket row is
+  used (window [window_start_ns, window_end_ns)), giving 101 games. A game is used only if both of its Kalshi
+  team markets have book rows in the Vultr recordings in the loaded range; the count used is reported. The
+  windows file has no machine column; the Vultr-data condition above replaces it. ESPN kickoff T comes from
+  `kickoff_utc` in `data/live/holdout_candidates.csv`.
+- Disclosure (03:38 ET): before the windows file existed, I read `results/holdout/lead_polymarket.com_per_game.csv`
+  and `results/holdout/lead_Polymarket US_per_game.csv` at about 03:31 to 03:33 ET. Loaded: whole files into
+  pandas (all columns in memory). Printed: the header line and the first 2 data rows of the polymarket.com file
+  (both excluded games, all numeric fields blank, lag_s blank); value counts of machine, and of (qualifying,
+  reason) for vultr rows (the reason strings contain the Kalshi / other mid-change counts for non-qualifying
+  games); overlap counts of game_id between the two files and equality rates of window_start_ns /
+  window_end_ns; describe() of window length in hours; line counts. Columns used: game_id, machine, qualifying,
+  reason, window_start_ns, window_end_ns, kickoff_utc. Other columns (lag_s, n_changes_*, excl_*, pin_start_g,
+  kalshi_rows, other_rows, excluded_s): seen as header names only; no values printed (lag_s values not seen
+  except the 2 blank rows). The script does not read these files.
 - Tickers: event ticker = `kalshi_ticker` in `data/live/holdout_candidates.csv`; team codes from
   `data/vultr/data/live/kalshi_events.json` as [away, home, sep] (the collector's own orientation source).
   Home market = `<event>-<home>`, away market = `<event>-<away>`. Cross-check done before writing this: for all
@@ -84,8 +98,17 @@ Payout and P&L
   payout = q x (sv_home + sv_away); both-NO payout = q x (2 - sv_home - sv_away) (covers ties or scalar
   results). Per position net P&L = payout - q_h x price_h - q_a x price_a - entry fees(q_h) - entry fees(q_a)
   + (excess sale proceeds - excess sale fee). Excess held to settlement pays its own settlement value.
+- Ties: a tie (Kalshi result "scalar") pays 0.5 + 0.5: each team YES settles at 0.50 (the settlement file
+  shows settlement_value_dollars 0.5000 on both markets for scalar results), so both-YES and both-NO each pay
+  q x 1.00 on a tie.
 - A game with no finalized settlement rows for both markets (1 of the 101 has no rows): its executed positions
   are counted in executed / contracts but excluded from P&L and listed separately.
+
+Confirmations (03:38 ET, requested by the orchestrator)
+- (a) Size is min(10, displayed size on each leg at its fill snapshot, the first received at or after t + L),
+  not at t. (b) Webull is $0.02 per contract per leg, charged on both legs (and on any excess unwind fill).
+  (c) Kalshi direct is 0.07 x C x P x (1 - P) rounded up to the cent per leg (per order). (d) A tie pays
+  0.5 + 0.5.
 
 Statistics
 - Per run (L, schedule): opportunities seen (YES, NO), attempts, executed, missed, contracts (sum of paired q),
