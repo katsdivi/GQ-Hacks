@@ -1,0 +1,1897 @@
+{
+ "posthoc_tns_L1_net_c": {
+  "value": -4.042857142857143,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "mean_net_c_per_contract"
+ },
+ "posthoc_tns_L1_net_c_ci": {
+  "value": [
+   -4.37261798088411,
+   -3.679201362286919
+  ],
+  "source": "results/posthoc/tns/results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_tns_L1_trades": {
+  "value": 231,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "trades"
+ },
+ "posthoc_tns_L2_net_c": {
+  "value": -4.138528138528138,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "mean_net_c_per_contract"
+ },
+ "posthoc_tns_L2_net_c_ci": {
+  "value": [
+   -4.455947297297298,
+   -3.7668425044396208
+  ],
+  "source": "results/posthoc/tns/results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_tns_L2_trades": {
+  "value": 231,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "trades"
+ },
+ "posthoc_tns_L5_net_c": {
+  "value": -4.375324675324675,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "mean_net_c_per_contract"
+ },
+ "posthoc_tns_L5_net_c_ci": {
+  "value": [
+   -4.695465089034677,
+   -4.093328947368422
+  ],
+  "source": "results/posthoc/tns/results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_tns_L5_trades": {
+  "value": 231,
+  "source": "results/posthoc/tns/results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea1_complement_violations": {
+  "value": 1260,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "opps_total (schedule direct)"
+ },
+ "posthoc_idea1_violation_duration_median_s": {
+  "value": 0.0109,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "dur_s_min_25_50_75_90_max (median, schedule direct)"
+ },
+ "posthoc_idea1_L0.25_executed": {
+  "value": 22,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "executed"
+ },
+ "posthoc_idea1_L0.25_trade_mean_usd": {
+  "value": -0.2811863633268462,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean"
+ },
+ "posthoc_idea1_L0.25_trade_mean_ci_usd": {
+  "value": [
+   -0.3564621486494873,
+   -0.2110969736002351
+  ],
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean_ci_lo, trade_mean_ci_hi"
+ },
+ "posthoc_idea1_L0.5_executed": {
+  "value": 16,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "executed"
+ },
+ "posthoc_idea1_L0.5_trade_mean_usd": {
+  "value": -0.3229874995734861,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean"
+ },
+ "posthoc_idea1_L0.5_trade_mean_ci_usd": {
+  "value": [
+   -0.4015058332505676,
+   -0.2406199552987282
+  ],
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean_ci_lo, trade_mean_ci_hi"
+ },
+ "posthoc_idea1_L1_executed": {
+  "value": 14,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "executed"
+ },
+ "posthoc_idea1_L1_trade_mean_usd": {
+  "value": -0.267792856656469,
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean"
+ },
+ "posthoc_idea1_L1_trade_mean_ci_usd": {
+  "value": [
+   -0.3814495831656835,
+   -0.1208578333093211
+  ],
+  "source": "results/posthoc/idea1/idea1_results.csv",
+  "column": "trade_mean_ci_lo, trade_mean_ci_hi"
+ },
+ "posthoc_idea2_lag_median_s": {
+  "value": 0.1,
+  "source": "results/posthoc/idea2/idea2_lag_distribution.csv",
+  "column": "lag_s (kind real)"
+ },
+ "posthoc_idea2_lag_share_pos": {
+  "value": 0.9659090909090909,
+  "source": "results/posthoc/idea2/idea2_lag_distribution.csv",
+  "column": "lag_s > 0 (kind real)"
+ },
+ "posthoc_idea2_placebo_lag_median_s": {
+  "value": -0.4,
+  "source": "results/posthoc/idea2/idea2_lag_distribution.csv",
+  "column": "lag_s (placebo)"
+ },
+ "posthoc_idea2_mannwhitney_p": {
+  "value": 0.0365,
+  "source": "results/posthoc/idea2/idea2_RESULTS.md",
+  "column": "Lag test section"
+ },
+ "posthoc_idea2_L0.25_net_c": {
+  "value": -13.164565117968996,
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "mean_net_c (kalshi_direct)"
+ },
+ "posthoc_idea2_L0.25_net_c_ci": {
+  "value": [
+   -15.083269173503552,
+   -11.564402097763429
+  ],
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_idea2_L0.5_net_c": {
+  "value": -12.515728012979968,
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "mean_net_c (kalshi_direct)"
+ },
+ "posthoc_idea2_L0.5_net_c_ci": {
+  "value": [
+   -14.284322603686498,
+   -10.946561436878696
+  ],
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_idea2_L1_net_c": {
+  "value": -12.49984199497293,
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "mean_net_c (kalshi_direct)"
+ },
+ "posthoc_idea2_L1_net_c_ci": {
+  "value": [
+   -14.318823589027168,
+   -10.94149137640047
+  ],
+  "source": "results/posthoc/idea2/idea2_results.csv",
+  "column": "ci_low, ci_high"
+ },
+ "posthoc_idea3_status": {
+  "value": "invalid, lookahead",
+  "source": "results/posthoc/idea3/idea3_RESULTS.md",
+  "column": "INVALID, LOOKAHEAD note"
+ },
+ "posthoc_idea4_theta0.9_favorite_trades": {
+  "value": 1139,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.9_favorite_roc": {
+  "value": -0.0165913321192297,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.9_favorite_roc_ci": {
+  "value": [
+   -0.0372995490797875,
+   0.0021500130462088
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.9_favorite_c_per_contract": {
+  "value": -1.6664618086040388,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.9_placebo_trades": {
+  "value": 1202,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.9_placebo_roc": {
+  "value": -0.2094121097220301,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.9_placebo_roc_ci": {
+  "value": [
+   -0.3496384709619278,
+   -0.0626524060797168
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.9_placebo_c_per_contract": {
+  "value": -2.769217970049916,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.93_favorite_trades": {
+  "value": 1128,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.93_favorite_roc": {
+  "value": -0.0317449039959314,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.93_favorite_roc_ci": {
+  "value": [
+   -0.0509697808670454,
+   -0.0135611671642634
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.93_favorite_c_per_contract": {
+  "value": -2.718971631205673,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.93_placebo_trades": {
+  "value": 1200,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.93_placebo_roc": {
+  "value": -0.1245944116369807,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.93_placebo_roc_ci": {
+  "value": [
+   -0.2963757964033757,
+   0.0636575939078184
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.93_placebo_c_per_contract": {
+  "value": -1.5380000000000005,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.95_favorite_trades": {
+  "value": 1107,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.95_favorite_roc": {
+  "value": -0.0316215581138263,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.95_favorite_roc_ci": {
+  "value": [
+   -0.049967180979007,
+   -0.0144073982492425
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.95_favorite_c_per_contract": {
+  "value": -2.9009936766034325,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.95_placebo_trades": {
+  "value": 1200,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.95_placebo_roc": {
+  "value": -0.0749525346722747,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.95_placebo_roc_ci": {
+  "value": [
+   -0.2737259404987326,
+   0.1294480316036855
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.95_placebo_c_per_contract": {
+  "value": -0.8977500000000002,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.97_favorite_trades": {
+  "value": 1011,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.97_favorite_roc": {
+  "value": -0.0195944578094922,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.97_favorite_roc_ci": {
+  "value": [
+   -0.0367348695385623,
+   -0.003642402250259
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.97_favorite_c_per_contract": {
+  "value": -2.052621167161227,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_theta0.97_placebo_trades": {
+  "value": 1183,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.97_placebo_roc": {
+  "value": -0.0944504189002169,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea4_theta0.97_placebo_roc_ci": {
+  "value": [
+   -0.3203991787157593,
+   0.1552599633110002
+  ],
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea4_theta0.97_placebo_c_per_contract": {
+  "value": -1.1369399830938294,
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea4_selected": {
+  "value": "theta 0.9",
+  "source": "results/posthoc/idea4/training_results.csv",
+  "column": "selection rule (>= 100 trades, highest roc_mean)"
+ },
+ "posthoc_idea6_D_s60_winner_trades": {
+  "value": 20,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s60_winner_roc": {
+  "value": 0.3745082609005147,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s60_winner_roc_ci": {
+  "value": [
+   0.2461132020979478,
+   0.5152133980280609
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s60_winner_c_per_contract": {
+  "value": 24.000000000000004,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s60_placebo_trades": {
+  "value": 547,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s60_placebo_roc": {
+  "value": -1.0,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s60_placebo_roc_ci": {
+  "value": [
+   -1.0,
+   -1.0
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea6_D_s60_placebo_c_per_contract": {
+  "value": -3.247166361974406,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea6_D_s180_winner_trades": {
+  "value": 14,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s180_winner_roc": {
+  "value": 0.4537986701194789,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s180_winner_roc_ci": {
+  "value": [
+   0.2971984444649526,
+   0.6310662985399569
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s180_winner_c_per_contract": {
+  "value": 28.135714285714293,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s180_placebo_trades": {
+  "value": 269,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s180_placebo_roc": {
+  "value": -1.0,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s180_placebo_roc_ci": {
+  "value": [
+   -1.0,
+   -1.0
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea6_D_s180_placebo_c_per_contract": {
+  "value": -3.904460966542752,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea6_D_s600_winner_trades": {
+  "value": 14,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s600_winner_roc": {
+  "value": 0.4146281653077649,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1) [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s600_winner_roc_ci": {
+  "value": [
+   0.249247183483021,
+   0.6147176733537412
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s600_winner_c_per_contract": {
+  "value": 25.66428571428571,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract [INVALID: winner leg, bad ESPN end-marker wallclocks]"
+ },
+ "posthoc_idea6_D_s600_placebo_trades": {
+  "value": 49,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s600_placebo_roc": {
+  "value": -1.0,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea6_D_s600_placebo_roc_ci": {
+  "value": [
+   -1.0,
+   -1.0
+  ],
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea6_D_s600_placebo_c_per_contract": {
+  "value": -10.73877551020408,
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea6_selected": {
+  "value": "none",
+  "source": "results/posthoc/idea6/training_results.csv",
+  "column": "selection rule (>= 50 trades)"
+ },
+ "posthoc_idea6_E_to_winner_099_median_s": {
+  "value": 11,
+  "source": "results/posthoc/idea6/README.md",
+  "column": "Close-out, descriptive results kept"
+ },
+ "posthoc_idea6_E_to_winner_099_p90_s": {
+  "value": 253,
+  "source": "results/posthoc/idea6/README.md",
+  "column": "Close-out, descriptive results kept"
+ },
+ "posthoc_idea6_settlement_disagreements": {
+  "value": 0,
+  "source": "results/posthoc/idea6/README.md",
+  "column": "Close-out, descriptive results kept"
+ },
+ "posthoc_idea7_k0.02_signal_trades": {
+  "value": 19,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.02_signal_roc": {
+  "value": -0.1236541979624997,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.02_signal_roc_ci": {
+  "value": [
+   -0.5210868881694604,
+   0.2918670137905009
+  ],
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea7_k0.02_signal_c_per_contract": {
+  "value": 1.7000000000000004,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea7_k0.02_placebo_trades": {
+  "value": 274,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.02_placebo_roc": {
+  "value": -0.0146984744969648,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.02_placebo_roc_ci": {
+  "value": [
+   -0.1361526575138525,
+   0.1208121324272578
+  ],
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea7_k0.02_placebo_c_per_contract": {
+  "value": 1.8777372262773715,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea7_k0.03_signal_trades": {
+  "value": 0,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.03_placebo_trades": {
+  "value": 24,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.03_placebo_roc": {
+  "value": -0.1761240828757207,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.03_placebo_roc_ci": {
+  "value": [
+   -0.4681360085108556,
+   0.1104723581465044
+  ],
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea7_k0.03_placebo_c_per_contract": {
+  "value": -0.4333333333333329,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea7_k0.05_signal_trades": {
+  "value": 0,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.05_placebo_trades": {
+  "value": 1,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.05_placebo_roc": {
+  "value": 0.7006802721088435,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea7_k0.05_placebo_roc_ci": {
+  "value": [
+   NaN,
+   NaN
+  ],
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea7_k0.05_placebo_c_per_contract": {
+  "value": 41.2,
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea7_selected": {
+  "value": "none",
+  "source": "results/posthoc/idea7/training_results.csv",
+  "column": "selection rule (>= 100 trades)"
+ },
+ "posthoc_idea8_x0.2_fade_trades": {
+  "value": 792,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.2_fade_roc": {
+  "value": -0.1107948852953286,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.2_fade_roc_ci": {
+  "value": [
+   -0.1813251307243925,
+   -0.0337146672890484
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.2_fade_c_per_contract": {
+  "value": -3.57020202020202,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_x0.2_placebo_trades": {
+  "value": 881,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.2_placebo_roc": {
+  "value": -0.1837021952804209,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.2_placebo_roc_ci": {
+  "value": [
+   -0.2607288320173953,
+   -0.0998786679323051
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.2_placebo_c_per_contract": {
+  "value": -2.7942111237230423,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_x0.4_fade_trades": {
+  "value": 540,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.4_fade_roc": {
+  "value": -0.1555280926422969,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.4_fade_roc_ci": {
+  "value": [
+   -0.2427743933076655,
+   -0.0617466296378533
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.4_fade_c_per_contract": {
+  "value": -5.6359259259259264,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_x0.4_placebo_trades": {
+  "value": 626,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.4_placebo_roc": {
+  "value": -0.1742401574121132,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.4_placebo_roc_ci": {
+  "value": [
+   -0.2709517828817302,
+   -0.0679091221609409
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.4_placebo_c_per_contract": {
+  "value": -0.8910543130990412,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_x0.6_fade_trades": {
+  "value": 290,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.6_fade_roc": {
+  "value": -0.1421406957600289,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.6_fade_roc_ci": {
+  "value": [
+   -0.2711392200509981,
+   -0.0154706159955628
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.6_fade_c_per_contract": {
+  "value": -4.862758620689656,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_x0.6_placebo_trades": {
+  "value": 371,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.6_placebo_roc": {
+  "value": -0.2852318212033217,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea8_x0.6_placebo_roc_ci": {
+  "value": [
+   -0.4091016685229992,
+   -0.1399638805792021
+  ],
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea8_x0.6_placebo_c_per_contract": {
+  "value": -1.733153638814016,
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea8_selected": {
+  "value": "x 0.2",
+  "source": "results/posthoc/idea8/training_results.csv",
+  "column": "selection rule (>= 100 trades, highest roc_mean)"
+ },
+ "posthoc_idea8_matched_placebo_note": {
+  "value": "fade minus follow on matched games: CI includes 0 at every x",
+  "source": "results/posthoc/idea8/MATCHED_PLACEBO.md",
+  "column": "paired difference table"
+ },
+ "posthoc_idea9_k_delay0.05_60_signal_trades": {
+  "value": 1015,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_60_signal_roc": {
+  "value": -0.0772621868364085,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_60_signal_roc_ci": {
+  "value": [
+   -0.1695795342029929,
+   0.0228548826098381
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.05_60_signal_c_per_contract": {
+  "value": -3.471133004926108,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.05_60_placebo_trades": {
+  "value": 1039,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_60_placebo_roc": {
+  "value": -0.087782160169707,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_60_placebo_roc_ci": {
+  "value": [
+   -0.1449026623573032,
+   -0.0251250322368771
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.05_60_placebo_c_per_contract": {
+  "value": -3.0055822906641003,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.1_60_signal_trades": {
+  "value": 841,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_60_signal_roc": {
+  "value": -0.0188993385108045,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_60_signal_roc_ci": {
+  "value": [
+   -0.11106452120188,
+   0.0753303057911993
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.1_60_signal_c_per_contract": {
+  "value": -0.9730083234244952,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.1_60_placebo_trades": {
+  "value": 896,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_60_placebo_roc": {
+  "value": -0.1078246669166319,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_60_placebo_roc_ci": {
+  "value": [
+   -0.1683805176790038,
+   -0.0400867312449394
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.1_60_placebo_c_per_contract": {
+  "value": -4.983816964285715,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.05_180_signal_trades": {
+  "value": 1025,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_180_signal_roc": {
+  "value": -0.1355396413662681,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_180_signal_roc_ci": {
+  "value": [
+   -0.2189787192913465,
+   -0.0551321762382732
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.05_180_signal_c_per_contract": {
+  "value": -3.9040975609756106,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.05_180_placebo_trades": {
+  "value": 1049,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_180_placebo_roc": {
+  "value": -0.0815410155131253,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.05_180_placebo_roc_ci": {
+  "value": [
+   -0.1422553668453655,
+   -0.0188885625201198
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.05_180_placebo_c_per_contract": {
+  "value": -2.7770257387988564,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.1_180_signal_trades": {
+  "value": 918,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_180_signal_roc": {
+  "value": -0.0297674132088852,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_180_signal_roc_ci": {
+  "value": [
+   -0.1174046012490994,
+   0.0648617540703344
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.1_180_signal_c_per_contract": {
+  "value": -1.2784313725490202,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_k_delay0.1_180_placebo_trades": {
+  "value": 947,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_180_placebo_roc": {
+  "value": -0.0845015567518442,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea9_k_delay0.1_180_placebo_roc_ci": {
+  "value": [
+   -0.1486846784986226,
+   -0.0187792089152372
+  ],
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea9_k_delay0.1_180_placebo_c_per_contract": {
+  "value": -4.360506863780359,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea9_selected": {
+  "value": "k 0.1, delay 60",
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "selection rule (>= 100 trades, highest roc_mean)"
+ },
+ "posthoc_idea9_k0.05_delay60_signal_brier_espn": {
+  "value": 0.2005805765123152,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.05_delay60_signal_brier_kalshi": {
+  "value": 0.190683448275862,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.05_delay60_placebo_brier_espn": {
+  "value": 0.1944495387872954,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.05_delay60_placebo_brier_kalshi": {
+  "value": 0.1878962463907603,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.1_delay60_signal_brier_espn": {
+  "value": 0.2196153045541022,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.1_delay60_signal_brier_kalshi": {
+  "value": 0.2085405469678953,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.1_delay60_placebo_brier_espn": {
+  "value": 0.2093536833147321,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.1_delay60_placebo_brier_kalshi": {
+  "value": 0.2032987723214285,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.05_delay180_signal_brier_espn": {
+  "value": 0.1983652215219512,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.05_delay180_signal_brier_kalshi": {
+  "value": 0.1886799024390244,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.05_delay180_placebo_brier_espn": {
+  "value": 0.1915918379694947,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.05_delay180_placebo_brier_kalshi": {
+  "value": 0.1838835081029552,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.1_delay180_signal_brier_espn": {
+  "value": 0.219966240664488,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.1_delay180_signal_brier_kalshi": {
+  "value": 0.2055808278867102,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_k0.1_delay180_placebo_brier_espn": {
+  "value": 0.2107211747201689,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_espn"
+ },
+ "posthoc_idea9_k0.1_delay180_placebo_brier_kalshi": {
+  "value": 0.2024348468848996,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi"
+ },
+ "posthoc_idea9_kalshi_brier_lower_rows": {
+  "value": 8,
+  "source": "results/posthoc/idea9/training_results.csv",
+  "column": "brier_kalshi < brier_espn"
+ },
+ "posthoc_idea10_s0.03_fade_net_c": {
+  "value": -4.416383734701935,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.03_fade_net_c_ci": {
+  "value": [
+   -4.6684545612336645,
+   -4.141063968965192
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.03_fade_trades": {
+  "value": 2533,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_s0.03_placebo_net_c": {
+  "value": -4.281811023622047,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.03_placebo_net_c_ci": {
+  "value": [
+   -4.5639948921242,
+   -3.999406823203487
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.03_placebo_trades": {
+  "value": 2540,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_s0.05_fade_net_c": {
+  "value": -4.297667087011349,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.05_fade_net_c_ci": {
+  "value": [
+   -4.693631287414629,
+   -3.921453163373048
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.05_fade_trades": {
+  "value": 1586,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_s0.05_placebo_net_c": {
+  "value": -4.567645221736414,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.05_placebo_net_c_ci": {
+  "value": [
+   -4.97301037297018,
+   -4.147295420364389
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.05_placebo_trades": {
+  "value": 1601,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_s0.1_fade_net_c": {
+  "value": -3.8889081455805887,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.1_fade_net_c_ci": {
+  "value": [
+   -4.560319460042226,
+   -3.1961887631940185
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.1_fade_trades": {
+  "value": 577,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_s0.1_placebo_net_c": {
+  "value": -5.031292517006802,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_c_per_contract (kalshi_direct, x1)"
+ },
+ "posthoc_idea10_s0.1_placebo_net_c_ci": {
+  "value": [
+   -5.842358668639879,
+   -4.219033761866752
+  ],
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "net_ci_lo, net_ci_hi"
+ },
+ "posthoc_idea10_s0.1_placebo_trades": {
+  "value": 588,
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "trades"
+ },
+ "posthoc_idea10_selected": {
+  "value": "s 0.1",
+  "source": "results/posthoc/idea10/training_results.csv",
+  "column": "selection rule (>= 200 trades, highest net c/contract)"
+ },
+ "posthoc_idea10_event_field_goal_median_10s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_10s_c"
+ },
+ "posthoc_idea10_event_field_goal_median_30s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_30s_c"
+ },
+ "posthoc_idea10_event_field_goal_median_60s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_60s_c"
+ },
+ "posthoc_idea10_event_field_goal_median_180s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_180s_c"
+ },
+ "posthoc_idea10_event_field_goal_median_300s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_300s_c"
+ },
+ "posthoc_idea10_event_field_goal_n": {
+  "value": 2620,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "with_pre_price"
+ },
+ "posthoc_idea10_event_safety_median_10s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_10s_c"
+ },
+ "posthoc_idea10_event_safety_median_30s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_30s_c"
+ },
+ "posthoc_idea10_event_safety_median_60s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_60s_c"
+ },
+ "posthoc_idea10_event_safety_median_180s_c": {
+  "value": 0.999999999999998,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_180s_c"
+ },
+ "posthoc_idea10_event_safety_median_300s_c": {
+  "value": 1.0000000000000009,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_300s_c"
+ },
+ "posthoc_idea10_event_safety_n": {
+  "value": 45,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "with_pre_price"
+ },
+ "posthoc_idea10_event_touchdown_median_10s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_10s_c"
+ },
+ "posthoc_idea10_event_touchdown_median_30s_c": {
+  "value": 1.0000000000000009,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_30s_c"
+ },
+ "posthoc_idea10_event_touchdown_median_60s_c": {
+  "value": 1.9999999999999991,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_60s_c"
+ },
+ "posthoc_idea10_event_touchdown_median_180s_c": {
+  "value": 2.0000000000000018,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_180s_c"
+ },
+ "posthoc_idea10_event_touchdown_median_300s_c": {
+  "value": 2.0000000000000018,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_300s_c"
+ },
+ "posthoc_idea10_event_touchdown_n": {
+  "value": 5427,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "with_pre_price"
+ },
+ "posthoc_idea10_event_all_median_10s_c": {
+  "value": 0.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_10s_c"
+ },
+ "posthoc_idea10_event_all_median_30s_c": {
+  "value": 1.0,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_30s_c"
+ },
+ "posthoc_idea10_event_all_median_60s_c": {
+  "value": 1.0000000000000009,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_60s_c"
+ },
+ "posthoc_idea10_event_all_median_180s_c": {
+  "value": 1.0000000000000009,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_180s_c"
+ },
+ "posthoc_idea10_event_all_median_300s_c": {
+  "value": 1.0000000000000009,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "median_move_300s_c"
+ },
+ "posthoc_idea10_event_all_n": {
+  "value": 8092,
+  "source": "results/posthoc/idea10/training_event_study.csv",
+  "column": "with_pre_price"
+ },
+ "posthoc_idea11_a1_receipt_median_lag_s": {
+  "value": 0.09,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "median_s"
+ },
+ "posthoc_idea11_a1_receipt_share_pos": {
+  "value": 0.9886363636363636,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "share_pos"
+ },
+ "posthoc_idea11_a1_receipt_iqr_s": {
+  "value": 0.0225,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "iqr_s"
+ },
+ "posthoc_idea11_a1_receipt_placebo_median_s": {
+  "value": 0.08,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "placebo_median_s"
+ },
+ "posthoc_idea11_a1_receipt_mannwhitney_p": {
+  "value": 0.6442754449236375,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "mannwhitney_p"
+ },
+ "posthoc_idea11_a2_venue_median_lag_s": {
+  "value": 0.07,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "median_s"
+ },
+ "posthoc_idea11_a2_venue_share_pos": {
+  "value": 0.9659090909090908,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "share_pos"
+ },
+ "posthoc_idea11_a2_venue_iqr_s": {
+  "value": 0.0,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "iqr_s"
+ },
+ "posthoc_idea11_a2_venue_placebo_median_s": {
+  "value": -0.16,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "placebo_median_s"
+ },
+ "posthoc_idea11_a2_venue_mannwhitney_p": {
+  "value": 0.0237395285938242,
+  "source": "results/posthoc/idea11/lag_summary.csv",
+  "column": "mannwhitney_p"
+ },
+ "posthoc_idea11_lag_reading": {
+  "value": "Venue-time lag is a constant offset (IQR 0 ms). Receipt-time lag (+90 ms) matches the unrelated-game placebo (+80 ms, p = 0.64). No evidence of a lead in either direction.",
+  "source": "results/posthoc/idea11/RESULTS.md",
+  "column": "dated note"
+ },
+ "posthoc_idea11_L0.25_both": {
+  "value": 733,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "both"
+ },
+ "posthoc_idea11_L0.25_kalshi_only": {
+  "value": 1434,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "kalshi_only"
+ },
+ "posthoc_idea11_L0.25_pm_only": {
+  "value": 449,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "pm_only"
+ },
+ "posthoc_idea11_L0.25_neither": {
+  "value": 423,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "neither"
+ },
+ "posthoc_idea11_L0.25_hedged_contracts": {
+  "value": 2977,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hedged_contracts"
+ },
+ "posthoc_idea11_L0.25_naked_contracts": {
+  "value": 20131,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "naked_contracts"
+ },
+ "posthoc_idea11_L0.25_corrected_hold_total_usd": {
+  "value": -348.04149000000035,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total"
+ },
+ "posthoc_idea11_L0.25_corrected_hold_total_ci": {
+  "value": [
+   -1170.92740175,
+   411.7007299999989
+  ],
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total_ci_lo, hold_total_ci_hi"
+ },
+ "posthoc_idea11_L0.25_corrected_hold_c_per_contract": {
+  "value": -1.5060824196224298,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_per_contract x 100"
+ },
+ "posthoc_idea11_L0.25_corrected_unwind_total_usd": {
+  "value": -697.17899,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "unwind_total"
+ },
+ "posthoc_idea11_L0.25_original_pnl_total_usd": {
+  "value": 58.48024087150005,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_pnl_total"
+ },
+ "posthoc_idea11_L0.25_original_c_per_contract": {
+  "value": 1.52221732820463,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_per_contract x 100"
+ },
+ "posthoc_idea11_L0.5_both": {
+  "value": 692,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "both"
+ },
+ "posthoc_idea11_L0.5_kalshi_only": {
+  "value": 1435,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "kalshi_only"
+ },
+ "posthoc_idea11_L0.5_pm_only": {
+  "value": 470,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "pm_only"
+ },
+ "posthoc_idea11_L0.5_neither": {
+  "value": 442,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "neither"
+ },
+ "posthoc_idea11_L0.5_hedged_contracts": {
+  "value": 2746,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hedged_contracts"
+ },
+ "posthoc_idea11_L0.5_naked_contracts": {
+  "value": 20346,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "naked_contracts"
+ },
+ "posthoc_idea11_L0.5_corrected_hold_total_usd": {
+  "value": -346.0850300000001,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total"
+ },
+ "posthoc_idea11_L0.5_corrected_hold_total_ci": {
+  "value": [
+   -1217.3800380000002,
+   464.5487815000002
+  ],
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total_ci_lo, hold_total_ci_hi"
+ },
+ "posthoc_idea11_L0.5_corrected_hold_c_per_contract": {
+  "value": -1.49867200917343,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_per_contract x 100"
+ },
+ "posthoc_idea11_L0.5_corrected_unwind_total_usd": {
+  "value": -702.2088800000001,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "unwind_total"
+ },
+ "posthoc_idea11_L0.5_original_pnl_total_usd": {
+  "value": 63.55876100000002,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_pnl_total"
+ },
+ "posthoc_idea11_L0.5_original_c_per_contract": {
+  "value": 1.67358110154116,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_per_contract x 100"
+ },
+ "posthoc_idea11_L1_both": {
+  "value": 613,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "both"
+ },
+ "posthoc_idea11_L1_kalshi_only": {
+  "value": 1466,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "kalshi_only"
+ },
+ "posthoc_idea11_L1_pm_only": {
+  "value": 536,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "pm_only"
+ },
+ "posthoc_idea11_L1_neither": {
+  "value": 424,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "neither"
+ },
+ "posthoc_idea11_L1_hedged_contracts": {
+  "value": 2485,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hedged_contracts"
+ },
+ "posthoc_idea11_L1_naked_contracts": {
+  "value": 20518,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "naked_contracts"
+ },
+ "posthoc_idea11_L1_corrected_hold_total_usd": {
+  "value": -361.4808899999998,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total"
+ },
+ "posthoc_idea11_L1_corrected_hold_total_ci": {
+  "value": [
+   -1227.5303615,
+   436.8198200000001
+  ],
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_total_ci_lo, hold_total_ci_hi"
+ },
+ "posthoc_idea11_L1_corrected_hold_c_per_contract": {
+  "value": -1.571388907364,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "hold_per_contract x 100"
+ },
+ "posthoc_idea11_L1_corrected_unwind_total_usd": {
+  "value": -724.9561199999999,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "unwind_total"
+ },
+ "posthoc_idea11_L1_original_pnl_total_usd": {
+  "value": 54.00764478900002,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_pnl_total"
+ },
+ "posthoc_idea11_L1_original_c_per_contract": {
+  "value": 1.65022213089909,
+  "source": "results/posthoc/idea11/corrected_results.csv",
+  "column": "orig_per_contract x 100"
+ },
+ "posthoc_idea12_k0.03_signal_trades": {
+  "value": 829,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.03_signal_roc": {
+  "value": -0.0519067451114616,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.03_signal_roc_ci": {
+  "value": [
+   -0.1357562006786342,
+   0.0384468435252254
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.03_signal_c_per_contract": {
+  "value": -1.0968636911942105,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_k0.03_placebo_trades": {
+  "value": 868,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.03_placebo_roc": {
+  "value": -0.1323018871284341,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.03_placebo_roc_ci": {
+  "value": [
+   -0.2072115767983242,
+   -0.0579859523721432
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.03_placebo_c_per_contract": {
+  "value": -5.080184331797236,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_k0.05_signal_trades": {
+  "value": 692,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.05_signal_roc": {
+  "value": -0.0550210666212332,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.05_signal_roc_ci": {
+  "value": [
+   -0.1474829421439917,
+   0.0384560281364148
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.05_signal_c_per_contract": {
+  "value": -1.4930635838150292,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_k0.05_placebo_trades": {
+  "value": 747,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.05_placebo_roc": {
+  "value": -0.1204665781416288,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.05_placebo_roc_ci": {
+  "value": [
+   -0.1998461030663864,
+   -0.042746210214721
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.05_placebo_c_per_contract": {
+  "value": -5.382597054886212,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_k0.08_signal_trades": {
+  "value": 489,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.08_signal_roc": {
+  "value": -0.0645650600884062,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.08_signal_roc_ci": {
+  "value": [
+   -0.1753684830563451,
+   0.0570427088503538
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.08_signal_c_per_contract": {
+  "value": -1.6642126789366052,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_k0.08_placebo_trades": {
+  "value": 544,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.08_placebo_roc": {
+  "value": -0.0453520419314802,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea12_k0.08_placebo_roc_ci": {
+  "value": [
+   -0.132027318355739,
+   0.042086668550804
+  ],
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea12_k0.08_placebo_c_per_contract": {
+  "value": -2.347242647058824,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea12_selected": {
+  "value": "k 0.03",
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "selection rule (>= 100 trades, highest roc_mean)"
+ },
+ "posthoc_idea12_k0.03_signal_win_rate": {
+  "value": 0.4963811821471652,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.03_signal_mean_fill": {
+  "value": 0.4934620024125452,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea12_k0.03_placebo_win_rate": {
+  "value": 0.4982718894009216,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.03_placebo_mean_fill": {
+  "value": 0.5355184331797236,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea12_k0.05_signal_win_rate": {
+  "value": 0.4761560693641618,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.05_signal_mean_fill": {
+  "value": 0.4766763005780347,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea12_k0.05_placebo_win_rate": {
+  "value": 0.5026773761713521,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.05_placebo_mean_fill": {
+  "value": 0.5421419009370817,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea12_k0.08_signal_win_rate": {
+  "value": 0.4427402862985685,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.08_signal_mean_fill": {
+  "value": 0.4449284253578732,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea12_k0.08_placebo_win_rate": {
+  "value": 0.5726102941176471,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "win_rate"
+ },
+ "posthoc_idea12_k0.08_placebo_mean_fill": {
+  "value": 0.5817830882352941,
+  "source": "results/posthoc/idea12/training_results.csv",
+  "column": "mean_fill"
+ },
+ "posthoc_idea13_e0.02_signal_trades": {
+  "value": 23,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.02_signal_roc": {
+  "value": -0.4521657657898513,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.02_signal_roc_ci": {
+  "value": [
+   -0.7909442991891419,
+   -0.0849067281071887
+  ],
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea13_e0.02_signal_c_per_contract": {
+  "value": -16.973913043478266,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea13_e0.02_placebo_trades": {
+  "value": 92,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.02_placebo_roc": {
+  "value": -0.1233109526197755,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.02_placebo_roc_ci": {
+  "value": [
+   -0.3008421285655269,
+   0.0553154862914886
+  ],
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea13_e0.02_placebo_c_per_contract": {
+  "value": -5.62717391304348,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea13_e0.04_signal_trades": {
+  "value": 1,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.04_signal_roc": {
+  "value": -1.0,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.04_signal_roc_ci": {
+  "value": [
+   NaN,
+   NaN
+  ],
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea13_e0.04_signal_c_per_contract": {
+  "value": -38.7,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea13_e0.04_placebo_trades": {
+  "value": 6,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.04_placebo_roc": {
+  "value": 0.0318909756637437,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_mean (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.04_placebo_roc_ci": {
+  "value": [
+   -0.5170450571432569,
+   0.5771250816918944
+  ],
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "roc_ci_lo, roc_ci_hi"
+ },
+ "posthoc_idea13_e0.04_placebo_c_per_contract": {
+  "value": 7.216666666666667,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "cents_per_contract"
+ },
+ "posthoc_idea13_e0.06_signal_trades": {
+  "value": 0,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_e0.06_placebo_trades": {
+  "value": 0,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "trades (kalshi_direct, x1)"
+ },
+ "posthoc_idea13_selected": {
+  "value": "none",
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "selection rule (>= 40 trades)"
+ },
+ "posthoc_idea13_brier_line": {
+  "value": 0.2111156681188533,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "brier_p"
+ },
+ "posthoc_idea13_brier_kalshi": {
+  "value": 0.2112542553191489,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "brier_k"
+ },
+ "posthoc_idea13_brier_games": {
+  "value": 282,
+  "source": "results/posthoc/idea13/training_results.csv",
+  "column": "brier_games"
+ },
+ "posthoc_dsr_A_trials_73": {
+  "value": 3.7529592243764526e-12,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "values.OOS.A.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+ },
+ "posthoc_dsr_B_trials_73": {
+  "value": 9.889869520514859e-46,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "values.OOS.B.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+ },
+ "posthoc_dsr_combined_trials_73": {
+  "value": 6.117231365045925e-42,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "values.OOS.combined.deflated_sharpe_total_73 (report_book.deflated_sharpe, n_total=73)"
+ },
+ "posthoc_dsr_A_trials_22_preregistered": {
+  "value": 1.2688037762570972e-09,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "stored_total_22.OOS.A.deflated_sharpe_total_22 (results/holdout/numbers.json)"
+ },
+ "posthoc_dsr_B_trials_22_preregistered": {
+  "value": 9.572076128569198e-38,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "stored_total_22.OOS.B.deflated_sharpe_total_22 (results/holdout/numbers.json)"
+ },
+ "posthoc_dsr_combined_trials_22_preregistered": {
+  "value": 1.182992424432419e-34,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "stored_total_22.OOS.combined.deflated_sharpe_total_22 (results/holdout/numbers.json)"
+ },
+ "posthoc_variants_rows_total": {
+  "value": 73,
+  "source": "experiments/variants.csv",
+  "column": "row count"
+ }
+}

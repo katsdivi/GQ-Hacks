@@ -1,0 +1,10 @@
+,count
+games,1267
+games_used,1265
+game_skip: missing market (KXNCAAFGAME-25AUG30LAMUNT-UNT: no rows in the trade file),1
+game_skip: team mapping,1
+event_skip: no wallclock,60
+event_skip: no single scoring side,125
+event_skip: outside window,1258
+event_skip: no pre/post price,2725
+events_in_window_study,9733
