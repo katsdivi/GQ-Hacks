@@ -54,5 +54,8 @@ uncorrected in-sample positive. Scored by the search agent itself, conservativel
 
 | 11 | MODEL: pregame-anchored in-game score model (Clegg et al.) | +10 | new |
 
-**Total after Round 11: +220.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
+| 12 | UNDERREACT: change-vs-change underreaction family (arXiv 2606.07811) | +10 | new |
+| 12 | Underreaction family ruled out (primary and all 6-min cells CIs below 0) | +5 | ruled out |
+
+**Total after Round 12: +235.** Stop condition (+100): not met. No penalties beyond the Round 1 bug (-20) and the
 three repeats/finer grids already listed; no lookahead, holdout/live data, unlogged trial or undisclosed rerun.

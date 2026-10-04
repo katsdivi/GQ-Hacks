@@ -486,3 +486,41 @@ Stop condition met: False.
 
 IN-SAMPLE BEST (own trials), after 305 trials, not expected to persist: R2.CONS.A2.W300, ROC
 0.135 [-0.075, 0.349] on 17 trades.
+
+
+## Round 12
+
+Run 2026-10-04 06:03 ET. Source: Rules 2/3 (arXiv 2606.07811, change-vs-change underreaction), one family.
+
+- **Primary R12.NS.low.taker.H360: ROC -0.071 [-0.086, -0.056], 575 trades: killed.** All four 6-minute-exit cells
+  are below 0 with CIs below 0 (-0.059 to -0.073); the round-trip costs (2 spreads, 2 fees) are the whole loss:
+  there is no measurable drift in the 6 minutes after a Kalshi under-reaction to an ESPN WP change.
+- Settlement exits: -0.033 to +0.027, all CIs span 0.
+- Under-reaction relative to ESPN WP is not followed by continuation on Kalshi, in thin or thick markets, salient or
+  not.
+
+### All Round 12 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R12.ALL.high.taker.settle | 327 | 0.0274 | -0.0629 | 0.1104 | 1.502 | 0.0274 | 1.502 | 10.23 | 1.246 | 1 |
+| R12.ALL.low.taker.settle | 219 | 0.0063 | -0.0978 | 0.1108 | 0.3393 | 0.0063 | 0.3393 | -35.13 | 0.2933 | 1 |
+| R12.NS.high.taker.settle | 308 | -0.0083 | -0.1049 | 0.08 | -0.4506 | -0.0083 | -0.4506 | -52.05 | -0.3672 | 1 |
+| R12.NS.low.taker.settle | 200 | -0.0243 | -0.1384 | 0.094 | -1.295 | -0.0243 | -1.295 | -66.89 | -1.059 | 1 |
+| R12.NS.low.maker.settle | 172 | -0.0327 | -0.1688 | 0.0959 | -1.633 | -0.0251 | -1.244 | -69.14 | -1.344 | 1 |
+| R12.ALL.low.taker.H360 | 694 | -0.0587 | -0.0707 | -0.0461 | -3.207 | -0.0587 | -3.207 | -235.1 | -13.43 | 1 |
+| R12.NS.low.maker.H360 | 419 | -0.0677 | -0.0863 | -0.0482 | -3.476 | -0.0606 | -3.084 | -161 | -12.16 | 1 |
+| R12.NS.high.taker.H360 | 1109 | -0.0701 | -0.0875 | -0.053 | -3.634 | -0.0701 | -3.634 | -445.8 | -12.64 | 1 |
+| R12.NS.low.taker.H360 | 575 | -0.0705 | -0.0858 | -0.0557 | -3.837 | -0.0705 | -3.837 | -233.3 | -13.25 | 1 |
+| R12.ALL.high.taker.H360 | 1341 | -0.073 | -0.0875 | -0.0588 | -3.923 | -0.073 | -3.923 | -569.3 | -15.27 | 1 |
+
+### Cumulative correction after Round 12
+
+Trials: own 168 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used); unsup 0 (not found yet); regress 0 (not found yet)) = 315. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.391. DSR of that best: 3.04e-29 (project convention;
+normal-returns version 1.90e-09). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 315 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
