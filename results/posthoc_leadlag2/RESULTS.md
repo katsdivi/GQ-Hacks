@@ -63,3 +63,25 @@ Holm survivors: none. Stop condition: not met.
 
 Verdict R1: there is no in-game polymarket.com lead to trade on Kalshi; Kalshi is the in-game leader. The only window
 where polymarket.com leads is pre-game, which Round 2 tests.
+
+## Round 3 (spec a815df2): CME vs Kalshi in-game, descriptive only
+
+Data: CME map from branch data-cme-train 2126c45 (10 NFL playoff games, Jan 10 to 18, 2026, the only training
+games with both CME quotes and Kalshi trades); CME 1 s BBO mids, Kalshi last trades, 1 s grid, in-game window
+[kickoff + 20 min, kickoff + 4 h] clipped to the CME data start (LA at CAR: 51 min of overlap; CME trades start
+mid-game). 10 games < 30, so by the spec there are no trading trials and no trials are added. Per-game table:
+r3_cme_games.csv; placebo pairs: r3_cme_placebo.csv (lags and shares only, no prices).
+
+| measure | result |
+|---|---|
+| xcorr argmax lag (positive = CME leads), median | -4 s; CME leads in 1 of 10 games, Kalshi in 9 |
+| unrelated-game placebo pairs (88, aligned on time since kickoff), median lag | -1 s (51% negative); Mann-Whitney real vs placebo p = 0.16 |
+| CME Hasbrouck information share (VECM, 1 s), median | 0.030 (GG component share 0.194) |
+| Kalshi response to CME 3 c jumps (660 jumps), median of game medians | 0.5 s, 64% covered within 60 s |
+| CME response to Kalshi 3 c jumps (1,449 jumps), median of game medians | 6.5 s, 53% covered |
+| price changes on the 1 s grid | CME 6,609, Kalshi 40,676 |
+
+Reading: on the training games where both exist, Kalshi leads CME, not the reverse. Kalshi has about 6 times as
+many price changes, about 97% of the information share, and responds to CME jumps within about a second, while CME
+takes about 6.5 s to follow Kalshi's. One game (SF at SEA) leans the other way (CME IS 0.48, lag +9 s). The
+pre-registered hypothesis direction (CME leads Kalshi) is not supported on training, with the caveat of 10 games.
