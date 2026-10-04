@@ -67,3 +67,12 @@ P1 12 + P3 27 + P4 6 + P5 9 + W 3 = 57 trials. P2 = 0 (skipped, reason above).
 ## Outputs
 results/posthoc_costside_patterns/{SPEC.md, RESULTS.md, trials_log.csv, daily_pnl.csv}. Per-trade files gitignored.
 Code: scripts/posthoc_costside_patterns.py. Tests: tests/test_posthoc_costside_patterns.py.
+
+## Amendment 1 (before any result was computed)
+Data-coverage check (first-trade timestamps only, no prices or PnL looked at): training trade files start at about
+kickoff - 2 h for every game, so the P1 reference at kickoff - 6 h has no data in any game and P1 as written cannot
+run. P1 is changed to: reference price at kickoff - 105 min (last trade ts <= that time, max age 15 min, i.e. the
+first trades after coverage starts), decision price at kickoff - 30 min (max age 30 min, unchanged). The rest of P1
+(d in {3,5}, momentum or reversal, 12 trials, IDs, fills, hold to settlement) is unchanged. Trial count stays 57.
+This also means P1 drift is measured over 75 min, not 5.5 h. The pre-game coverage limit also bounds all other
+pre-game logic (nothing earlier than kickoff - 2 h exists).

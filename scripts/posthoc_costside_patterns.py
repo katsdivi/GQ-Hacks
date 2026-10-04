@@ -136,10 +136,10 @@ def p1_candidates(G, d, mode):
     rows = []
     for x in G:
         t = x["ko"] - 30 * 60 * NS
-        tref = x["ko"] - 6 * 3600 * NS
+        tref = x["ko"] - 105 * 60 * NS
         teams = (x["g"].home, x["g"].away)
         p_now = {k: price_asof(x["tr"][k], t, 30 * 60 * NS) for k in teams}
-        p_ref = {k: price_asof(x["tr"][k], tref, 3 * 3600 * NS) for k in teams}
+        p_ref = {k: price_asof(x["tr"][k], tref, 15 * 60 * NS) for k in teams}
         team = p1_pick(p_ref, p_now, d, mode)
         if team is None:
             continue
