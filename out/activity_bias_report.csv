@@ -1,0 +1,7 @@
+pair,case,games,median_lag_s,share_lag_pos,share_lag_ge_1s,share_lag_5s_pm1,rule_says_kalshi_leads,verdicts
+Kalshi 390/min vs polymarket.com-like 5/min,no_link,400,1.0,0.517,0.517,0.115,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi 390/min vs polymarket.com-like 5/min,zero_lag,400,1.0,0.625,0.625,0.18,30% of 10 studies,"{'neither venue leads consistently': 7, 'kalshi leads': 3}"
+Kalshi 390/min vs polymarket.com-like 5/min,lead_5s,400,6.0,1.0,1.0,0.568,100% of 10 studies,{'kalshi leads': 10}
+Kalshi 390/min vs Polymarket-US-like 1/min,no_link,400,0.0,0.477,0.477,0.092,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi 390/min vs Polymarket-US-like 1/min,zero_lag,400,5.0,0.833,0.833,0.182,100% of 10 studies,{'kalshi leads': 10}
+Kalshi 390/min vs Polymarket-US-like 1/min,lead_5s,400,8.0,0.927,0.927,0.32,100% of 10 studies,{'kalshi leads': 10}

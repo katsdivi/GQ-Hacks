@@ -1,0 +1,7 @@
+pair,case,games,median_lag_s,share_lag_pos,share_lag_zero,share_lag_5s_pm1,rule_says_kalshi_leads,verdicts
+Kalshi quotes vs polymarket.com-like quotes,no_link,400,0.0,0.48,0.037,0.098,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi quotes vs polymarket.com-like quotes,zero_lag,400,0.0,0.0,1.0,0.0,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi quotes vs polymarket.com-like quotes,lead_5s,400,5.0,1.0,0.0,1.0,50% of 10 studies,"{'kalshi leads': 5, 'neither venue leads consistently': 5}"
+Kalshi quotes vs Polymarket US-like quotes (1 s polled),no_link,400,1.0,0.507,0.045,0.138,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi quotes vs Polymarket US-like quotes (1 s polled),zero_lag,400,0.0,0.0,1.0,0.0,0% of 10 studies,{'neither venue leads consistently': 10}
+Kalshi quotes vs Polymarket US-like quotes (1 s polled),lead_5s,400,5.0,1.0,0.0,1.0,50% of 10 studies,"{'kalshi leads': 5, 'neither venue leads consistently': 5}"
