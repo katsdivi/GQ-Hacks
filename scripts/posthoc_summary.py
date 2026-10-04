@@ -98,7 +98,7 @@ plac = lagd[lagd["kind"] != "real"]["lag_s"]
 put("idea2_lag_median_s", float(real.median()), fl, "lag_s (kind real)")
 put("idea2_lag_share_pos", float((real > 0).mean()), fl, "lag_s > 0 (kind real)")
 put("idea2_placebo_lag_median_s", float(plac.median()), fl, "lag_s (placebo)")
-put("idea2_mannwhitney_p", 0.0365, P / "idea2" / "idea2_RESULTS.md", "Lag test section")
+put("idea2_mannwhitney_p", 0.0365, "results/posthoc_latency/idea2_RESULTS.md @ e3fcc8c (branch posthoc-latency; unchanged at aef5cec; copy at results/posthoc/idea2/idea2_RESULTS.md)", "Lag test section: 'Mann-Whitney p (real vs placebo, two-sided) = 0.0365' (value is in the md only, no CSV column)")
 dd = t[t["fee_line"] == "kalshi_direct"]
 for r in dd.itertuples():
     L = f"{r.latency_L_s:g}"
@@ -186,7 +186,7 @@ for k in [k for k in num if k.startswith("posthoc_idea6_D_s") and "_winner_" in 
 
 trained("idea7", "7", "k", ("signal", "placebo"), "pregame polymarket.com minus Kalshi gap; buy Kalshi when polymarket.com is higher",
         "a413026", "8cce2c3", 3, 100, "no: no setting selected",
-        lambda q: "negative; no setting selected; venues agree within 1 to 2 c at kickoff - 5 min")
+        lambda q: "negative; no setting selected (below 100 trades)")
 
 
 def idea8_extra(t, f, q):
@@ -335,6 +335,9 @@ md[-1] = "|---|---|" + "---|" * len(hns)
 for b in ("A", "combined", "B"):
     md.append(f"| {b} | {dsr['stored_total_22'][f'OOS.{b}.deflated_sharpe_total_22']:.3g} | "
               + " | ".join(f"{hist[h][f'OOS.{b}.deflated_sharpe_total_{h}']:.3g}" for h in hns) + " |")
+md += ["", f"The {n}-trial line is current (variants.csv rows at the last scripts/posthoc_dsr.py run); "
+       "lines at fewer trials (" + ", ".join(h for h in hns if h != str(n)) + ") are superseded by it and kept for the record. "
+       "The 22-trial values are the pre-registered ones and are unchanged."]
 (P / "SUMMARY.md").write_text("\n".join(md) + "\n")
 (P / "numbers_posthoc.json").write_text(json.dumps(num, indent=1, default=float))
 print("\n".join(md))

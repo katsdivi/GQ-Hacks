@@ -134,8 +134,8 @@
  },
  "posthoc_idea2_mannwhitney_p": {
   "value": 0.0365,
-  "source": "results/posthoc/idea2/idea2_RESULTS.md",
-  "column": "Lag test section"
+  "source": "results/posthoc_latency/idea2_RESULTS.md @ e3fcc8c (branch posthoc-latency; unchanged at aef5cec; copy at results/posthoc/idea2/idea2_RESULTS.md)",
+  "column": "Lag test section: 'Mann-Whitney p (real vs placebo, two-sided) = 0.0365' (value is in the md only, no CSV column)"
  },
  "posthoc_idea2_L0.25_net_c": {
   "value": -13.164565117968996,
@@ -1889,6 +1889,21 @@
   "source": "results/posthoc/dsr_posthoc.json",
   "column": "history.74.OOS.combined.deflated_sharpe_total_74 (report_book.deflated_sharpe, n_total=74)"
  },
+ "posthoc_dsr_A_trials_77": {
+  "value": 2.9105068298727324e-12,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.77.OOS.A.deflated_sharpe_total_77 (report_book.deflated_sharpe, n_total=77)"
+ },
+ "posthoc_dsr_B_trials_77": {
+  "value": 4.489277121816517e-46,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.77.OOS.B.deflated_sharpe_total_77 (report_book.deflated_sharpe, n_total=77)"
+ },
+ "posthoc_dsr_combined_trials_77": {
+  "value": 2.975911069085227e-42,
+  "source": "results/posthoc/dsr_posthoc.json",
+  "column": "history.77.OOS.combined.deflated_sharpe_total_77 (report_book.deflated_sharpe, n_total=77)"
+ },
  "posthoc_dsr_A_trials_22_preregistered": {
   "value": 1.2688037762570972e-09,
   "source": "results/posthoc/dsr_posthoc.json",
@@ -1905,7 +1920,7 @@
   "column": "stored_total_22.OOS.combined.deflated_sharpe_total_22 (results/holdout/numbers.json)"
  },
  "posthoc_variants_rows_total": {
-  "value": 74,
+  "value": 77,
   "source": "experiments/variants.csv",
   "column": "row count"
  },

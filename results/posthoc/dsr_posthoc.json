@@ -1,14 +1,14 @@
 {
- "n_trials": 74,
+ "n_trials": 77,
  "check_total_22_reproduced": {
   "OOS.A.deflated_sharpe_total_22": 1.2688037762570972e-09,
   "OOS.B.deflated_sharpe_total_22": 9.572076128569198e-38,
   "OOS.combined.deflated_sharpe_total_22": 1.182992424432419e-34
  },
  "values": {
-  "OOS.A.deflated_sharpe_total_74": 3.5172309874294692e-12,
-  "OOS.B.deflated_sharpe_total_74": 8.083912188019218e-46,
-  "OOS.combined.deflated_sharpe_total_74": 5.089377402896855e-42
+  "OOS.A.deflated_sharpe_total_77": 2.9105068298727324e-12,
+  "OOS.B.deflated_sharpe_total_77": 4.489277121816517e-46,
+  "OOS.combined.deflated_sharpe_total_77": 2.975911069085227e-42
  },
  "stored_total_22": {
   "OOS.A.deflated_sharpe_total_22": 1.2688037762570972e-09,
@@ -25,6 +25,11 @@
    "OOS.A.deflated_sharpe_total_74": 3.5172309874294692e-12,
    "OOS.B.deflated_sharpe_total_74": 8.083912188019218e-46,
    "OOS.combined.deflated_sharpe_total_74": 5.089377402896855e-42
+  },
+  "77": {
+   "OOS.A.deflated_sharpe_total_77": 2.9105068298727324e-12,
+   "OOS.B.deflated_sharpe_total_77": 4.489277121816517e-46,
+   "OOS.combined.deflated_sharpe_total_77": 2.975911069085227e-42
   }
  }
 }

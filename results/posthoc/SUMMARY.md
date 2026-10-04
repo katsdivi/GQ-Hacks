@@ -10,7 +10,7 @@
 | 3 | Kalshi reverses after large taker prints; fade them | 4e60e8c (03:45:47 ET) | a7b1dd8 (03:48:52 ET) | 3 | none | not reported (invalid) | none in spec | n/a: run on holdout-period data (Vultr Oct 3) after the pre-registered run; no separate holdout | INVALID: lookahead (whole-window 95th percentile size threshold; 54c3c28); not rerun |
 | 4 | late-game near-certain favorite underpriced; buy and hold | 3142f9b (03:51:37 ET) | 6e21338 (03:54:49 ET) | 4 | theta 0.9 | ROC -0.017 [-0.037, +0.002], 1139 trades, -1.67 c/contract | ROC -0.209 [-0.350, -0.063], 1202 trades | no: decided on training (no edge at any theta), 80a919d | negative |
 | 6 | after the ESPN end-of-game marker, buy the winner below 0.99 | 7c78c2c (03:57:49 ET) | 07b8e21 (04:13:39 ET) | 3 | none (no D reaches 50 trades) | not reported: winner leg INVALID | largest: D_s 60 ROC -1.000 [-1.000, -1.000], 547 trades | no: winner leg invalid; decided on training | INVALID: winner leg uses bad ESPN end-marker wallclocks (lookahead; close-out 4f85101); descriptive: median 11 s from E to the winner's first trade >= 0.99 (p90 253 s); 0 ESPN vs Kalshi settlement disagreements |
-| 7 | pregame polymarket.com minus Kalshi gap; buy Kalshi when polymarket.com is higher | a413026 (04:38:20 ET) | 8cce2c3 (04:40:17 ET) | 3 | none (no setting reaches 100 trades) | none selected (signal trades: 19, 0, 0); largest: k 0.02 ROC -0.124 [-0.521, +0.292] | largest: k 0.02 ROC -0.015 [-0.136, +0.121], 274 trades | no: no setting selected | negative; no setting selected; venues agree within 1 to 2 c at kickoff - 5 min |
+| 7 | pregame polymarket.com minus Kalshi gap; buy Kalshi when polymarket.com is higher | a413026 (04:38:20 ET) | 8cce2c3 (04:40:17 ET) | 3 | none (no setting reaches 100 trades) | none selected (signal trades: 19, 0, 0); largest: k 0.02 ROC -0.124 [-0.521, +0.292] | largest: k 0.02 ROC -0.015 [-0.136, +0.121], 274 trades | no: no setting selected | negative; no setting selected (below 100 trades) |
 | 8 | fade pregame taker-flow imbalance | 856b5f9 (04:05:34 ET) | 1e241e6 (04:07:36 ET) | 3 | x 0.2 | ROC -0.111 [-0.181, -0.034], 792 trades, -3.57 c/contract | ROC -0.184 [-0.261, -0.100], 881 trades | no: no edge on training | negative; matched-games placebo (a63ee03): fade minus follow CI includes 0 at every x |
 | 9 | ESPN win probability ahead of Kalshi; buy the team ESPN rates higher | df80d2c (04:03:47 ET) | 47037f2 (04:16:08 ET) | 4 | k 0.1, delay 60 | ROC -0.019 [-0.111, +0.075], 841 trades, -0.97 c/contract | ROC -0.108 [-0.168, -0.040], 896 trades | no: closed on training | negative; Kalshi Brier lower than ESPN in 8 of 8 rows; ESPN wallclocks unreliable |
 | 10 | retail overreacts to scores; fade the scoring team's Kalshi move | 3a02690 (04:03:49 ET) | 92ee688 (04:15:59 ET) | 3 | s 0.1 | net c/contract -3.89 [-4.56, -3.20], 577 trades | net c/contract -5.03 [-5.84, -4.22], 588 trades | no: closed on training | negative; event study: scoring team's price keeps rising (TD median +2 c at +60 s to +300 s; FG 0) |
@@ -20,10 +20,12 @@
 
 ## Deflated Sharpe with all variants
 
-Additional line next to the pre-registered values (not replacing them). Trials = final experiments/variants.csv row count = 74. Same function (report_book.deflated_sharpe) and inputs as the run; trial-Sharpe variance still from the 12 training trials with daily series. Source: results/posthoc/dsr_posthoc.json (scripts/posthoc_dsr.py; the total-22 values reproduce exactly).
+Additional line next to the pre-registered values (not replacing them). Trials = final experiments/variants.csv row count = 77. Same function (report_book.deflated_sharpe) and inputs as the run; trial-Sharpe variance still from the 12 training trials with daily series. Source: results/posthoc/dsr_posthoc.json (scripts/posthoc_dsr.py; the total-22 values reproduce exactly).
 
-| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | DSR, 73 trials (post-hoc line) | DSR, 74 trials (post-hoc line) |
-|---|---|---|---|
-| A | 1.27e-09 | 3.75e-12 | 3.52e-12 |
-| combined | 1.18e-34 | 6.12e-42 | 5.09e-42 |
-| B | 9.57e-38 | 9.89e-46 | 8.08e-46 |
+| book | DSR, 22 trials (pre-registered, results/holdout/numbers.json) | DSR, 73 trials (post-hoc line) | DSR, 74 trials (post-hoc line) | DSR, 77 trials (post-hoc line) |
+|---|---|---|---|---|
+| A | 1.27e-09 | 3.75e-12 | 3.52e-12 | 2.91e-12 |
+| combined | 1.18e-34 | 6.12e-42 | 5.09e-42 | 2.98e-42 |
+| B | 9.57e-38 | 9.89e-46 | 8.08e-46 | 4.49e-46 |
+
+The 77-trial line is current (variants.csv rows at the last scripts/posthoc_dsr.py run); lines at fewer trials (73, 74) are superseded by it and kept for the record. The 22-trial values are the pre-registered ones and are unchanged.
