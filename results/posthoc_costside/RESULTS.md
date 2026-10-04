@@ -76,3 +76,53 @@ none. Stop condition: not met.
 
 IN-SAMPLE BEST, after 133 trials, not expected to persist: R1.A.I7.A1.W300, ROC 0.062
 [-0.706, 0.746] on 8 trades.
+
+
+## Round 2
+
+Run 2026-10-04 05:39 ET. (The Round 2 spec header says 05:58 ET; that was a typo, the spec commit 2d0c0e0 is at
+05:38 ET, before this run.)
+
+- ARB: when the two Kalshi markets' last trades sum to <= 0.95 or 0.97, buying both at trade + 1 c loses -0.058 and
+  -0.060 ROC (CIs below 0): the sum is a stale artifact of last trades, and both legs pay the spread and fees.
+  Pairs filled 98%; orphans 24 and 41.
+- CONS (search consensus + maker): small samples (4 to 64 trades); best with >= 50 trades A1 W300 +0.044
+  [-0.041, +0.125].
+- VOL: the polymarket.com lead with maker entry in LOW Kalshi volatility is the best own trial so far: ROC +0.050
+  [-0.008, +0.107], 687 trades, excl. top 5 +$147; the high-volatility half is flat to negative. The CI still
+  includes 0.
+- TP: take-profit exits hurt every entry (all ROC <= 0; tp 0.03 clearly negative): cutting winners early gives
+  up the settlement payoff while losers still run.
+- External trials now include the maker helper (36) and patterns helper (57), both finished, daily P&L used.
+
+### All Round 2 trials (primary line; alt = maker0 for maker trials, else same)
+
+| trial | trades | roc | roc_lo | roc_hi | c_per_contract | alt_roc | alt_c_per_contract | excl5_pnl | sharpe_x365 | holm_p |
+|---|---|---|---|---|---|---|---|---|---|---|
+| R2.CONS.A2.W300 | 17 | 0.1352 | -0.075 | 0.349 | 9.806 | 0.1401 | 10.12 | -2.73 | 6.056 | 1 |
+| R2.CONS.A1.W60 | 26 | 0.1243 | -0.0049 | 0.2522 | 10.21 | 0.1278 | 10.46 | 7.74 | 8.201 | 1 |
+| R2.VOL.low.maker | 687 | 0.0505 | -0.0084 | 0.107 | 2.789 | 0.0577 | 3.17 | 147 | 3.513 | 1 |
+| R2.CONS.A1.W300 | 64 | 0.0444 | -0.0413 | 0.1247 | 3.786 | 0.0472 | 4.016 | 5.33 | 3.719 | 1 |
+| R2.VOL.low.taker | 756 | 0.0063 | -0.046 | 0.0613 | 0.3675 | 0.0063 | 0.3675 | -16.05 | 0.5956 | 1 |
+| R2.TP.I12.tp0.06 | 689 | -0.0021 | -0.0341 | 0.0285 | -0.101 | 0.0062 | 0.2939 | -46.5 | -0.2788 | 1 |
+| R2.VOL.high.maker | 449 | -0.0047 | -0.0832 | 0.0745 | -0.2648 | 0.0028 | 0.1581 | -54.05 | -0.231 | 1 |
+| R2.TP.I9.tp0.06 | 478 | -0.0063 | -0.0454 | 0.0329 | -0.2544 | 0.0041 | 0.1632 | -45.45 | -0.5555 | 1 |
+| R2.TP.C1.tp0.06 | 764 | -0.0298 | -0.0606 | -0.0005 | -1.642 | -0.0229 | -1.25 | -157.7 | -3.45 | 1 |
+| R2.TP.I9.tp0.03 | 478 | -0.0357 | -0.0634 | -0.0073 | -1.45 | -0.0257 | -1.033 | -95.94 | -4.365 | 1 |
+| R2.TP.I12.tp0.03 | 689 | -0.0374 | -0.0635 | -0.0133 | -1.797 | -0.0294 | -1.402 | -157.3 | -5.34 | 1 |
+| R2.TP.C1.tp0.03 | 764 | -0.0416 | -0.0647 | -0.02 | -2.29 | -0.0347 | -1.898 | -205.2 | -5.773 | 1 |
+| R2.ARB.S0.95 | 1492 | -0.0578 | -0.0639 | -0.0517 | -3.057 | -0.0578 | -3.057 | -485.9 | -13.05 | 1 |
+| R2.ARB.S0.97 | 1733 | -0.0597 | -0.0656 | -0.0536 | -3.143 | -0.0597 | -3.143 | -579.8 | -11.98 | 1 |
+| R2.VOL.high.taker | 469 | -0.0655 | -0.1362 | 0.0068 | -3.877 | -0.0655 | -3.877 | -221.2 | -3.439 | 1 |
+| R2.CONS.A2.W60 | 4 | -0.3223 | -1 | 0.0965 | -23.77 | -0.3197 | -23.5 | 0 | -10.74 | 1 |
+
+### Cumulative correction after Round 2
+
+Trials: own 95 + external (search 54 (daily P&L used); maker 36 (daily P&L used); patterns 57 (daily P&L used)) = 242. Reality Check p for the best by t-stat
+(patterns:P3-08): 0.324. DSR of that best: 2.17e-32 (project convention;
+normal-returns version 2.43e-10). Holm survivors at 0.05: none.
+Stop candidates (own trials meeting CI > 0, >= 100 trades, excl. top 5 > 0): none.
+Stop condition met: False.
+
+IN-SAMPLE BEST (own trials), after 242 trials, not expected to persist: R2.CONS.A2.W300, ROC
+0.135 [-0.075, 0.349] on 17 trades.
