@@ -1,0 +1,41 @@
+{
+ "label": "robustness, post-run: residue levels removed",
+ "rows_read_and_dropped": {
+  "kalshi": [
+   37950660,
+   232094
+  ],
+  "polymarket": [
+   6838073,
+   0
+  ],
+  "polymarket_us": [
+   300807,
+   0
+  ]
+ },
+ "polymarket.com": {
+  "n_qualifying": 86,
+  "n_placebo": 81,
+  "median_corrected_lag_s": 0.0,
+  "mann_whitney_p": 0.7854714556817095,
+  "share_positive": 0.12790697674418605,
+  "share_negative": 0.0,
+  "placebo_median_s": -1.0,
+  "alpha": 0.05,
+  "result": "neither venue leads consistently",
+  "holm_level": 0.05
+ },
+ "Polymarket US": {
+  "n_qualifying": 75,
+  "n_placebo": 70,
+  "median_corrected_lag_s": 7.0,
+  "mann_whitney_p": 4.0016686466294836e-07,
+  "share_positive": 0.92,
+  "share_negative": 0.06666666666666667,
+  "placebo_median_s": 1.0,
+  "alpha": 0.025,
+  "result": "kalshi leads",
+  "holm_level": 0.025
+ }
+}

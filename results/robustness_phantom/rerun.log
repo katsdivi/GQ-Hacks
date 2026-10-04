@@ -1,0 +1,39 @@
+/Users/divyamkataria/GQ HACKS/wt-phantom/holdout_mid.py:306: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)].copy()
+/Users/divyamkataria/GQ HACKS/wt-phantom/holdout_mid.py:306: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)].copy()
+/Users/divyamkataria/GQ HACKS/wt-phantom/holdout_mid.py:344: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)]
+/Users/divyamkataria/GQ HACKS/wt-phantom/holdout_mid.py:344: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  q = per[per.get("qualifying", pd.Series(False, index=per.index)).fillna(False).astype(bool)]
+/Users/divyamkataria/GQ HACKS/wt-phantom/scripts/phantom_lead_rerun.py:59: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  oq = old[old["qualifying"].fillna(False).astype(bool)]
+/Users/divyamkataria/GQ HACKS/wt-phantom/scripts/phantom_lead_rerun.py:61: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  nq = nq[nq.get("qualifying", pd.Series(False, index=nq.index)).fillna(False).astype(bool)]
+/Users/divyamkataria/GQ HACKS/wt-phantom/scripts/phantom_lead_rerun.py:59: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  oq = old[old["qualifying"].fillna(False).astype(bool)]
+/Users/divyamkataria/GQ HACKS/wt-phantom/scripts/phantom_lead_rerun.py:61: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  nq = nq[nq.get("qualifying", pd.Series(False, index=nq.index)).fillna(False).astype(bool)]
+robustness, post-run: residue levels removed
+rows read / dropped per venue: {'kalshi': [37950660, 232094], 'polymarket': [6838073, 0], 'polymarket_us': [300807, 0]}
+                                                                          0                                             1
+test                                                         polymarket.com                                 Polymarket US
+label                          robustness, post-run: residue levels removed  robustness, post-run: residue levels removed
+pre_result                                 neither venue leads consistently                                  kalshi leads
+robust_result                              neither venue leads consistently                                  kalshi leads
+pre_n_qualifying                                                         88                                            76
+robust_n_qualifying                                                      86                                            75
+pre_median_corrected_lag_s                                              0.0                                           7.5
+robust_median_corrected_lag_s                                           0.0                                           7.0
+pre_median_game_lag_s                                                   0.0                                           7.5
+robust_median_game_lag_s                                                0.0                                           7.0
+pre_mann_whitney_p                                                 0.708577                                           0.0
+robust_mann_whitney_p                                              0.785471                                           0.0
+pre_placebo_median_s                                                   -1.0                                           0.0
+robust_placebo_median_s                                                -1.0                                           1.0
+pre_share_positive                                                    0.125                                      0.921053
+robust_share_positive                                              0.127907                                          0.92
+pre_holm_level                                                         0.05                                         0.025
+robust_holm_level                                                      0.05                                         0.025
+games_lag_changed                                                         1                                             5
+EXIT 0
