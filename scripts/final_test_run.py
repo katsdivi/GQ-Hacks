@@ -383,7 +383,7 @@ def finish(c: Ctx, num: dict, start: str, t0: float, gi: dict, gate_msg: str) ->
     return numbers
 
 
-def real_ctx() -> Ctx:
+def real_ctx(checklist_only: bool = False) -> Ctx:
     out = ROOT / "results" / "holdout"          # created (the lock) only after the checklist passes, in run()
     live = ROOT / "data" / "live"
     vroot, mroot = ROOT / "data" / "vultr", ROOT / "data" / "mac"
@@ -392,6 +392,11 @@ def real_ctx() -> Ctx:
     machines = [H.Machine("vultr", vroot, vroot / "GAPS_vultr.md", vroot / "heartbeats"),
                 H.Machine("mac", ROOT, mroot / "GAPS_mac.md", mroot / "heartbeats")]
     md = live / "holdout_maps"
+    maps_files = {"polymarket_com_map.json": md / "polymarket_com_map.json",
+                  "polymarket_us_map.json": md / "polymarket_us_map.json"}
+    if checklist_only:        # the checklist needs no holdout trades, settlements or training outputs
+        return Ctx(out, machines, pd.read_csv(live / "holdout_candidates.csv"), H.load_maps(md),
+                   live / "holdout_seconds_delay.csv", None, None, None, None, None, None, None, None, False, maps_files)
     hr = ROOT / "data" / "holdout_raw"
     ev = pd.read_csv(hr / "events.csv")
     st = pd.read_csv(hr / "settlements.csv")
@@ -427,7 +432,7 @@ def main() -> None:
         c = FX.dry_ctx(ROOT / "results" / ("dryrun_gatefail" if a.dry_run_flip_away else "dryrun"),
                        flip_away=a.dry_run_flip_away)
     elif a.checklist_only:
-        c = real_ctx()
+        c = real_ctx(checklist_only=True)
         ck = checklist(c)
         print("PRE-RUN CHECKLIST (checklist only; nothing evaluated, no lock)")
         for m, f in ck["feeds"].items():
