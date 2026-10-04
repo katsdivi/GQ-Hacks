@@ -308,10 +308,12 @@ def pm_resolution(cond: str) -> dict | None:
     """token id -> settlement value (outcomePrices) from the Gamma API, cached."""
     PM_CACHE.mkdir(parents=True, exist_ok=True)
     f = PM_CACHE / f"{cond}.json"
+    if f.exists() and f.read_text().strip() == "[]":
+        f.unlink()                    # first run cached empty answers (query lacked closed=true)
     if not f.exists():
         for i in range(4):
             try:
-                r = requests.get("https://gamma-api.polymarket.com/markets", params={"condition_ids": cond}, timeout=30)
+                r = requests.get("https://gamma-api.polymarket.com/markets", params={"condition_ids": cond, "closed": "true"}, timeout=30)
                 if r.status_code == 200:
                     f.write_text(r.text)
                     break
@@ -483,5 +485,83 @@ def main() -> None:
     print("\n".join(lines))
 
 
+def settle_only() -> None:
+    """Settlement step only, after the 04:14 run cached empty polymarket.com resolutions. Reads the saved
+    executions.csv (fills, sizes, prices and fees are unchanged; nothing is re-detected or re-filled), fetches the
+    resolutions with closed=true, recomputes payouts, P&L and the settlement check, and writes RESULTS_b.md and
+    arb_results.csv."""
+    exd = pd.read_csv(OUT / "executions.csv")
+    q = windows()
+    maps = H.load_maps(DATA / "data/live/holdout_maps")
+    sett = pd.read_csv(DATA / "data/holdout_raw/settlements.csv")
+    res_k, res_pm = {}, {}
+    for a in q.itertuples():
+        pc = maps["polymarket_com"][a.kalshi_ticker]
+        ks = sett[sett.game_id == a.game_id].set_index("side")["settlement_value_dollars"].astype(float)
+        res_k[a.game_id] = {"home": float(ks.get("home", np.nan)), "away": float(ks.get("away", np.nan))}
+        if a.game_id in set(exd.game_id):
+            pr = pm_resolution(pc["condition"])
+            other = [t for t in pc["token_ids"] if t != pc["collector_home_token"]][0]
+            res_pm[a.game_id] = ({"home": pr["tokens"].get(pc["collector_home_token"], np.nan),
+                                  "away": pr["tokens"].get(other, np.nan), "closed": pr["closed"], "uma": pr["uma"]}
+                                 if pr else {"home": np.nan, "away": np.nan, "closed": None, "uma": None})
+    exd["k_settle_home"] = exd.game_id.map(lambda g: res_k[g]["home"])
+    exd["pm_settle_home"] = exd.game_id.map(lambda g: res_pm[g]["home"])
+    exd["settle_agree"] = exd.game_id.map(lambda g: settlement_agrees(res_k[g], res_pm[g]))
+    pnl = []
+    for r in exd.to_dict("records"):
+        pnl.append(settle_pnl(r, r["team"], res_k[r["game_id"]], res_pm[r["game_id"]])["pnl"] if r["executed"] else np.nan)
+    exd["pnl"] = pnl
+    exd.to_csv(OUT / "executions_settled.csv", index=False)
+    ops = pd.read_csv(OUT / "opportunities.csv")
+    lines = [f"# Idea 11 (b), settled. {ARB_LABEL}", "", "Settlement step only (settle_only), run after the one "
+             "real-data run (9d06979): that run cached empty polymarket.com resolutions because the Gamma query lacked "
+             "closed=true, so its P&L was all NaN (printed as 0) and every game showed as a disagreement. Opportunities, "
+             "fills, sizes, prices and fees below are the run's saved executions.csv, unchanged.", ""]
+    dur = ops["duration_s"].to_numpy(float)
+    lines += [f"Opportunities: {len(ops)} in {ops.game_id.nunique()} games (home leg {int((ops.team == 'home').sum())}, "
+              f"away leg {int((ops.team == 'away').sum())}). Duration median {np.median(dur):.3f} s, p90 "
+              f"{np.percentile(dur, 90):.3f} s. Share lasting >= 0.25 / 0.5 / 1.0 / 2.0 s: "
+              + " / ".join(f"{(dur >= x).mean():.3f}" for x in (0.25, 0.5, 1.0, 2.0))
+              + f". Median executable size at t: {ops['size'].median():.2f}.", "",
+              "| L (s) | attempts | executed | missed | no book / side empty | games executed | contracts | total P&L $ "
+              "| 95% CI | per contract $ | 95% CI | ex top 5 total $ | ex top 5 per contract $ |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    res = []
+    for L in LATS:
+        e = exd[exd["latency_s"] == L]
+        x = e[e["executed"].astype(bool) & e["pnl"].notna()]
+        row = {"label": ARB_LABEL, "latency_L_s": L, "attempts": len(e), "executed": int(e["executed"].sum()),
+               "executed_unsettled": int((e["executed"].astype(bool) & e["pnl"].isna()).sum()),
+               "missed": int((e["why"] == "missed").sum()),
+               "no_book_or_empty": int(e["why"].isin(["no book after fill time", "side empty at fill"]).sum())}
+        gp = x.groupby("game_id").agg(pnl=("pnl", "sum"), q=("q", "sum"))
+        bt = boot(gp["pnl"].to_numpy(float), gp["q"].to_numpy(float))
+        g2 = gp.drop(gp["pnl"].sort_values(ascending=False).index[:5])
+        row.update(games=len(gp), contracts=float(gp.q.sum()), pnl_total=float(gp.pnl.sum()),
+                   total_ci_lo=bt["total_ci"][0], total_ci_hi=bt["total_ci"][1],
+                   pnl_per_contract=float(gp.pnl.sum() / gp.q.sum()), pc_ci_lo=bt["pc_ci"][0], pc_ci_hi=bt["pc_ci"][1],
+                   ex_top5_total=float(g2.pnl.sum()), ex_top5_pc=float(g2.pnl.sum() / g2.q.sum()) if g2.q.sum() > 0 else np.nan)
+        lines.append(f"| {L} | {row['attempts']} | {row['executed']} | {row['missed']} | {row['no_book_or_empty']} | "
+                     f"{row['games']} | {row['contracts']:.2f} | {row['pnl_total']:.2f} | [{row['total_ci_lo']:.2f}, "
+                     f"{row['total_ci_hi']:.2f}] | {row['pnl_per_contract']:.4f} | [{row['pc_ci_lo']:.4f}, "
+                     f"{row['pc_ci_hi']:.4f}] | {row['ex_top5_total']:.2f} | {row['ex_top5_pc']:.4f} |")
+        res.append(row)
+    pd.DataFrame(res).to_csv(OUT / "arb_results.csv", index=False)
+    xg = exd[exd["executed"].astype(bool)]
+    games = sorted(set(xg.game_id))
+    dis = [g for g in games if not settlement_agrees(res_k[g], res_pm[g])]
+    lines += ["", f"Settlement check: {len(games)} games with an executed opportunity at any L; disagreements "
+              f"{len(dis)}: " + (", ".join(f"{g} (Kalshi home {res_k[g]['home']}, polymarket.com home token "
+                                            f"{res_pm[g]['home']}, closed {res_pm[g]['closed']}, uma {res_pm[g]['uma']})"
+                                            for g in dis) or "none") + ".",
+              f"Executed rows without a usable settlement (excluded from P&L): "
+              + ", ".join(f"L {r['latency_L_s']}: {r['executed_unsettled']}" for r in res) + ".",
+              "Sources: Kalshi data/holdout_raw/settlements.csv (settlement_value_dollars); polymarket.com Gamma API "
+              "markets?condition_ids=..&closed=true outcomePrices (cached data/pm_resolution/, gitignored)."]
+    (OUT / "RESULTS_b.md").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(settle_only() if "--settle-only" in sys.argv else main())
